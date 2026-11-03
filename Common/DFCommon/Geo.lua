@@ -128,255 +128,29 @@ function Geo:getPoint(pointIndex)
     return unpack(container[index])
 end
 
-function Geo:setPoint(pointIndex, u, v)
-    local container, index = self:_getContainer(pointIndex)
-    container[index] = { u, v }
-end
 
-function Geo:insertPoint(prevPointIndex, u, v)
-    local container, index = self:_getContainer(prevPointIndex)
-    local insertIndex = index + 1
-    if insertIndex > #container then
-        insertIndex = 1
-    end
-    table.insert(container, insertIndex, {u, v})
-    return { prevPointIndex[1], prevPointIndex[2], prevPointIndex[3], insertIndex }
-end
 
-function Geo:sendGeneratedData(editor)
 
-    -- Fix up generated data for editing
-    DFSchema.prepareForEditing(self.tData.tVertices, self.tData, 'tVertices')
-    DFSchema.prepareForEditing(self.tData.tIndices, self.tData, 'tIndices')
-    DFSchema.prepareForEditing(self.tData.tDefaultIndexRange, self.tData, 'tDefaultIndexRange')
-    DFSchema.prepareForEditing(self.tData.tFrameIndexRanges, self.tData, 'tFrameIndexRanges')
-    
-    -- Request the data to be stored in the model
-    editor:sendTransaction(function()
-        editor:requestModifyField(self.tData, 'tVertices', self.tData.tVertices)
-        editor:requestModifyField(self.tData, 'tIndices', self.tData.tIndices)
-        editor:requestModifyField(self.tData, 'tDefaultIndexRange', self.tData.tDefaultIndexRange)
-        editor:requestModifyField(self.tData, 'tFrameIndexRanges', self.tData.tFrameIndexRanges)
-    end)
-end
 
-function Geo:removePoint(pointIndex)
-    local container, index = self:_getContainer(pointIndex)
-    table.remove(container, index)
-end
 
-function Geo:insertPolygon(tPolygon, frame, polyIndex, negativeIndex)
-    local tGeometry = self:getGeometry(frame)
-    if negativeIndex == 0 then
-        table.insert(tGeometry.tPolygons, polyIndex, { tExteriorPoints = tPolygon })
-    else
-        local tPoly = tGeometry.tPolygons[polyIndex]
-        if not tPoly.tNegativePolygons then
-            tPoly.tNegativePolygons = {}
-        end
-        table.insert(tPoly.tNegativePolygons, negativeIndex, tPolygon)
-    end
-end
 
-function Geo:removePolygon(pointIndex)
-    local frame, polyIndex, negativeIndex = unpack(pointIndex)
-    local tGeometry = self:getGeometry(frame)
-    if negativeIndex == 0 then
-        table.remove(tGeometry.tPolygons, polyIndex)
-    else
-        local tPolygon = tGeometry.tPolygons[polyIndex]
-        table.remove(tPolygon.tNegativePolygons, negativeIndex)
-        if #tPolygon.tNegativePolygons == 0 then
-            tPolygon.tNegativePolygons = nil
-        end
-    end
-end
 
-function Geo:requestCustomizeFrame(editor, frame, x0, y0, x1, y1)
-    local tGeometry = {
-        tRect = { x0, y0, x1, y1 },
-        tPolygons = {},
-    }
-    editor:requestModifyField(self.tData.tFrameGeometry, frame, tGeometry)
-end
 
-function Geo:requestModifyPoint(editor, pointIndex, u, v)
-    local container, index = self:_getContainer(pointIndex)
-    editor:requestModifyField(container, index, { u, v })
-end
 
-function Geo:requestInsertPoint(editor, prevPointIndex, u, v)
-    local container, index = self:_getContainer(prevPointIndex)
-    local insertIndex = index + 1
-    if insertIndex > #container then
-        insertIndex = 1
-    end
-    editor:requestInsertField(container, insertIndex, { u, v })
-end
 
-function Geo:requestModifyPolygon(editor, tPolygon, frame, polyIndex, negativeIndex)
-    local tGeometry = self:getGeometry(frame)
-    local tPoly = tGeometry.tPolygons[polyIndex]
-    if negativeIndex == 0 then
-        editor:requestModifyField(tPoly, 'tExteriorPoints', tPolygon)
-    else
-        editor:requestModifyField(tPoly.tNegativePolygons, negativeIndex, tPolygon)
-    end
-end
 
-function Geo:requestInsertPolygon(editor, tPolygon, frame, polyIndex, negativeIndex)
-    local tGeometry = self:getGeometry(frame)
-    if negativeIndex == 0 then
-        editor:requestInsertField(tGeometry.tPolygons, polyIndex, { tExteriorPoints = tPolygon })
-    else
-        local tPoly = tGeometry.tPolygons[polyIndex]
-        if not tPoly.tNegativePolygons then
-            editor:requestModifyField(tPoly, 'tNegativePolygons', { tPolygon })
-        else
-            editor:requestInsertField(tPoly.tNegativePolygons, negativeIndex, tPolygon)
-        end
-    end
-end
 
-function Geo:requestRemovePolygon(editor, pointIndex)
-    local frame, polyIndex, negativeIndex = unpack(pointIndex)
-    local tGeometry = self:getGeometry(frame)
-    if negativeIndex == 0 then
-        editor:requestRemoveField(tGeometry.tPolygons, polyIndex)
-    else
-        editor:requestRemoveField(tGeometry.tPolygons[polyIndex].tNegativePolygons, negativeIndex)
-    end
-end
-
-function Geo:requestRemovePoint(editor, pointIndex)
-    local frame, polyIndex, negativeIndex, point = unpack(pointIndex)
-    local tGeometry = self:getGeometry(frame)
-    local tPolygons = tGeometry.tPolygons
-    local tPolygon = tPolygons[polyIndex]
-    local tContainer
-    if negativeIndex == 0 then
-        tContainer = tPolygon.tExteriorPoints
-    else
-        tContainer = tPolygon.tNegativePolygons[negativeIndex]
-    end
-    if #tContainer > 3 then
-        editor:requestRemoveField(tContainer, point)
-    else
-        if negativeIndex == 0 then
-            editor:requestRemoveField(tPolygons, polyIndex)
-        else
-            editor:requestRemoveField(tPolygon.tNegativePolygons, negativeIndex)
-        end
-    end
-end
 
 function Geo:polygon(pointIndex)
     local container, index = self:_getContainer(pointIndex)
     return container
 end
 
-function Geo:neighbor(pointIndex, offset)
-    local container, index = self:_getContainer(pointIndex)
-    local nextIndex = index + offset
-    nextIndex = 1 + (nextIndex - 1) % #container
-    return { pointIndex[1], pointIndex[2], pointIndex[3], nextIndex }
-end
 
-function Geo:findPolygon(frame, u, v)
-    local tGeometry = self:getGeometry(frame)
-    for i, tPolygon in ipairs(tGeometry.tPolygons) do
-        if self:_isPointInPolygon(u, v, tPolygon) then
-            return i
-        end
-    end
-    return nil
-end
 
-function Geo:findNegativePolygon(frame, u, v)
-    local tGeometry = self:getGeometry(frame)
-    for polyIndex, tPolygon in ipairs(tGeometry.tPolygons) do
-        for negativeIndex, tPoints in ipairs(tPolygon.tNegativePolygons) do
-            if self:_isPointInShape(u, v, tPoints) then
-                return { frame, polyIndex, negativeIndex }
-            end
-        end
-    end
-    return nil
-end
 
-function Geo:isPolygonValid(frame, polyIndex, negativeIndex)
-    local tPolygon = self:polygon({ frame, polyIndex, negativeIndex })
-    for i = 1, #tPolygon do
-        local point = { frame, polyIndex, negativeIndex, i }
-        if not self:isPointValid(point) or not self:isSegmentValid(point) then
-            return false
-        end
-    end
-    return true
-end
 
-function Geo:isPointValid(pointIndex, bCheckSegments)
 
-    if bCheckSegments then
-        if not self:isSegmentValid(self:neighbor(pointIndex, -1)) then
-            return false
-        end
-        if not self:isSegmentValid(pointIndex) then
-            return false
-        end
-    end
-
-    local u, v = self:getPoint(pointIndex)
-    local frame, polyIndex, negativeIndex, point = unpack(pointIndex)
-    local tGeometry = self:getGeometry(frame)
-    
-    -- First check to see if the point is contained within any other polygons
-    for i, tPolygon in ipairs(tGeometry.tPolygons) do
-        if i ~= polyIndex then
-            if self:_isPointInPolygon(u, v, tPolygon) then
-                return false
-            end
-        end
-    end
-    
-    local tPolygon = tGeometry.tPolygons[polyIndex]
-    
-    -- Points can't be contained within any of their own negative shapes (unless
-    -- it's its own negative shape)
-    if tPolygon.tNegativePolygons then
-        for i, tPoints in ipairs(tPolygon.tNegativePolygons) do
-            if i ~= negativeIndex and self:_isPointInShape(u, v, tPoints) then
-                return false
-            end                
-        end
-    end
-    
-    -- Negative shape points must be contained within their exterior shape
-    if negativeIndex ~= 0 then
-        if not self:_isPointInShape(u, v, tPolygon.tExteriorPoints) then
-            return false
-        end
-    end
-    
-    return true
-end
-
-function Geo:isSegmentValid(firstPointIndex)
-    local tGeometry = self:getGeometry(firstPointIndex[1])
-    for polyIndex, tPolygon in ipairs(tGeometry.tPolygons) do
-        if self:_segmentIntersectsPolygon(firstPointIndex, polyIndex, 0) then
-            return false
-        end
-        if tPolygon.tNegativePolygons then
-            for negativeIndex = 1, #tPolygon.tNegativePolygons do
-                if self:_segmentIntersectsPolygon(firstPointIndex, polyIndex, 0) then
-                    return false
-                end
-            end
-        end
-    end
-    return true
-end
 
 
 function Geo:closestPoint(frame, u, v)
@@ -965,98 +739,10 @@ function Geo:_addTriangle(tGeometry, p0, p1, p2)
     table.insert(self.tData.tIndices, i2)
 end
 
-function Geo:_isPointInPolygon(u, v, tPolygon)
-    if not self:_isPointInShape(u, v, tPolygon.tExteriorPoints) then
-        return false
-    end
-    if tPolygon.tNegativePolygons then
-        for _, tPoints in ipairs(tPolygon.tNegativePolygons) do
-            if self:_isPointInShape(u, v, tPoints) then
-                return false
-            end
-        end
-    end
-    return true
-end
 
-function Geo:_isPointInShape(u, v, tPoints)
-    local pointCount = #tPoints
-    if pointCount < 3 then
-        return false
-    end
-    
-    -- Use the even-odd rule to determine whether the point is inside the list of points
-    local inside = false
-    local prevU, prevV = unpack(tPoints[pointCount])
-    for _, point in ipairs(tPoints) do
-        local pointU, pointV = unpack(point)
-        if (pointV > v) ~= (prevV > v) and u < ((prevU - pointU) * (v - pointV) / (prevV - pointV) + pointU) then
-            inside = not inside
-        end
-        prevU, prevV = pointU, pointV
-    end
-    return inside
-end
 
-function Geo:_segmentIntersectsPolygon(segmentStart, polyIndex, negativeIndex)
-    local au, av = self:getPoint(segmentStart)
-    local bu, bv = self:getPoint(self:neighbor(segmentStart, 1))
-    
-    local frame = segmentStart[1]
-    local tGeometry = self:getGeometry(frame)
-    local tPolygon = tGeometry.tPolygons[polyIndex]
-    local tPoints
-    if negativeIndex == 0 then
-        tPoints = tPolygon.tExteriorPoints
-    else
-        tPoints = tPolygon.tNegativePolygons[negativeIndex]
-    end
-    
-    local pointCount = #tPoints
-    if pointCount ~= 0 then
-        local prevPoint = tPoints[pointCount]
-        local prevIndex = { frame, polyIndex, negativeIndex, pointCount }
-        for i, point in ipairs(tPoints) do
-            if not self:_segmentsAreNeighbors(segmentStart, prevIndex) then
-                local pu0, pv0 = unpack(prevPoint)
-                local pu1, pv1 = unpack(point)
-                if self:_segmentsIntersect(au, av, bu, bv, pu0, pv0, pu1, pv1) then
-                    return true
-                end
-            end
-            prevPoint = point
-            prevIndex = { frame, polyIndex, negativeIndex, i }
-        end
-    end
-    return false
-end
 
-function Geo:_segmentsIntersect(u1, v1, u2, v2, u3, v3, u4, v4)
 
-    -- Check for parallel segments
-    local denominator = (v4 - v3) * (u2 - u1) - (u4 - u3) * (v2 - v1)
-    if math.abs(denominator) == 0 then 
-        return false
-    end
-    
-    -- Find the distance along (p1, p2) where the intersection occurs
-    local aNumerator = (u4 - u3) * (v1 - v3) - (v4 - v3) * (u1 - u3)
-    local bNumerator = (u2 - u1) * (v1 - v3) - (v2 - v1) * (u1 - u3)
-    local ta, tb = aNumerator / denominator, bNumerator / denominator
-    return 0 < ta and ta < 1 and 0 < tb and tb < 1
-end
-
-function Geo:_segmentsAreNeighbors(lhsIndex, rhsIndex)
-    local lhsNext = self:neighbor(lhsIndex, 1)
-    local rhsNext = self:neighbor(rhsIndex, 1)
-    if self:_pointsEqual(lhsIndex, rhsIndex) or self:_pointsEqual(lhsIndex, rhsNext) then
-        return true
-    end
-    if self:_pointsEqual(lhsNext, rhsIndex) or self:_pointsEqual(lhsNext, rhsNext) then
-        return true
-    end
-    return false
-end
 
 function Geo:_pointsEqual(lhs, rhs)
     return lhs and rhs and lhs[1] == rhs[1] and lhs[2] == rhs[2] and lhs[3] == rhs[3] and lhs[4] == rhs[4]

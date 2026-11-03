@@ -33,29 +33,13 @@ function m.stripSuffix(filePath)
     return string.gsub(filePath, "%.%a+$", "")
 end
 
-function m.getFileName(filePath)
-    return string.match(filePath, "[/]?([^/]+)$")
-end
 
 function m.stripFileName(filePath)
     -- there must be a better regex that avoids this first check for strings ending in "/".
     return (string.find(filePath, "/", -1) and filePath) or (string.match(filePath, "^(.+/)[^/]+$") or "")
 end
 
-local function _deprecated()
- 	if debug and debug.traceback then
- 		print("Calling deprecated function")
- 		print(debug.traceback())
- 	end
-end
 
-local function _readAll(fn)
-	local file = io.open(fn)
-	assert(file)
-	local data = file:read('*all')
-	file:close()
-	return data
-end
 
 -- Return path platform-agnostic data file
 function m.getDataPath(fn)
@@ -71,22 +55,13 @@ function m.getAudioPath(fn)
     return string.format("%sAudio/%s", m.PLAT_DIR, fn)
 end
 
-function m.readShader(fn)
-    return _readAll( string.format("%sData/Shaders/%s", m.BASE_DIR, fn) )
-end
 
 --
 -- Deprecated -- don't add more of these if you can just use m.BASE_DIR
 --
 
-function m.getTexturePath(fn)
-	return m.getAssetPath(fn)
-end
 function m.getSpritePath(fn)
 	return m.getAssetPath(fn)
-end
-function m.getLevelPath(fn)
-    return string.format("%sData/Levels/%s", m.BASE_DIR, fn)
 end
 
 -- MTF NOTE/TODO: deprecated.

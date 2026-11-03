@@ -56,9 +56,6 @@ function Pathfinder.staticInit()
     Airlock = require('Zones.Airlock')
 end
 
-function Pathfinder.tagTile(addr,tTagSpec,tAdditionalData)
-    Pathfinder.tTaggedTiles[addr] = (tTagSpec and {tTagSpec=tTagSpec,tAdditionalData=tAdditionalData or {}}) or nil
-end
 
 function Pathfinder.pathSoftBlocked(tx,ty)
     local addr = g_World.pathGrid:getCellAddr(tx,ty)
@@ -1131,9 +1128,6 @@ function Pathfinder:start(rChar,sWalkOverride,sBreatheOverride)
     local addr = g_World.pathGrid:getCellAddr(tx,ty)
 end
 
-function Pathfinder:getCurrentStepData()
-    return self.tCurrentStepData
-end
 
 function Pathfinder:pathDist(rChar)
     return self.tPathNodes[ #self.tPathNodes ].g * 100

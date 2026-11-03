@@ -39,19 +39,6 @@ function AnimEvent:setRig(rig)
 end
 
 -- PROTECTED FUNCTIONS --
-function AnimEvent:_createProp()
-	-- ToDo: Find joint and create a prop with the offset applied
-	assert(0)
-end
 
-function AnimEvent:_getEventLoc()
-
-    local rRootProp = self.rEntity:getProp()
-    if self.JointName ~= nil and self.rEntity.rProp ~= nil and self.rEntity.rProp.rCurrentRig ~= nil then  
-        rRootProp = self.rEntity.rProp.rCurrentRig:getJointProp( self.JointName )
-    end
-    
-    return rRootProp:modelToWorld(unpack(self.Offset))
-end
 
 return AnimEvent

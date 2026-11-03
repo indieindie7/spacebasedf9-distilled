@@ -244,14 +244,6 @@ function Fire._addToTile(tx,ty,bLoading,nIntensity)
     end
 end
 
-function Fire.debugStartFire()
-    local tc = require('CharacterManager').getCharacters()
-    if tc[1] then
-        Fire.startFire(tc[1]:getLoc())
-    else
-        Fire.startFire(0,0)
-    end
-end
 
 function Fire.startFire(wx,wy)
     local tx, ty = g_World._getTileFromWorld(wx,wy)

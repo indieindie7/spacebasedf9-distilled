@@ -359,9 +359,6 @@ function Airlock:getExteriorTile(bAll)
 end
 
 -- Returns a tile outside of the airlock zone, in the base.
-function Airlock:getInteriorTile(bAll)
-    return self:_getTileOutsideAirlock(false,bAll)
-end
 
 function Airlock:_getTileOutsideAirlock(bInSpace)
     for addr,_ in pairs(self.rRoom.tDoors) do
@@ -477,50 +474,6 @@ function Airlock:_updateJobList()
     self.activityOptionList:set(tJobs)
 end
 
-function Airlock:_testPathToJob(sType)
-    local spaceTiles = CommandObject.getBuildTiles(false,sType)
-    local oldestUpdate = GameRules.elapsedTime
-    local oldestTileAddr = nil
-    local oldestTileData = nil
-    
-    for addr,data in pairs(spaceTiles) do
-        local cachedData = self.tBuildOrders[data.addr]
-        if not cachedData then
-            oldestTileAddr = data.addr
-            oldestTileData = data
-            break
-        elseif cachedData.updateTime < oldestUpdate then
-            oldestUpdate = cachedData.updateTime
-            oldestTileAddr = data.addr
-            oldestTileData = data
-        end
-    end
-
-    if oldestTileData then
-        local cache = self.tBuildOrders[oldestTileAddr]
-        if not cache then
-            cache = {}
-            self.tBuildOrders[oldestTileAddr] = cache
-        end
-        cache.updateTime = GameRules.elapsedTime
-        cache.tPath = nil
-        cache.addr = oldestTileAddr
-
-        local x1,y1 = oldestTileData.x,oldestTileData.y
-        for addr,_ in pairs(self.rRoom.tDoors) do
-            local rDoor = ObjectList.getDoorAtTile(g_World.pathGrid:cellAddrToCoord(addr))
-            if rDoor and rDoor.bValidAirlock then
-                local x0,y0 = rDoor:getValidTileOnSide(false)
-                local tPath = Pathfinder.getPath(x0, y0, x1, y1, nil, {bForceSpacewalking=true})
-                if tPath then
-                    cache.tPath = tPath
-                    cache.doorAddr = addr
-                    break
-                end
-            end
-        end
-    end
-end
 
 function Airlock:_attemptChangeDoors(dt,operation,state,bSpaceOnly)
     local bSuccess = true

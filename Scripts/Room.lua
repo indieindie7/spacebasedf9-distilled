@@ -84,48 +84,7 @@ function Room.getSpaceRoom()
     return g_SpaceRoom
 end
 
-function Room.DBG_verifyPower()
-    local tPoweredProps = {}
-    for id, rRoom in pairs(Room.tPowerZones) do
-            for rProp,_ in pairs(rRoom.zoneObj.tThingsPowered) do
-                if rProp.decayPerSecond ~= nil then
-                    if tPoweredProps[rProp] then 
-                        print('DOUBLE-DRAW PROP: '..rProp:getUniqueName())
-                    end
-                    if not rProp.rPowerRoom or rProp.rPowerRoom ~= rRoom then
-                        print('INCORRECT POWER ROOM ASSIGNMENT')
-                    end
-                    tPoweredProps[rProp] = rProp
-                end
-            end
-    end
-end
 
-function Room.DBG_verifyGrid()
-    for x=1,World.width do
-        for y=1,World.height do
-            local roomTileValue = World.roomGrid:getTileValue(x,y)
-            if roomTileValue ~= 0 then
-                local rRoom = Room.tRooms[roomTileValue]
-                if not rRoom then
-                    print('failed to find room at',x,y,roomTileValue)
-                else
-                    local addr = World.pathGrid:getCellAddr(x,y)
-                    if not rRoom.tTiles[addr] then
-                        print('failed to find tile in room tile list',x,y)
-                    end
-                end
-            end
-        end
-    end
-    for id,rRoom in pairs(Room.tRooms) do
-        for addr,coord in pairs(rRoom.tTiles) do
-            if World.roomGrid:getTileValue(coord.x,coord.y) ~= id then
-                print('failed to find room tile in world grid',coord.x,coord.y,id)
-            end
-        end
-    end
-end
 
 function Room.enablePowerVis()
     Room.sbPowerVisEnabled = true
@@ -301,9 +260,6 @@ function Room.DBG_globalSetTeam(nTeam)
     --World.fixupVisuals()
 end
 
-function Room.needsCallback()
-    return Room.debugDrawMode ~= Room.DEBUG_DRAW_NONE
-end
 
 function Room.debugDrawRooms()
     for idx,room in pairs(Room.tRooms) do
@@ -793,9 +749,6 @@ function Room:getVisibility()
     return self.nLastVisibility
 end
 
-function Room:isTileInRoom(tx,ty,tw)
-    return (self == Room.getRoomAtTile(tx,ty,tw,true))
-end
 
 function Room._floodRoom( thisTile, floodData, tOldTiles )
     if floodData.tiles[thisTile] or floodData.skipTiles[thisTile] then
@@ -2027,9 +1980,6 @@ function Room:_attemptFloatAway()
     self:_doFloatAway(tRooms)
 end
 
-function Room:DBG_forceFloatAway()
-    self.DBG_floatForced = true
-end
 
 function Room:_doFloatAway(tRooms)
     tRooms = tRooms or Room.getRoomsOfTeam(self.nOriginalTeam, true)
@@ -2220,33 +2170,6 @@ end
 -- if a room layout changes, it reevaluates all of these.
 -- whenever this list changes, it regens the prop list as appropriate.
 
-function Room:autopopulateProps()
-    local validObjects = Zone[self.zoneName].tValidObjectTypes
-    local maxObjects = Zone[self.zoneName].nMaxProps
-    if maxObjects then
-        maxObjects = maxObjects - self.nProps
-        if maxObjects <= 0 then
-            self.bJobsDirty = false
-            return
-        end
-    end
-    local buildJobs = 0
-    if validObjects and #validObjects > 0 then
-        for addr,coord in pairs(self.tTiles) do
-            local testObjName = DFUtil.arrayRandom(validObjects)
-            local bAdded = Room.attemptAddPropGhostAt(coord.x,coord.y, self.nLevel, testObjName, false)
-            if not bAdded then
-                bAdded = Room.attemptAddPropGhostAt(coord.x,coord.y, self.nLevel, testObjName, true)
-            end
-            if bAdded then
-                buildJobs = buildJobs+1
-            end
-            if maxObjects and buildJobs >= maxObjects then
-                break
-            end
-        end
-    end
-end
 
 function Room.createGhostCursor(tx,ty,sName,bFlipX,bFlipY)
     bFlipX = bFlipX and EnvObject.canFlipX(sName)
@@ -2592,10 +2515,6 @@ function Room:isBreached()
     return self.bBreach
 end
 
-function Room:setZoneCallback(zone, callback)
-    self.rZone = zone
-    self.zonePropCallback = callback
-end
 
 -- tx,ty is the wall tile.
 -- dir is the direction FROM the room TO the wall.
@@ -3121,10 +3040,6 @@ function Room:getExtinguishTargets(rChar, ao)
     return tTiles
 end
 
-function Room:addFireExtinguisher()
-    self.bFireUpgrade = true
-    self.bJobsDirty = true
-end
 
 function Room:inside(wx,wy,wz,nLevel)
     local r = Room.getRoomAt(wx,wy,wz,nLevel)

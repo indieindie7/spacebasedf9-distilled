@@ -195,10 +195,6 @@ function Environment.randomSetup()
     Environment.loadEnvironment(Environment.tEnv)
 end
 
-function Environment.testEnvironment( sPreset )
-    Environment.tEnv = Environment.generateEnvironment(sPreset)
-    Environment.loadEnvironment(Environment.tEnv)
-end
 
 function Environment.getSaveTable()
 	-- cover case of existing (pre alpha 4) save data with no planet data

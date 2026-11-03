@@ -69,19 +69,8 @@ function Print(tt, ...)
     MOAILogMgr.log(txt)
 end
 
-function m.testFlag(set, flag)
-    return set % (2*flag) >= flag
-end
 
-function m.setFlag(set, flag)
-    if m.testFlag(set,flag) then return set end
-    return set + flag
-end
 
-function m.clearFlag(set, flag) 
-    if m.testFlag(set,flag) then return set - flag end
-    return set
-end
 
 function m.printTable(t, ttype, prefix, max)
     max = max or 1000
@@ -176,13 +165,6 @@ function m.split(input, sep)
     return fields
 end
 
-function m.findInArray(array, value)
-    for k, v in ipairs(array) do
-        if value == v then
-            return k
-        end
-    end
-end
 
 function m.removeFromArray(array, removeValue)
     for index, value in ipairs(array) do
@@ -281,17 +263,7 @@ function m.isTraceEnabled()
     return TT_ENABLED[TT_Warning] or TT_ENABLED[TT_System] or TT_ENABLED[TT_Gameplay] or TT_ENABLED[TT_Info]
 end
 
-function m.disableTrace()
-    Trace(TT_Info, "Disabling trace messages.")
-    TT_ENABLED[TT_Warning] = false
-    TT_ENABLED[TT_System] = false
-    TT_ENABLED[TT_Gameplay] = false
-    TT_ENABLED[TT_Info] = false
-end
 
-local function weakRefGet(t)
-    return rawget(t, '_UserData')
-end
 
 local weakIndex = function(t, k)
     local ref = rawget(t, '_UserData')
@@ -303,13 +275,6 @@ local weakRefMT = {
     __index = weakIndex,
 }
 
-function m.wrapWeak(v)
-    local weak = {}
-    setmetatable(weak, weakRefMT)
-    weak['_UserData'] = v
-    weak['get'] = weakRefGet
-    return weak
-end
 
 
 return m

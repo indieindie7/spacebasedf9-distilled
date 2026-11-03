@@ -106,13 +106,6 @@ function Hint.onTick(dt)
     --print('Hint.tickIndex: '..Hint.tickIndex)
 end
 
-function Hint.getHintWithName(sName)
-	for _,hint in pairs(require('HintData').tHints) do
-		if hint.name == sName then
-			return hint
-		end
-	end
-end
 
 function Hint.getNextHints()
     local hints = {}

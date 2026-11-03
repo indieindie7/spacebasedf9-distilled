@@ -27,27 +27,7 @@ function Topics.initializeTopicList()
     Topics.initialized = true
 end
 
-function Topics.dumpTopics()
-	print('-----------------------')
-	print('global topics list')
-	print('-----------------------')
-	for id,tData in pairs(Topics.tTopics) do
-		print(id..' ('..tData.category..'): '..tData.name)
-	end
-	print('-----------------------')
-end
 
-function Topics.dumpTopic(topicName)
-	print('-----------------------')
-	print('list of '..topicName)
-	print('-----------------------')
-	for id,tData in pairs(Topics.tTopics) do
-		if tData.category == topicName then
-			print('"'..tData.name..'"')
-		end
-	end
-	print('-----------------------')
-end
 
 function Topics.generatePeopleList()
 	-- this should only be run for initial population, so no need to
@@ -194,13 +174,6 @@ function Topics.getRandomTopic(sCategory)
     return MiscUtil.randomValue(Topics.tTopicsByCategory[sCategory])
 end
 
-function Topics.numberOfCategories()
-	local i = 0
-	for _,category in pairs(Topics.TopicList) do
-		i = i + 1
-	end
-	return i
-end
 
 function Topics.getName(topic)
 	return Topics.tTopics[topic].name
@@ -302,12 +275,6 @@ function Topics.getRandomProvenance()
 	return g_LM.randomLine(Topics.FoodProvenance)
 end
 
-function Topics.testGenerator(genFn, count)
-	local count = count or 10
-	for i=1,count do
-		print(genFn())
-	end
-end
 
 --
 -- random name ingredients

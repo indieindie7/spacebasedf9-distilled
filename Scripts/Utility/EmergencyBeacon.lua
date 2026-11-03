@@ -475,10 +475,6 @@ function EmergencyBeacon:destroy()
     self.rPreviewProp=nil
 end
 
-function EmergencyBeacon:getViolenceMode()
-end
 
-function EmergencyBeacon:setViolenceMode(eMode)
-end
 
 return EmergencyBeacon

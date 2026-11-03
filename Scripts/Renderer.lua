@@ -576,9 +576,6 @@ function Renderer.initializeRenderer(gameViewport, uiViewport)
     SeqCommand.registerCommands()
 end
 
-function Renderer.resetCamera()
-    rGameplayCamera:setLoc( 0, 0, rGameplayCamera:getFocalLength( kVirtualScreenWidth ) )
-end
 
 function Renderer.toggleUI()
     if nil == Renderer.bHideUI then Renderer.bHideUI = false end
@@ -867,9 +864,6 @@ function Renderer.getUIViewportRect()
     return 0, 0, Renderer.rUIViewport.sizeX, -Renderer.rUIViewport.sizeY
 end
 
-function Renderer.getGameViewportRect()
-    return 0, 0, Renderer.rGameViewport.sizeX, Renderer.rGameViewport.sizeY
-end
 
 function Renderer.getHalfScreenSize()
     return Renderer.rGameViewport.sizeX / 2, Renderer.rGameViewport.sizeY / 2
@@ -879,17 +873,11 @@ function Renderer.getScreenSize()
     return Renderer.rGameViewport.sizeX, Renderer.rGameViewport.sizeY
 end
 
-function Renderer.getGameViewport()
-    return Renderer.rGameViewport
-end
 
 function Renderer.getViewport()
     return Renderer.rUIViewport
 end
 
-function Renderer.getViewportWindow()
-    return rViewportWindow
-end
 
 function Renderer.getGameplayCamera()
     return rGameplayCamera
@@ -903,9 +891,6 @@ function Renderer.getUICamera()
     return rUICamera
 end
 
-function Renderer.getDebugCamera()
-    return rDebugCamera
-end
 
 function Renderer.getGlobalTexture(sName)
     return tGlobalTextures[sName]
@@ -916,11 +901,6 @@ function Renderer.getWorldFromCursor(cursorX, cursorY)
     return worldLayer:wndToWorld(cursorX, cursorY)
 end
 
-function Renderer._onDebugDrawWorldSpace( index, xOff, yOff, xScale, yScale )
-    if tFlags.DebugDrawWorldSpace then
-        Renderer.dDebugRenderWorldSpace:dispatch()
-    end
-end
 
 function Renderer._onDebugDrawScreenSpace( index, xOff, yOff, xScale, yScale )
 
@@ -1100,9 +1080,6 @@ function Renderer._debugShowGpuProfileReport(show)
 end
 
 
-function Renderer.getVertexFormat(sName)
-    return tVertexFormats[sName]
-end
 
 function Renderer.loadMaterialInstance(sName)
     return DFGraphics.loadMaterial(tGlobalMaterialFilenames[sName])

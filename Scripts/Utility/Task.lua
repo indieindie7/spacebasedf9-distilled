@@ -96,9 +96,6 @@ function Task:getTag(sTag)
     if self.rParentTask then return self.rParentTask:getTag(sTag) end
 end
 
-function Task:isChildTask()
-    return self.rParentTask ~= nil
-end
 
 function Task:getPriority()
     return self.nPriority
@@ -336,16 +333,7 @@ function Task:queueTask(sTaskName,tData)
 	table.insert(self.tQueue, {sClass=sTaskName,tData=tData})
 end
 
-function Task:queueTaskRef(sTaskName,rTask)
-	if not self.tQueue then self.tQueue={} end
-	table.insert(self.tQueue, {sClass=sTaskName,rTask=rTask})
-end
 
-function Task:optionRemoved()
-    --if not self.bUninterruptible then
-        self:interrupt("Option removed.")
-    --end
-end
 
 function Task:obstructionWait(dt)
     if not self.nObstructionTime then
@@ -459,53 +447,6 @@ function Task:tickInteraction(dt)
 end
 
 -- world coords
-function Task:_incrementPathStep()
-    self.tPath.nextStep = self.tPath.currentStep + 1
-
-    local targetX,targetY = self.tPath[self.tPath.nextStep].x,self.tPath[self.tPath.nextStep].y
-    local tx,ty = World._getTileFromWorld(targetX,targetY)
-
-	-- MTF HACK:
-	-- I removed diagonal movement, but that led to some pretty ugly zigzagging. So...
-	-- if current and nextnext are adjacent
-	-- but through a corner (dir nsew)
-	-- if both diags are clear, just cut through the corner.
-	local nextNext = self.tPath.nextStep+1
-	if nextNext <= #self.tPath then
-                --Profile.enterScope("isoWalkHack")
-		local txNextNext,tyNextNext = World._getTileFromWorld(self.tPath[nextNext].x,self.tPath[nextNext].y)
-		local txCurrent,tyCurrent = World._getTileFromWorld(self.tPath[self.tPath.currentStep].x,self.tPath[self.tPath.currentStep].y)
-		local _,_,dir = World.isAdjacentToTile(txCurrent,tyCurrent, txNextNext, tyNextNext, true, false)
-		if dir then
-			local bCheat = false
-			local dirA,dirB = nil,nil
-			if dir == World.directions.N then
-				dirA = World.directions.NW
-				dirB = World.directions.NE
-			elseif dir == World.directions.E then
-				dirA = World.directions.SE
-				dirB = World.directions.NE
-			elseif dir == World.directions.W then
-				dirA = World.directions.NW
-				dirB = World.directions.SW
-			elseif dir == World.directions.S then
-				dirA = World.directions.SW
-				dirB = World.directions.SE
-			end
-			if dirA then
-				if World._isPathable(World._getAdjacentTile(txCurrent,tyCurrent,dirA)) and 
-						World._isPathable(World._getAdjacentTile(txCurrent,tyCurrent,dirB)) then
-					self.tPath.nextStep = nextNext
-				end
-			end
-
-		end
-                --Profile.leaveScope("isoWalkHack")
-	end
-	local wx,wy = self.tPath[self.tPath.nextStep].x,self.tPath[self.tPath.nextStep].y
-    local tx,ty = World._getTileFromWorld(wx,wy)
-	return wx,wy,tx,ty
-end
 
 function Task:_enteredNewTile()
     self.nObstructionTime = nil

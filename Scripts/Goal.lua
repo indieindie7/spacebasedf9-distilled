@@ -13,15 +13,6 @@ function Goal.init()
 	Goal.nTicks = 0
 end
 
-function Goal.getNumCompletedGoals()
-	local nGoals = 0
-	for _,tGoal in pairs(GoalData.tGoals) do
-		if Base.tS.tGoals[tGoal.sName] then
-			nGoals = nGoals + 1
-		end
-	end
-	return nGoals
-end
 
 function Goal.onTick(dt)
 	-- tick one goal per tick, for simplicity -

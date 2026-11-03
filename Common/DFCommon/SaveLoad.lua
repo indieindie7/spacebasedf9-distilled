@@ -73,28 +73,6 @@ function m.saveString(saveStr, fileName, bPreservePath, bNoDeflate)
     ]]--
 end
 
-function m.loadString(fileName, bPreservePath, bSilenceErrors)
-    -- works fine; just commented out for now so I can have human-readable saves.
-    local path = fileName
-    if not bPreservePath then
-        path = m.getSaveFilename(path)
-    end
-    local dataBuffer = MOAIDataBuffer.new()
-    dataBuffer:load( path )
-    if dataBuffer:testHeader('--MOAI') then
-        -- nothing
-    else
-        dataBuffer:inflate()
-    end
-    local str = dataBuffer:getString()
-    if str then
-        local f,err = loadstring(str)
-        if f then return f()
-        elseif not bSilenceErrors then
-            Print(TT_Error, "Failed to load file",fileName,"error:",err)
-        end
-    end
-end
 
 -- Private Functions
 

@@ -188,33 +188,6 @@ function DebugManager:addDebugOption( sName, tCategories, hotKey, callbackSet, c
     DebugManager.tOptionCache = nil
 end
 
-function DebugManager:getDebugOptions(sCategory)
-
-    if DebugManager.tOptionCache == nil then
-
-        DebugManager.tOptionCache = {}
-    
-        local numDebugOptions = #DebugManager.tDebugOptions
-        for i=1,numDebugOptions do
-        
-            local tDbgOption = DebugManager.tDebugOptions[i]
-            if tDbgOption.tCategories ~= nil then
-                local numCategories = #tDbgOption.tCategories
-                for j=1,numCategories do
-                
-                    local sOptCategory = tDbgOption.tCategories[j]
-                    if DebugManager.tOptionCache[sOptCategory] == nil then
-                        DebugManager.tOptionCache[sOptCategory] = {}
-                    end
-                
-                    table.insert(DebugManager.tOptionCache[sOptCategory], tDbgOption)
-                end
-            end
-        end
-    end
-    
-    return DebugManager.tOptionCache[sCategory]
-end
 
 -- DEBUG CALLBACKS
 function DebugManager.toggleDebugMenu()

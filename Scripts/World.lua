@@ -337,10 +337,6 @@ function World._zoneAtAddr(addr)
     return Zone.tOrderedZoneList[tileVal - World.logicalTiles.ZONE_LIST_START + 1]
 end
 
-function World._zoneAtTile(tileX, tileY)
-    local tileVal = World.pathGrid:getTileValue(tileX,tileY)
-    return Zone.tOrderedZoneList[tileVal - World.logicalTiles.ZONE_LIST_START + 1]
-end
 
 function World._zoneValue(tileVal)
     return Zone.tOrderedZoneList[tileVal - World.logicalTiles.ZONE_LIST_START + 1]
@@ -1109,9 +1105,6 @@ function World._isPathBlocked(tx,ty,bAllowSpace)
     return World.pathGrid:checkTileFlag(tx,ty, MOAIGridSpace.TILE_HIDE)
 end
 
-function World.getRandomDirection()
-	return DFUtil.tableRandom(World.directions)
-end
 
 function World._getBestOpenNeighbor(wx,wy,vx,vy,bThroughCorners,bAllowSpace)
     local tx,ty = World._getTileFromWorld(wx,wy)
@@ -1288,14 +1281,7 @@ function World.isAdjacentToWall(tileX, tileY, bThroughCorners, bIncludeSame)
     return World.isAdjacentToFn(tileX,tileY, testFn, bThroughCorners, bIncludeSame)
 end
 
-function World.isAdjacentToFloor(tileX, tileY, bThroughCorners, bIncludeSame)
-    local testFn = function(tx,ty) return World.countsAsFloor(World._getTileValue(tx,ty)) end
-    return World.isAdjacentToFn(tileX,tileY, testFn, bThroughCorners, bIncludeSame)
-end
 
-function World.isAdjacentTo(tileX, tileY, bThroughCorners, value, bIncludeSame)
-    return World.isAdjacentToFn(tileX,tileY, function(tx,ty) return World._getTileValue(tx,ty) == value end, bThroughCorners, bIncludeSame)
-end
 
 function World.isAdjacentToObj(tileX, tileY, bThroughCorners, obj, bIncludeSame)
     local fn = function(tx,ty)
@@ -1304,13 +1290,6 @@ function World.isAdjacentToObj(tileX, tileY, bThroughCorners, obj, bIncludeSame)
     return World.isAdjacentToFn(tileX,tileY, fn, bThroughCorners, bIncludeSame)
 end
 
-function World.isAdjacentToBase(tileX, tileY, bThroughCorners, zoned, bIncludeSame)
-    local testFn = function(tx,ty) 
-        local tv = World._getTileValue(tx,ty)
-        return World.countsAsFloor(tv) or World.countsAsWall(tv) or CommandObject.getConstructionAtTile(tx, ty)
-    end
-    return World.isAdjacentToFn(tileX,tileY, testFn, bThroughCorners, bIncludeSame)
-end
 
 function World.isAdjacentToSpace(tileX, tileY,bThroughCorners, bIncludeSame)
     local testFn = function(tx,ty) return World._getTileValue(tx,ty) == World.logicalTiles.SPACE end
@@ -1723,11 +1702,6 @@ function World.updateCutaway(bShowSpace)
 	end
 end
 
-function World.buildTile(worldX, worldY)
-    local tx, ty = World._getTileFromWorld(worldX, worldY)
-	local rv = World._buildTile(tx,ty)
-    return rv
-end
 
 function World._buildTile(tileX,tileY,param)
     local tileAddr = World.pathGrid:getCellAddr(tileX, tileY)
@@ -1756,10 +1730,6 @@ function World._buildTile(tileX,tileY,param)
     return bSuccess
 end
 
-function World.canBuildFloor(tileX, tileY)
-    local tile = World._getTileValue(tileX, tileY)
-    return tile == World.logicalTiles.SPACE
-end
 
 
 
@@ -1820,16 +1790,6 @@ function World.canBuildWall(tx, ty)
     return true
 end
 
-function World.isAreaSpace(minX, minY, maxX, maxY)
-    for i = minX, maxX do
-        for j = minY, maxY do            
-            if World.pathGrid:getTileValue(i, j) ~= World.logicalTiles.SPACE then
-                return false
-            end
-        end
-    end
-    return true
-end
 
 function World.countsAsWall(tile)
     return (tile == World.logicalTiles.WALL or tile == World.logicalTiles.WALL_DESTROYED)
@@ -1923,11 +1883,6 @@ function World._addWallSpriteToTable(rLayer, tTable, tx,ty, sSlotId, nIndex, bFl
     end
 end
 
-function World.getCachedWallProps(tx, ty)
-    local addr = World.pathGrid:getCellAddr(tx, ty)
-    
-    return World.layers.worldWall.props[addr]
-end
 
 function World._getWallPropTable(layer, x, y, nTopIndex, nBottomIndex, bFlip, bIgnoreLighting, tExistingTable, sPropType)
 	-- walls consist of multiple props, specified by top+bottom values
@@ -2217,9 +2172,6 @@ function World._updateTileColor(tx,ty,addr,value, bFlip)
     World._setGridLocColor(tx, ty, World.rightFacingColor, bFlip)
 end
     
-function World.getSpaceName()
-    return tSpaceNames[math.random(1,#tSpaceNames)]
-end
 
 function World.getWallDirection(wx,wy)
     local tileX, tileY = World._getTileFromWorld(wx,wy)
@@ -2518,20 +2470,6 @@ function World.damageTile(tx, ty, tw, tDamage, bDamageContents)
     return nResult
 end
 
-function World._randomTileSprite(visualTileData) --spriteName, errorSprite)
-    local spriteSheetIndex = nil
-    if #visualTileData.indexes > 0 then
-        spriteSheetIndex = DFUtil.arrayRandom(visualTileData.indexes)
-    end
-    if not spriteSheetIndex then
-        if visualTileData.layer == World.layers.worldWall then
-            spriteSheetIndex = visualTileData.layer.spriteSheet.names['Wall_Error']
-        else
-            spriteSheetIndex = visualTileData.layer.spriteSheet.names['Tile_Error']
-        end
-    end
-    return spriteSheetIndex
-end
 
 function World._getWorldFromAddr(addr)
     return World._getWorldFromTile(World.pathGrid:cellAddrToCoord(addr))
@@ -2813,18 +2751,6 @@ function World._deleteWallBlob(tBlob)
     end
 end
 
-function World._dumpBlobs()
-    local tMarked={}
-    for addr,tBlob in pairs(World.tWallAddrToBlob) do
-        if not tMarked[tBlob] then
-            tMarked[tBlob] = true
-            print('Blob: ')
-            for blobAddr,_ in pairs(tBlob.tWallAddrs) do
-                print('   ',World.pathGrid:cellAddrToCoord(blobAddr))
-            end
-        end
-    end
-end
 
 function World._dirtyTile(tileX, tileY, bDirtyWallBlobs)
     local tileAddr = World.pathGrid:getCellAddr(tileX, tileY)

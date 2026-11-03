@@ -16,28 +16,7 @@ end
 function ParticleSystemManager.init()    
 end
 
-function ParticleSystemManager.stopAll()
 
-    local numActiveParticleSystems = #ParticleSystemManager.tActiveParticleSystems
-    for i=1,numActiveParticleSystems do
-        local rParticleSystem = ParticleSystemManager.tActiveParticleSystems[i]
-        rParticleSystem:stop(true)
-        rParticleSystem:unload()
-    end
-    
-    ParticleSystemManager.update()
-    ParticleSystemManager.update()
-    
-    DFEffects.stopAllParticleSystems()
-end
-
-function ParticleSystemManager.checkForLeaks()
-    
-    local numParticleSystemsAlive = DFEffects.debugPrintParticleSystems()
-    if numParticleSystemsAlive > 0 then
-        Trace(TT_Error, tostring(numParticleSystemsAlive) .. " particle systems leakd!")
-    end
-end
 
 function ParticleSystemManager.onTick(dt)    
 

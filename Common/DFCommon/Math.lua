@@ -83,12 +83,6 @@ function m.overlaps(xMin1, yMin1, xMax1, yMax1,
 end
 
 -- Returns true if point is in rect. (inclusive)
-function m.pointIn(x, y, xMin, yMin, xMax, yMax)
-    return ( (x <= xMax) and
-             (x >= xMin) and
-             (y <= yMax) and
-             (y >= yMin) )
-end
 
 function m.randomFloat( lower, upper )
     return ( lower + ( ( upper - lower ) * math.random() ) )
@@ -96,36 +90,8 @@ end
 
 local boxMullerRand1 = nil
 local boxMullerRand2 = nil
-function m.boxMuller(standardDeviation)
-    local variance = standardDeviation * standardDeviation
- 
-	if boxMullerRand1 then
-		local rng = math.sqrt(variance * boxMullerRand1) * math.sin(boxMullerRand2)
-        boxMullerRand1, boxMullerRand2 = nil,nil
-        return rng
-    end
- 
-	boxMullerRand1 = math.random()
-	if boxMullerRand1 < EPSILON then boxMullerRand1 = EPSILON end
-	boxMullerRand1 = -2 * math.log(boxMullerRand1)
-	boxMullerRand2 = math.random() * math.pi * 2
- 
-	return math.sqrt(variance * boxMullerRand1) * math.cos(boxMullerRand2)
-end
 
-function m.pinPct(val)
-    return math.min(math.max(0,val),1)
-end
 
-function m.pin( n, minVal, maxVal )
-    if minVal > maxVal then
-        local temp = minVal
-        minVal = maxVal
-        maxVal = temp
-    end
-    
-    return math.min( math.max( n, minVal ), maxVal )
-end
 
 function m.lerp( a, b, t )
     return a * (1 - t) + b * t
@@ -152,9 +118,6 @@ function m.sign(n)
     return n >= 0 and 1 or -1    
 end
 
-function m.fcmp(a, b)
-    return math.abs(a - b) < EPSILON
-end
 
 function m.sanitizeVector( vec, default )
 

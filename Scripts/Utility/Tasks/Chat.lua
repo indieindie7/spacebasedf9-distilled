@@ -414,13 +414,6 @@ function Chat:_computeResult()
     end
 end
 
-function Chat:_likeHate(value)
-	if value < 0 then
-		return 'hate'
-	else
-		return 'like'
-	end
-end
 
 function Chat:_getAffChange(myAffForTopic, myAffForOther, otherAffForTopic)
 	-- given self and another's affinities, return two values for change

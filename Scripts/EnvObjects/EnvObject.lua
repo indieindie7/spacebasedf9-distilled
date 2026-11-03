@@ -602,38 +602,11 @@ function EnvObject:getTileInFrontOf(bBehind)
     return g_World._getAdjacentTile(tx,ty, facing)
 end
 
-function EnvObject:getTilesInFrontOf(bBehind)
-    local tx, ty = g_World._getTileFromWorld(self:getLoc())
-    local facing = self:getFacing()
-    if bBehind then facing = g_World.oppositeDirections[facing] end
-    local tTiles = {}
-    local walkDir = g_World.directions.NE
-    if facing == g_World.directions.SW then
-        walkDir = g_World.directions.NW
-    end
-
-    if bBehind then
-        for i=2,self.tData.height do
-            tx,ty = g_World.getAdjacentTile(tx,ty,facing)
-        end
-    end
-
-    for i=1,self.tData.width do
-        local ax,ay = g_World._getAdjacentTile(tx,ty, facing)
-        local addr = g_World.pathGrid:getCellAddr(ax,ay)
-        tTiles[addr] = {x=ax,y=ay,addr=addr}
-        tx,ty = g_World.getAdjacentTile(tx,ty,walkDir)
-    end
-    return tTiles
-end
 
 function EnvObject:isHostileTo(rChar)
     return false
 end
 
-function EnvObject:getWorldInFrontOf(bBehind)
-    return g_World._getWorldFromTile(self:getTileInFrontOf(bBehind))
-end
 
 function EnvObject:getFootprint(bMargin,bIndexByAddr)
     local tx,ty = self:getTileLoc()
@@ -867,9 +840,6 @@ function EnvObject:postLoad()
 end
 ]]--
 
-function EnvObject:blocksOxygen()
-    return false
-end
 
 function EnvObject:getLoc()
     return self.wx,self.wy,self.wz,self.nLevel
@@ -1799,16 +1769,5 @@ function EnvObject.gatePickUpStuff(rChar,rAO)
     end
 end
 
-function EnvObject.DBG_repairEverything(nTargetCondition, sObjectType)
-	for id,rRoom in pairs(Room.tRooms) do
-		for rProp,_ in pairs(rRoom.tProps) do
-			if not sObjectType then
-				rProp.nCondition = nTargetCondition or 100
-			elseif sObjectType == rProp.sName then
-				rProp.nCondition = nTargetCondition or 100
-			end
-		end
-	end
-end
 
 return EnvObject

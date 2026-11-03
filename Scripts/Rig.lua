@@ -304,15 +304,6 @@ function Rig:getJointProp( sName )
     return nil
 end
 
-function Rig:getJointIndex( sName )
-
-    local tJointData = self.tJointMap[sName]
-    if tJointData ~= nil then
-        return tJointData.idx
-    end
-    
-    return nil
-end
 
 function Rig:setJointLoc( sName, tLoc, sLayerName )
 
@@ -657,18 +648,7 @@ function Rig:setAnimSpeed(animSpeed, bDeltaTransRelative)
     end
 end
 
-function Rig:setAnimMode(animMode)
-    self.rAnimController:setAnimSpeed(DFAnimController.PRIORITY_NORMAL, animMode)
-end
 
-function Rig:isAnimPlayingOnLayer(sLayerName)
-    local animPriority = DFAnimController.PRIORITY_NORMAL
-    if sLayerName ~= nil then
-        animPriority = self.rAnimController:getLayerPriority(sLayerName)
-    end
-
-    return ( self.rAnimController:getNumAnimsPlaying(animPriority) > 0 )
-end
 
 function Rig:setRigFlipped(bSetting)
     local bRigFlipped = self.scaleX == -1
@@ -685,9 +665,6 @@ function Rig:setRigFlipped(bSetting)
 end
 
 -- PUBLIC FUNCTIONS - MESH --
-function Rig:getDynamicMesh()
-    return self.rMainMesh
-end
 
 -- PUBLIC FUNCTIONS - MESH VISIBILITY --
 function Rig:addMeshVisibilityOverrides(tMeshVisibilityOverrides)
@@ -710,58 +687,10 @@ function Rig:addMeshVisibilityOverrides(tMeshVisibilityOverrides)
     end
 end
 
-function Rig:removeMeshVisibilityOverrides(tMeshVisibilityOverrides)
 
-    -- Remove visibility overrides for subsets of the meshes used by this rig
-    for sMeshName,tSubsetVisibility in pairs(tMeshVisibilityOverrides) do
-        
-        if self.tMeshVisibilityOverrides[sMeshName] == nil then
-            return
-        end
-        
-        local tSubsetVisibilityOverrides = self.tMeshVisibilityOverrides[sMeshName]
-        for sSubsetName,_ in pairs(tSubsetVisibility) do
-            
-            if tSubsetVisibilityOverrides[sSubsetName] ~= nil then
-                self.numMeshVisibilityOverrides = self.numMeshVisibilityOverrides - 1
-                tSubsetVisibilityOverrides[sSubsetName] = nil
-            end
-        end
-    end
-end
-
-function Rig:clearMeshVisibilityOverrides()
-
-    -- Clear all visibility overrides
-    -- Note: This does not affect the currently playing animations
-    self.tMeshVisibilityOverrides = {}
-    self.numMeshVisibilityOverrides = 0
-end
 
 -- PUBLIC FUNCTIONS - EXTERNAL MESHES --
-function Rig:addExternalMeshes(otherRig)
 
-    -- Combine the dynamic meshes
-    if self.rMainMesh ~= nil then
-        for _, tMeshData in pairs(otherRig.tMeshMap) do
-            if tMeshData.rMesh ~= nil then
-                self.rMainMesh:addExternalMesh(tMeshData.rMesh)
-            end
-        end
-    end
-end
-
-function Rig:removeExternalMeshes(otherRig)
-
-	-- Remove the meshes from the draw context
-	if self.rMainMesh ~= nil then
-		for _, tMeshData in pairs(otherRig.tMeshMap) do
-			if tMeshData.rMesh ~= nil then
-				self.rMainMesh:removeExternalMesh(tMeshData.rMesh)
-			end
-		end
-	end
-end
 
 -- PUBLIC FUNCTIONS - ATTACHMENTS --
 function Rig:attach(otherRig, sJointName, tOffsetPosition, tOffsetRotation, tScale)
@@ -1025,14 +954,6 @@ function Rig:getProp()
     return self.rUnscaledRootJointProp
 end
 
-function Rig:getDeltaTransProp()
-
-    if self.rDeltaTransJointProp == nil then
-        self.rDeltaTransJointProp = self:getJointProp("DeltaTrans")
-    end
-
-    return self.rDeltaTransJointProp
-end
 
 function Rig:getWorldBounds(bDynamicBounds)
     local x0, y0, z0 = self.rEntity.rProp:modelToWorld()
@@ -1077,24 +998,12 @@ function Rig:getWorldBounds(bDynamicBounds)
     return x0, y0, z0, x1, y1, z1
 end
 
-function Rig:hitTest(x, y)
-    if self.rMainMesh ~= nil then
-        local x0, y0, z0, x1, y1, z1 = self.rMainMesh:getWorldBounds(true)
-        if x0 <= x and x <= x1 and y0 <= y and y <= y1 then
-            return true
-        end
-    end
-end
 
 -- PUBLIC FUNCTIONS - MISC --
 function Rig:getMaterials()
     return self.tMaterials
 end
 
-function Rig:setTargetSceneLayer(rTargetSceneLayer, targetSceneLayerAlpha)
-    self.rTargetSceneLayer = rTargetSceneLayer
-    self.targetSceneLayerAlpha = targetSceneLayerAlpha
-end
 
 function Rig:_setTextureReplacements( tRigData )
     local tTextureReplacements = tRigData.tTextureReplacements

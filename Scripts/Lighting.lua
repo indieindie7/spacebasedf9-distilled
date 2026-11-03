@@ -195,11 +195,6 @@ function Lighting.setWallLightUVs(tx, ty, rProp, bIgnoreLighting)
     rProp.bIgnoreLighting = bIgnoreLighting    
 end
 
-function Lighting.lightProp(rProp, facingTileX, facingTileY)
-    local tFloorLightColor = Lighting.getLightColorForTile(facingTileX, facingTileY)
-
-    rProp:setColor(tFloorLightColor[1], tFloorLightColor[2], tFloorLightColor[3], 1.0)
-end
 
 -- brighten a roomdawg
 function Lighting.setRoomHighlight(rRoom, nHighlightPercent)

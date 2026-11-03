@@ -26,17 +26,7 @@ function Needs.genericCurve(val)
     return 100*100/(val+200)
 end
 
-function Needs.powerFnCurve(val, amplitude)
-	local amplitude = amplitude or 175
-    return 100*100 / (val + amplitude)
-end
 
-function Needs.logCurve(val, xOffset, amplitude, frequency)
-	local xOffset = xOffset or 95
-	local amplitude = amplitude or 1.5 -- lower = greater
-	local frequency = frequency or 2
-	return -math.log(val + xOffset) * frequency / amplitude
-end
 
 function Needs.linearCurve(val, steepness)
 	local steepness = steepness or 3

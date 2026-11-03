@@ -54,14 +54,6 @@ end
 function Schema.object(tFieldSchemas, sDescription, sGroup)
     return Schema.ObjectType.new(tFieldSchemas, sDescription, sGroup)
 end
-function Schema.derivedObject(rBaseObject, tFieldSchemas, sDescription, sGroup)
-    for field, rFieldSchema in pairs(rBaseObject.tFieldSchemas) do
-        if not tFieldSchemas[field] then
-            tFieldSchemas[field] = rFieldSchema
-        end
-    end
-    return Schema.ObjectType.new(tFieldSchemas, sDescription, sGroup)
-end
 
 -- Convenience types
 function Schema.enum(default, tCandidates, sDescription, sGroup)
@@ -171,42 +163,8 @@ function Schema:getFieldSchema(field)
     return nil
 end
 
-function Schema:modifyField(tData, tPath, value)
-    local field = table.remove(tPath, #tPath)
-    local tContainer, rSchema = self:_getPath(tData, tPath)
-    tContainer[field] = value
-    Schema.prepareForEditing(value, tContainer, field)
-    if rSchema then
-        rSchema:_onSetField(tContainer, field, value)
-    end
-end
 
-function Schema:insertField(tData, tPath, index, value)
-    local tContainer, rSchema = self:_getPath(tData, tPath)
-    -- Reindex trailing elements
-    for i = index, #tContainer do
-        tContainer[i].__schemaParentKey = i + 1
-    end
-    table.insert(tContainer, index, value)
-    
-    Schema.prepareForEditing(value, tContainer, index)
-    if rSchema then
-        rSchema:_onInsertField(tContainer, index, value)
-    end
-end
 
-function Schema:removeField(tData, tPath, index)
-    local tContainer, rSchema = self:_getPath(tData, tPath)
-    -- Reindex trailing elements
-    for i = index + 1, #tContainer do
-        tContainer[i].__schemaParentKey = i - 1
-    end
-    local value = table.remove(tContainer, index)
-    Schema.prepareForEditing(value, nil, nil)
-    if rSchema then
-        rSchema:_onRemoveField(tContainer, index, value)
-    end
-end
 
 function Schema:_getPath(tData, tPath, pathIndex)
     if not pathIndex then
@@ -274,87 +232,15 @@ function Schema.ContainerType.new(rValueSchema, sDescription, sGroup)
     return self
 end
 
-function Schema.ContainerType:registerChangeHandler(tData, handler, firstArg, bRecursive)
-    local tDelegates = self.tChangeDelegates
-    if bRecursive then
-        tDelegates = self.tRecursiveChangeDelegates
-    end
-    local delegate = tDelegates[tData]
-    if not delegate then
-        delegate = Delegate.new()
-        tDelegates[tData] = delegate
-    end
-    delegate:register(handler, firstArg)
-end
 
-function Schema.ContainerType:unregisterChangeHandler(tData, handler, firstArg)
-    if self.tChangeDelegates[tData] then
-        self.tChangeDelegates[tData]:unregister(handler, firstArg)
-        self.tChangeDelegates[tData] = nil
-    end
-    if self.tRecursiveChangeDelegates[tData] then
-        self.tRecursiveChangeDelegates[tData]:unregister(handler, firstArg)
-        self.tRecursiveChangeDelegates[tData] = nil
-    end
-end
 
-function Schema.ContainerType:registerFieldChangeHandler(tData, field, handler, firstArg)
-    local tFieldDelegates = self.tFieldChangeDelegates[field]
-    if not tFieldDelegates then
-        tFieldDelegates = {}
-        self.tFieldChangeDelegates[field] = tFieldDelegates
-    end
-    local delegate = tFieldDelegates[tData]
-    if not delegate then
-        delegate = Delegate.new()
-        tFieldDelegates[tData] = delegate
-    end
-    delegate:register(handler, firstArg)
-end
 
-function Schema.ContainerType:unregisterFieldChangeHandler(tData, field, handler, firstArg)
-    local tFieldDelegates = self.tFieldChangeDelegates[field]
-    local delegate = tFieldDelegates[tData]
-    if delegate ~= nil then
-        delegate:unregister(handler, firstArg)
-        tFieldDelegates[tData] = nil
-    end
-end
 
 function Schema.ContainerType:getFieldSchema(field)
     return self.rValueSchema
 end
 
-function Schema.ContainerType:_onSetField(tData, field, value)
-    local tFieldDelegates = self.tFieldChangeDelegates[field]
-    if tFieldDelegates then
-        local fieldDelegate = tFieldDelegates[tData]
-        if fieldDelegate then
-            fieldDelegate:dispatch(tData, field, value)
-        end
-    end
-    local delegate = self.tChangeDelegates[tData]
-    if delegate then
-        delegate:dispatch(tData, field, value)
-    end
-    self:_notifyAncestors(tData, field, value)
-end
     
-function Schema.ContainerType:_notifyAncestors(tData, field, value)
-    local rAncestor = self
-    local ancestorValue = value
-    local ancestorKey = field
-    while rAncestor ~= nil do
-        local recursiveDelegate = rAncestor.tRecursiveChangeDelegates[tData]
-        if recursiveDelegate then
-            recursiveDelegate:dispatch(tData, ancestorKey, ancestorValue)
-        end
-        rAncestor = rAncestor.rParent
-        ancestorValue = tData
-        ancestorKey = tData:parentKey()
-        tData = tData:parentContainer()
-    end
-end
 
 
 ----------------------------------------------------------------------
@@ -372,55 +258,11 @@ function Schema.ArrayType.new(rValueSchema, sDescription, sGroup)
     return self
 end
 
-function Schema.ArrayType:registerFieldInsertHandler(tData, handler, firstArg)
-    local delegate = self.tInsertDelegates[tData]
-    if not delegate then
-        delegate = Delegate.new()
-        self.tInsertDelegates[tData] = delegate
-    end
-    delegate:register(handler, firstArg)
-end
 
-function Schema.ArrayType:unregisterFieldInsertHandler(tData, handler, firstArg)
-    local delegate = self.tInsertDelegates[tData]
-    delegate:unregister(handler, firstArg)
-    self.tInsertDelegates[tData] = nil
-end
 
-function Schema.ArrayType:registerFieldRemoveHandler(tData, handler, firstArg)
-    local delegate = self.tRemoveDelegates[tData]
-    if not delegate then
-        delegate = Delegate.new()
-        self.tRemoveDelegates[tData] = delegate
-    end
-    delegate:register(handler, firstArg)
-end
 
-function Schema.ArrayType:unregisterFieldRemoveHandler(tData, handler, firstArg)
-    local delegate = self.tRemoveDelegates[tData]
-    delegate:unregister(handler, firstArg)
-    self.tRemoveDelegates[tData] = nil
-end
 
-function Schema.ArrayType:_onInsertField(tData, index, value)
-    local delegate = self.tInsertDelegates[tData]
-    if delegate then
-        delegate:dispatch(tData, index, value)
-    end
-    if self.rParent then
-        self.rParent:_notifyAncestors(tData:parentContainer(), tData:parentKey(), tData)
-    end
-end
 
-function Schema.ArrayType:_onRemoveField(tData, index, value)
-    local delegate = self.tRemoveDelegates[tData]
-    if delegate then
-        delegate:dispatch(tData, index, value)
-    end
-    if self.rParent then
-        self.rParent:_notifyAncestors(tData:parentContainer(), tData:parentKey(), tData)
-    end
-end
 
 
 ----------------------------------------------------------------------

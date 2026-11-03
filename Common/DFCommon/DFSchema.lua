@@ -39,9 +39,6 @@ function DFSchema.metaData(value)
     return MetaDataType.new(value)
 end
 
-function DFSchema.sequenceCommandMetaData(value)
-    return SequenceCommandMetaDataType.new(value)
-end
 
 function DFSchema.componentTable(tComponentSchemas, sDescription)
     return ComponentTableType.new(tComponentSchemas, sDescription)

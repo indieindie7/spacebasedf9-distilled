@@ -26,8 +26,5 @@ function EffectEvent:isDone()
 end
 
 -- PROTECTED FUNCTIONS
-function EffectEvent:_setEffect(rEffect)
-    self.rEffect = rEffect
-end
 
 return EffectEvent

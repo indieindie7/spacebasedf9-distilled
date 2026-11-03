@@ -36,9 +36,6 @@ function ResearchZone:initFromSaveTable(t)
     self:setActiveResearch(t.sCurrentResearch)
 end
 
-function ResearchZone:getActiveResearch()
-    return self.sCurrentResearch
-end
 
 function ResearchZone:getResearchStatus()
     return self.sCurrentResearch

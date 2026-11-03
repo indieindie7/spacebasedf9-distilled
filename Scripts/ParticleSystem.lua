@@ -82,9 +82,6 @@ function ParticleEffect:unload()
     self.bUnloaded = true
 end
 
-function ParticleEffect:isUnloaded()
-    return self.rParticleSystem == nil or self:isDone()
-end
 
 function ParticleEffect:addToEntity()
 
@@ -170,11 +167,6 @@ function ParticleEffect:setOffsetRotation(tOffset)
     self:_updateRootOffset()
 end
 
-function ParticleEffect:setTargetProp(rProp)
-
-    self.rTargetProp = rProp
-    self.rParticleSystem:setTarget(self.rTargetProp)
-end
 
 function ParticleEffect:setTargetOffset(tOffset)
 

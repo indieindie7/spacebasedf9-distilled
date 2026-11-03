@@ -893,20 +893,6 @@ function CommandObject.clearSavedCommandStates(bRestoring, bDontExpendMatter)
 	end
 end
 
-function CommandObject.getPriorCommand(cellAddr)
-	-- returns a command type and command data if tile with given address was
-    -- confirmed in a previous build session, nil if tile was set down this
-    -- session (ie part of cost estimates)
-    if not (CommandObject.tPrevCommands or CommandObject.tCommands) then
-        return nil
-    end
-    for idx,cmd in pairs(CommandObject.tPrevCommands) do
-        if cmd.tTiles[cellAddr] then
-            return idx,cmd,cmd.tTiles[cellAddr]
-        end
-    end
-    return nil
-end
 
 function CommandObject.addCommand(tempCommandObject)
     if tempCommandObject.commandAction == CommandObject.COMMAND_BATCH then
@@ -1187,25 +1173,6 @@ end
 
 -- find a build command at the specified location, or adjacent.
 -- returns world coordinates, despite the name.
-function CommandObject.findBuildTile(worldX,worldY,requiredType,rTask,nRange)
-    local tileX,tileY = g_World._getTileFromWorld(worldX,worldY) 
-    local testFn=function(tx,ty)
-        if rTask then
-            if rTask.rActivityOption:reserved(tx,ty,rTask.rChar) then return false end
-        end
-
-        local addr = g_World.pathGrid:getCellAddr(tx,ty)
-        local cmdObj = CommandObject.tCommands[addr]
-        if cmdObj and cmdObj.commandAction == CommandObject.COMMAND_BUILD_TILE then
-            -- MTF hack: regardless of required type, always adds a vaporize command.
-            if cmdObj.tTiles[addr].buildTileType == CommandObject.BUILD_PARAM_VAPORIZE or not requiredType or (requiredType == g_World.logicalTiles.WALL and cmdObj.tTiles[addr].buildTileType == g_World.logicalTiles.WALL)
-                    or (requiredType == g_World.logicalTiles.ZONE_LIST_START and cmdObj.tTiles[addr].buildTileType == g_World.logicalTiles.ZONE_LIST_START) then
-                return true
-            end
-        end
-    end
-    return CommandObject._findAppropriateTile(worldX,worldY,testFn,nRange)
-end
 
 function CommandObject.findMineTile(worldX,worldY,rTask,nRange)
     local tileX,tileY = g_World._getTileFromWorld(worldX,worldY) 

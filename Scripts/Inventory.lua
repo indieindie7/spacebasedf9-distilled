@@ -339,24 +339,6 @@ function Inventory.heldOnly(tItem)
     return tItemTemplate.bHeldOnly
 end
 
-function Inventory.createItemAtCursor(sTemplate, tOverrides)
-    if not sTemplate then
-        local idx = math.random(1,#InventoryData.tStuffNames)
-        sTemplate = InventoryData.tStuffNames[idx]
-    end
-    if sTemplate == 'ResearchDatacube' then
-        if not tOverrides then tOverrides = {} end
-        if not tOverrides.sResearchData then
-            tOverrides.sResearchData = require('GameEvents.Event')._getRandomDatacubeResearch()
-        end
-    end
-    local tItem = Inventory.createItem(sTemplate, tOverrides)
-    local DFInput = require('DFCommon.Input')
-    local x,y = DFInput.m_x, DFInput.m_y
-    local wx,wy = require('Renderer').getWorldFromCursor(x,y)
-    local rPickup = require('Pickups.Pickup').dropInventoryItemAt(tItem,wx,wy)
-    return rPickup,tItem
-end
 
 function Inventory.createItem(sTemplate, tOverrides)
     local tItem = {sTemplate=sTemplate}
@@ -446,8 +428,5 @@ function Inventory._generateName(tItem)
     return sName
 end
 
-function Inventory.canStack(tItemA,tItemB)
-    return tItemA.sTemplate == tItemB.sTemplate and InventoryData.tTemplates[tItemA.sTemplate].bStackable
-end
 
 return Inventory

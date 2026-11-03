@@ -727,30 +727,5 @@ function ActivityOption:_gateActivity(rChar, nMinPriority)
 end
 
 
-function ActivityOption.testCurve(taskName, step)
-	if not step then
-		step = 5
-	end
-	-- dump list of scores for a task sampled from a need's curve
-	-- generic overview, doesn't take into account specific citizen variables
-	print('============================')
-	print('needs curve data dump for task ' .. taskName .. ':')
-	print('----------------------------')
-	local taskNeeds = OptionData.tAdvertisedActivities[taskName].Needs
-    if taskNeeds then
-	    for needName,benefit in pairs(taskNeeds) do
-		    print('fulfillment of ' .. needName .. ' need (benefit ' .. benefit .. '):')
-		    local need = Needs.tNeedList[needName]
-		    for curVal=-100,100,step do
-			    local futureVal = curVal + benefit
-			    futureVal = Needs.clamp(futureVal)
-			    local score = need.scoreFn(curVal, futureVal, need.curveFn)
-			    print(curVal .. ' -> ' .. futureVal .. ' = ' .. score)
-		    end
-	    end
-    end
-	print(taskName .. ' dump complete.')
-	print('============================')
-end
 
 return ActivityOption

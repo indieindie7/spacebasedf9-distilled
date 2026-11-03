@@ -75,9 +75,6 @@ function Event.getHostilityMod(bHostile)
     return nMod
 end
 
-function Event.spawnsCharacters()
-    return false, 0
-end
 
 -- Weighting for this event type
 -- we pipe in these two arguments because we are likely generating a weight

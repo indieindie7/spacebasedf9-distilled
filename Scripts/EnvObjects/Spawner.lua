@@ -31,9 +31,6 @@ function Spawner:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
     end
 end
 
-function Spawner:setSpawnType(s)
-    self.tParams.spawnerName = s
-end
 
 function Spawner:getSpawnType()
     return self.tParams.spawnerName

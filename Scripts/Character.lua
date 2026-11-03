@@ -944,11 +944,6 @@ function Character:isAdjacentToObj(rObj)
 	return World.areWorldCoordsAdjacent(cx,cy,tx,ty, true, true)
 end
 
-function Character:faceDir(dir)
-	local tx, ty = World._getTileFromWorld(self:getLoc())
-	local faceX, faceY = World._getAdjacentTile(tx, ty, dir)
-	self:faceTile(faceX, faceY)
-end
 
 -- AI -------------------------------------------------------------------------------------------------
 function Character:getNeedValue(needName,rAO)
@@ -987,22 +982,6 @@ function Character:retrieveMemory(key)
 end
 
 -- return: tile pairs
-function Character:_getNearbyZoneDestination(sZoneType)
-	-- returns a reasonably near (current or adjacent room) pair of
-	-- points in the specified zone type
-	local rCurrentRoom = self.rCurrentRoom
-	if not rCurrentRoom or rCurrentRoom == Room.getSpaceRoom() or rCurrentRoom.bDestroyed then return end
-
-	if rCurrentRoom:getZoneName() == sZoneType then
-		return rCurrentRoom:getPathableTilePairs()
-	end
-	local tNearbyRooms = rCurrentRoom:getAccessibleByDoor()
-	for room,_ in pairs(tNearbyRooms) do
-		if room.zoneObj and room:getZoneName() == sZoneType then
-			return room:getPathableTilePairs()
-		end
-	end
-end
 
 -- does self hate rChar?
 function Character:_hates(rChar)
@@ -1760,11 +1739,6 @@ function Character:setElevatedSpacewalk(bElevated, bForce)
 	self.tStatus.bElevatedSpacewalk = bElevated
 end
 
-function Character:_setColor(r,g,b,a)
-	if self.rRig and self.rRig.rMainMesh then
-		self.rRig.rMainMesh:setColor(r,g,b,a)
-	end
-end
 
 function Character:isElevated()
 	return self.tStatus.bElevatedSpacewalk
@@ -2783,14 +2757,6 @@ function Character:selectNewTask()
 	self.nWaitingTime = 0
 end
 
-function Character:_finishOldTask()
-	if not self.rCurrentTask or self.rCurrentTask:isChildTask() then return end
-
-	self.tStatus.sOldTaskName = self.rCurrentTask.activityName
-	self.tStatus.bOldTaskWorkShift = self.rCurrentTask:getTag('WorkShift')
-
-	self.rCurrentTask = nil
-end
 
 -- MTF HACK:
 -- There are some useful tests to do while we still have pathfinding cached, so I throw them in here.
@@ -3213,8 +3179,6 @@ end
 -- PRIVATE -------------------------------------------------------
 ------------------------------------------------------------------
 
-function Character:_setCharacterVisuals( tData )
-end
 
 function Character:_setStats( tData )
 	-- try to load from save
@@ -3444,9 +3408,6 @@ function Character:getPersonalityStat(sName)
     return self.tStats.tPersonality[sName]
 end
 
-function Character:getRaceName()
-	return g_LM.line(Character.tRaceNames[self.tStats.nRace])
-end
 
 function Character:getSuitOxygenSeconds()
 	return self.tStatus.suitOxygen / Character.OXYGEN_PER_SECOND
@@ -4056,13 +4017,6 @@ table.insert(self.tHandVariations, self.tHandAccessoryVariation)
 self.rRig:setVariationLayer( self.tHandVariations )
 end]]--
 
-function Character:toggleSpacesuit()
-	if self.rRig:isActive() then
-		self:spacesuitOn()
-	else
-		self:spacesuitOff()
-	end
-end
 
 function Character:spacesuitOn(bInitializing)
 	if not self.rSpacesuitRig then return end
@@ -6241,11 +6195,6 @@ function Character:cure(sName)
     self.tStats.tImmunities[sName] = GameRules.elapsedTime
 end
 
-function Character:DBG_cureAllMaladies()
-	for sName,tMalady in pairs(self.tStatus.tMaladies) do
-		self:cure(sName)
-	end
-end
 
 ------------------------------------------------------
 -- SPECIFIC TASKS

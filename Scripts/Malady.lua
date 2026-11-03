@@ -303,27 +303,6 @@ end
 
 -- Rough guess at the badness of a malady. Should maybe just pick a number to hardcode in MaladyData?
 -- returns 0-1.
-function Malady.getMaladyDifficulty(tMalady)
-    local nRemainingResearch = 0
-    local sMaladyName = tMalady.sMaladyName
-
-    if not Malady.hasDiscoveredCure(sMaladyName) then
-        nRemainingResearch = Malady.tS.tResearch[sMaladyName].nResearchCure - Malady.tS.tResearch[sMaladyName].nCureProgress
-    end
-    nRemainingResearch = math.min(.2, .2 * nRemainingResearch / 1500)
-
-    local nSeverity = math.min(.4, .35 * (tMalady.nSeverity + (tMalady.nAdditionalDeadliness or 0)))
-
-    local nPerceptionGap = math.max(0,math.min(.1, 0.25 * (tMalady.nSeverity - tMalady.nPerceivedSeverity)))
-
-    local nContagiousness = 0
-    if tMalady.bSpreadSneeze then nContagiousness = nContagiousness + .15 end
-    if tMalady.bSpreadTouch then nContagiousness = nContagiousness + .15 end
-
-    --print('contag',nContagiousness,'sev',nSeverity,'percept',nPerceptionGap,'resrch',nRemainingResearch)
-
-    return nContagiousness + nSeverity + nPerceptionGap + nRemainingResearch
-end
 
 function Malady.createNewMaladyInstance(sMaladyType, bUseExistingStrain, bRequireResearch, nResearchTimeOverride)
     local tMaladySpec = DFUtil.deepCopy( MaladyData[sMaladyType] )

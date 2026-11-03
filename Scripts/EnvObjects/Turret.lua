@@ -508,12 +508,5 @@ function Turret:getThreatLevel()
     return Character.THREAT_LEVEL.Turret
 end
 
-function Turret:getZ(wx,wy)
-    -- fudge the z a little to draw the turret barrel in front of adjacent walls.
-    local tx, ty = g_World._getTileFromWorld(self:getLoc())
-    tx,ty = g_World._getAdjacentTile(tx,ty, g_World.directions.SW)
-    wx,wy = g_World._getWorldFromTile(tx,ty)
-    return g_World.getHackySortingZ(wx,wy-5)
-end
 
 return Turret

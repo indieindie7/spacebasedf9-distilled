@@ -502,14 +502,6 @@ function EventController._getNextEventTimeDelta()
     return t
 end
 
-function EventController.DBG_fakeLateForecast()
-    EventController.tS.tEventForecast = {}
-    if #EventController.tS.tPrevEventInfo == 0 then
-        table.insert(EventController.tS.tPrevEventInfo, {})
-    end
-    EventController.generateEventForecast(30,60*60*2)
-    print(EventController.getForecastDebugText())
-end
 
 function EventController.generateEventForecast(nForcePop,nForceTime)
     EventController.tS.tEventForecast = {}

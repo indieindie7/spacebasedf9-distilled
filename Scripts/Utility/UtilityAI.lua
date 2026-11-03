@@ -16,13 +16,7 @@ local UtilityAI = {
     DEBUG_PROFILE = false,
 }
 
-function UtilityAI.getGlobalList()
-    return { { stub=true, } }
-end
 
-function UtilityAI.createIdleTask(rChar)
-    return require('Utility.Tasks.Breathe').new(rChar)
-end
 
 function UtilityAI.getNearbyCharacters(rChar)
     return require('CharacterManager').getCharacters()

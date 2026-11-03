@@ -157,10 +157,6 @@ function ScCreateEntity:setEntityLoc(rEntity, tLoc)
     rEntity.rProp:forceUpdate()
 end
 
-function ScCreateEntity:setEntityScl(rEntity, tScl)
-    
-    rEntity.rProp:setScl( unpack(tScl) )
-end
 
 function ScCreateEntity:onExecute()   
     local rEntity = self.rEntity
@@ -273,9 +269,6 @@ end
 
 -- PUBLIC FUNCTIONS --
 
-function ScCreateEntity:getEntity()
-    return self.rEntity
-end
 
 -- PROTECTED FUNCTIONS --
 

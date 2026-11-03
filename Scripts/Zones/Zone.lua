@@ -738,38 +738,8 @@ function Zone.getZoneDataForIdx(idx)
     return zoneData
 end
 
-function Zone.randomTileIndex(zoneName)
-    return DFUtil.arrayRandom(Zone[zoneName].indexes)
-end
 
-function Zone.randomTileIndexFromIndex(idx)
-    return DFUtil.arrayRandom(Zone[ Zone.tOrderedZoneList[idx] ].indexes)
-end
 
-function Zone.shouldPlaceLightForEdgeTile(tileX, tileY, zoneId)
-    local bPlace = false
-    
-    local tileLeftDiagX = ((tileY % 2 == 1) and tileX-1) or tileX
-    local tileLeftDiagY = 1 --((tileY % 2 == 1) and tileX-1) or tileX
-    
-    local zoneDef = Zone[zoneId]
-    
-    -- TODO: ideally we would be working with iso diamond coords such that the top left tile is 0,0, the tile to the right of that is 1,0, and the tile
-    --        below 0,0 would be 0,1. Instead we're being fed this stacked diamond garbage :(
-    if zoneDef then
-        local tileLightX = tileLeftDiagX % zoneDef.nNumTilesBetweenWallLights
-        local tileLightY = tileLeftDiagY % zoneDef.nNumTilesBetweenWallLights
-
-        --print("light tile: " .. tileX .. ", " .. tileY .. " - tileLight: " .. tileLightX .. ", " .. tileLightY .. " - tileLeftDiag: " .. tileLeftDiagX .. ", " .. tileLeftDiagY)
-        
-        if  (tileLightX == 0) 
-         or (tileLightY == 0) then
-            bPlace = true
-        end
-    end
-    
-    return bPlace
-end
 
 function Zone.getUniqueZoneName(zoneName)
 	-- each zone has its own naming "style"; delegate to unique generators
@@ -908,9 +878,6 @@ function Zone.getPubName()
 	return name
 end
 
-function Zone.getLightSpriteForWallIndex(wallIndex)
-    
-end
 
 function Zone.initZoneData()
     local EnvObjectData = require('EnvObjects.EnvObjectData')

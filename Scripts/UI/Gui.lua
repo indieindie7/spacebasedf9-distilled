@@ -178,9 +178,6 @@ function Gui.createTextBox(styleName, hAlign, vAlign)
 	return rTextBox
 end
 
-function Gui.getActivePane()
-    return Gui.rCurActivePane
-end
 
 function Gui._popPaneStack()
     if #Gui.paneStack > 0 then

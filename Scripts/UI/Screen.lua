@@ -79,20 +79,5 @@ function Screen:inputKeyboard(key, bKeyDown)
 end
 
 -- PROTECTED FUNCTIONS
-function Screen:widgetInputPointer(rLayer, tPointer, bDoubleTap)
-
-    local rPartition = rLayer:getPartition()
-    if rPartition ~= nil then
-    
-        local x, y = rLayer:wndToWorld(tPointer.x, tPointer.y)
-        local rHit = rPartition:propForPoint(x, y)
-        
-        if rHit ~= nil and rHit.rWidget ~= nil then
-            return rHit.rWidget:inputPointer(tPointer, bDoubleTap)
-        end
-    end
-    
-    return false
-end
 
 return Screen

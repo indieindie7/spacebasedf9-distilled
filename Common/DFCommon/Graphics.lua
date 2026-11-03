@@ -127,10 +127,6 @@ function m.dumpTextures(sDumpTag)
     dataBuffer:save( dumpDir .. sDumpTag .. "_" ..os.time() .. ".csv", false )
 end
 
-function m.setDefaultTextureFilter(minFilter, magFilter)
-    m.defaultMinFilter = minFilter
-    m.defaultMagFilter = magFilter
-end
 
 function m.reloadTextureData(texturePath, loadAsynchronously)
     local tex = m.textureLibrary[texturePath]
@@ -579,27 +575,6 @@ function m.loadFont(sFontName)
     return font
 end
 
-function m.unloadFont(sFontName)
-    local font = m.fontLibrary[sFontName]
-    if font ~= nil then
-        font.refCount = font.refCount - 1
-        if font.refCount == 0 then
-            if font.tTextures ~= nil then
-                -- Unload the preloaded textures
-                for _,rFontTexture in ipairs(font.tTextures) do
-                    m.unloadTexture(rFontTexture.path)
-                end
-                -- Release the internals
-                m.fontLibrary[sFontName] = nil
-            else
-                -- NSM: Curenntly no way to unload a font, so hack the refcount to 1
-                font.refCount = 1
-                -- font::release()
-                -- m.fontLibrary[fontName] = nil
-            end
-        end
-    end    
-end
 
 function m.reloadShaderData(shaderPath, clearCache)
     local shader = m.shaderLibrary[shaderPath]
@@ -716,41 +691,6 @@ function m.reloadAllShaders()
     end
 end
 
-function m.printShaderUsageStats()
-    Trace("Shader usage:")
-    Trace("=============")
-    
-    local numSingles = 0
-    local singlePercentage = 0
-    local numMultis = 0
-    local multiPercentage = 0
-    
-    for shaderPath, shader in pairs(m.shaderLibrary) do
-        local hasPermutations, numPrograms, numProgramsUsed = shader:getUsageStats()
-        local relativeProgramsUsed = numProgramsUsed * 100 / numPrograms
-        Trace("* " .. shader.path)
-        Trace("   " .. tostring(numProgramsUsed) .. "/" .. tostring(numPrograms) .. " (" .. tostring(math.floor(relativeProgramsUsed)) .. "%%)")
-        if hasPermutations then
-            numMultis = numMultis + 1
-            multiPercentage = multiPercentage + relativeProgramsUsed
-        else
-            numSingles = numSingles + 1
-            singlePercentage = singlePercentage + relativeProgramsUsed
-        end
-    end
-    
-    Trace("-------------")
-    
-    if numSingles > 0 then numSingles = 1 / numSingles else numSingles = 0 end
-    local avgSinglePercentage = singlePercentage * numSingles
-    Trace("Singles: " .. tostring(math.floor(avgSinglePercentage)) .. "%%")
-    
-    if numMultis > 0 then numMultis = 1 / numMultis else numMultis = 0 end
-    local avgMultiPercentage = multiPercentage * numMultis
-    Trace("Multis:  " .. tostring(math.floor(avgMultiPercentage)) .. "%%")
-    
-    Trace("=============")
-end
 
 function m.reloadMaterial(material, clearCache)
 
@@ -1028,26 +968,6 @@ function m.overlaps(sprite1, sprite2)
     return DFMath.overlaps(xMin1, yMin1, xMax1, yMax1, xMin2, yMin2, xMax2, yMax2)
 end
 
-function m.aggregateWorldBounds(propList)
-    if #propList == 0 then
-        return 0, 0, 0, 0, 0, 0
-    end
-    local x0, y0, z0, x1, y1, z1
-    local bFirst = true
-    for _, prop in pairs(propList) do
-        if bFirst then
-            x0, y0, z0, x1, y1, z1 = prop:getWorldBounds()
-            bFirst = x0 == nil
-        else
-            local px0, py0, pz0, px1, py1, pz1 = prop:getWorldBounds()
-            if px0 ~= nil then
-                x0, y0, z0 = math.min(x0, px0), math.min(y0, py0), math.min(z0, pz0)
-                x1, y1, z1 = math.max(x1, px1), math.max(y1, py1), math.max(z1, pz1)            
-            end
-        end
-    end
-    return x0, y0, z0, x1, y1, z1
-end
 
 function m.getNormalizedAssetPath( assetPath )
 

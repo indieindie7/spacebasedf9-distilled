@@ -330,9 +330,6 @@ function GameRules.checkCameraPan(dt)
     GameRules.panCamera(dx, dy)
 end
 
-function GameRules._DBGnext(fn)
-    GameRules.DBG_runNext = fn
-end
 
 function GameRules.onTick(dt)
 
@@ -1172,9 +1169,6 @@ function GameRules.randomSetup(tLandingZone)
     GameRules.placeModule(tModuleData, tileX, tileY, true)
 end
 
-function GameRules.toggleHints(bEnable)
-    GameRules.bHintsDisabled = not bEnable
-end
 
 function GameRules.setEditMode(bEnable)
     if bEnable == GameRules.inEditMode then
@@ -1218,10 +1212,6 @@ function GameRules.updateAudioLevels()
 end
 
 -- volume in menus is constant
-function GameRules.removeScaleFromAudioLevels()
-    GameRules.bAudioLevelScaleApplied = true
-    GameRules.updateAudioLevels()
-end
 
 function GameRules.applyScaleToAudioLevels(scale)
     GameRules.nAudioLevelLastScale = GameRules.nAudioLevelLastScale or GameRules.MAX_ZOOM
@@ -1287,17 +1277,6 @@ function GameRules._centerCameraOnPoint(x, y, z)
     GameRules.setCameraLoc(x,y, z or cz)
 end
 
-function GameRules._resetCamera()
-    -- center camera on "first" character
-    GameRules.lastZoom = 1
-    GameRules._setZoom(1.0)
-    local tChars = CharacterManager.getCharacters()
-    local firstChar = tChars[1]
-    if firstChar then
-        local x, y = firstChar:getLoc()
-        GameRules._centerCameraOnPoint(x, y)
-    end
-end
 
 function GameRules.startCameraShake(nMag,nDuration)
     local camera = Renderer.getGameplayCamera()
@@ -1620,26 +1599,7 @@ function GameRules.getMatter()
     return GameRules.nMatter
 end
 
-function GameRules.repairSelectedObject()
-	GameRules.setSelectedObjectCondition(100)
-end
 
-function GameRules.setSelectedObjectCondition(condition)
-	local rObject = g_GuiManager.getSelected(ObjectList.ENVOBJECT)
-	if rObject then
-		rObject:_setCondition(condition)
-	end
-end
 
-function GameRules.getTotalIndoorTiles()
-	-- returns # of interior (non-breached) player-owned floor tiles
-	local tiles = 0
-	for idx,room in pairs(Room.tRooms) do
-		if not room.bBreach and room.nTeam == Character.TEAM_ID_PLAYER then
-			tiles = tiles + room.nTiles
-		end
-	end
-	return tiles
-end
 
 return GameRules

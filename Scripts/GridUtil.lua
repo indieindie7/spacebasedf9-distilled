@@ -116,14 +116,8 @@ function GridUtil.GetMaxSquareCoordY(nSqX)
 end
 
 -- safety checks if you want to loop over the grid but aren't sure if your value is in range
-function GridUtil.CheckSquareToIsoValue(tx, ty)
-    return nil ~= GridUtil._SquareToIsoLookup[tx] and nil ~= GridUtil._SquareToIsoLookup[tx][ty]
-end
 
 -- safety checks if you want to loop over the grid but aren't sure if your value is in range
-function GridUtil.CheckIsoToSquareValue(tx, ty)
-    return nil ~= GridUtil._SquareToIsoLookup[tx] and nil ~= GridUtil._SquareToIsoLookup[tx][ty]
-end
 
 -- check to see if two tiles in iso space have line of sight between them.
 --  we do this by first figuring out the line, then iterating over the tiles to see if we
@@ -362,63 +356,6 @@ end
 
 -- get all the tiles for the outside edges of a circle. All tiles will be ~radius distance
 --  from the center. Uses the midpoint circle algorithm.
-function GridUtil.GetTilesForIsoCircleBorder(centerX, centerY, radius)
-    
-    local x0, y0 = GridUtil.IsoToSquare(centerX, centerY)
-    
-    local tPoints = {}
-    
-    local f = 1 - radius
-    local ddF_x = 0
-    local ddF_y = -2 * radius
-    local x = 0
-    local y = radius
-    
-    -- use hashing to avoid adding duplicates. kinda crummy but this might
-    --  only get faster if we switch to C++.
-    local function addPoint(tPoints, x, y)
-    
-        -- now convert from square tiles back to iso. We also need to remove duplicates from the table
-        local key = x .. "_" .. y
-        x,y = GridUtil.SquareToIso(x, y)
-        if g_World._isInBounds(x,y) then
-            tPoints[key] = {x=x, y=y}
-        end
-    end
-    
-    addPoint(tPoints, x0, y0 + radius)
-    addPoint(tPoints, x0, y0 - radius)
-    addPoint(tPoints, x0 + radius, y0)
-    addPoint(tPoints, x0 - radius, y0)
-    
-    while x < y do
-        if f >= 0 then 
-            y = y - 1
-            ddF_y = ddF_y + 2
-            f = f + ddF_y
-        end
-        x = x + 1
-        ddF_x = ddF_x + 2;
-        f = f + ddF_x + 1;    
-
-        addPoint(tPoints, x0 + x, y0 + y)
-        addPoint(tPoints, x0 - x, y0 + y)
-        addPoint(tPoints, x0 + x, y0 - y)
-        addPoint(tPoints, x0 - x, y0 - y)
-        addPoint(tPoints, x0 + y, y0 + x)
-        addPoint(tPoints, x0 - y, y0 + x)
-        addPoint(tPoints, x0 + y, y0 - x)
-        addPoint(tPoints, x0 - y, y0 - x)
-    end
-    
-    local tHashedPoints = tPoints
-    tPoints = {}
-    for idx,point in pairs(tHashedPoints) do
-        table.insert(tPoints, point)
-    end
-    
-    return tPoints
-end
 
 -- get all the tiles for a filled circle
 function GridUtil.GetTilesForIsoCircle(centerX, centerY, radius)
@@ -445,13 +382,6 @@ function GridUtil.GetTileDistance(x1, y1, x2, y2)
 end
 
 -- useful if you're doing a whole bunch of these checks, removes a sqrt call.
-function GridUtil.GetTileDistanceSquared(x1, y1, x2, y2)
-    x1,y1 = GridUtil.IsoToSquare(x1,y1)
-    x2,y2 = GridUtil.IsoToSquare(x2,y2)
-    local dx,dy = x2-x1,y2-y1
-    dx,dy=dx*dx,dy*dy
-    return dx+dy
-end
 
 function GridUtil.OffsetAddrByWorld(addr,worldXOff,worldYOff)
     local tx, ty = g_World.pathGrid:cellAddrToCoord(addr)        

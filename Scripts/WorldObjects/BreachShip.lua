@@ -67,9 +67,6 @@ end
 
 -- tile "radius". Hideously approximate since horiz and vert tiles are different, so we probably should use
 -- the hit radius instead. But for now it's just used to give turrets a slightly longer range so it's fine.
-function BreachShip:getTileRadius()
-    return 3
-end
 
 -- worldspace hit enlargement.
 function BreachShip:getHitRadius()

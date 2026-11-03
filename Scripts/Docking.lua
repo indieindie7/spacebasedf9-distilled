@@ -437,9 +437,6 @@ function Docking._queueUpBuild(tModuleData,tx,ty,sEventType, tDockingTile,bDBGFo
     return Docking.tQueuedEvent
 end
 
-function Docking.getQueuedEvent()
-    return Docking.tQueuedEvent
-end
 
 function Docking.attemptQueueEvent(sEventType, nEventDifficulty)
     nEventDifficulty = nEventDifficulty or 0

@@ -89,8 +89,5 @@ function ActivityOptionList:getListAsUtilityOptions()
     return t
 end
 
-function ActivityOptionList:getList()
-    return self.tList
-end
 
 return ActivityOptionList

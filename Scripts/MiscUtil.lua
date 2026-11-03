@@ -36,13 +36,6 @@ function m.isoToSquare(tx,ty)
     return ns,we
 end
 
-function m.isoSquareDist(x1,y1,x2,y2)
-    x1,y1 = m.isoToSquare(x1,y1)
-    x2,y2 = m.isoToSquare(x2,y2)
-    local dx,dy = x2-x1,y2-y1
-    dx,dy=dx*dx,dy*dy
-    return math.sqrt(dx+dy)
-end
 
 function m.setTransformVisParent(child,parent)
     --child:setAttrLink ( MOAIProp2D.INHERIT_TRANSFORM, parent, MOAIProp2D.TRANSFORM_TRAIT )    

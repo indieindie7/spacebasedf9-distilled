@@ -225,9 +225,6 @@ function CharacterManager._updateJobCounts()
     end
 end
 
-function CharacterManager.getCitizenPopulation()
-    return #tCharacters
-end
 
 function CharacterManager.getOwnedCitizenPopulation()
     tOwnedCharacters = CharacterManager.getOwnedCharacters()
@@ -302,15 +299,6 @@ function CharacterManager.destroyCharacter( rCharacterProp )
     end
 end
 
-function CharacterManager.getCaptainsLog()
-    local sCaptainsLog = "--------------------------------------"
-    for _, rCharacter in ipairs( tOwnedCharacters ) do
-        sCaptainsLog = sCaptainsLog..rCharacter:getLogAsString()
-        local sCaptainsLog = "--------------------------------------"
-    end
-    
-    return sCaptainsLog
-end
 
 function CharacterManager.shutdown()
     if not tCharacters then
@@ -364,23 +352,6 @@ function CharacterManager.loadCharacter( tData, xOff, yOff, nTeam )
     return rCharacter
 end
 
-function CharacterManager.getCharacterNamed( sName, bExcludeDeadCharacters )
-	-- names are not guaranteed to be unique, so make sure you want this and not
-	-- CharacterManager.getCharacterByUniqueID below!
-    for _,rCharacter in ipairs( tCharacters ) do
-        if rCharacter:getUniqueID() == sName and rCharacter.tStatus.health ~= Character.STATUS_DEAD then
-			return rCharacter
-        end
-    end
-	if not bExcludeDeadCharacters then
-		for rChar,_ in pairs( tDeadCharacters ) do
-			if rChar.tStats.sName == sName then
-				return rChar
-			end
-		end
-	end
-    return nil
-end
 
 function CharacterManager.getCharacterByUniqueID( sUniqueID, bExcludeDeadCharacters )
     for _,rCharacter in ipairs( tCharacters ) do
@@ -496,27 +467,6 @@ function CharacterManager.DBG_addExperience()
     end
 end
 
-function CharacterManager.DBG_randomizeMorale()
-	for _,rChar in pairs(tCharacters) do
-		rChar.tStats.nMorale = math.random(Character.MORALE_MIN, Character.MORALE_MAX)
-	end
-end
 
-function CharacterManager.DBG_randomizeQuirks()
-	-- DEBUG: randomizes personality quirks for all citizens
-	for _,rChar in pairs(tCharacters) do
-		for k,_ in pairs(Character.PERSONALITY_TRAITS) do
-			if string.find(k, 'b') == 1 then
-				-- some boolean traits should be more or less common
-				local nChance = Character.PERSONALITY_LIKELIHOOD[k] or 0.5
-				local bCoinFlip = false
-				if math.random() < nChance then
-					bCoinFlip = true
-				end
-				rChar.tStats.tPersonality[k] = bCoinFlip
-			end
-		end
-	end
-end
 
 return CharacterManager

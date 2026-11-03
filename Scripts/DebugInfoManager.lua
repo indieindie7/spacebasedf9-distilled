@@ -99,18 +99,8 @@ function DebugInfoManager.onTick( dt )
     end
 end
 
-function DebugInfoManager.setDebugGridColor(tx,ty,color)
-    color = color or {0,0,0,0}
-    DebugInfoManager.debugColorGrid:setColor(tx,ty,unpack(color))
-end
 
-function DebugInfoManager.clearDebugGrid()
-    DebugInfoManager.debugColorGrid:fill(0)
-end
 
-function DebugInfoManager.setDebugGridEnabled(bEnabled)
-    g_World.setAnalysisPropEnabled(bEnabled,DebugInfoManager.debugColorGrid)
-end
 
 function DebugInfoManager.showTexture(rTexture)
     DebugInfoManager.debugTexture = rTexture

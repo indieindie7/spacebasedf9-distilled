@@ -149,8 +149,6 @@ function ObjectList.loadFromSaveTable(objType,t,xOff,yOff,nTeam)
     return o
 end
 
-function ObjectList.convertObjectTagsForSave(tSaveData)
-end
 
 function _isStaleTag(t)
     if type(t) == 'table' and t._ObjectList_TagMarker then
@@ -354,17 +352,6 @@ function ObjectList._generateNewObjectTagsForModuleLoad(tSaveData, nTagOffset, t
     end
 end
 
-function ObjectList._adjustAddr(addr,xOff,yOff)
-    if not xOff then return addr end
-
-    local tx,ty = World.pathGrid:cellAddrToCoord(addr)
-    local wx,wy = World._getWorldFromTile(tx,ty)
-    wx,wy = wx+xOff,wy+yOff
-    tx,ty = World._getTileFromWorld(wx,wy)
-    addr = World.pathGrid:getCellAddr(tx,ty)
-    
-    return addr,wx,wy
-end
 
 function ObjectList.getSaveTable(objType,tag,xOff,yOff)
     assertdev(not tag.bInvalid)
@@ -413,10 +400,6 @@ function ObjectList.getObjType(obj)
     end
 end
 
-function ObjectList.getObjSubtype(obj)
-    local _,st = ObjectList.getObjType(obj)
-    return st
-end
 
 function ObjectList.getCountOfType(sType)
     return ObjectList.tCountByType[sType] 
@@ -455,10 +438,6 @@ function ObjectList.getTypeIterater(typeName, bYieldTag, subtype)
     return iter, nil, nil       -- state and index are unused
 end
 
-function ObjectList.getObjByID(id)
-    local objData = id and ObjectList.tObjList[id]
-    if objData and not objData.tag.bInvalid then return objData.obj end
-end
 
 function ObjectList.reset()
     ObjectList.tObjList={}

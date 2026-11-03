@@ -55,54 +55,8 @@ LodManager.tLodProfiles = {
 
 LodManager.tAcceptedSceneLods = {}
 
-function LodManager.clearSceneLods()
 
-    LodManager.tAcceptedSceneLods = {}
-end
 
-function LodManager.addSceneLod(sLodName, bEnabled)
-
-    bEnabled = bEnabled or true
-    LodManager.tAcceptedSceneLods[sLodName] = bEnabled
-end
-
-function LodManager.applyLodProfile(sName)
-
-    local tProfile = LodManager.tLodProfiles[sName]
-    assert(tProfile ~= nil)
-
-    -- Reset the scene-LODs
-    LodManager.clearSceneLods()
-    
-    -- Add scene LODs
-    LodManager.addSceneLod("default")
-    
-    for _, sLod in ipairs(tProfile.tSceneLods) do
-        LodManager.addSceneLod(sLod)
-    end
-    
-    -- Reset shader LODSs
-    MOAIShaderMgr.clearPermutationFlagOverrides()
-    MOAIShaderMgr.clearPermutationSwitchOverrides()
-    
-    -- Set shader LODs
-    if tProfile.tShaderLods ~= nil then
-    
-        local tFlagOverrides = tProfile.tShaderLods.tFlagOverrides
-        if tFlagOverrides ~= nil then
-            for sFlagName, bIsEnabled in pairs(tFlagOverrides) do
-                MOAIShaderMgr.setPermutationFlagOverride(sFlagName, bIsEnabled)
-            end
-        end
-        
-        local tSwitchOverrides = tProfile.tShaderLods.tSwitchOverrides
-        if tSwitchOverrides ~= nil then
-            for sOptionName, sOverride in pairs(tSwitchOverrides) do
-                MOAIShaderMgr.setPermutationSwitchOverride(sOptionName, sOverride)
-            end
-        end
-    end
-end
 
 function LodManager.acceptExplicitSceneLod(sLodName)
 

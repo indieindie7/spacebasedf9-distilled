@@ -137,10 +137,6 @@ function Door:hasPower()
 	return g_PowerHoliday or ((rEastRoom and rEastRoom:hasPower()) or (rWestRoom and rWestRoom:hasPower()))
 end
 
-function Door:touchesRoom(rRoom)
-    local rE,rW = self:getRooms()
-    return rRoom == rE or rRoom == rW
-end
 
 function Door:getRooms()
 --[[

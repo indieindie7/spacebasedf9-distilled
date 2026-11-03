@@ -162,16 +162,6 @@ tEasterEggNames_Other = {
 
 }
 
-function CitizenNames.testGenerateNames(race, sex, count)
-    -- function for testing name generation
-    local sRace = g_LM.line(Character.tRaceNames[race])
-    Print(TT_Info, 'character name test dump: '..sex..' '..race)
-    count = count or 50
-    while count > 0 do
-        count = count - 1
-        Print(TT_Info, CitizenNames.getNewUniqueName(race, sex))
-    end
-end
 
 function CitizenNames.getTobianName()
     local name = g_LM.line(DFUtil.arrayRandom(CitizenNames.tTobianNames))

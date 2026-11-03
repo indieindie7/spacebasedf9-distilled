@@ -13,9 +13,6 @@ function SeqCommand.addEditorSchema(componentName, rSchema)
     SeqCommand.tEditorSchemas[componentName] = rSchema
 end
 
-function SeqCommand.loadEditorCommands()
-    SeqCommand.registerCommands()
-end
 
 -- Register all sequence command types
 local tSeqCommandTypes = {}
@@ -274,9 +271,6 @@ function SeqCommand:created()
     self:onCreated()
 end
 
-function SeqCommand:analyzeAssets(rClump, sParentReference)
-    self:onAnalyzeAssets(rClump, sParentReference)
-end
 
 function SeqCommand:preloadCutscene(rAssetSet)
     self.bSkip = false
@@ -305,9 +299,6 @@ function SeqCommand:cleanup(bSkipped)
     self:onCleanup(bSkipped)
 end
 
-function SeqCommand:updateActorName(sOriginalActorName, sActorName)    
-    self:onUpdateActorName(sOriginalActorName, sActorName)    
-end
 
 -- PUBLIC FUNCTIONS --
 function SeqCommand:getSibling(sCommandType)

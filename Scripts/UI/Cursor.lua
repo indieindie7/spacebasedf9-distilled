@@ -353,15 +353,6 @@ function Cursor._getDemolishTarget(wx,wy,bDrag)
     return nil
 end
 
-function Cursor._getBuildEnvObjectTarget(wx,wy,bDrag)
-    if not bDrag then
-        local rObjTarget = g_GuiManager._getTargetAt(wx,wy)
-        if rObjTarget and ObjectList.getObjType(rObjTarget) == ObjectList.ENVOBJECT then
-            return rObjTarget.tag
-        end
-    end
-    return -1
-end
 
 Cursor.modes=
 {

@@ -1001,9 +1001,6 @@ function GuiManager.setCursorVisible(bVisible)
     end
 end
 
-function GuiManager.isCursorVisible()
-    return GuiManager.bCursorVisible
-end
 
 function GuiManager.shouldShowWorldToolTip()
     if not GuiManager.newBase:isVisible() and not GuiManager.startMenu:isVisible() and GuiManager.bCanShowWorldToolTip then
