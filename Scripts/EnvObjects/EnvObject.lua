@@ -899,7 +899,7 @@ function EnvObject:onTick()
 	local oldc = self.nCondition
     local bUpdate = true
 	if self:isFunctioning() and self.rRoom and self.rRoom:getVisibility() ~= g_World.VISIBILITY_HIDDEN then
-		if self.decayPerSecond > 0 and not GameRules.inEditMode then
+		if self.decayPerSecond > 0 then
             if self.nDecayResume then
                 if self.nDecayResume < GameRules.elapsedTime then
                     self.nDecayResume = nil

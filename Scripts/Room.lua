@@ -1316,7 +1316,7 @@ function Room:revealed()
 end
 function Room:tickVisibility()
     local nVisibility = World.VISIBILITY_HIDDEN
-    if self.nTeam == Character.TEAM_ID_PLAYER or GameRules.inEditMode then
+    if self.nTeam == Character.TEAM_ID_PLAYER then
         nVisibility = World.VISIBILITY_FULL
     elseif self.nLastSeen then
         local nDiff = GameRules.elapsedTime - self.nLastSeen

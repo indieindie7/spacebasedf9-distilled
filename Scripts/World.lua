@@ -279,7 +279,6 @@ function World.init(width, height, tileWidth, tileHeight)
     World.dTileChanged = Delegate.new()
     World.tWallAddrToBlob={}
     World.tDirtyWallTiles={}
-    GameRules.dEditModeChanged:register(World.onEditModeChanged)
     Zone.initZoneData()
     ObjectList.init()
     EnvObject.globalInit()
@@ -373,16 +372,8 @@ function World.setAnalysisPropEnabled(bEnabled,rGrid)
         Renderer.getRenderLayer(World.analysisPropLayer):removeProp(World.analysisProp)
     end
 end
-function World.onEditModeChanged()
-    if GameRules.inEditMode then
-        World.layers.worldCeiling.renderLayer:setLoc(100000,100000)
-    else
-        World.layers.worldCeiling.renderLayer:setLoc(0,0)
-    end
-end
 function World.shutdown()
     World.bSuspendFixupVisuals = true
-    GameRules.dEditModeChanged:unregister(World.onEditModeChanged)
     CommandObject.shutdown()
     EnvObject.globalShutdown()
     WorldObject.globalShutdown()
@@ -440,55 +431,6 @@ function World.saveOtherTypes(saveData, worldXOff,worldYOff)
             assert(not v._ObjectList_ObjectMarker or v._ObjectList_ObjectMarker.objType == objType)
         end
     end
-end
-function World.getModuleSaveData()
-    local saveData = {
-    }
-    local minX,minY = 999999,999999
-    local maxX,maxY = -999999,-999999
-    for x = 0, World.width do
-        for y = 0, World.height do
-            local tile = World.pathGrid:getTileValue(x, y)
-            if tile > World.logicalTiles.SPACE then
-                minX, minY = math.min(minX, x), math.min(minY, y)
-                maxX, maxY = math.max(maxX, x), math.max(maxY, y)
-            end
-        end
-    end
-    local tTags = ObjectList.getTagsOfType(ObjectList.ENVOBJECT)
-    for _,objData in pairs(tTags) do
-		local x,y = World._getTileFromWorld(objData.obj:getLoc())
-		minX = math.min(x, minX)
-		maxX = math.max(x, maxX)
-		minY = math.min(y, minY)
-		maxY = math.max(y, maxY)
-	end
-    local worldMinX, worldMinY = World._getWorldFromTile(minX,minY)
-    local worldMaxX, worldMaxY = World._getWorldFromTile(maxX,maxY)
-    saveData.tileHealth = World.tileHealth
-    saveData.pathGrid = World.pathGrid:getSaveData()
-    saveData.floorDecals = World.floorDecals
-    World.saveOtherTypes(saveData, 0, 0)
-    saveData.origMinX,saveData.origMinY = minX,minY
-    saveData.minX,saveData.minY,saveData.maxX,saveData.maxY = minX,minY,maxX,maxY
-    saveData.worldMinX,saveData.worldMinY,saveData.worldMaxX,saveData.worldMaxY = worldMinX,worldMinY,worldMaxX,worldMaxY
-	saveData.dockingPoints = {}
-    local fn = ObjectList.getTypeIterater(ObjectList.ENVOBJECT,false,'DockPoint')
-    local rEnvObj = fn()
-    while rEnvObj do
-		local x,y = World._getTileFromWorld(rEnvObj:getLoc())
-		if rEnvObj.sFriendlyName == 'NE' then
-			saveData.dockingPoints[World.directions.NE] = {tileX=x, tileY=y}
-		elseif rEnvObj.sFriendlyName == 'NW' then
-			saveData.dockingPoints[World.directions.NW] = {tileX=x, tileY=y}
-		elseif rEnvObj.sFriendlyName == 'SE' then
-			saveData.dockingPoints[World.directions.SE] = {tileX=x, tileY=y}
-		elseif rEnvObj.sFriendlyName == 'SW' then
-			saveData.dockingPoints[World.directions.SW] = {tileX=x, tileY=y}
-		end
-        rEnvObj = fn()
-    end
-    return saveData, -worldMinX, -worldMinY
 end
 function World.getSaveData()
     local saveData = {
@@ -708,12 +650,6 @@ function World.updateHealthVisuals(tileAddr, tHealthDetails)
             end
         end
     end
-end
-function World.testFloorDecal(sDecal)
-    local DFInput = require('DFCommon.Input')
-    local x,y = DFInput.m_x, DFInput.m_y
-    local tx, ty = World._getTileFromCursor(x, y)
-    World.setFloorDecal(tx,ty,sDecal)
 end
 function World.setFloorDecal(tx,ty,sDecal,tColor)
     local addr = World.pathGrid:getCellAddr(tx,ty)
@@ -1125,9 +1061,6 @@ function World._checkPropFit(tileX, tileY, propName, bFlipX, bFlipY, bAllowRezon
             local wallDir = World._getWallDirection(World.pathGrid:cellAddrToCoord(tile))
             local sNeededDir = bFlipX and World.wallDirections.NWSE or World.wallDirections.NESW
             local bValid = wallDir == sNeededDir and (not lastDir or lastDir == wallDir)
-            if GameRules.inEditMode then
-                bValid = true
-            end
             if tValidTiles then
                 local txDoor,tyDoor = World.pathGrid:cellAddrToCoord(tile)
                 if bValid then tValidTiles[tile] = {x=txDoor,y=tyDoor,addr=tile}
@@ -1287,10 +1220,6 @@ function World._buildTile(tileX,tileY,param)
         bSuccess = World._demolishTile(tileX,tileY)
     elseif param then
         World._setTile(tileX, tileY, param)
-    elseif GameRules.inEditMode and World.countsAsFloor(tileValue) then
-        World._setTile(tileX, tileY, World.logicalTiles.WALL)
-    elseif GameRules.inEditMode and tileValue == World.logicalTiles.SPACE then
-        World._setTile(tileX, tileY, World.logicalTiles.WALL)
     else
         bSuccess = false
     end

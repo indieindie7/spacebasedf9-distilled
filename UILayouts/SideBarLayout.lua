@@ -260,37 +260,6 @@ return
             },
         },
         tex('BeaconIcon','ui_iconIso_beacon','UI/Shared',{ nIconX, nIconStartY - (nButtonHeight * 6) },Gui.AMBER,{nIconScale, nIconScale}),
-        {
-            key = 'DisasterButton',
-            type = 'onePixelButton',
-            pos = { 0, -(nButtonHeight * 7) },
-            scale = { nButtonWidthExpanded, nButtonHeight },
-            color = Gui.BLACK,
-            onPressed =
-            {
-                { key = 'DisasterButton', color = BRIGHT_AMBER, },
-            },
-            onReleased =
-            {
-                { key = 'DisasterButton', color = AMBER, },
-            },
-            onHoverOn =
-            {
-                { key = 'DisasterButton',  color=Gui.AMBER, },
-                { key = 'DisasterLabel', color = { 0, 0, 0 }, },
-                { key = 'DisasterIcon', color = { 0, 0, 0 }, },
-                { key = 'DisasterHotkeyExpanded', color = { 0, 0, 0 }, },
-                hl(),
-            },
-            onHoverOff =
-            {
-                { key = 'DisasterButton', color = Gui.BLACK, },
-                { key = 'DisasterLabel', color = Gui.AMBER, },
-                { key = 'DisasterIcon', color = Gui.AMBER, },
-                { key = 'DisasterHotkeyExpanded', color = Gui.AMBER, },
-            },
-        },
-        tex('DisasterIcon','icon_wall_neon_pizza','UI/Shared',{ nIconX, nIconStartY - (nButtonHeight * 7) },Gui.AMBER,{nIconScale, nIconScale}),
         lc('InspectLabel',{ nLabelX, nLabelStartY },'HUDHUD005TEXT','dosisregular40',{ 0, 300, 200, 0 },Gui.AMBER),
         lc('AssignLabel',{ nLabelX, nLabelStartY - nButtonHeight },'HUDHUD006TEXT','dosisregular40',{ 0, 300, 200, 0 },Gui.AMBER),
         lc('ResearchLabel',{ nLabelX, nLabelStartY - nButtonHeight * 2 },'HUDHUD046TEXT','dosisregular40',{ 0, 300, 200, 0 },Gui.AMBER),
@@ -298,7 +267,6 @@ return
         lc('ConstructLabel',{ nLabelX, nLabelStartY - (nButtonHeight * 4) },'HUDHUD007TEXT','dosisregular40',{ 0, 300, 280, 0 },Gui.AMBER),
         lc('MineLabel',{ nLabelX, nLabelStartY - (nButtonHeight * 5) },'HUDHUD008TEXT','dosisregular40',{ 0, 300, 200, 0 },Gui.AMBER),
         lc('BeaconLabel',{ nLabelX, nLabelStartY - (nButtonHeight * 6) },'HUDHUD025TEXT','dosisregular40',{ 0, 300, 200, 0 },Gui.AMBER),
-        lc('DisasterLabel',{ nLabelX, nLabelStartY - (nButtonHeight * 7) },'HUDHUD062TEXT','dosisregular40',{ 0, 300, 200, 0 },Gui.AMBER),
         tx('InspectHotkey',{ nHotkeyX, nHotkeyStartY },'I','dosissemibold22',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
         tx('InspectHotkeyExpanded',{ nHotkeyExpandedX, nHotkeyStartY },'I','dosissemibold20',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
         tx('AssignHotkey',{ nHotkeyX, nHotkeyStartY - nButtonHeight },'R','dosissemibold20',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
@@ -313,8 +281,6 @@ return
         tx('MineHotkeyExpanded',{ nHotkeyExpandedX, nHotkeyStartY - (nButtonHeight * 5) },'M','dosissemibold20',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
         tx('BeaconHotkey',{ nHotkeyX, nHotkeyStartY - (nButtonHeight * 6) },'B','dosissemibold20',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
         tx('BeaconHotkeyExpanded',{ nHotkeyExpandedX, nHotkeyStartY - (nButtonHeight * 6) },'B','dosissemibold20',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
-        tx('DisasterHotkey',{ nHotkeyX, nHotkeyStartY - (nButtonHeight * 7) },'Z','dosissemibold20',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
-        tx('DisasterHotkeyExpanded',{ nHotkeyExpandedX, nHotkeyStartY - (nButtonHeight * 7) },'Z','dosissemibold20',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
         tex('SidebarBottomEndcap','ui_hud_anglebottom','UI/HUD',{ -152, -(nButtonHeight * nNumButtons) },Gui.SIDEBAR_BG,{ 1, 1 }),
         tex('SidebarBottomEndcapExpanded','ui_hud_anglebottom','UI/HUD',{ 0, -(nButtonHeight * nNumButtons) },Gui.SIDEBAR_BG,{ 1.12, 1.12 }),
     },

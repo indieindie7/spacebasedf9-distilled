@@ -31,7 +31,6 @@ HintData.tHints =
     _h1('NoBuilding', 'HINTSX016TEXT', HintChecks.noBuilding),
     _h1('PubAtCapacity', 'HINTSX019TEXT', HintChecks.pubAtCapacity),
     _h1('PubButNoBar', 'HINTSX020TEXT', HintChecks.pubButNoBar),
-    _h1('EditMode', 'HINTSX018TEXT', HintChecks.editMode),
     _h1('FailedDutyAccident', 'HINTSX021TEXT', HintChecks.failedDutyAccident),
     _h1('DerelictNoBeacon', 'HINTSX022TEXT', HintChecks.derelictNoBeacon),
     _h1('FireNoExtinguisher', 'HINTSX023TEXT', HintChecks.fireNoExtinguisher),

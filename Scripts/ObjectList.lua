@@ -54,7 +54,7 @@ function ObjectList.addObject(objType, objSubtype, obj, tSaveData, bBlocksPathin
     if ObjectList._bLoading and ObjectList.tReservedTags and tSaveData and tSaveData._ObjectList_ObjectMarker then
         objID = tSaveData._ObjectList_ObjectMarker.objID
         if not ObjectList.tReservedTags[objID] then
-            assertdev(require('GameRules').inEditMode)
+            assertdev(false)
         else
             tag = ObjectList.tReservedTags[objID]
             ObjectList.tReservedTags[objID] = nil

@@ -497,21 +497,4 @@ function Malady.getAvailableResearch()
     end
     return tOptions,nOptions
 end
-function Malady.DBG_testMalady()
-    local rSelected = g_GuiManager.getSelected()
-    local objType = ObjectList.getObjType(rSelected)
-    local tMs = {}
-    for k,v in pairs(MaladyData) do
-        if not v.bNoCreate then
-            table.insert(tMs,k)
-        end
-    end
-    local sMaladyType = MiscUtil.randomValue(tMs)
-    local tMalady = Malady.createNewMaladyInstance(sMaladyType)
-    if objType == ObjectList.CHARACTER then
-        rSelected:diseaseInteraction(nil,tMalady)
-    elseif objType == ObjectList.ENVOBJECT then
-        rSelected:diseaseInteraction(nil,tMalady)
-    end
-end
 return Malady

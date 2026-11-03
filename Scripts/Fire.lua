@@ -209,26 +209,6 @@ function Fire.startFire(wx,wy)
         Base.eventOccurred(Base.EVENTS.Fire, {wx=wx,wy=wy,rRoom=rRoom})
     end
 end
-function Fire.testFire()
-    local DFInput = require('DFCommon.Input')
-    local x,y = DFInput.m_x, DFInput.m_y
-    local worldLayer = g_World.getWorldRenderLayer()
-    local wx, wy = worldLayer:wndToWorld(x, y)
-    local tx, ty = g_World._getTileFromWorld(wx,wy)
-    local addr = g_World.pathGrid:getCellAddr(tx,ty)
-    local rChar = ObjectList.getObjAtTile(tx,ty,ObjectList.CHARACTER)
-    if not rChar then
-        if Fire.tFlames[addr] then
-            Fire.extinguish(wx,wy)
-        else
-            Fire.startFire(wx,wy)
-        end
-    else
-        if not rChar:isDead() and not rChar.onFire then
-            rChar:catchFire()
-        end
-    end
-end
 function Fire.getSaveTable(worldXOff,worldYOff)
     local tData = {tTiles={},tFlames={}}
     worldXOff,worldYOff = worldXOff or 0, worldYOff or 0

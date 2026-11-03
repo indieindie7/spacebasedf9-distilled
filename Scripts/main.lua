@@ -20,7 +20,6 @@ g_World = nil
 g_GameRules = GameRules
 g_GuiManager=nil
 g_mainThread = nil
-DBG_START_IN_EDIT_MODE = false
 local jit = require("jit")
 print("jit status: " .. tostring(jit.status()))
 local function _initGarbageCollector()
@@ -79,12 +78,7 @@ local function _initGame(windowWidth, windowHeight)
             DFUtil.sleep(0.1)
             g_GuiManager.setCursorVisible(true)
             g_GuiManager.setIsInStartupScreen(false)
-            if DBG_START_IN_EDIT_MODE then
-                GameRules.setEditMode(true)
-                bLoaded = true
-            else
-                bLoaded = GameRules.loadGame()
-            end
+            bLoaded = GameRules.loadGame()
             print('StartThread c')
 			DFGraphics.blockOnAsyncTextureLoad()
             print('StartThread d')

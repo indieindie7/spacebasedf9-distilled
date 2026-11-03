@@ -11,7 +11,6 @@ local JobRosterMenu = require('UI.JobRoster')
 local ResearchMenu = require('UI.ResearchAssignment')
 local GoalsList = require('UI.GoalsList')
 local BeaconMenu = require('UI.BeaconMenu')
-local DisasterMenu = require('UI.DisasterMenu')
 local Renderer = require('Renderer')
 local SoundManager = require('SoundManager')
 local CommandObject = require('Utility.CommandObject')
@@ -46,8 +45,6 @@ function m.create()
         self.rMineHotKeyExpanded = self:getTemplateElement('MineHotkeyExpanded')
         self.rBeaconHotKey = self:getTemplateElement('BeaconHotkey')
         self.rBeaconHotKeyExpanded = self:getTemplateElement('BeaconHotkeyExpanded')
-        self.rDisasterHotKey = self:getTemplateElement('DisasterHotkey')
-        self.rDisasterHotKeyExpanded = self:getTemplateElement('DisasterHotkeyExpanded')
         self.rInspectLabel = self:getTemplateElement('InspectLabel')
         self.rAssignLabel = self:getTemplateElement('AssignLabel')
         self.rResearchLabel = self:getTemplateElement('ResearchLabel')
@@ -55,8 +52,6 @@ function m.create()
         self.rConstructLabel = self:getTemplateElement('ConstructLabel')
         self.rMineLabel = self:getTemplateElement('MineLabel')
         self.rBeaconLabel = self:getTemplateElement('BeaconLabel')
-        self.rDisasterLabel = self:getTemplateElement('DisasterLabel')
-        self.rDisasterIcon = self:getTemplateElement('DisasterIcon')
         self.rInspectButton = self:getTemplateElement('InspectButton')
         self.rAssignButton = self:getTemplateElement('AssignButton')
         self.rResearchButton = self:getTemplateElement('ResearchButton')
@@ -64,7 +59,6 @@ function m.create()
         self.rConstructButton = self:getTemplateElement('ConstructButton')
         self.rMineButton = self:getTemplateElement('MineButton')
         self.rBeaconButton = self:getTemplateElement('BeaconButton')
-        self.rDisasterButton = self:getTemplateElement('DisasterButton')
         self.rEndCap = self:getTemplateElement('SidebarBottomEndcap')
         self.rEndCapExpanded = self:getTemplateElement('SidebarBottomEndcapExpanded')
         self.rInspectIcon = self:getTemplateElement('InspectIcon')
@@ -77,7 +71,6 @@ function m.create()
         self.rMineButton:addPressedCallback(self.onMineButtonPressed, self)
         self.rConstructButton:addPressedCallback(self.onConstructButtonPressed, self)
         self.rBeaconButton:addPressedCallback(self.onBeaconButtonPressed, self)
-        self.rDisasterButton:addPressedCallback(self.onDisasterButtonPressed, self)
         self.tHotkeyButtons = {}
         self:addHotkey(self.rInspectHotkey.sText, self.rInspectButton)
         self:addHotkey(self.rAssignHotKey.sText, self.rAssignButton)
@@ -95,32 +88,9 @@ function m.create()
         self.rResearchMenu = ResearchMenu.new()
         self.rGoalsList = GoalsList.new()
         self.rBeaconMenu = BeaconMenu.new()
-        self.rDisasterMenu = DisasterMenu.new()
-        self.rDisasterButton:setEnabled(false)
-        self:setElementHidden(self.rDisasterButton, true)
-        self:setElementHidden(self.rDisasterIcon, true)
-        self:setElementHidden(self.rDisasterLabel, true)
-        self:setElementHidden(self.rDisasterHotKey, true)
-        self:setElementHidden(self.rDisasterHotKeyExpanded, true)
-        self.bDisasterMode = false
-    end
-    function Ob:enableDisasterMenu()
-        self.bDisasterMode = true
-        self.rDisasterButton:setEnabled(true)
-        self:setElementHidden(self.rDisasterIcon, false)
-        self:setElementHidden(self.rDisasterHotKey, false)
-        local nButtonHeight, nButtons = 81, 8
-        self.rEndCap:setLoc(-152, -nButtonHeight * nButtons)
-        self.rEndCapExpanded:setLoc(0, -nButtonHeight * nButtons)
-        self.rSmallBarButton:setScl(104, nButtonHeight * nButtons)
-        self.rLargeBarButton:setScl(286, nButtonHeight * nButtons)
-        self:addHotkey(self.rDisasterHotKey.sText, self.rDisasterButton)
     end
     function Ob:onTick(dt)
         if self.elementsVisible or g_GuiManager.inMainScreen() then
-            if g_GameRules.bDisasterMode and not self.bDisasterMode then
-                self:enableDisasterMenu()
-            end
             if not self.rSubmenu and g_GuiManager.getSelected() then
                 self:openSubmenu(self.rInspectMenu)
             end
@@ -144,9 +114,6 @@ function m.create()
         self.rConstructButton:setEnabled(bEnabled)
         self.rMineButton:setEnabled(bEnabled)
         self.rBeaconButton:setEnabled(bEnabled)
-        if g_GameRules.bDisasterMode then
-            self.rDisasterButton:setEnabled(bEnabled)
-        end
     end
     function Ob:playWarbleEffect(bFullscreen, nTimeScale)
         nTimeScale = nTimeScale or 1.0
@@ -187,11 +154,6 @@ function m.create()
         self:setElementHidden(self.rBeaconButton, not bExpanded)
         self:setElementHidden(self.rBeaconHotKey, bExpanded)
         self:setElementHidden(self.rBeaconHotKeyExpanded, not bExpanded)
-        if g_GameRules.bDisasterMode then
-            self:setElementHidden(self.rDisasterButton, not bExpanded)
-            self:setElementHidden(self.rDisasterHotKey, bExpanded)
-            self:setElementHidden(self.rDisasterHotKeyExpanded, not bExpanded)
-        end
         self:setElementHidden(self.rInspectLabel, not bExpanded)
         self:setElementHidden(self.rAssignLabel, not bExpanded)
         self:setElementHidden(self.rResearchLabel, not bExpanded)
@@ -199,9 +161,6 @@ function m.create()
         self:setElementHidden(self.rConstructLabel, not bExpanded)
         self:setElementHidden(self.rMineLabel, not bExpanded)
         self:setElementHidden(self.rBeaconLabel, not bExpanded)
-        if g_GameRules.bDisasterMode then
-            self:setElementHidden(self.rDisasterLabel, not bExpanded)
-        end
         self:setElementHidden(self.rEndCap, bExpanded)
         self:setElementHidden(self.rEndCapExpanded, not bExpanded)
         self:setElementHidden(self.rSmallBarHighlight, bExpanded)
@@ -339,11 +298,6 @@ function m.create()
     function Ob:onBeaconButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             self:openSubmenu(self.rBeaconMenu)
-        end
-    end
-    function Ob:onDisasterButtonPressed(rButton, eventType)
-        if eventType == DFInput.TOUCH_UP then
-            self:openSubmenu(self.rDisasterMenu)
         end
     end
     function Ob:onFinger(touch, x, y, props)

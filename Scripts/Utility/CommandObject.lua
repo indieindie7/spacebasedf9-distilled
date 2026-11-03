@@ -101,9 +101,7 @@ function CommandObject._canPerformAt(commandAction, commandParam, coord)
             if not coord.buildTileType then
                 coord.buildTileType = commandParam
             end
-            if GameRules.inEditMode then
-                validity = CommandObject.TILE_VALID
-            elseif coord.buildTileType == g_World.logicalTiles.WALL then
+            if coord.buildTileType == g_World.logicalTiles.WALL then
                 if g_World.canBuildWall(coord.x,coord.y,g_World.logicalTiles.WALL) then
                     validity = CommandObject.TILE_VALID
                 else
@@ -113,12 +111,8 @@ function CommandObject._canPerformAt(commandAction, commandParam, coord)
                 validity = CommandObject._testBuildFloor(coord.x,coord.y)
             end
     elseif commandAction == CommandObject.COMMAND_BUILD_ENVOBJECT then
-        if GameRules.inEditMode then
-            validity = CommandObject.TILE_VALID
-        else
-            local bFound = g_World._findPropFit(coord.x, coord.y, commandParam, coord.bFlipX, coord.bFlipY,false,true)
-            validity = (bFound and CommandObject.TILE_VALID) or CommandObject.TILE_INVALID
-        end
+        local bFound = g_World._findPropFit(coord.x, coord.y, commandParam, coord.bFlipX, coord.bFlipY,false,true)
+        validity = (bFound and CommandObject.TILE_VALID) or CommandObject.TILE_INVALID
     end
     return validity
 end
@@ -915,8 +909,6 @@ function CommandObject._canVaporizeTile(tx,ty)
         return CommandObject.TILE_VALID
     elseif g_World.countsAsFloor(tileValue) or g_World.isDoor(tileValue) then
         return CommandObject.TILE_VALID
-    elseif GameRules.inEditMode then
-        return CommandObject.TILE_VALID
     end
     return CommandObject.TILE_INVALID
 end
@@ -930,8 +922,6 @@ function CommandObject._canDemolishTile(tx,ty)
     if g_World.countsAsWall(tileValue) then
         return CommandObject.TILE_VALID
     elseif g_World.isDoor(tileValue) then
-        return CommandObject.TILE_VALID
-    elseif GameRules.inEditMode then
         return CommandObject.TILE_VALID
     end
     local obj = ObjectList.getObjAtTile(tx, ty,ObjectList.ENVOBJECT)
@@ -948,7 +938,6 @@ function CommandObject._testMine(tx,ty)
     return CommandObject.TILE_INVALID
 end
 function CommandObject._testBuildFloor(tx,ty)
-    if GameRules.inEditMode then return CommandObject.TILE_VALID end
     local tileValue = g_World._getTileValue(tx, ty)
     if Asteroid.isAsteroid(tileValue) then
         return CommandObject.TILE_INVALID
@@ -1036,14 +1025,6 @@ function CommandObject._findAppropriateTile(wx,wy,testFn,nRange)
         return targetWorldX,targetWorldY,adjcmd,adjcmd.tTiles[addr]
     end
 end
-function CommandObject._performAllCommands()
-    local addr = next(CommandObject.tCommands)
-    while addr do
-        local tx,ty = g_World.pathGrid:cellAddrToCoord(addr)
-        CommandObject._performCommand(CommandObject.tCommands[addr],tx,ty)
-        addr = next(CommandObject.tCommands)
-    end
-end
 function CommandObject._removeAllCommands()
     for addr,cmd in pairs(CommandObject.tCommands) do
         cmd:remove()
@@ -1074,15 +1055,7 @@ function CommandObject._performCommand(cmdObj,tx,ty)
     elseif cmdObj.commandAction == CommandObject.COMMAND_BUILD_ENVOBJECT then
         local wx,wy = g_World._getWorldFromTile(coord.x,coord.y)
         local tPropTiles = g_World._getPropFootprint(coord.x,coord.y, cmdObj.commandParam, false, coord.bFlipX)
-        if GameRules.inEditMode then
-            for i,tile in ipairs(tPropTiles) do
-                local oldObj = ObjectList.getObjAtTile(coord.x,coord.y,ObjectList.ENVOBJECT)
-                if oldObj then
-                    oldObj:remove()
-                end
-            end
-        end
-        local rProp = require('EnvObjects.EnvObject').createEnvObject(cmdObj.commandParam, wx,wy, coord.bFlipX, coord.bFlipY, GameRules.inEditMode)
+        local rProp = require('EnvObjects.EnvObject').createEnvObject(cmdObj.commandParam, wx,wy, coord.bFlipX, coord.bFlipY)
         cmdObj:remove()
         bSuccess = (rProp ~= nil)
     elseif cmdObj.commandAction == CommandObject.COMMAND_VAPORIZE or cmdObj.commandAction == CommandObject.COMMAND_DEMOLISH then

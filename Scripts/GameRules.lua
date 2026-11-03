@@ -42,7 +42,6 @@ local GameScreen = nil
 local SAVE_TYPES={ObjectList.ROOM, ObjectList.ENVOBJECT, ObjectList.CHARACTER, ObjectList.RESERVATION}
 local GameRules = {
 	SAVEGAME_VERSION = 7,
-    sEditModulePath='editme',
     nMatter = 0,
     simTime = 0,
     elapsedTime = 0,
@@ -112,7 +111,6 @@ local GameRules = {
 	cutawayMode = false,
 	prePauseSpeed = 1,
     bInCutscene = nil,
-    bDisasterMode = false,
     worldAssets = nil,
 }
 function GameRules.onFileChanged()
@@ -144,7 +142,6 @@ function GameRules.onFileChanged()
     GameScreen = require('GameScreen')
 end
 function GameRules.init()
-    GameRules.dEditModeChanged = Delegate.new()
     GameRules.dGameLoaded = Delegate.new()
 	GameRules.cursorX, GameRules.cursorY = 0,0
     GameRules.prevDragX = {}
@@ -353,21 +350,9 @@ function GameRules.reset(tLandingZone)
     GameRules.shutdown()
     GameRules.init()
     collectgarbage ("collect")
-    if GameRules.inEditMode then
-        GameRules.nMatter = GameRules.STARTING_MATTER
-        GameRules.nLastDutyAccident = 0
-        GameRules.nLastNewShip = 0
-        GameRules.bHasHadEnclosedRooms = false
-        Environment.randomSetup()
-        EventController.setBaseSeeds()
-    else
-        GameRules.randomSetup(tLandingZone)
-    end
+    GameRules.randomSetup(tLandingZone)
 	GameRules.startLoop()
 	GameRules.timePause()
-end
-function GameRules._getEditModeSaveFileName()
-    return "Module_"..os.time()
 end
 function GameRules.getLandingZone()
     if not GameRules.tLandingZone then GameRules.tLandingZone = {x=math.random(1,64),y=math.random(1,64)} end
@@ -375,42 +360,30 @@ function GameRules.getLandingZone()
 end
 function GameRules.saveGame()
     local tSaveData = {}
-    if GameRules.inEditMode then
-        local xOff,yOff
-        tSaveData.tWorldSaveData,xOff,yOff = World.getModuleSaveData()
-    else
-        tSaveData.nMatter = GameRules.nMatter
-        tSaveData.powerHolidayEndTime = GameRules.powerHolidayEndTime
-        tSaveData.simTime = GameRules.simTime
-        tSaveData.elapsedTime = GameRules.elapsedTime or 0
-		tSaveData.nLastDutyAccident = GameRules.nLastDutyAccident
-		tSaveData.nLastNewShip = GameRules.nLastNewShip
-        tSaveData.SPACEDATE_BASE = GameRules.SPACEDATE_BASE
-        tSaveData.sStarDate = GameRules.sStarDate
-        tSaveData.sStarTime = GameRules.sStarTime
-        tSaveData.tLandingZone = GameRules.getLandingZone()
-        tSaveData.tSoundSaveData = SoundManager.getSaveData()
-        tSaveData.tWorldSaveData = World.getSaveData()
-        tSaveData.tTopics = Topics.tTopics
-        tSaveData.tEventControllerState = EventController.getSaveData()
-        tSaveData.tBaseState = require('Base').getSaveData()
-		tSaveData.currentZoom = GameRules.currentZoom
-		tSaveData.bHasHadEnclosedRooms = GameRules.bHasHadEnclosedRooms
-		tSaveData.bHasZoned = GameRules.bHasZoned
-		tSaveData.nCameraX,tSaveData.nCameraY,tSaveData.nCameraZ = Renderer.getGameplayCamera():getLoc()
-    end
+    tSaveData.nMatter = GameRules.nMatter
+    tSaveData.powerHolidayEndTime = GameRules.powerHolidayEndTime
+    tSaveData.simTime = GameRules.simTime
+    tSaveData.elapsedTime = GameRules.elapsedTime or 0
+	tSaveData.nLastDutyAccident = GameRules.nLastDutyAccident
+	tSaveData.nLastNewShip = GameRules.nLastNewShip
+    tSaveData.SPACEDATE_BASE = GameRules.SPACEDATE_BASE
+    tSaveData.sStarDate = GameRules.sStarDate
+    tSaveData.sStarTime = GameRules.sStarTime
+    tSaveData.tLandingZone = GameRules.getLandingZone()
+    tSaveData.tSoundSaveData = SoundManager.getSaveData()
+    tSaveData.tWorldSaveData = World.getSaveData()
+    tSaveData.tTopics = Topics.tTopics
+    tSaveData.tEventControllerState = EventController.getSaveData()
+    tSaveData.tBaseState = require('Base').getSaveData()
+	tSaveData.currentZoom = GameRules.currentZoom
+	tSaveData.bHasHadEnclosedRooms = GameRules.bHasHadEnclosedRooms
+	tSaveData.bHasZoned = GameRules.bHasZoned
+	tSaveData.nCameraX,tSaveData.nCameraY,tSaveData.nCameraZ = Renderer.getGameplayCamera():getLoc()
 	tSaveData.nSavegameVersion = GameRules.SAVEGAME_VERSION
     ObjectList.removeStaleTags(tSaveData)
     MOAISim.forceGarbageCollection()
-    if GameRules.inEditMode then
-        local path = DFFile.getDataPath("Modules/")
-        local str = MessagePack.pack(tSaveData)
-        DFSaveLoad.saveString( str, path..GameRules._getEditModeSaveFileName(), true)
-        DFSaveLoad.saveString( str, path..GameRules.sEditModulePath..'.sav', true)
-    else
-        local str = MessagePack.pack(tSaveData)
-        DFSaveLoad.saveString( str, GameRules.sAutoSaveFile )
-    end
+    local str = MessagePack.pack(tSaveData)
+    DFSaveLoad.saveString( str, GameRules.sAutoSaveFile )
     local tProcessed={}
     local tTags={}
 end
@@ -539,12 +512,7 @@ function GameRules.placeModule(tModuleData, tileXOff, tileYOff, bOnPlayerTeam)
 end
 function GameRules.loadGame(sOverridePath, bOverridePreservePath)
     local tSaveData
-    if GameRules.inEditMode then
-        local path = DFFile.getDataPath("Modules/")
-        tSaveData = GameRules._loadSavegameAndUpdate(path..GameRules.sEditModulePath..'.sav',true,true)
-    else
-        tSaveData = GameRules._loadSavegameAndUpdate(sOverridePath or GameRules.sAutoSaveFile, bOverridePreservePath, true)
-    end
+    tSaveData = GameRules._loadSavegameAndUpdate(sOverridePath or GameRules.sAutoSaveFile, bOverridePreservePath, true)
     if not tSaveData then
         Trace(TT_Warning, "Could not load the save")
         return
@@ -554,56 +522,50 @@ function GameRules.loadGame(sOverridePath, bOverridePreservePath)
     end
     GameRules.init()
 	local bLoaded = false
-    if GameRules.inEditMode then
-        local w,h = tSaveData.tWorldSaveData.maxX-tSaveData.tWorldSaveData.minX,tSaveData.tWorldSaveData.maxY-tSaveData.tWorldSaveData.minY
-        local tModuleData = {tSaveData=tSaveData, sSetName='editMode',sModuleName='editMode'}
-        GameRules.placeModule(tModuleData, math.floor((World.width-w)*.5), math.floor((World.height-h)*.5), true)
-    else
-        GameRules.nMatter = tSaveData.nMatter or tSaveData.matter or GameRules.STARTING_MATTER
-        GameRules.tLandingZone = tSaveData.tLandingZone
-        GameRules.simTime = tSaveData.simTime
-        GameRules.elapsedTime = tSaveData.elapsedTime  or 0
-        GameRules.powerHolidayEndTime = tSaveData.powerHolidayEndTime
-        if not tSaveData.nSavegameVersion or tSaveData.nSavegameVersion < 5 then
-            GameRules.powerHolidayEndTime = GameRules.elapsedTime + 60*10
-        end
-        if GameRules.powerHolidayEndTime then
-            g_PowerHoliday = true
-        end
-        GameRules.sStarDate = tSaveData.sStarDate
-        GameRules.sStarTime = tSaveData.sStarTime
-        GameRules.nLastDutyAccident = tSaveData.nLastDutyAccident or 0
-        GameRules.nLastNewShip = tSaveData.nLastNewShip or 0
-        GameRules.SPACEDATE_BASE = tSaveData.SPACEDATE_BASE or GameRules.SPACEDATE_BASE
-        ObjectList.portOldSavegames(tSaveData,tSaveData.nSavegameVersion)
-        local tTags={}
-        GameRules._dbgVerifySaveTable(tSaveData,tTags)
-        Room.beginLoad(tSaveData, false)
-        ObjectList.beginLoad(tSaveData, false)
-        Room.hackLoadSpaceRoom(tSaveData)
-        require('Base').fromSaveData(tSaveData.tBaseState or {})
-        World.loadSaveData(tSaveData.nSavegameVersion, tSaveData.tWorldSaveData )
-        EventController.fromSaveData(tSaveData.tEventControllerState or {})
-        ObjectList.endLoad()
-        Room.endLoad()
-        local tBeaconSaveData = {}
-        if tSaveData and tSaveData.tBaseState and tSaveData.tBaseState.tBeacon then
-            tBeaconSaveData = tSaveData.tBaseState.tBeacon
-        end
-        g_ERBeacon:fromSaveTable(tBeaconSaveData)
-        Topics.fromSaveData(tSaveData)
-        Topics.generateActivityList()
-        Topics.generatePeopleList()
-        GameRules.bHasHadEnclosedRooms = tSaveData.bHasHadEnclosedRooms
-        GameRules.bHasZoned = tSaveData.bHasZoned
-        GameRules.currentZoom = tSaveData.currentZoom or GameRules.START_ZOOM
-        SoundManager.loadSaveData( tSaveData.tSoundSaveData )
-        if tSaveData.nCameraX and tSaveData.nCameraY and tSaveData.nCameraZ then
-            GameRules._centerCameraOnPoint(tSaveData.nCameraX, tSaveData.nCameraY, tSaveData.nCameraZ)
-        end
-        bLoaded = true
-        GameRules.dGameLoaded:dispatch()
+    GameRules.nMatter = tSaveData.nMatter or tSaveData.matter or GameRules.STARTING_MATTER
+    GameRules.tLandingZone = tSaveData.tLandingZone
+    GameRules.simTime = tSaveData.simTime
+    GameRules.elapsedTime = tSaveData.elapsedTime  or 0
+    GameRules.powerHolidayEndTime = tSaveData.powerHolidayEndTime
+    if not tSaveData.nSavegameVersion or tSaveData.nSavegameVersion < 5 then
+        GameRules.powerHolidayEndTime = GameRules.elapsedTime + 60*10
     end
+    if GameRules.powerHolidayEndTime then
+        g_PowerHoliday = true
+    end
+    GameRules.sStarDate = tSaveData.sStarDate
+    GameRules.sStarTime = tSaveData.sStarTime
+    GameRules.nLastDutyAccident = tSaveData.nLastDutyAccident or 0
+    GameRules.nLastNewShip = tSaveData.nLastNewShip or 0
+    GameRules.SPACEDATE_BASE = tSaveData.SPACEDATE_BASE or GameRules.SPACEDATE_BASE
+    ObjectList.portOldSavegames(tSaveData,tSaveData.nSavegameVersion)
+    local tTags={}
+    GameRules._dbgVerifySaveTable(tSaveData,tTags)
+    Room.beginLoad(tSaveData, false)
+    ObjectList.beginLoad(tSaveData, false)
+    Room.hackLoadSpaceRoom(tSaveData)
+    require('Base').fromSaveData(tSaveData.tBaseState or {})
+    World.loadSaveData(tSaveData.nSavegameVersion, tSaveData.tWorldSaveData )
+    EventController.fromSaveData(tSaveData.tEventControllerState or {})
+    ObjectList.endLoad()
+    Room.endLoad()
+    local tBeaconSaveData = {}
+    if tSaveData and tSaveData.tBaseState and tSaveData.tBaseState.tBeacon then
+        tBeaconSaveData = tSaveData.tBaseState.tBeacon
+    end
+    g_ERBeacon:fromSaveTable(tBeaconSaveData)
+    Topics.fromSaveData(tSaveData)
+    Topics.generateActivityList()
+    Topics.generatePeopleList()
+    GameRules.bHasHadEnclosedRooms = tSaveData.bHasHadEnclosedRooms
+    GameRules.bHasZoned = tSaveData.bHasZoned
+    GameRules.currentZoom = tSaveData.currentZoom or GameRules.START_ZOOM
+    SoundManager.loadSaveData( tSaveData.tSoundSaveData )
+    if tSaveData.nCameraX and tSaveData.nCameraY and tSaveData.nCameraZ then
+        GameRules._centerCameraOnPoint(tSaveData.nCameraX, tSaveData.nCameraY, tSaveData.nCameraZ)
+    end
+    bLoaded = true
+    GameRules.dGameLoaded:dispatch()
     collectgarbage()
 	return bLoaded
 end
@@ -703,16 +665,6 @@ function GameRules.randomSetup(tLandingZone)
     require('Asteroid').spawnAsteroids(MiscUtil.getGalaxyMapValue(tLandingZone.x, tLandingZone.y,'asteroids'))
     EventController.setBaseSeeds()
     GameRules.placeModule(tModuleData, tileX, tileY, true)
-end
-function GameRules.setEditMode(bEnable)
-    if bEnable == GameRules.inEditMode then
-        return
-    end
-    GameRules.inEditMode = bEnable
-    GameRules.matterMult = (bEnable and 0) or 1
-    GameRules.bProhibitSuffocation = bEnable
-    GameRules.timePause()
-    GameRules.dEditModeChanged:dispatch(bEnable)
 end
 local firstHover = false
 function GameRules.handleHover(x,y)
@@ -928,17 +880,6 @@ function GameRules.deleteCharacter(wx,wy)
         local Character = require('CharacterConstants')
         CharacterManager.deleteCharacter( rProp )
     end
-end
-function GameRules.deleteSelected()
-	local rChar = g_GuiManager.getSelectedCharacter()
-	local rObject = g_GuiManager.getSelected(ObjectList.ENVOBJECT)
-	if rChar then
-		local Character = require('CharacterConstants')
-		CharacterManager.deleteCharacter(rChar)
-	elseif rObject then
-		rObject:remove()
-	end
-	g_GuiManager.setSelected()
 end
 function GameRules.cycleVisualizer()
     if not GameRules.currentVisualizer and not Room.powerVisEnabled() then

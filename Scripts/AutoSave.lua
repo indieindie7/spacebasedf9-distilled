@@ -22,7 +22,7 @@ function AutoSave.init()
     end
 end
 function AutoSave.onTick(dt)
-    if GameRules.inEditMode or GameRules.playerTimeScale == 0 then return end
+    if GameRules.playerTimeScale == 0 then return end
     if not g_Config:getConfigValue("autosave") and not GameRules.bQueuedSave then return end
     AutoSave.nTimeSinceLastSave = (AutoSave.nTimeSinceLastSave or 0) + dt
     if GameRules.bQueuedSave or AutoSave.nTimeSinceLastSave > AutoSave.TIME_BETWEEN_AUTOSAVES then
@@ -31,7 +31,7 @@ function AutoSave.onTick(dt)
     end
 end
 function AutoSave.saveGame()
-    if GameRules.inEditMode or GameRules.playerTimeScale == 0 or not g_Config:getConfigValue("autosave") then
+    if GameRules.playerTimeScale == 0 or not g_Config:getConfigValue("autosave") then
         return
     end
     if EventController.tCurrentEventPersistentState then

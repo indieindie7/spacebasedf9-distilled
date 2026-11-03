@@ -54,26 +54,6 @@ end
 function GameScreen:inputPointer(touch, bDoubleTap)
     GameRules.inputPointer(touch,bDoubleTap)
 end
-function GameScreen._cyclePropToPlace(bBackward)
-    if not GameScreen.propToPlace then
-        GameScreen.propList = {}
-        local objList = require('EnvObjects.EnvObjectData')
-        for name,data in pairs(objList.tObjects) do
-            if data.showInObjectMenu == false then
-                table.insert(GameScreen.propList,{name=name,data=data})
-            end
-        end
-        GameScreen.propToPlaceIdx = 0
-    end
-    GameScreen.propToPlaceIdx = GameScreen.propToPlaceIdx + ((bBackward and -1) or 1)
-    if GameScreen.propToPlaceIdx > #GameScreen.propList then
-        GameScreen.propToPlaceIdx = 1
-    elseif GameScreen.propToPlaceIdx < 1 then
-        GameScreen.propToPlaceIdx = #GameScreen.propList
-    end
-    GameScreen.propToPlace = GameScreen.propList[GameScreen.propToPlaceIdx].name
-    GameRules.setUIMode(GameRules.MODE_PLACE_PROP, GameScreen.propToPlace)
-end
 function GameScreen:onKeyboard(key, bDown)
     if g_GuiManager and g_GuiManager.isInStartupScreen() then
         return true
@@ -114,7 +94,7 @@ function GameScreen:onKeyboard(key, bDown)
     end
     local bShift = MOAIInputMgr.device.keyboard:keyIsDown(MOAIKeyboardSensor.SHIFT)
 	local bCtrl = MOAIInputMgr.device.keyboard:keyIsDown(MOAIKeyboardSensor.CONTROL)
-    if not bHandled and not GameScreen.bUseDebugKeys and not bCtrl then
+    if not bHandled and not bCtrl then
         bHandled = g_GuiManager.onKeyboard(key, bDown)
     end
     local World=require('World')
@@ -141,15 +121,11 @@ function GameScreen:onKeyboard(key, bDown)
             if (key == string.byte("-")) or (key == string.byte("_")) then
                 bBackward = true
             end
-            if GameRules.inEditMode and GameRules.currentMode == GameRules.MODE_PLACE_PROP then
-                GameScreen._cyclePropToPlace(bBackward)
-            else
-                local zoomAmount = -GameRules.ZOOM_WHEEL_STEP * 4.0
-                if bBackward then
-                    zoomAmount = -zoomAmount
-                end
-                GameRules.AddZoom(zoomAmount)
+            local zoomAmount = -GameRules.ZOOM_WHEEL_STEP * 4.0
+            if bBackward then
+                zoomAmount = -zoomAmount
             end
+            GameRules.AddZoom(zoomAmount)
         elseif bShift and ( key == string.byte(']') or key == string.byte('[') ) then
             local sel = g_GuiManager.getSelected()
             local rRoom
@@ -247,85 +223,12 @@ function GameScreen:onKeyboard(key, bDown)
         elseif key == string.byte('l') and bCtrl then
             GameRules.loadGame()
             GameRules.startLoop()
-        elseif key == string.byte('z') and bCtrl then
-            GameRules.bDisasterMode = true
         elseif key == 32 then
             GameRules.togglePause()
         elseif key == 264 then
             Renderer.toggleUI()
         end
         g_GuiManager.refresh()
-    end
-    if not bHandled and bDown then
-        if DFSpace.isDev() or g_bAllowDebugInRelease then
-            if key == 96 then
-                if GameScreen.bUseDebugKeys then
-                    GameScreen.bUseDebugKeys = false
-                    GameRules.setUIMode(GameRules.MODE_INSPECT)
-                else
-                    GameScreen.bUseDebugKeys = true
-                end
-            end
-        end
-    end
-    if not bHandled and GameScreen.bUseDebugKeys then
-        if bDown then
-            if key == string.byte('r') and bCtrl then
-                GameRules.reset()
-            elseif key == 16 then
-                require('EnvObjects.Spawner').spawnAll()
-            elseif key == string.byte("h") then
-                g_PowerHoliday = not g_PowerHoliday
-            elseif key == string.byte("A") then
-                GameRules.setUIMode(GameRules.MODE_PLACE_ASTEROID)
-            elseif key == string.byte("B") then
-                require('World').testFloorDecal("blood01", nil)
-            elseif key == string.byte("C") then
-                GameRules.setUIMode(GameRules.MODE_MAKE_CHARACTER, Character.FACTION_BEHAVIOR.Citizen)
-            elseif key == string.byte("D") then
-                GameRules.setUIMode(GameRules.MODE_DAMAGE_WORLD_TILE)
-            elseif key == string.byte("E") then
-                GameRules.setEditMode(not GameRules.inEditMode)
-            elseif key == string.byte("F") then
-                local Fire = require('Fire')
-                Fire.testFire()
-            elseif key == string.byte("H") then
-                GameRules.setUIMode(GameRules.MODE_MAKE_CHARACTER, Character.FACTION_BEHAVIOR.EnemyGroup)
-            elseif key == string.byte("K") then
-                GameRules.setUIMode(GameRules.MODE_MAKE_CHARACTER, Character.FACTION_BEHAVIOR.KillBot)
-            elseif key == string.byte("L") then
-                local Malady=require('Malady')
-                Malady.DBG_testMalady()
-            elseif key == string.byte("M") then
-                GameRules.setUIMode(GameRules.MODE_MAKE_CHARACTER, Character.FACTION_BEHAVIOR.Monster)
-            elseif key == string.byte("N") then
-                require("AnimatedSprite").test()
-            elseif key == string.byte("P") then
-                if not GameScreen.propToPlace then
-                    GameScreen._cyclePropToPlace()
-                end
-                GameRules.setUIMode(GameRules.MODE_PLACE_PROP, GameScreen.propToPlace)
-            elseif key == string.byte("S") then
-                GameRules.setUIMode(GameRules.MODE_PLACE_SPAWNER)
-            elseif key == string.byte("W") then
-                GameRules.setUIMode(GameRules.MODE_PLACE_WORLDOBJECT, 'BreachShip')
-            elseif key == string.byte("Z") then
-                GameRules.setUIMode(GameRules.MODE_DELETE_CHARACTER)
-            elseif key == 127 then
-                GameRules.deleteSelected()
-            elseif bShift and key == string.byte("1") then
-                EventController.DBG_forceForecastRegen()
-            elseif bShift and key == string.byte("4") then
-                GameRules.addMatter(1000)
-            elseif bShift and key == string.byte("6") then
-                EventController.DBG_forceNextEvent()
-            elseif key == 268 then
-                Profile.shinyStart()
-            end
-            g_GuiManager.refresh()
-        else
-            GameRules.bZooming = false
-        end
     end
 end
 return GameScreen

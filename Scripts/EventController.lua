@@ -192,15 +192,6 @@ end
 function EventController.getSaveData()
     return EventController.tS
 end
-function EventController.DBG_forceForecastRegen()
-    if EventController.tS and EventController.tS.tEventForecast then
-        EventController.generateEventForecast()
-        EventController._eventCompleted({sEventType = 'CompoundEvent'})
-    end
-end
-function EventController.DBG_forceNextEvent()
-    EventController._forceNextEvent()
-end
 function EventController._forceNextEvent()
     if EventController.tS and EventController.tS.tNextEventData then
         local nDelta = 0

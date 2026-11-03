@@ -229,9 +229,6 @@ function HintChecks.pubButNoBar()
 	end
 	return false
 end
-function HintChecks.editMode()
-    return GameRules.inEditMode
-end
 function HintChecks.failedDutyAccident()
 	if GameRules.nLastDutyAccident == 0 then
 		return false

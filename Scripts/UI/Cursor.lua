@@ -28,9 +28,6 @@ function Cursor.execute(touchUpWX,touchUpWY)
             Cursor.tempCommand = nil
         end
     end
-    if GameRules.inEditMode then
-        CommandObject._performAllCommands()
-    end
 end
 function Cursor.refresh()
     local startDragX,startDragY = -1,-1
@@ -101,19 +98,7 @@ function Cursor.updateGridCursor(cursorX, cursorY, curStartX, curStartY, mode, b
         Cursor.drawTiles(tInvalid, false,true)
         Profile.leaveScope("Cursor.drawTiles")
 	end
-    if GameRules.currentMode == GameRules.MODE_INSPECT and GameRules.inEditMode and bMouseDown then
-        if Cursor.currentDragTarget and bDragging then
-            local wx,wy = Renderer.getWorldFromCursor(cursorX, cursorY)
-            Cursor.currentDragTarget:setLoc(wx,wy)
-        else
-            local rObjTarget = g_GuiManager.getSelected(ObjectList.ENVOBJECT)
-            if rObjTarget then
-                Cursor.currentDragTarget = rObjTarget
-            end
-        end
-    else
-        Cursor.currentDragTarget = nil
-    end
+    Cursor.currentDragTarget = nil
     Profile.leaveScope("Cursor.updateGridCursor")
 end
 function Cursor.modeChanging(oldMode,newMode)
@@ -379,21 +364,17 @@ Cursor.modes=
             require('Room').clearGhostCursor()
         end,
         custom=function(tx,ty,wx,wy)
-            if GameRules.inEditMode then
-                EnvObject.createEnvObject(GameRules.currentModeParam,wx,wy,GameScreen.bFlipProp,nil,true)
+			local tObjectData = EnvObject.getObjectData(GameRules.currentModeParam)
+            local bAllow,newTX,newTY = require('Room').attemptAddPropGhostAt(tx,ty,1,GameRules.currentModeParam,GameScreen.bFlipProp)
+            if not bAllow then
+                SoundManager.playSfx("disallow")
             else
-				local tObjectData = EnvObject.getObjectData(GameRules.currentModeParam)
-                local bAllow,newTX,newTY = require('Room').attemptAddPropGhostAt(tx,ty,1,GameRules.currentModeParam,GameScreen.bFlipProp)
-                if not bAllow then
-                    SoundManager.playSfx("disallow")
-                else
-                    if tObjectData.placeSound then
-                        SoundManager.playSfx(tObjectData.placeSound)
-                    end
-                    local rRoom = require('Room').getRoomAtTile(newTX,newTY,1)
-                    if rRoom and tObjectData.zoneName and rRoom:getZoneName() == 'PLAIN' then
-                        rRoom:setZone(tObjectData.zoneName)
-                    end
+                if tObjectData.placeSound then
+                    SoundManager.playSfx(tObjectData.placeSound)
+                end
+                local rRoom = require('Room').getRoomAtTile(newTX,newTY,1)
+                if rRoom and tObjectData.zoneName and rRoom:getZoneName() == 'PLAIN' then
+                    rRoom:setZone(tObjectData.zoneName)
                 end
             end
         end,
