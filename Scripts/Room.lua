@@ -607,17 +607,17 @@ function Room._selectBestRoomFromFloodData(floodData)
         else
             local rBestRoom = Room.tRooms[nBestID]
             local rCurrentRoom = Room.tRooms[id]
-            local bCurrentZonePlain = rCurrentRoom and rCurrentRoom:getZoneName() == 'PLAIN'
-            local bBestZonePlain = rBestRoom:getZoneName() == 'PLAIN'
-            if rCurrentRoom and rCurrentRoom.nTeam == Character.TEAM_ID_PLAYER and rBestRoom.nTeam ~= Character.TEAM_ID_PLAYER then
-                nBestID = id
-                nBestCount = count
-            elseif rBestRoom.nTeam == Character.TEAM_ID_PLAYER and (not rCurrentRoom or rCurrentRoom.nTeam ~= Character.TEAM_ID_PLAYER) then
-            elseif rCurrentRoom and (bBestZonePlain and not bCurrentZonePlain) then
-                nBestID = id
-                nBestCount = count
-            elseif rCurrentRoom and (not bBestZonePlain and bCurrentZonePlain) then
-            elseif count > nBestCount then
+            local bCurrentPlayer = rCurrentRoom ~= nil and rCurrentRoom.nTeam == Character.TEAM_ID_PLAYER
+            local bBestPlayer = rBestRoom.nTeam == Character.TEAM_ID_PLAYER
+            local bCurrentPlain = rCurrentRoom ~= nil and rCurrentRoom:getZoneName() == 'PLAIN'
+            local bBestPlain = rBestRoom:getZoneName() == 'PLAIN'
+            local bTake = count > nBestCount
+            if bCurrentPlayer ~= bBestPlayer then
+                bTake = bCurrentPlayer
+            elseif rCurrentRoom and bCurrentPlain ~= bBestPlain then
+                bTake = bBestPlain
+            end
+            if bTake then
                 nBestID = id
                 nBestCount = count
             end
@@ -1794,20 +1794,17 @@ end
 function Room.sendAlert(tx,ty,tw,nRange,fn)
     local r = Room.getRoomAtTile(tx,ty,tw, true)
     if not r then return end
-    local adjoiningRooms = r:getAdjoiningRooms()
-    local tCharactersInRoom = r:getCharactersInRoom(true)
-    for rCharInRoom,_ in pairs(tCharactersInRoom) do
-        if MiscUtil.isoDist(tx,ty,rCharInRoom:getTileLoc()) < nRange then
-            fn(rCharInRoom,tx,ty,tw)
-        end
-    end
-    for rAdjoiningRoom,nAdjoining in pairs(adjoiningRooms) do
-        tCharactersInRoom = rAdjoiningRoom:getCharactersInRoom(true)
-        for rCharInRoom,_ in pairs(tCharactersInRoom) do
+    local function alertRoom(rRoom)
+        for rCharInRoom,_ in pairs(rRoom:getCharactersInRoom(true)) do
             if MiscUtil.isoDist(tx,ty,rCharInRoom:getTileLoc()) < nRange then
                 fn(rCharInRoom,tx,ty,tw)
             end
         end
+    end
+    local adjoiningRooms = r:getAdjoiningRooms()
+    alertRoom(r)
+    for rAdjoiningRoom,_ in pairs(adjoiningRooms) do
+        alertRoom(rAdjoiningRoom)
     end
 end
 function Room.spreadCombatAwareness(rAttacker, tx,ty,tw)
@@ -2389,31 +2386,24 @@ function Room:hasObjectOfType(sObjectType)
 	end
 	return false
 end
+function Room:_gateFireFighter(rChar, bAllowed, sDenied)
+	if not self.bBurning then
+		return false, 'not on fire'
+	end
+	if not bAllowed then
+		return false, sDenied
+	end
+	local wx,wy,wz,nLevel = rChar:getLoc()
+	if self:inOrAdjoining(wx,wy,wz,nLevel,true) then
+		return true
+	end
+	return 'not in or next to room'
+end
 function Room:utilityGateTool(rChar)
-	if self.bBurning then
-        if self:hasObjectOfType('FirePanel') or rChar:getJob() == Character.EMERGENCY then
-            local wx,wy,wz,nLevel = rChar:getLoc()
-            if self:inOrAdjoining(wx,wy,wz,nLevel,true) then
-                return true
-            end
-            return 'not in or next to room'
-        end
-        return false,'no fire upgrade'
-    end
-    return false, 'not on fire'
+	return self:_gateFireFighter(rChar, self.bBurning and (self:hasObjectOfType('FirePanel') or rChar:getJob() == Character.EMERGENCY), 'no fire upgrade')
 end
 function Room:utilityGateHands(rChar)
-	if self.bBurning then
-        if not self.bFireUpgrade then
-            local wx,wy,wz,nLevel = rChar:getLoc()
-            if self:inOrAdjoining(wx,wy,wz,nLevel,true) then
-                return true
-            end
-            return 'not in or next to room'
-        end
-        return false,'fire upgrade'
-    end
-    return false, 'not on fire'
+	return self:_gateFireFighter(rChar, not self.bFireUpgrade, 'fire upgrade')
 end
 function Room:utilityGatePanic(rChar)
 	return self.bBurning and rChar.nThreat == OptionData.tPriorities.SURVIVAL_NORMAL and self:inside(rChar:getLoc()), 'no nearby fire seen'
