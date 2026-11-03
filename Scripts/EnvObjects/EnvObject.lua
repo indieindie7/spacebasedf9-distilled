@@ -121,20 +121,16 @@ function EnvObject.getSpriteLoc(propName,wx,wy,bFlipX,bFlipY)
     end
     local _,spriteY = g_World.getPropMinY(wx,wy,propName,bFlipX)
     local spriteZ = g_World.getHackySortingZ(wx,wy)
+    local nZOffset = 0
     if propName == 'SpaceshipEngine' then
-        local offset = -40
-        if not bFlipY then
-            spriteZ = spriteZ - offset
-        else
-            spriteZ = spriteZ + offset
-        end
+        nZOffset = -40
     elseif tData.againstWall then
-        local offset = 20
-        if not bFlipY then
-            spriteZ = spriteZ - offset
-        else
-            spriteZ = spriteZ + offset
-        end
+        nZOffset = 20
+    end
+    if bFlipY then
+        spriteZ = spriteZ + nZOffset
+    else
+        spriteZ = spriteZ - nZOffset
     end
     return spriteX,spriteY,spriteZ
 end
@@ -1195,6 +1191,19 @@ function EnvObject:setToolTipBulletPoint(tSlot, sString, sBulletTexture, tColor)
 	tSlot.sTextureSpriteSheet = 'UI/Inspector'
 	tSlot.tTextureColor = tColor or Gui.AMBER
 end
+local function _itemLabel(tItem, bWithOwner)
+    local sString = tItem.sName
+    if tItem.nCount > 1 then
+        sString = sString .. ' ('..tItem.nCount..')'
+    end
+    if bWithOwner then
+        local rOwner = Inventory.getOwner(tItem)
+        if rOwner and rOwner.getNiceName then
+            sString = sString .. ' ('..rOwner:getNiceName()..')'
+        end
+    end
+    return sString
+end
 function EnvObject:getContentsTextTable()
     if self.tInventory and next(self.tInventory) ~= nil then
         local t = {}
@@ -1204,14 +1213,7 @@ function EnvObject:getContentsTextTable()
 				local sResearchLC = ResearchData[tItem.sResearchData].sName
 				sString = g_LM.line(sResearchLC)
             else
-                sString = tItem.sName
-                if tItem.nCount > 1 then
-                    sString = sString .. ' ('..tItem.nCount..')'
-                end
-                local rOwner = Inventory.getOwner(tItem)
-                if rOwner and rOwner.getNiceName then
-                    sString = sString .. ' ('..rOwner:getNiceName()..')'
-                end
+                sString = _itemLabel(tItem, true)
             end
             table.insert(t,{str=sString,key=k})
         end
@@ -1231,11 +1233,7 @@ function EnvObject:getContentsText()
 				nItems = 1
 				break
 			end
-            sString = sString .. tItem.sName
-            if tItem.nCount > 1 then
-                sString = sString .. ' ('..tItem.nCount..')'
-            end
-            sString = sString..'\n'
+            sString = sString .. _itemLabel(tItem) .. '\n'
 			nItems = nItems + 1
         end
     else
@@ -1254,15 +1252,7 @@ function EnvObject:getContentsList()
 				table.insert(tItems, s)
 				break
 			end
-            local sString = tItem.sName
-            if tItem.nCount > 1 then
-                sString = sString .. ' ('..tItem.nCount..')'
-            end
-            local rOwner = Inventory.getOwner(tItem)
-            if rOwner and rOwner.getNiceName then
-                sString = sString .. ' ('..rOwner:getNiceName()..')'
-            end
-			table.insert(tItems, sString)
+			table.insert(tItems, _itemLabel(tItem, true))
         end
     else
         table.insert(tItems, g_LM.line('INSPEC141TEXT'))
@@ -1273,14 +1263,9 @@ function EnvObject:getToolTipTextInfos()
     if not self.tToolTipTextInfos then
         self.tToolTipTextInfos = {}
 	end
-	self.tToolTipTextInfos[1] = {}
-	self.tToolTipTextInfos[2] = {}
-	self.tToolTipTextInfos[3] = {}
-	self.tToolTipTextInfos[4] = {}
-	self.tToolTipTextInfos[5] = {}
-	self.tToolTipTextInfos[6] = {}
-	self.tToolTipTextInfos[7] = {}
-	self.tToolTipTextInfos[8] = {}
+	for i = 1, 8 do
+		self.tToolTipTextInfos[i] = {}
+	end
 	local nCurrentIndex = 1
     self.tToolTipTextInfos[nCurrentIndex].sString = ""
     if self.tParams and self.tParams.spawnerName then
@@ -1293,12 +1278,8 @@ function EnvObject:getToolTipTextInfos()
     local tColor = Gui.AMBER
     if self.nCondition <= 25 then
         tColor = Gui.RED
-    else
-        tColor = Gui.AMBER
     end
-    if self.tToolTipTextInfos[nCurrentIndex].sString ~= "" then
-		self:setToolTipBulletPoint(self.tToolTipTextInfos[nCurrentIndex], sString, nil, tColor)
-	end
+	self:setToolTipBulletPoint(self.tToolTipTextInfos[nCurrentIndex], sString, nil, tColor)
 	nCurrentIndex = nCurrentIndex + 1
 	if self.tData.nPowerDraw or self.tData.nPowerOutput then
 		local sLabel = g_LM.line('INSPEC164TEXT')
