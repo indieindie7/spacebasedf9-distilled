@@ -1,14 +1,11 @@
 local Gui = require('UI.Gui')
-
--- training text + shaded area beneath
 local nTutorialX = 0
 local nTutorialY = -720
 local nTutorialTextXOffset = 480
 local nTutorialTextYOffset = 45
 local nTutorialHeight = 96
 local nTutorialOpacity = 0.65
-
-return 
+return
 {
     posInfo =
         {
@@ -20,7 +17,6 @@ return
     },
     tElements =
     {
-		-- shaded area behind training text
         {
             key = 'TutorialTextBGFadeTop',
             type = 'uiTexture',
@@ -29,7 +25,6 @@ return
             pos = { nTutorialX, nTutorialY },
             scale = { 2568/64, 1 },
             color = {0, 0, 0, nTutorialOpacity},
-			--color = Gui.AMBER,
             hidden = true,
         },
         {

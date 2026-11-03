@@ -3,12 +3,9 @@ local EnvObject=require('EnvObjects.EnvObject')
 local ObjectList=require('ObjectList')
 local Base=require('Base')
 local Character=require('CharacterConstants')
-
 local Bed = Class.create(EnvObject, MOAIProp.new)
-
 function Bed:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
     EnvObject.init(self,sName, wx,wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
-
     local tData=
     {
         rTargetObject=self,
@@ -24,7 +21,7 @@ function Bed:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
             end
             return true
         end,
-        utilityOverrideFn=function(rChar,rAO,nOriginalUtility) 
+        utilityOverrideFn=function(rChar,rAO,nOriginalUtility)
             local rOwner = self:getOwner()
             if rOwner and rOwner == rChar then
                 return nOriginalUtility
@@ -42,7 +39,6 @@ function Bed:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
     }
     self.rSleepInBedOption = g_ActivityOption.new('SleepInBed',tData)
 end
-
 function Bed:getOwner()
     local rOwner = nil
     local tCharTag = Base.tBedToChar[self.tag]
@@ -55,7 +51,6 @@ function Bed:getOwner()
     end
     return rOwner
 end
-
 function Bed:getResidenceString()
     local r = self:getRoom()
     if not self.bDestroyed and r and r:getZoneName() == 'RESIDENCE' then
@@ -63,12 +58,10 @@ function Bed:getResidenceString()
     end
     return g_LM.line('INSPEC168TEXT')
 end
-
 function Bed:setOwner(rChar)
     if rChar and rChar:isDead() then rChar = nil end
     Base.assignBed(rChar,self)
 end
-
 function Bed:getSaveTable(xShift,yShift)
     local t = EnvObject.getSaveTable(self,xShift,yShift)
     if self.ownerTag then
@@ -76,13 +69,9 @@ function Bed:getSaveTable(xShift,yShift)
     end
     return t
 end
-
 function Bed:getAvailableActivities()
     local tActivities = EnvObject.getAvailableActivities(self)
     table.insert(tActivities, self.rSleepInBedOption)
     return tActivities
 end
-
-
-
 return Bed

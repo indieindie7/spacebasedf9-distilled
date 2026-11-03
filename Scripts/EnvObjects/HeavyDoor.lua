@@ -1,8 +1,6 @@
 local Class=require('Class')
 local Door = require('EnvObjects.Door')
-
 local HeavyDoor = Class.create(Door, MOAIProp.new)
-
 HeavyDoor.doorSprites=
 {
 	[Door.doorStates.OPEN] = 'door_open',
@@ -11,10 +9,8 @@ HeavyDoor.doorSprites=
 	[Door.doorStates.BROKEN_CLOSED] = 'door_broken',
 	[Door.doorStates.BROKEN_OPEN] = 'door_open',
 }
-
 function HeavyDoor:takeDamage(rSource, tDamage)
 	tDamage.nDamage = tDamage.nDamage / 10
 	Door.takeDamage(self, rSource, tDamage)
 end
-
 return HeavyDoor

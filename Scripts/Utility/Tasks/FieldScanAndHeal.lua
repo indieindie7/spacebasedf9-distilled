@@ -8,10 +8,8 @@ local Malady=require('Malady')
 local MiscUtil=require('MiscUtil')
 local DFUtil = require('DFCommon.Util')
 local Character=require('CharacterConstants')
-
 local FieldScanAndHeal = Class.create(Task)
 FieldScanAndHeal.HEAL_DURATION = 25
-
 function FieldScanAndHeal:init(rChar, tPromisedNeeds, rActivityOption)
     Task.init(self,rChar,tPromisedNeeds,rActivityOption)
     self.rTargetObject = rActivityOption.tData.rTargetObject
@@ -22,15 +20,11 @@ function FieldScanAndHeal:init(rChar, tPromisedNeeds, rActivityOption)
 	assert(self.rPatient and self.rChar)
 	assert(self.rChar ~= self.rPatient)
 end
-
-
 function FieldScanAndHeal:_testScanOrHeal()
     if self.rPatient:getCurrentTaskName() ~= 'GetFieldScanned' then return false end
-    -- if anyone's still walking, let them finish first.
-    if self.tPath or (self.rPatient and self.rPatient.rCurrentTask and self.rPatient.rCurrentTask.rPath) then 
-        return false 
+    if self.tPath or (self.rPatient and self.rPatient.rCurrentTask and self.rPatient.rCurrentTask.rPath) then
+        return false
     end
-    
     if not self.bScanned then
         if self:attemptInteractWithObject('maintain', self.rPatient, self.HEAL_DURATION) then
             return true
@@ -47,7 +41,6 @@ function FieldScanAndHeal:_testScanOrHeal()
         end
     end
 end
-
 function FieldScanAndHeal:onComplete(bSuccess)
     Task.onComplete(self, bSuccess)
     self.rChar:playAnim('breathe')
@@ -55,7 +48,6 @@ function FieldScanAndHeal:onComplete(bSuccess)
         self.rPatient.rCurrentTask:scanComplete(self.rChar, bSuccess)
     end
 end
-
 function FieldScanAndHeal:_followTarget(dt)
     if self:_hackyFollowTimeoutTest(dt) then
         self:interrupt('timed out')
@@ -68,7 +60,6 @@ function FieldScanAndHeal:_followTarget(dt)
         end
     end
 end
-
 function FieldScanAndHeal:_getLogData(sMaladyName)
 	local tLogData
     if sMaladyName == 'HitPoints' then
@@ -92,7 +83,6 @@ function FieldScanAndHeal:_getLogData(sMaladyName)
     end
 	return tLogData
 end
-
 function FieldScanAndHeal:_performScanOn(rPatient)
 	local bFoundSomething = false
     local bMissedSomething = false
@@ -109,7 +99,6 @@ function FieldScanAndHeal:_performScanOn(rPatient)
             end
         end
     end
-	-- in case of successful/clean scan
 	if not bFoundSomething and not self:_hpToHeal() then
 		local tLogData = self:_getLogData()
 		Log.add(Log.tTypes.DUTY_DOCTOR_SCAN_HEALTHY, self.rChar, tLogData)
@@ -117,7 +106,6 @@ function FieldScanAndHeal:_performScanOn(rPatient)
 	end
     return bMissedSomething
 end
-
 function FieldScanAndHeal:_healPerformed(sMalady,rPatient)
     local nHP,nMaxHP = rPatient:getHP()
     if sMalady == 'HitPoints' then
@@ -131,7 +119,6 @@ function FieldScanAndHeal:_healPerformed(sMalady,rPatient)
         rPatient:cure(sMalady)
     end
 	local sLogType = Log.tTypes.DUTY_DOCTOR_HEAL_ILLNESS
-	-- healing an injury?
 	if Malady.isInjury(sMalady) then
 		sLogType = Log.tTypes.DUTY_DOCTOR_HEAL_BROKEN_LEG
     elseif sMalady == 'HitPoints' then
@@ -143,10 +130,8 @@ function FieldScanAndHeal:_healPerformed(sMalady,rPatient)
 	end
 	local tLogData = self:_getLogData(sMalady)
 	Log.add(sLogType, self.rChar, tLogData)
-	-- citizen getting healed uses a more generic "i'm better" log for now
 	Log.add(Log.tTypes.HEALTH_CITIZEN_HEAL_ILLNESS, rPatient, tLogData)
 end
-
 function FieldScanAndHeal:_hpToHeal()
     local nHP,nMaxHP = self.rPatient:getHP()
     if nHP < nMaxHP then
@@ -155,7 +140,6 @@ function FieldScanAndHeal:_hpToHeal()
         end
     end
 end
-
 function FieldScanAndHeal:onUpdate(dt)
     local bValid,sFailure = self:_testCoopStillValid('GetFieldScanned')
     if not bValid then
@@ -163,12 +147,10 @@ function FieldScanAndHeal:onUpdate(dt)
         return
     end
     if self.bComplete then return end
-
     local bHPInjury = self:_hpToHeal() ~= nil
     if not bHPInjury and self.bScanned and not Malady.getNextCurableMalady(self.rPatient,self.rChar:getJobLevel(Character.DOCTOR)) then
         return true
     end
-
     if self:interacting() then
         if self:tickInteraction(dt) then
             if not self.bScanned then
@@ -185,9 +167,8 @@ function FieldScanAndHeal:onUpdate(dt)
         end
     elseif self:_testScanOrHeal() then
         self.rPatient.rCurrentTask:doctorWorking(self.bScanned)
-    else 
+    else
         self:_followTarget(dt)
     end
 end
-
 return FieldScanAndHeal

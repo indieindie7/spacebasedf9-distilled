@@ -1,11 +1,7 @@
 local Gui = require('UI.Gui')
-
 local buttonX, buttonY = 0, -205
-
--- button draws above label in other element, give it low alpha
 local DIM_AMBER = Gui.AMBER_DIM
 DIM_AMBER[4] = 0.25
-
 return
 {
     posInfo =
@@ -16,7 +12,7 @@ return
         offsetY = 0,
     },
     tElements =
-    {     
+    {
         {
             key = 'OccupantButton',
             type = 'onePixelButton',

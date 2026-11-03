@@ -1,11 +1,9 @@
 local Gui = require('UI.Gui')
-
 local nButtonX, nButtonY = 0, 0
 local nButtonWidth, nButtonHeight  = 160, 37
 local nCostWidth, nCostHeight = 200, 33
 local nCostWidthSelected = 220
 local nTextY = 33
-
 return
 {
     posInfo =
@@ -33,7 +31,7 @@ return
                 { key = 'ButtonLabel', color = Gui.BLACK, },
                 { key = 'ButtonTexture', hidden = true },
                 { key = 'ButtonTexturePressed', hidden = false },
-				{ key = 'CostButton', color = Gui.GREEN, }, -- debug
+				{ key = 'CostButton', color = Gui.GREEN, },
                 { playSfx = 'hilight', },
             },
             onHoverOff =
@@ -41,7 +39,7 @@ return
                 { key = 'ButtonLabel', color = Gui.AMBER, },
                 { key = 'ButtonTexture', hidden = false },
                 { key = 'ButtonTexturePressed', hidden = true },
-				{ key = 'CostButton', color = Gui.RED, }, -- debug
+				{ key = 'CostButton', color = Gui.RED, },
             },
 			onSelectedOn =
 			{

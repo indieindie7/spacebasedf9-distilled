@@ -1,5 +1,4 @@
 local Gui = require('UI.Gui')
-
 local nWidth, nHeight = 200, 120
 local nBorderThickness = 4
 local nTextMargin = 18
@@ -9,7 +8,6 @@ local nTextHeight = 30
 local nTextureMargin = 16
 local nTextureStartY = -16
 local nTextureHeight = 30
-
 return
 {
     posInfo =
@@ -135,7 +133,6 @@ return
     },
     tElements =
     {
-        -- BG
         {
             key = 'Background',
             type = 'onePixel',
@@ -171,7 +168,6 @@ return
             scale = { nBorderThickness, nHeight },
             color = Gui.AMBER,
         },
-        -- text boxes
         {
             key = 'TipText1',
             type = 'textBox',

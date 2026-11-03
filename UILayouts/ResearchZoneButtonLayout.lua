@@ -1,5 +1,4 @@
 local Gui = require('UI.Gui')
-
 local nButtonX = 16
 local nZoneNameX = 48
 local nProjectNameX = 450
@@ -7,7 +6,6 @@ local nTextY = 6
 local nZoneButtonWidth,nZoneButtonHeight = 370, 64
 local nProjectButtonWidth = 450
 local nBubbleThickness = 2
-
 return
 {
     posInfo =
@@ -19,7 +17,6 @@ return
     },
     tElements =
     {
-        -- zone name + solid bubble
         {
             key = 'ZoneNameBubbleLeft',
             type = 'uiTexture',
@@ -38,7 +35,6 @@ return
             scale = {(nZoneButtonWidth / 32), 1},
             color = Gui.AMBER,
         },
-        -- draw BG beneath right of bubble
         {
             key = 'ProjectNameBubbleLeft',
             type = 'uiTexture',
@@ -68,7 +64,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.BLACK,
 		},
-        -- project name + hollow bubble
         {
             key = 'ProjectNameBubbleMid',
             type = 'uiTexture',

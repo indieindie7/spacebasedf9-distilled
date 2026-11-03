@@ -1,9 +1,7 @@
 local Gui = require('UI.Gui')
-
 local nButtonWidth, nButtonHeight  = 418, 98
 local nTabWidth, nTabHeight = 83, 47
 local nTabLineHeight = 3
-
 return
 {
     posInfo =
@@ -27,7 +25,7 @@ return
             type = 'onePixel',
             pos = { 140, -133 },
             scale = { 278, 30 },
-            color = { 1, 0, 0 },   
+            color = { 1, 0, 0 },
         },
         {
             key = 'EmergencyStatusText',
@@ -47,7 +45,6 @@ return
             scale = { nButtonWidth, 106 },
             color = Gui.AMBER,
         },
-		-- "editing name" BG
         {
             key = 'NameEditBG',
             type = 'onePixelButton',
@@ -55,20 +52,19 @@ return
             scale = { nButtonWidth, 35 },
             color = Gui.AMBER,
         },
-        -- Portrait
         {
             key = 'PictureBG',
             type = 'onePixel',
             pos = { 30, -144 },
             scale = { 110, 20 },
-            color = Gui.AMBER,     
+            color = Gui.AMBER,
         },
         {
             key = 'ConditionBG',
             type = 'onePixel',
             pos = { 140, -218 },
             scale = { 273, 30 },
-            color = { 0, 0, 0 },   
+            color = { 0, 0, 0 },
         },
         {
             key = 'Picture',
@@ -86,7 +82,6 @@ return
             pos = { 33, -145 },
             scale = { 0.84, 0.84 },
         },
-        -- Name
         {
             key = 'NameLabel',
             type = 'textBox',
@@ -98,7 +93,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 0, 0, 0 },
         },
-        -- Name Edit Button
         {
             key = 'NameEditButton',
             type = 'onePixelButton',
@@ -141,7 +135,6 @@ return
             color = Gui.AMBER,
 			hidden = true,
         },
-        -- Condition
         {
             key = 'ConditionLabel',
             type = 'textBox',
@@ -164,7 +157,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 0, 0, 0 },
         },
-        -- stats
         {
             key = 'StatsBG',
             type = 'onePixel',
@@ -172,7 +164,6 @@ return
             scale = { nButtonWidth, 152 },
             color = Gui.AMBER_OPAQUE,
         },
-        -- description
         {
             key = 'DescriptionText',
             type = 'textBox',
@@ -184,7 +175,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- door status
 		{
             key = 'DoorStatusLabel',
             type = 'textBox',
@@ -207,7 +197,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- "behind tab" box
         {
             key = 'TabBGSpacer',
             type = 'onePixel',
@@ -215,7 +204,6 @@ return
             scale = { nTabWidth*4 + 3, nTabHeight },
             color = Gui.AMBER_OPAQUE,
         },
-		-- line that completes the tab row
         {
             key = 'TabLineSpacer',
             type = 'onePixel',
@@ -223,12 +211,11 @@ return
             scale = { nTabWidth*4 + 3, nTabLineHeight },
             color = Gui.AMBER,
         },
-        -- Tabbed Pane
         {
             key = 'TabbedPane',
             type = 'tabbedPane',
             pos = { 0, -428 },
-            rect = { 0, 0, nButtonWidth-20, 655 }, 
+            rect = { 0, 0, nButtonWidth-20, 655 },
         },
    },
 }

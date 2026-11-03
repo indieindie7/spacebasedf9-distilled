@@ -6,10 +6,8 @@ local ObjectList=require('ObjectList')
 local Door=require('EnvObjects.Door')
 local Room=require('Room')
 local Pathfinder=require('Pathfinder')
-
 local Airlock = Class.create(Door, MOAIProp.new)
-
-Airlock.monitorStates = 
+Airlock.monitorStates =
 {
     LOCKED=1,
     OXYNONE=2,
@@ -17,7 +15,6 @@ Airlock.monitorStates =
     OXYMED=4,
     OXYFULL=5,
 }
-
 Airlock.doorSprites=
 {
         [Door.doorStates.OPEN] = 'airlock_door_open',
@@ -26,7 +23,6 @@ Airlock.doorSprites=
         [Door.doorStates.BROKEN_CLOSED] = 'AirlockDoor_broken',
         [Door.doorStates.BROKEN_OPEN] = 'airlock_door_open',
 }
-
 Airlock.monitorSprites=
 {
     [Airlock.monitorStates.OXYNONE] = 'airlock_door_meter1',
@@ -35,61 +31,47 @@ Airlock.monitorSprites=
     [Airlock.monitorStates.OXYFULL] = 'airlock_door_meter4',
     [Airlock.monitorStates.LOCKED] =  'airlock_door_lockicon',
 }
-
 function Airlock:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
     Door.init(self,sName, wx,wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
     self.sPortrait = 'Env_Airlock_Door'
     if self.bDestroyed then return end
-    
     self.bCanBlockOxygen = true
-
     self:testAirlock()
     self.MonitorSprite = MOAIProp.new()
     self.monitorState = Airlock.monitorStates.OXYNONE
-       
     for k,v in pairs(Airlock.monitorSprites) do
         DFGraphics.alignSprite(self.spriteSheet, v, "left", "bottom")
     end
     local monitorSpriteName = Airlock.monitorSprites[self.monitorState]
-    
     self.MonitorSprite:setDeck(self.spriteSheet)
     self.MonitorSprite:setIndex( self.spriteSheet.names[ monitorSpriteName ])
     require('Renderer').getRenderLayer(self.layer):insertProp(self.MonitorSprite)
-
     self.MonitorSprite:setLoc( EnvObject.getSpriteLoc(sName, wx, wy,self.bFlipX) )
     if bFlipX then self.MonitorSprite:setScl(-1, 1) end
 end
-
 function Airlock:_updateDoorState(bForceToOperation, bForceUpdate)
     if bForceUpdate or not self:getScriptController() then
         Door._updateDoorState(self, bForceToOperation)
 	end
-           
     if self.MonitorSprite then
-        if self.operation == Door.operations.LOCKED then 
- --           self.monitorState = Airlock.monitorStates.LOCKED 
+        if self.operation == Door.operations.LOCKED then
         end
-        
         if self.nCondition == 0 then
             self.monitorState = Airlock.monitorStates.OXYNONE
         end
-        self.MonitorSprite:setVisible( self.doorState ~= Door.doorStates.OPEN and self.nVisibility == g_World.VISIBILITY_FULL ) --hide the monitor if the door is open since the 'screen' is hidden in the open graphic.
+        self.MonitorSprite:setVisible( self.doorState ~= Door.doorStates.OPEN and self.nVisibility == g_World.VISIBILITY_FULL )
         self.MonitorSprite:setIndex( self.spriteSheet.names[ Airlock.monitorSprites[ self.monitorState ] ] )
     end
 end
-
 function Airlock:remove()
     self.bValidAirlock = false
     require('Renderer').getRenderLayer(self.layer):removeProp(self.MonitorSprite)
-    --self:_updatePathTags()
     Door.remove(self)
 end
-
 function Airlock:_setDoorState(nState)
     Door._setDoorState(self,nState)
     self:_updatePathTags()
 end
-
 function Airlock:_getFunctionalAirlockZone()
     local tTest = {self.tWestSideTiles[1],self.tEastSideTiles[1]}
     for i=1,2 do
@@ -100,8 +82,6 @@ function Airlock:_getFunctionalAirlockZone()
         end
     end
 end
-
--- special-case hacky function for pathfinding.
 function Airlock:functioningAsOuterAirlockDoor()
     if self.bValidAirlock then
         local rZone = self:_getFunctionalAirlockZone()
@@ -109,17 +89,11 @@ function Airlock:functioningAsOuterAirlockDoor()
     end
     return false
 end
-
 function Airlock:setOwnedByZone(rZoneObj,bOwned)
     self:_setDoorState(self.doorState)
 end
-
 function Airlock:testAirlock()
-    -- MTF: already done in tick, by door.
-    --self:_updateSpaceStatus()
-
     self.bValidAirlock = not self:_isSabotaged() and self.bEastSideVacuum ~= self.bWestSideVacuum and self.nCondition > 0
-
     if self.bEastSideVacuum then
         self.airlockSpaceDir = self.eastDir
         self.airlockInsideDir = self.westDir
@@ -129,7 +103,6 @@ function Airlock:testAirlock()
     end
     self:_updatePathTags()
 end
-
 function Airlock:getValidTileOnSide(bInside)
     if self.bValidAirlock then
         local dir = (bInside and self.airlockInsideDir) or self.airlockSpaceDir
@@ -139,5 +112,4 @@ function Airlock:getValidTileOnSide(bInside)
         return wx,wy,tx,ty
     end
 end
-
 return Airlock

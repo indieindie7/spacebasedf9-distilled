@@ -5,19 +5,15 @@ local Room = require('Room')
 local World=require('World')
 local EnvObject=require('EnvObjects.EnvObject')
 local CharacterConstants=require('CharacterConstants')
-
 local EatPlant = Class.create(Task)
-
 EatPlant.HARVEST_DURATION = 2
 EatPlant.EAT_DURATION = 5
 EatPlant.nDuration = EatPlant.HARVEST_DURATION + EatPlant.EAT_DURATION + 1
-
 function EatPlant:init(rChar,tPromisedNeeds,rActivityOption)
     Task.init(self,rChar,tPromisedNeeds,rActivityOption)
     self.rTarget = rActivityOption.tData.rTargetObject
     self:setPath(rActivityOption.tBlackboard.tPath)
 end
-
 function EatPlant:onUpdate(dt)
     if self:interacting() then
         if self:tickInteraction(dt) then
@@ -53,5 +49,4 @@ function EatPlant:onUpdate(dt)
         assert(false)
     end
 end
-
 return EatPlant

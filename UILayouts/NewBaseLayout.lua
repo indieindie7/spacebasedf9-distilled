@@ -1,16 +1,13 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
-
 local sRightSideBarTileX = '(g_GuiManager.getUIViewportSizeX() / 2) - 126'
 local sLeftSideBarTileX = '-g_GuiManager.getUIViewportSizeX() / 2'
 local sLeftSidebarStartY = '(g_GuiManager.getUIViewportSizeY() / 2) - 758'
 local sRightSidebarStartY = '(g_GuiManager.getUIViewportSizeY() / 2) - 734'
 local sTileHeight = 542
 local defaultTextStyle = 'dosissemibold28'
-
-return 
+return
 {
     posInfo =
         {
@@ -18,7 +15,7 @@ return
         alignY = 'center',
         offsetX = 0,
         offsetY = 0,
-        scale = { 1, 1 }, -- TODO: set scale for smaller or larger pixel sizes
+        scale = { 1, 1 },
     },
     tElements =
     {
@@ -36,9 +33,6 @@ return
             type = 'uiTexture',
             textureName = 'galaxy',
             sSpritesheetPath = 'UI/GalaxyMap',
-            --textureName = 'galaxymap',
-            --sSpritesheetPath = 'UI/NewGame',
-            --pos = { 580, -576 },
             hAlign='center',
             vAlign='center',
             color = Gui.WHITE,
@@ -88,7 +82,6 @@ return
             color = AMBER,
             layerOverride = 'UI',
         },
-		-- tutorial coordinates: 12-34 (get it?)
         {
             key = 'TutorialMarker',
             type = 'uiTexture',
@@ -129,7 +122,6 @@ return
             pos = { '-g_GuiManager.getUIViewportSizeX() / 2', 'g_GuiManager.getUIViewportSizeY() / 2' },
             color = Gui.WHITE,
         },
-        -- dumb version of tiling
         {
             key = 'SideBarLeftTile1',
             type = 'uiTexture',
@@ -178,7 +170,6 @@ return
             pos = { sLeftSideBarTileX, sLeftSidebarStartY..' - 5 * '..sTileHeight },
             color = Gui.WHITE,
         },
-        -- end tiling
         {
             key = 'SideBarLeftBGBottom',
             type = 'uiTexture',
@@ -195,7 +186,6 @@ return
             pos = { '(g_GuiManager.getUIViewportSizeX() / 2) - 156', 'g_GuiManager.getUIViewportSizeY() / 2' },
             color = Gui.WHITE,
         },
-        -- dumb version of tiling
         {
             key = 'SideBarRightTile1',
             type = 'uiTexture',
@@ -244,7 +234,6 @@ return
             pos = { sRightSideBarTileX, sRightSidebarStartY..' - 5 * '..sTileHeight },
             color = Gui.WHITE,
         },
-        -- end tiling
         {
             key = 'SideBarRightBGBottom',
             type = 'uiTexture',
@@ -317,7 +306,7 @@ return
             pos = { '-g_GuiManager.getUIViewportSizeX() / 2 - 70', 'g_GuiManager.getUIViewportSizeY() / 2 + 40' },
             hidden = true,
             color = { 0.2, 1.0, 0.5, 0.4 },
-        },        
+        },
         {
             key = 'ButtonConfirm',
             type = 'onePixelButton',
@@ -343,7 +332,7 @@ return
                 {
                     key = 'ButtonConfirmInactive',
                     hidden = true,
-                },                
+                },
             },
             onHoverOff =
             {
@@ -354,7 +343,7 @@ return
                 {
                     key = 'ButtonConfirmActiveGlow',
                     hidden = true,
-                },                    
+                },
                 {
                     key = 'ButtonConfirmOff',
                     hidden = false,
@@ -362,7 +351,7 @@ return
                 {
                     key = 'ButtonConfirmInactive',
                     hidden = false,
-                },                
+                },
             },
         },
         {
@@ -381,7 +370,7 @@ return
             pos = { '-g_GuiManager.getUIViewportSizeX() / 2 + 50', 'g_GuiManager.getUIViewportSizeY() / 2 - 300' },
             hidden = true,
             color = Gui.WHITE,
-        },        
+        },
         {
             key = 'ButtonDeclineActive',
             type = 'uiTexture',
@@ -400,8 +389,7 @@ return
             pos = { '-g_GuiManager.getUIViewportSizeX() / 2 - 70', 'g_GuiManager.getUIViewportSizeY() / 2 - 160' },
             hidden = true,
             color = { 1.0, 0.5, 0.1, 0.5 },
-        },       
-        
+        },
         {
             key = 'ButtonDecline',
             type = 'onePixelButton',
@@ -419,7 +407,7 @@ return
                 {
                     key = 'ButtonDeclineActiveGlow',
                     hidden = false,
-                },                
+                },
             },
             onHoverOff =
             {
@@ -430,7 +418,7 @@ return
                 {
                     key = 'ButtonDeclineActiveGlow',
                     hidden = true,
-                },                
+                },
             },
         },
         {
@@ -450,7 +438,7 @@ return
             pos = { '-g_GuiManager.getUIViewportSizeX() / 2 + 66', '-(g_GuiManager.getUIViewportSizeY() / 2) + 244' },
             hidden = true,
             color = Gui.WHITE,
-        },       
+        },
         {
             key = 'ButtonDeploy',
             type = 'onePixelButton',
@@ -464,9 +452,9 @@ return
                     {
                         key = "ButtonDeployActive",
                         hidden = false,
-                    },         
+                    },
                 },
-        },        
+        },
         {
             key = 'ButtonCancelActive',
             type = 'uiTexture',

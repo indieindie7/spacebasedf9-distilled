@@ -1,5 +1,4 @@
 local PlantData = {}
-
 PlantData.tPlants =
 {
     Corn =
@@ -11,7 +10,7 @@ PlantData.tPlants =
             {nAbove=0.8, spriteName='plant_corn_01_c', bCanBeEaten=true},
             {nAbove=0.98, spriteName='plant_corn_01_c', bCanBeHarvested=true, bCanBeEaten=true},
         },
-        nLifeTime = 500, -- plant age
+        nLifeTime = 500,
 		sPlantLC = 'PROPSX048TEXT',
         tHarvestableFoods =
         {
@@ -50,7 +49,7 @@ PlantData.tPlants =
         nLifeTime = 500,
 		sPlantLC = 'PROPSX049TEXT',
         tHarvestableFoods =
-        { 
+        {
             Glowfruit = {
 				tNumHarvestedRange={3,9},
 			},
@@ -68,12 +67,11 @@ PlantData.tPlants =
         nLifeTime = 500,
 		sPlantLC = 'PROPSX051TEXT',
         tHarvestableFoods =
-        { 
+        {
             CandyCane = {
 				tNumHarvestedRange={1,5},
 			},
         },
-    },       
+    },
 }
-
 return PlantData

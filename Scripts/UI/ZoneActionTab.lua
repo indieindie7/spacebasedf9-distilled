@@ -1,5 +1,4 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
 local Character = require('CharacterConstants')
@@ -9,12 +8,9 @@ local Base = require('Base')
 local GameRules = require('GameRules')
 local ObjectList = require('ObjectList')
 local TemplateButton = require('UI.TemplateButton')
-
 local sUILayoutFileName = 'UILayouts/ZoneActionTabLayout'
-
 local tActionButtonData=
 {
-	-- claim/unclaim
     {
 		sLayoutFile = 'UILayouts/ActionButtonLayout',
 		sButtonName = 'ActionButton',
@@ -36,7 +32,6 @@ local tActionButtonData=
             return 'disabled'
         end,
     },
-	-- seal/unseal o2
     {
 		sActiveLinecode="ZONEUI071TEXT",
         sInactiveLinecode="ZONEUI072TEXT",
@@ -59,11 +54,9 @@ local tActionButtonData=
         end,
     },
 }
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.tButtons = {}
-
     function Ob:init()
         self:processUIInfo(sUILayoutFileName)
         Ob.Parent.init(self)
@@ -86,20 +79,16 @@ function m.create()
         self.tCitizenAssignmentButtons = {}
         self.tCitizenUnassignmentButtons = {}
 		self.rCustomControlsLabel = self:getTemplateElement('CustomControlsLabel')
-
         self.rAssignmentScrollableUI = self:getTemplateElement('AssignmentButtonScrollPane')
 		self.rAssignmentScrollableUI:setRenderLayer('UIScrollLayerLeft')
         self.rAssignmentScrollableUI:setScissorLayer('UIScrollLayerLeft')
     end
-
     local tAssignmentButtonData={
 		sLayoutFile = 'UILayouts/ActionButtonLayout',
 		sButtonName = 'ActionButton',
 		sLabelElement = 'ActionLabel',
         labelFn=function(btn)
-			-- "unassigned"
 			local label = g_LM.line('ZONEUI147TEXT')
-			-- if selected, "click to assign"
 			if btn.bClicked then
 				label = g_LM.line('ZONEUI148TEXT')
 			else
@@ -122,12 +111,10 @@ function m.create()
 			return 'normal'
 		end,
     }
-	
 	local tUnassignmentButtonData={
 		sLayoutFile = 'UILayouts/CancelButtonLayout',
 		sButtonName = 'CancelButton',
 		buttonStatusFn=function(btn)
-			-- only enable when slot is assigned
 			local rChar = btn.rZoneActionTab:_btnToChar(btn)
 			if rChar then
 				return 'normal'
@@ -135,7 +122,6 @@ function m.create()
 			return 'disabled'
 		end,
 	}
-
     function Ob:_btnToChar(btn)
         local rRoom = self.rZoneInspector.rRoom
         local zoneObj = rRoom and rRoom.zoneObj
@@ -143,28 +129,24 @@ function m.create()
             local tSlots = zoneObj:getAssignmentSlots()
             local rChar = tSlots[btn.idx] and tSlots[btn.idx].char and ObjectList.getObject(tSlots[btn.idx].char)
             if rChar then return rChar end
-
             local rBed = tSlots[btn.idx] and tSlots[btn.idx].bed and ObjectList.getObject(tSlots[btn.idx].bed)
             if rBed then
                 return rBed:getOwner()
             end
         end
     end
-
     function Ob:_addAssignmentButton()
         local rButton = TemplateButton.new()
         rButton.rZoneActionTab = self
 		rButton.bClicked = false
         rButton:setBehaviorData(tAssignmentButtonData)
         self.rAssignmentScrollableUI:addScrollingItem(rButton)
-		-- no need to setLoc, that's done in onTick loop that creates us
         rButton:addPressedCallback(self.assignCitizenToZoneButtonPressed,self)
         table.insert(self.tCitizenAssignmentButtons, rButton)
         rButton.idx = #self.tCitizenAssignmentButtons
         table.insert(self.tButtons, rButton)
         return rButton
     end
-	
 	function Ob:_addUnassignmentButton()
 		local rButton = TemplateButton.new()
         rButton.rZoneActionTab = self
@@ -176,7 +158,6 @@ function m.create()
         table.insert(self.tButtons, rButton)
         return rButton
 	end
-	
 	function Ob:assignCitizenToZoneButtonPressed(rButton)
 		if rButton.bClicked then
 			GameRules.setUIMode(GameRules.MODE_INSPECT)
@@ -186,7 +167,6 @@ function m.create()
 			rButton.bClicked = true
 		end
     end
-	
 	function Ob:unAssignCitizenToZoneButtonPressed(rButton)
         local rRoom = self.rZoneInspector.rRoom
         local zoneObj = rRoom and rRoom.zoneObj
@@ -194,7 +174,6 @@ function m.create()
             zoneObj:assignChar(rButton.idx, nil)
 		end
 	end
-	
     function Ob:citizenSelected(rCitizen,index)
         local rRoom = self.rZoneInspector.rRoom
         local zoneObj = rRoom and rRoom.zoneObj
@@ -203,11 +182,9 @@ function m.create()
         end
 		self.tCitizenAssignmentButtons[index].bClicked = false
     end
-
 	function Ob:sealButtonPressed()
 		self.rZoneInspector.rRoom:toggleLockdown()
 	end
-	
 	function Ob:claimButtonPressed()
 		local rRoom = self.rZoneInspector.rRoom
 		if rRoom and rRoom:getVisibility() == g_World.VISIBILITY_FULL then
@@ -220,17 +197,14 @@ function m.create()
 			end
 		end
 	end
-	
 	function Ob:setRoom(rRoom)
 		for _,rButton in pairs(self.tButtons) do
 			rButton.rSelected = rRoom
 		end
 	end
-	
     function Ob:onTick(dt)
 		local rRoom = self.rZoneInspector.rRoom
         local zoneObj = rRoom and rRoom.zoneObj
-		-- track how many assignment buttons are used so we know which to hide
 		local nAssignButtonIndex = 0
         if zoneObj and zoneObj.getAssignmentSlots then
 			self.rCustomControlsLabel:setVisible(true)
@@ -250,40 +224,25 @@ function m.create()
 				if not rButton:isVisible() then
 					self:setElementHidden(rButton,false)
 				end
-				-- [X] unassign button
 				local rCancelButton = self.tCitizenUnassignmentButtons[i] or self:_addUnassignmentButton()
 				rCancelButton:setLoc(x + 160 + 52, y - 3)
 				if not rCancelButton:isVisible() then
 					self:setElementHidden(rCancelButton,false)
 				end
-				-- advance Y
 				y = y + h - nButtonMargin
             end
         else
 			self.rCustomControlsLabel:setVisible(false)
 		end
-		-- hide any assign button that isn't for a visible slot
 		for i=nAssignButtonIndex+1,#self.tCitizenAssignmentButtons do
 			self:setElementHidden(self.tCitizenAssignmentButtons[i], true)
 			self:setElementHidden(self.tCitizenUnassignmentButtons[i], true)
 		end
-		-- individual buttons tick their status as defined in behavior data
         for _,rButton in pairs(self.tButtons) do
 			rButton:onTick(dt)
 		end
         self.rAssignmentScrollableUI:refresh()
     end
-	
---[[	
-    function Ob:onFinger(touch, x, y, props)
-        local bHandled = false
-        for i, rButton in ipairs(self.tButtons) do
-            bHandled = rButton:onFinger(touch, x, y, props)
-        end
-        return bHandled
-    end
-]]--
-	
     function Ob:inside(wx, wy)
         local bInside = Ob.Parent.inside(self, wx, wy)
         for i, rButton in ipairs(self.tButtons) do
@@ -291,15 +250,11 @@ function m.create()
         end
         return bInside
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

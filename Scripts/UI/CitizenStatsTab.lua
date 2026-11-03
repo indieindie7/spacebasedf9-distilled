@@ -1,26 +1,19 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
 local Character = require('CharacterConstants')
 local Topics = require('Topics')
 local UIElement = require('UI.UIElement')
 local Malady = require('Malady')
-
 local sUILayoutFileName = 'UILayouts/CitizenStatsTabLayout'
-
--- only show this many friends and enemies
 local FRIENDS_LIST_MAX_LENGTH = 4
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.rCitizen = nil
     Ob.bDoRolloverCheck = true
-
     function Ob:init()
         self:processUIInfo(sUILayoutFileName)
         Ob.Parent.init(self)
-
         self.rJoinDateText = self:getTemplateElement('JoinDateText')
         self.rIllnessText = self:getTemplateElement('IllnessText')
         self.rInjuryText = self:getTemplateElement('InjuryText')
@@ -36,22 +29,17 @@ function m.create()
 		self.rIllnessButton = self:getTemplateElement('IllnessButton')
         self.rIllnessButton:addPressedCallback(self.onIllnessButtonPressed, self)
     end
-	
     function Ob:onTick(dt)
         if not self.rCitizen then
 			return
 		end
-		
-		-- disable clickable buttons, re-enable later if applicable
 		self.rIllnessButton:setEnabled(false)
-		
 		if self.bHostileMode then
 			if self.rCitizen.tStats and self.rCitizen.tStats.tHistory and self.rCitizen.tStats.tHistory.nTotalKills then
 				self.rHostileKillsText:setString(tostring(self.rCitizen.tStats.tHistory.nTotalKills))
 			else
 				self.rHostileKillsText:setString("0")
 			end
-			-- we embed random flavor text ONTO the character
 			if not self.rCitizen.tFlavorStats then
 				self.rCitizen.tFlavorStats = {}
 			end
@@ -61,12 +49,10 @@ function m.create()
 			self.rFlavorText1Text:setString(self.rCitizen.tFlavorStats.sNumBasesAttacked)
 			return
 		end
-		
 		local faveHobby = self.rCitizen:getFavorite('Activities')
 		if faveHobby then
 			self.rHobbyText:setString(Topics.tTopics[faveHobby].name)
 		end
-		
 		local faveFood = self.rCitizen:getFavorite('Foods')
 		if faveFood then
 			self.rFoodText:setString(Topics.tTopics[faveFood].name)
@@ -75,11 +61,8 @@ function m.create()
 		if faveBand then
 			self.rBandText:setString(Topics.tTopics[faveBand].name)
 		end
-		-- getPeopleOfAffinity returns an array of friend data tables, sorted
-		-- by affinity * (familiarity * familiarity_scale)
 		local tFriendsData = self.rCitizen:getPeopleOfAffinity(Character.FRIEND_AFFINITY, true)
 		local sFriendString = g_LM.line('INSPEC082TEXT')
-		-- trim friends list to desired length
 		if #tFriendsData > 0 then
 			local tFriends = {}
 			for i,tFriendData in ipairs(tFriendsData) do
@@ -90,7 +73,6 @@ function m.create()
 			sFriendString = table.concat(tFriends, ', ')
 		end
 		self.rFriendsText:setString(sFriendString)
-		-- same for enemies
 		local tEnemiesData = self.rCitizen:getPeopleOfAffinity(Character.ENEMY_AFFINITY, false)
 		local sEnemyString = g_LM.line('INSPEC082TEXT')
 		if #tEnemiesData > 0 then
@@ -103,7 +85,6 @@ function m.create()
 			sEnemyString = table.concat(tEnemies, ', ')
 		end
 		self.rEnemiesText:setString(sEnemyString)
-		
 		if self.rInventoryText then
 			self.rInventoryText:setString(self.rCitizen:getInventoryString())
 		end
@@ -128,10 +109,8 @@ function m.create()
 		local sIllness, sInjury
 		if #tIllnessNames > 0 then
 			sIllness = table.concat(tIllnessNames, ', ')
-			-- enable button
 			self.rIllnessButton:setEnabled(true)
 		else
-			-- "None Diagnosed"
 			sIllness = g_LM.line('INSPEC146TEXT')
 		end
 		self.rIllnessText:setString(sIllness)
@@ -141,12 +120,9 @@ function m.create()
 			sInjury = g_LM.line('INSPEC146TEXT')
 		end
 		self.rInjuryText:setString(sInjury)
-        -- "likes" (stuff tags)
         local tTags = self.rCitizen:getSortedTagAffinities()
-        -- return only top 5 most liked
         local tTagStrings = {}
         for i=1,5 do
-            -- affinity must be above a threshold
             if tTags[i].nAff >= Character.FRIEND_AFFINITY then
                 local sString = g_LM.line(tTags[i].sLC)
                 sString = sString:gsub("^%l", string.upper)
@@ -155,11 +131,9 @@ function m.create()
         end
         self.rStuffText:setString(table.concat(tTagStrings, ', '))
 	end
-    
     function Ob:setCitizen(rCitizen)
         self.rCitizen = rCitizen
     end
-	
     function Ob:setHostileMode(bSet)
         self.bHostileMode = bSet
         if bSet then
@@ -174,33 +148,24 @@ function m.create()
             end
         end
     end
-	
 	function Ob:onIllnessButtonPressed(rButton, eventType)
-		-- if we have an illness, bring up disease research
 		local _,nIllnesses = self.rCitizen:getIllnesses()
 		if nIllnesses > 0 then
-			-- open research screen
 			local rSideBar = g_GuiManager.getSideBar()
 			rSideBar:openSubmenu(rSideBar.rResearchMenu)
-			-- open disease tab
 			rSideBar.rResearchMenu:setTechMode(false)
 		end
 	end
-	
     function Ob:onSelected(bSelected)
         if bSelected then
             self:setHostileMode(self.bHostileMode)
         end
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

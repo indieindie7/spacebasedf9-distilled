@@ -6,9 +6,7 @@ local MiscUtil = require('MiscUtil')
 local GameRules = require('GameRules')
 local Needs = require('Utility.Needs')
 local Character = require('CharacterConstants')
-
 local m = {}
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.bgColor = {0, 0, 0, 0}
@@ -28,7 +26,6 @@ function m.create()
         Ob.Parent.init(self)
         self:setRenderLayer('UI')
         self.bVisible = false
-		-- debug graphs
 		local rDebugPaneScriptDeck = MOAIScriptDeck.new()
 		rDebugPaneScriptDeck:setRect(0, 0, kVirtualScreenWidth, kVirtualScreenHeight)
 		rDebugPaneScriptDeck:setDrawCallback(self.drawGraph)
@@ -36,32 +33,26 @@ function m.create()
 		rDebugPaneScriptDeckProp:setDeck ( rDebugPaneScriptDeck )
 		rDebugPaneScriptDeckProp:setBlendMode( MOAIProp.GL_SRC_ALPHA, MOAIProp.GL_ONE_MINUS_SRC_ALPHA )
 		Renderer.getRenderLayer('UI'):insertProp(rDebugPaneScriptDeckProp)
-		-- table of label Y locations, used by CitizenPsychTab
 		self.tLabels = {}
     end
-	
 	function Ob:inside(wx,wy)
         return false
     end
-	
     function Ob:onTick(dt)
         if not GameRules.bInitialized then
             return
         end
     end
-	
 	function Ob:getGraphYRange()
 		local maxY = Needs.MAX_VALUE
 		local midY = (Needs.MAX_VALUE + Needs.MIN_VALUE) / 2
 		local minY = Needs.MIN_VALUE
 		return minY, midY, maxY
 	end
-	
 	function Ob:drawGraph()
 		if not Ob.bVisible then
 			return
 		end
-        -- only draw if character is selected and pane is on an appropriate page
         local selected = g_GuiManager.getSelected()
 		if not selected then
 			return
@@ -70,25 +61,18 @@ function m.create()
         if objType ~= ObjectList.CHARACTER then
 			return
 		end
-		-- draw graph background
 		local x0,y0 = Ob.graphStartX, Ob.graphStartY
 		local x1,y1 = x0 + Ob.graphWidth, y0 - Ob.graphHeight
 		MOAIGfxDevice.setPenColor( 0.5, 0.5, 0.5, 0.15 )
         MOAIDraw.fillRect ( x0, y0, x1, y1 )
-		-- darker bg behind labels
-		--MOAIGfxDevice.setPenColor( 0.15, 0.15, 0.15, 0.5 )
-        --MOAIDraw.fillRect ( x1, y0, x1 + Ob.labelWidth, y1 )
-		-- mid line
 		MOAIGfxDevice.setPenColor( 0.5, 0.5, 0.5, 0.75 )
 		y1 = y0 - (Ob.graphHeight / 2)
 		MOAIDraw.drawLine( x0, y1, x1, y1 )
-        -- mid-mid lines
 		MOAIGfxDevice.setPenColor( 0.25, 0.25, 0.25, 0.5 )
 		y1 = y0 - (Ob.graphHeight / 4)
 		MOAIDraw.drawLine( x0, y1, x1, y1 )
 		y1 = y0 - (Ob.graphHeight * 3/4)
 		MOAIDraw.drawLine( x0, y1, x1, y1 )
-        -- colored lines for each item
         for graph,items in pairs(selected.tStats.tHistory.tGraphItems) do
 			local minY, midY, maxY = Ob:getGraphYRange()
 			if graph ~= 'XP' then
@@ -96,7 +80,6 @@ function m.create()
 			end
         end
 	end
-    
     function Ob:drawGraphLine(graphName, graphItems, minY, midY, maxY)
         local color
         if graphName == 'Morale' then
@@ -110,19 +93,14 @@ function m.create()
         local x = Ob.graphStartX + Ob.graphWidth
         local y = Ob.graphStartY - (Ob.graphHeight / 2)
         local prevX,prevY = x,y
-        -- x distance between graph updates
         local tickWidth = Ob.graphWidth / Ob.graphNodesToDraw
-        -- only draw most recent slice of graphItems
-        -- (reverse and slice list)
         local tPoints = {}
         for i=0,Ob.graphNodesToDraw do
             tPoints[i] = graphItems[#graphItems-i]
         end
-        -- draw the lines
         local bFirstPoint = true
         for i,item in pairs(tPoints) do
 			y = Ob:getGraphY(item, minY, maxY)
-            --MOAIDraw.fillCircle(x, y, 3)
             if bFirstPoint then
                 prevY = y
                 bFirstPoint = false
@@ -131,7 +109,6 @@ function m.create()
             prevX, prevY = x, y
             x = x - tickWidth
         end
-        -- reposition text label
 		if not tPoints[1] then
 			return
 		end
@@ -139,21 +116,15 @@ function m.create()
 		y = Ob:getGraphY(tPoints[1], minY, maxY) + 15
 		Ob.tLabels[graphName] = {x=x, y=y}
     end
-	
 	function Ob:getGraphY(value, minY, maxY)
-		-- normalize value
 		value = (value + math.abs(minY)) / (maxY + math.abs(minY))
 		return (Ob.graphStartY - Ob.graphHeight) + (math.min(value, 1) * Ob.graphHeight)
 	end
-	
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

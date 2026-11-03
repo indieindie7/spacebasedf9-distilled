@@ -1,6 +1,5 @@
 local Gui = require('UI.Gui')
-
-return 
+return
 {
     posInfo =
     {
@@ -33,16 +32,16 @@ return
                 pos = { -35, 0 },
             },
         },
-    },    
+    },
     tElements =
-    {      
+    {
         {
             key = 'Button',
             type = 'onePixelButton',
             pos = { -50, 0 },
             scale = { 50, 50 },
             color = Gui.HINTLOG_HIGHLIGHT,
-        },    
+        },
         {
             key = 'ButtonLabel',
             type = 'textBox',
@@ -54,14 +53,5 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 0, 0, 0 },
         },
-        --[[
-        {
-            key = 'ScrollPane',
-            type = 'scrollPane',
-            pos = { 10, 0 },
-            scissorLayerName = 'UIScrollLayerRight',
-            rect = { 0, 764, 570, 1152 },
-        },  
-  ]]--      
     },
 }

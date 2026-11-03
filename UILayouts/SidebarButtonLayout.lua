@@ -1,9 +1,7 @@
 local Gui = require('UI.Gui')
-
 local nIconX, nIconStartY = 10, -12
 local nLabelX, nLabelStartY = 94, -10
 local nButtonWidth, nButtonHeight  = 330, 81
-
 return
 {
     posInfo =
@@ -37,7 +35,7 @@ return
                 {
                     key = 'SidebarIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'SidebarHotkey',
                     color = { 0, 0, 0 },
@@ -59,7 +57,7 @@ return
                 {
                     key = 'SidebarIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'SidebarHotkey',
                     color = Gui.AMBER,

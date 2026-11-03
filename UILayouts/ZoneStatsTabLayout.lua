@@ -1,13 +1,9 @@
 local Gui = require('UI.Gui')
-
 local nInspectorWidth = 418
-
 local nStatLabelMargin = 35
-
 local nStatsStartY = 0
 local nLineSize = 40
-
-return 
+return
 {
     posInfo =
         {
@@ -60,7 +56,6 @@ return
     },
     tElements =
     {
-		-- alternating tinted backgrounds for every other item
         {
             key = 'OxygenBG',
             type = 'onePixel',
@@ -75,7 +70,6 @@ return
             scale = { nInspectorWidth, nLineSize },
             color = Gui.AMBER_OPAQUE_DIM,
         },
-        -- surface area
         {
             key = 'SurfaceAreaIcon',
             type = 'uiTexture',
@@ -106,7 +100,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- oxygen
         {
             key = 'OxygenIcon',
             type = 'uiTexture',
@@ -137,7 +130,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- power draw
         {
             key = 'PowerDrawIcon',
             type = 'uiTexture',
@@ -168,7 +160,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- occupants
         {
             key = 'OccupantsIcon',
             type = 'uiTexture',
@@ -199,7 +190,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- room contents
         {
             key = 'RoomContentsIcon',
             type = 'uiTexture',

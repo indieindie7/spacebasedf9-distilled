@@ -1,9 +1,7 @@
 local DFUtil = require('DFCommon.Util')
 local Character = require('CharacterConstants')
 local tAnimations = {}
-
 tAnimations.sBasePath = 'Characters/Spacesuit/Animations/'
-
 tAnimations['breathe']=
 {
    sFilename='Spacewalk_Idle.anim',
@@ -56,38 +54,27 @@ tAnimations['melee']=
 {
    sFilename='Spacewalk_FireGun.anim',
 }
-
 tAnimations['stance']={}
 local tPistolStance={
-    --walk={
-        --sFilename='Citizen_Run_WithGun.anim',
-        --sAccessory='Pistol',   
-    --},
     shoot={
         sFilename='Spacewalk_FireGun.anim',
-        sAccessory='Pistol',   
+        sAccessory='Pistol',
     },
     idle={
         sFilename='Spacewalk_Idle_HoldGun.anim',
-        sAccessory='Pistol',   
+        sAccessory='Pistol',
     },
 }
 tAnimations['stance']['pistol'] = tPistolStance
-
 local tRifleStance={
-    --walk={
-        --sFilename='Citizen_Run_WithGun.anim',
-        --sAccessory='Rifle',   
-    --},
     shoot={
         sFilename='Spacewalk_FireGun.anim',
-        sAccessory='Rifle',   
+        sAccessory='Rifle',
     },
     idle={
         sFilename='Spacewalk_Idle_HoldGun.anim',
-        sAccessory='Rifle',   
+        sAccessory='Rifle',
     },
 }
 tAnimations['stance']['rifle'] = tRifleStance
-
 return tAnimations

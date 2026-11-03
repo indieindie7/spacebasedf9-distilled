@@ -1,11 +1,8 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
-
 local CONSTRUCT_CONFIRM = Gui.GREEN
-
 local nButtonWidth, nButtonHeight  = 330, 81
 local nTextHeight = nButtonHeight + 20
 local nButtonStartY = -123
@@ -15,8 +12,7 @@ local nHotkeyX, nHotkeyStartY = nButtonWidth - 112, -169
 local nIconScale = .6
 local numButtons = 2
 local nBGWidth = 160
-
-return 
+return
 {
     posInfo =
         {
@@ -72,11 +68,11 @@ return
             {
                 key = 'CostText',
                 hidden = true,
-            },            
+            },
         },
-    },    
+    },
     tElements =
-    {       
+    {
         {
             key = 'LargeBar',
             type = 'onePixel',
@@ -95,7 +91,7 @@ return
                 {
                     key = 'DoneButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
@@ -189,14 +185,14 @@ return
                 {
                     key = 'MineButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'MineButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -211,7 +207,7 @@ return
                 {
                     key = 'MineIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'MineHotkey',
                     color = { 0, 0, 0 },
@@ -233,7 +229,7 @@ return
                 {
                     key = 'MineIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'MineHotkey',
                     color = Gui.AMBER,
@@ -251,14 +247,14 @@ return
                 {
                     key = 'EraseButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'EraseButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -273,7 +269,7 @@ return
                 {
                     key = 'EraseIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'EraseHotkey',
                     color = { 0, 0, 0 },
@@ -295,7 +291,7 @@ return
                 {
                     key = 'EraseIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'EraseHotkey',
                     color = Gui.AMBER,
@@ -405,14 +401,13 @@ return
             color = SELECTION_AMBER,
             hidden = true,
         },
-        -- cost submenu
         {
             key = 'CostBackground',
             type = 'onePixel',
             pos = { nButtonWidth, 0 },
             scale = { nBGWidth, nButtonHeight },
             color = CONSTRUCT_CONFIRM,
-        },    
+        },
         {
             key = 'CostBackgroundEndCap',
             type = 'uiTexture',
@@ -420,7 +415,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth + nBGWidth - 1, 0 },
             color = CONSTRUCT_CONFIRM,
-        },   
+        },
         {
             key = 'CostVerticalRule',
             type = 'uiTexture',
@@ -428,7 +423,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth, -4 },
             color = { 0, 0, 0 },
-        },     
+        },
         {
             key = 'CostIconMatter',
             type = 'uiTexture',
@@ -436,7 +431,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth + 10, -10 },
             color = { 0, 0, 0 },
-        },   
+        },
         {
             key = 'CostText',
             type = 'textBox',
@@ -454,7 +449,7 @@ return
             textureName = 'ui_hud_anglebottom',
             sSpritesheetPath = 'UI/HUD',
             pos = { 0, nButtonStartY - numButtons*nButtonHeight },
-            scale = { 1.28, 1.28 },            
+            scale = { 1.28, 1.28 },
             color = Gui.SIDEBAR_BG,
         },
     },

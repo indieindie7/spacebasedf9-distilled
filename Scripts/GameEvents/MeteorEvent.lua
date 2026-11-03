@@ -1,7 +1,6 @@
 local Class = require('Class')
 local Event = require('GameEvents.Event')
 local MeteorEvent = Class.create(Event)
-
 local Base = require('Base')
 local DFMath = require('DFCommon.Math')
 local Renderer = require('Renderer')
@@ -14,36 +13,28 @@ local Gui = require('UI.Gui')
 local AnimatedSprite = require('AnimatedSprite')
 local SoundManager = require('SoundManager')
 local MiscUtil = require('MiscUtil')
-
 MeteorEvent.sEventType = "meteorEvents"
 MeteorEvent.sAlertLC = 'ALERTS026TEXT'
 MeteorEvent.sFailureLC = 'ALERTS027TEXT'
 MeteorEvent.METEOR_STRIKE_RADIUS=256*3
-
 function MeteorEvent.getSpawnLocationModifier()
     return Event._getExpMod('asteroids')
 end
-
 function MeteorEvent.getWeight()
     return 10.0
 end
-
 function MeteorEvent.allowEvent(nPopulation, nElapsedTime)
     return not g_Config:getConfigValue('disable_meteors') and (nPopulation > 4 or GameRules.elapsedTime > 60*10)
 end
-
 function MeteorEvent.onQueue(rController, tUpcomingEventPersistentState, nPopulation, nElapsedTime)
     Event.onQueue(rController, tUpcomingEventPersistentState, nPopulation, nElapsedTime)
-    
     tUpcomingEventPersistentState.nDuration =
-        12 + ((DFMath.randomFloat(0, 2) + 6) * tUpcomingEventPersistentState.nDifficulty) 
+        12 + ((DFMath.randomFloat(0, 2) + 6) * tUpcomingEventPersistentState.nDifficulty)
 end
-
 function MeteorEvent.onAlertShown(rController, tUpcomingEventPersistentState)
     tUpcomingEventPersistentState.tx, tUpcomingEventPersistentState.ty = MeteorEvent.getIndoorTarget(true)
     rController.showMeteorStrikeIndicator(tUpcomingEventPersistentState.tx, tUpcomingEventPersistentState.ty)
 end
-
 function MeteorEvent._randomPointInRadius(wx, wy, nMaxRadius)
     local rad = DFMath.randomFloat(0, nMaxRadius)
     local angle = math.random() * 2.0 * math.pi
@@ -51,10 +42,8 @@ function MeteorEvent._randomPointInRadius(wx, wy, nMaxRadius)
     local cos = math.cos(angle)
     return wx + rad * sin, wy + rad * cos * 0.66
 end
-
 function MeteorEvent.getIndoorTarget(bRequireSafeAndPathable)
     local tRooms, nPlayerRooms, nHiddenRooms = Room.getRoomsOfTeam(Character.TEAM_ID_PLAYER)
-
     local tWeightedChoices = {}
     for rRoom,id in pairs(tRooms) do
         if not bRequireSafeAndPathable or not rRoom:isDangerous() then
@@ -82,39 +71,23 @@ function MeteorEvent.getIndoorTarget(bRequireSafeAndPathable)
     if ty + nBufferInTiles > y1 then ty = y1 end
     return tx, ty
 end
-
 function MeteorEvent.tick(rController, dT, tCurrentEventPersistentState, tCurrentEventTransientState)
     local tPersistentState, tTransientState = tCurrentEventPersistentState, tCurrentEventTransientState
-
     local bDone = false
-
     if not tTransientState.bStarted then
         if not tPersistentState.tx then
-            -- MTF TODO BIG HACK: 
-            -- The alert was sometimes not being shown, and we'd get a crash because that's where we determine the x and y.
-            -- So for now I pretend the alert was shown. 
-            -- But really we should ensure it gets shown!
-            -- Not sure on the repro. Might be loading a game with an inprogress strike.
             MeteorEvent.onAlertShown(rController, tPersistentState)
         end
-        
         local tx,ty = tPersistentState.tx, tPersistentState.ty
         local wx,wy = g_World._getWorldFromTile(tx,ty)
         Base.eventOccurred(Base.EVENTS.EventAlert, {wx=wx,wy=wy,sLineCode="ALERTS033TEXT", tPersistentData=tPersistentState})
-    
         local nDuration = tPersistentState.nDuration
         local nPeakIntensity = tPersistentState.nDuration * 0.65
-    
         local nStartTime = GameRules.elapsedTime
         local nEndTime = GameRules.elapsedTime+nDuration
-        
-        -- hide visual indicator thingy
         rController.hideMeteorStrikeIndicator()
-        
         tTransientState.tMeteors = {}
-    
         SoundManager.playSfx("SFX/SFX/MeteorAppear")
-
         for i=1,nDuration do
             local nIntensity
             if i <= nPeakIntensity then
@@ -123,7 +96,6 @@ function MeteorEvent.tick(rController, dT, tCurrentEventPersistentState, tCurren
                 nIntensity = (nDuration-i+1)/(nDuration-nPeakIntensity+1)
             end
             nIntensity = nIntensity * nIntensity
-    
             local nNumMeteors = 2+math.floor(nIntensity*3)
             for j=1,nNumMeteors do
                 local nMeteorSize = (j==1 and nIntensity) or math.random()*nIntensity*.5
@@ -143,14 +115,12 @@ function MeteorEvent.tick(rController, dT, tCurrentEventPersistentState, tCurren
                 table.insert(tTransientState.tMeteors, tMeteor)
             end
         end
-
         tTransientState.farZ = g_World.getHackySortingZ(0,256)
         tTransientState.bStarted = true
     else
         bDone = true
         for i,t in ipairs(tTransientState.tMeteors) do
             if not t.bDone then bDone = false end
-
             if t.bDone then
             elseif not t.bStarted then
                 if GameRules.elapsedTime > t.nStartTime then
@@ -185,7 +155,6 @@ function MeteorEvent.tick(rController, dT, tCurrentEventPersistentState, tCurren
                         t.rMeteorSprite:die()
                         SoundManager.playSfx("SFX/SFX/MeteorImpact",t.wx,t.wy)
                         local tDamage = {}
-
                         if t.nSize > .9 then
                             GameRules.startCameraShake(15,.2)
                         end
@@ -193,18 +162,8 @@ function MeteorEvent.tick(rController, dT, tCurrentEventPersistentState, tCurren
                             g_World.playExplosion(t.wx, t.wy)
                         end
                         tDamage.nDamageType = Character.DAMAGE_TYPE.Impact
-
                         local nDamage = g_World.TILE_STARTING_HIT_POINTS * t.nSize * .3
-                        --[[
-                        -- MTF TEMP HACK:
-                        -- avoid causing breaches for now, until we fix breach repair AI.
-                        local tHealth = g_World.getTileHealth(t.tx,t.ty)
-                        if tHealth then 
-                            nDamage = math.max(0,math.min(math.floor(tHealth.nHitPoints*.75),nDamage))
-                        end
-                        ]]--
                         tDamage.nDamage = nDamage
-
                         local nResult = g_World.damageTile(t.tx,t.ty, 1, tDamage, true)
                         if nResult ~= g_World.logicalTiles.SPACE and t.nSize > .5 and math.random() < .25 then
                             Fire.startFire(g_World._getWorldFromTile(t.tx,t.ty))
@@ -214,18 +173,14 @@ function MeteorEvent.tick(rController, dT, tCurrentEventPersistentState, tCurren
             end
         end
     end
-
     if bDone then
-        return true    
+        return true
     end
 end
-
 function MeteorEvent.cleanup(rController)
     rController.hideMeteorStrikeIndicator()
 end
-
 function MeteorEvent.getModuleContentsDebugString(rController, tPersistentState)
     return string.format("Duration %.1f sec ", tPersistentState.nDuration)
 end
-
 return MeteorEvent

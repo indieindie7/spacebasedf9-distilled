@@ -5,12 +5,8 @@ local ObjectList=require('ObjectList')
 local GameRules=require('GameRules')
 local DFMath=require('DFCommon.Math')
 local EmergencyBeacon=require('Utility.EmergencyBeacon')
-
 local CircleBeacon = Class.create(Task)
-
---CircleBeacon.emoticon = 'work'
 CircleBeacon.DURATION = 200
-
 function CircleBeacon:init(rChar, tPromisedNeeds, rActivityOption)
     Task.init(self, rChar, tPromisedNeeds, rActivityOption)
     self.duration = DFMath.randomFloat(self.DURATION*.9,self.DURATION*1.1)
@@ -23,21 +19,15 @@ function CircleBeacon:init(rChar, tPromisedNeeds, rActivityOption)
     self.sWalkOverride = 'run'
     self:setPath(rActivityOption.tBlackboard.tPath)
 end
-
 function CircleBeacon:_startIdle()
     self.nIdleTime = DFMath.randomFloat(.5,1.5)
     self.rChar:playAnim('breathe')
 end
-
 function CircleBeacon:onComplete(bSuccess)
-    -- do not remove; used by subclasses.
     Task.onComplete(self,bSuccess)
 end
-
 function CircleBeacon:_pathToPointInRange()
-    -- time till repathing if we have a target object
     self.nRepathTime = 2
-    
     local cx,cy = self.rChar:getLoc()
     local targetWX, targetWY, targetWZ = self.anchorX, self.anchorY, self.anchorZ
     if self.rTargetObject then
@@ -45,7 +35,6 @@ function CircleBeacon:_pathToPointInRange()
         self.bInside = not self.rTargetObject:inSpace()
     end
     if self.bInside then
-
         local rRoom = Room.getRoomAt(targetWX, targetWY, targetWZ, self.anchorW, true)
         if rRoom then
             local wx,wy = rRoom:randomLocInRoom(false,true)
@@ -53,7 +42,6 @@ function CircleBeacon:_pathToPointInRange()
             return
         end
     end
-
     local randomX, randomY = math.random(-g_World.tileWidth*6,g_World.tileWidth*6), math.random(-g_World.tileHeight*8,g_World.tileHeight*8)
     randomX, randomY = targetWX + randomX, targetWY + randomY
     if self.bInside then
@@ -61,25 +49,18 @@ function CircleBeacon:_pathToPointInRange()
             return
         end
     end
-    --if g_World.isPathable(randomX,randomY) then
         self:createPath(cx, cy, randomX, randomY, true)
-    --end
 end
-
 function CircleBeacon:onUpdate(dt)
     if not g_ERBeacon:stillActive(self.anchorX,self.anchorY,self.rTargetObject,EmergencyBeacon.MODE_TRAVELTO) then
-        -- MTF TODO: pro-rate the needs fulfilled here by time spent.
         return true
     end
-
     if self.bGoingToBeacon then
         if self:tickWalk(dt) then
             self.bGoingToBeacon = false
             self.sWalkOverride = nil
             self:_startIdle()
         else
-            -- if seeking a moving target object, regenerate path every
-            -- so often
             if self.rTargetObject and self.nRepathTime < 0 then
                 self:_pathToPointInRange()
             end
@@ -100,5 +81,4 @@ function CircleBeacon:onUpdate(dt)
         end
     end
 end
-
 return CircleBeacon

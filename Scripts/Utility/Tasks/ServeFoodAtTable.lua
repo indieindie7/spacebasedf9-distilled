@@ -8,17 +8,12 @@ local Log=require('Log')
 local Pickup=require('Pickups.Pickup')
 local Character=require('CharacterConstants')
 local Topics=require('Topics')
-
 local ServeFoodAtTable = Class.create(Task)
-
 ServeFoodAtTable.emoticon = 'beer'
-
 ServeFoodAtTable.DURATION_MIN = 8
 ServeFoodAtTable.DURATION_MAX = 18
-
 function ServeFoodAtTable:init(rChar,tPromisedNeeds,rActivityOption)
     Task.init(self, rChar, tPromisedNeeds, rActivityOption)
-
     self.duration = math.random(ServeFoodAtTable.DURATION_MIN, ServeFoodAtTable.DURATION_MAX)
     if self.rChar:heldItem() and self.rChar:heldItem().sTemplate == 'CookedMeal' then
         self:_pathToStove()
@@ -29,7 +24,7 @@ function ServeFoodAtTable:init(rChar,tPromisedNeeds,rActivityOption)
         self.rTable = rActivityOption.tData.rTable
         self.nTableTX,self.nTableTY = rActivityOption.tData.tableTX,rActivityOption.tData.tableTY
         self.sDest = 'Fridge'
-        self.rFridge = ObjectList.getObjAtTile(self.pathTargetTX,self.pathTargetTY,ObjectList.ENVOBJECT) --,'Fridge')
+        self.rFridge = ObjectList.getObjAtTile(self.pathTargetTX,self.pathTargetTY,ObjectList.ENVOBJECT)
         if self.rFridge and self.rFridge.sFunctionality ~= 'Fridge' then
             self.rFridge = nil
         end
@@ -38,7 +33,6 @@ function ServeFoodAtTable:init(rChar,tPromisedNeeds,rActivityOption)
         end
     end
 end
-
 function ServeFoodAtTable:_pathToStove()
 	local rStove = self.rTable:getStove()
 	if not rStove then
@@ -54,13 +48,11 @@ function ServeFoodAtTable:_pathToStove()
 	self.pathTargetTX,self.pathTargetTY = rStove:getTileLoc()
 	self.sDest = 'Stove'
 end
-
 function ServeFoodAtTable:onUpdate(dt)
     if not self.rTable:isActive(self.sDest == 'Fridge') then
         self:interrupt('PubTable no longer active')
         return
     end
-
     if self:interacting() then
         if self:tickInteraction(dt) then
             if self.sDest == 'Fridge' then
@@ -84,12 +76,9 @@ function ServeFoodAtTable:onUpdate(dt)
 						return
 					end
 				end
-				-- pick meal from existing names, place in CookedMeal container
-				-- (meal is a key in Topics.tTopics)
 				local sRandomTopic = Topics.getRandomTopic('Foods')
                 local sFoodName = Topics.tTopics[sRandomTopic].name
 				local tMealItem = Inventory.createItem('CookedMeal', {sName=sFoodName, sTopicID=sRandomTopic})
-				-- remember who cooked this meal
 				tMealItem.sCreatorID = self.rChar.tStats.sUniqueID
                 self.rChar:pickUpItem(tMealItem,true)
                 if not self:createPathTo(self.rTable,g_World.directions.SE) then
@@ -99,7 +88,6 @@ function ServeFoodAtTable:onUpdate(dt)
                 self.pathTargetTX,self.pathTargetTY = self.rTable:getTileLoc()
                 self.sDest = 'PubTable'
             elseif self.sDest == 'PubTable' then
-				-- other stuff happens in onComplete below
                 return true
             end
         end
@@ -113,29 +101,23 @@ function ServeFoodAtTable:onUpdate(dt)
         elseif self.sDest == 'PubTable' then
             sAnim = 'interact'
         end
-
         if not self:attemptInteractWithTile(sAnim, self.pathTargetTX,self.pathTargetTY, 1, true) then
             self:interrupt('Failed to interact with '..self.sDest)
             return
         end
     end
 end
-
 function ServeFoodAtTable:onComplete(bSuccess)
     Task.onComplete(self,bSuccess)
-	-- increment "meals served"
 	if bSuccess then
 		require('Base').incrementStat('nMealsServed')
 	end
-	-- placing food on table = adding "dropped" item to its inventory
     local tItem
     if bSuccess and self.rChar:heldItemName() then
         tItem = self.rChar:transferItemTo(self.rTable, self.rChar:heldItemName())
     end
 	if tItem then
 		self.rChar:alterMorale(Character.MORALE_SERVED_MEAL, 'ServedMeal')
-		-- JPL TODO: increase server/diner familiarity by Character.FAMILIARITY_SERVE_MEAL
 	end
 end
-
 return ServeFoodAtTable

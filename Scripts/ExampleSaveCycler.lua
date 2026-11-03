@@ -1,8 +1,6 @@
 local GameRules=require('GameRules')
 local ExampleSaveCycler = {}
-
 local DFSaveLoad = require("DFCommon.SaveLoad")
-
 local EXAMPLE_SAVES = {
     Demo={
 		'JP_CoolBase4b',
@@ -21,22 +19,16 @@ local EXAMPLE_SAVES = {
         "snoop_doggs_dream_base",
     },
 }
-
 function ExampleSaveCycler.nextSave(sType)
     sType = sType or 'Demo'
     if nil == ExampleSaveCycler.nSave then
         ExampleSaveCycler.nSave = 1
     end
-
     ExampleSaveCycler.nSave = ExampleSaveCycler.nSave + 1
-
     if ExampleSaveCycler.nSave > #EXAMPLE_SAVES[sType] then
         ExampleSaveCycler.nSave = 1
     end
-
-    -- load the save file from the data dir
     GameRules.loadGame("Data/ExampleSaves/" .. EXAMPLE_SAVES[sType][ExampleSaveCycler.nSave] .. ".sav", true)
     GameRules.startLoop()
 end
-
 return ExampleSaveCycler

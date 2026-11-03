@@ -3,9 +3,7 @@ local Class=require('Class')
 local Log=require('Log')
 local World=require('World')
 local Character=require('CharacterConstants')
-
 local PutOnSuit = Class.create(Task)
-
 function PutOnSuit:init(rChar,tPromisedNeeds,rActivityOption)
     self.super.init(self,rChar,tPromisedNeeds,rActivityOption)
             assertdev(not rChar:wearingSpacesuit())
@@ -15,22 +13,17 @@ function PutOnSuit:init(rChar,tPromisedNeeds,rActivityOption)
     assertdev(rActivityOption.tBlackboard.rChar == rChar)
     assertdev(rActivityOption.tBlackboard.rTargetObject == self.rTarget)
     assertdev(rActivityOption.tBlackboard.tPath)
-    
     local tx,ty = self.rChar:getTileLoc()
     assertdev(tx == rActivityOption.tBlackboard.tPath.tPathNodes[1].tx)
     assertdev(ty == rActivityOption.tBlackboard.tPath.tPathNodes[1].ty)
-    
     if rActivityOption.tBlackboard.tPath then
-        self:setPath(rActivityOption.tBlackboard.tPath) 
+        self:setPath(rActivityOption.tBlackboard.tPath)
     end
 end
-
 function PutOnSuit:onUpdate(dt)
     if self.rChar:wearingSpacesuit() then
-        -- MTF HACK: characters will sometimes decide to spacewalk to an airlock to put on a suit.
         return true
     end
-
     if self.nInteracting then
         if self:tickInteraction(dt) then
             local tx,ty = self.rChar:getTileLoc()
@@ -47,5 +40,4 @@ function PutOnSuit:onUpdate(dt)
         end
     end
 end
-
 return PutOnSuit

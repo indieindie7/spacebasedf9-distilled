@@ -1,5 +1,4 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
@@ -15,13 +14,10 @@ local Inventory = require('Inventory')
 local TemplateButton = require('UI.TemplateButton')
 local ResearchData = require('ResearchData')
 local ObjectActionTab = require('UI.ObjectActionTab')
-
 local sUILayoutFileName = 'UILayouts/ObjectInspectorLayout'
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.rObject = nil
-
     function Ob:init()
         Ob.Parent.init(self)
         self:processUIInfo(sUILayoutFileName)
@@ -42,7 +38,6 @@ function m.create()
         self.rTabbedPane:addTab(self.rObjectActionTab, 'ObjectActionTab', true, tButtons[2])
         self.rTabbedPane:addTab(self.rObjectAboutTab, 'ObjectAboutTab', true, tButtons[3])
         self.tTabButtons = tButtons
-		
         self.rNameText = self:getTemplateElement('NameLabel')
         self.rPicture = self:getTemplateElement('Picture')
         self.rPictureTint = self:getTemplateElement('PictureTint')
@@ -55,44 +50,32 @@ function m.create()
         self.rEmergencyStatusText = self:getTemplateElement('EmergencyStatusText')
         self.rNameEditButton = self:getTemplateElement('NameEditButton')
         self.rNameEditTexture = self:getTemplateElement('NameEditTexture')
-
         self.rNameEditButton:addPressedCallback(self.onNameEditButtonPressed, self)
-
-		-- stretch box + line to fill space where tabs could be
 		self.rTabSpacer = self:getTemplateElement('TabBGSpacer')
 		self.rTabLineSpacer = self:getTemplateElement('TabLineSpacer')
-		-- read vars from layout to avoid data duplication
 		self.nTabWidth = self:getExtraTemplateInfo('nTabWidth')
 		self.nTabHeight = self:getExtraTemplateInfo('nTabHeight')
 		self.nTabLineHeight = self:getExtraTemplateInfo('nTabLineHeight')
-
 		self.rDoorStatusLabel = self:getTemplateElement('DoorStatusLabel')
 		self.rDoorStatusText = self:getTemplateElement('DoorStatusText')
-
     end
-	
 	function Ob:getNumberOfTabs()
 		if self.rObject and ObjectList.getObjType(self.rObject) == ObjectList.INVENTORYITEM then
             return 0
         end
         return 3
 	end
-    
     function Ob:refresh()
         if Ob.Parent.refresh then Ob.Parent.refresh(self) end
         self:setObject(self.rObject)
     end
-	
 	function Ob:adjustSpacer()
 		local nTabs = self:getNumberOfTabs()
-		-- shaded background
 		self.rTabSpacer:setLoc(self.nTabWidth * nTabs, -420)
 		self.rTabSpacer:setScl(self.nTabWidth * (5 - nTabs) + 3, self.nTabHeight)
-		-- line that completes tab row
 		self.rTabLineSpacer:setLoc(self.nTabWidth * nTabs, -420 - self.nTabHeight)
 		self.rTabLineSpacer:setScl(self.nTabWidth * (5 - nTabs) + 3, self.nTabLineHeight)
 	end
-
     function Ob:onTick(dt)
         self.rDescriptionText:setVisible(true)
         if not self.rObject then
@@ -100,13 +83,10 @@ function m.create()
 		end
         local bInvItem = ObjectList.getObjType(self.rObject) == ObjectList.INVENTORYITEM
         local rObject = self.rObject
-		-- dynamically adjust spacer, tho right now this inspector's # of
-		-- tabs is constant
 		self:adjustSpacer()
 		if rObject.bDestroyed then
 			if g_GuiManager.newSideBar then
 				g_GuiManager.newSideBar:closeSubmenu()
-				--g_GuiManager.clearSelectionProp()
 				g_GuiManager.setSelected(nil)
 				SoundManager.playSfx('degauss')
 			end
@@ -135,21 +115,16 @@ function m.create()
             nPortraitOffX,nPortraitOffY = nPortraitOffX or -200, nPortraitOffY or -240
             nPortraitScl = nPortraitScl or 2
         end
-        
 		if sPortrait then
-            -- MTF HACK: UI does TERRIBLE things do our sprite alignment if we let it screw with 
-            -- the spritesheet, so we add it with some override params.
             if sPortraitPath == 'Environments/Objects' or bUsePortraitOffsetHack then
                 self:addToUISpriteSheets(sPortrait, sPortraitPath, "left", "bottom")
             end
 			self:setTemplateUITexture('Picture', sPortrait, sPortraitPath)
-            
             local xOff,yOff = nPortraitOffX or 0, nPortraitOffY or 0
             local nPosX = self:_convertLayoutVal(self.rPicture.tElementInfo.pos[1])
             local nPosY = self:_convertLayoutVal(self.rPicture.tElementInfo.pos[2])
             self.rPicture:setLoc(nPosX+xOff, nPosY+yOff)
             self.rPicture:setScl(nPortraitScl or self.rPicture.tElementInfo.scale[1])
-            
             if sTintSprite and tTintColor then
                 self:setElementHidden(self.rPictureTint,false)
                 self:setTemplateUITexture('PictureTint', sTintSprite, sPortraitPath)
@@ -163,12 +138,10 @@ function m.create()
         else
             self:setElementHidden(self.rPictureTint,true)
 		end
-
 		local sEmergency = not bInvItem and self.rObject:getEmergencyString()
         self:setElementHidden(self.rEmergencyStatusBG, not sEmergency)
         self:setElementHidden(self.rEmergencyStatusText, not sEmergency)
         self.rEmergencyStatusText:setString(sEmergency or '')
-
 		local sString, tBarColor = EnvObject.getConditionUIString(rObject.nCondition)
 		if sString and tBarColor then
             self.rConditionBG:setColor(unpack(tBarColor))
@@ -178,7 +151,6 @@ function m.create()
             local rOwner = Inventory.getOwner(self.rObject)
             self.rConditionText:setString((rOwner and rOwner:getNiceName()) or '')
         end
-		-- door status
 		if rObject.isDoor and rObject:isDoor() then
 			local Door = require('EnvObjects.Door')
 			local lc
@@ -187,13 +159,11 @@ function m.create()
 			elseif rObject.doorState == Door.doorStates.CLOSED then
 				lc = 'PROPSX057TEXT'
 			elseif rObject.doorState == Door.doorStates.LOCKED then
-				-- vacuum-locked
 				if rObject.bTouchesVacuum then
 					lc = 'PROPSX052TEXT'
 				else
 					lc = 'PROPSX059TEXT'
 				end
-				-- "(Broken)" in parentheses if stuck open or closed
 			elseif rObject.doorState == Door.doorStates.BROKEN_OPEN then
 				lc = 'PROPSX052TEXT'
 			elseif rObject.doorState == Door.doorStates.BROKEN_CLOSED then
@@ -208,7 +178,6 @@ function m.create()
 		end
 		self.rTabbedPane:onTick(dt)
 	end
-
     function Ob:onFinger(touch, x, y, props)
         local bHandled = false
         if Ob.Parent.onFinger(self, touch, x, y, props) then
@@ -216,7 +185,6 @@ function m.create()
         end
         return bHandled
     end
-
     function Ob:inside(wx, wy)
         local bHandled = false
         if Ob.Parent.inside(self, wx, wy) then
@@ -225,17 +193,14 @@ function m.create()
         bHandled = self.rTabbedPane:inside(wx, wy) or bHandled
         return bHandled
     end
-	
     function Ob:show(nPri)
         local n = Ob.Parent.show(self, nPri)
 		self.rTabbedPane:setTabSelectedByKey('ObjectActionTab')
         return n
     end
-    
     function Ob:setSelectedInventoryItem(tItem)
         self:setObject(self.rObject, tItem)
     end
-	
     function Ob:setObject(rObject, tContainedItem)
         if tContainedItem then
             self.rContainingObject = rObject
@@ -244,7 +209,6 @@ function m.create()
         else
             self.rContainingObject = nil
         end
-        
         if self.rObject ~= rObject then
             if GameScreen.inTextEntry() then
                 GameScreen.endTextEntry()
@@ -258,7 +222,6 @@ function m.create()
             self.rTabbedPane:hideTab('ObjectActionTab')
             self.rTabbedPane:hideTab('ObjectAboutTab')
             self.rTabbedPane:setTabSelected(-1)
-            --self:setElementHidden(self.rNameEditButton,true)
             self:setElementHidden(self.rNameEditTexture,true)
             self.rConditionLabel:setString(g_LM.line('INSPEC199TEXT'))
         else
@@ -268,7 +231,6 @@ function m.create()
             self.rTabbedPane:revealTab('ObjectStatsTab')
             self.rTabbedPane:revealTab('ObjectActionTab')
             self.rTabbedPane:revealTab('ObjectAboutTab')
-            --self:setElementHidden(self.rNameEditButton,false)
             self:setElementHidden(self.rNameEditTexture,false)
             self.rConditionLabel:setString(g_LM.line('INSPEC054TEXT'))
         end
@@ -282,14 +244,12 @@ function m.create()
             self.rDescriptionText:setString(rObject:getDescription())
         end
 	end
-
     function Ob:onNameEditButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP and not GameScreen.inTextEntry() and self.rObject and ObjectList.getObjType(self.rObject) ~= ObjectList.INVENTORYITEM then
             GameScreen.beginTextEntry(self.rNameText, self, self.confirmTextEntry, self.cancelTextEntry)
 			self.rNameEditButton:setSelected(true)
         end
     end
-	
     function Ob:confirmTextEntry(text)
         if self.rObject and ObjectList.getObjType(self.rObject) ~= ObjectList.INVENTORYITEM then
             if self.rObject.tParams and self.rObject.tParams.spawnerName then
@@ -300,19 +260,14 @@ function m.create()
 			self.rNameEditButton:setSelected(false)
         end
     end
-
 	function Ob:cancelTextEntry(text)
 		self.rNameEditButton:setSelected(false)
 	end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

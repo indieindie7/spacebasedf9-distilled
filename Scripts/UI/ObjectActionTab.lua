@@ -1,5 +1,4 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
 local UIElement = require('UI.UIElement')
@@ -13,29 +12,20 @@ local GameRules = require('GameRules')
 local SoundManager = require('SoundManager')
 local CommandObject = require('Utility.CommandObject')
 local Character = require('CharacterConstants')
-
 local sUILayoutFileName = 'UILayouts/ObjectActionTabLayout'
-
 local nButtonRight = 160
-
 local tActionButtonData=
 {
-	-- demolish button
     {
-		-- active/inactive linecodes - overriden by labelFn
 		sLayoutFile = 'UILayouts/CostToggleButtonLayout',
-		-- element for clickable button
 		sButtonName = 'CostButton',
-		-- element whose text we set to change label
 		sLabelElement = 'CostText',
 		isVisibleFn=function(self)
-			-- if we ever add things that can't be demolished, check that here
 			return true
 		end,
         buttonStatusFn=function(self)
 			if self.rSelected:slatedForTeardown(false,true) then
 				return 'selected'
-			-- can't demolish if claiming for research
 			elseif self.rSelected:slatedForTeardown(true,false) then
 				return 'disabled'
 			end
@@ -59,7 +49,6 @@ local tActionButtonData=
 			SoundManager.playSfx('inspectordoornormal')
 		end,
     },
-	-- retrieve research
     {
 		sLayoutFile = 'UILayouts/CostToggleButtonLayout',
 		sButtonName = 'CostButton',
@@ -70,7 +59,7 @@ local tActionButtonData=
             return self.rSelected.bHasResearchData
 		end,
 		buttonStatusFn=function(self)
-			if not self.rSelected.bHasResearchData or self.rSelected:slatedForTeardown(false,true) then -- hack bool to indicate datacubes. 
+			if not self.rSelected.bHasResearchData or self.rSelected:slatedForTeardown(false,true) then
 				return 'disabled'
 			elseif self.rSelected:slatedForTeardown(true,false) then
 				return 'selected'
@@ -83,10 +72,8 @@ local tActionButtonData=
 			SoundManager.playSfx('inspectordoornormal')
 		end,
 	},
-	-- deactivate
 	{
 		sLayoutFile = 'UILayouts/ActionButtonLayout',
-		-- element whose text we set to change label
 		sLabelElement = 'ActionLabel',
 		sActiveLinecode = 'INSPEC171TEXT',
 		sInactiveLinecode = 'INSPEC172TEXT',
@@ -104,10 +91,8 @@ local tActionButtonData=
 		end,
 		nXOverride = 110,
 	},
-    -- assign bed to
 	{
 		sLayoutFile = 'UILayouts/ActionButtonLayout',
-		-- element whose text we set to change label
 		sLabelElement = 'ActionLabel',
 		isVisibleFn=function(self)
             local tag = ObjectList.getTag(self.rSelected)
@@ -123,18 +108,15 @@ local tActionButtonData=
 		end,
         labelFn=function(self)
 			local rChar = self.rSelected:getOwner()
-			-- "click to assign"
 			if GameRules.currentMode == GameRules.MODE_PICK and GameRules.currentModeParam.target == 'Character' then
 				return g_LM.line('ZONEUI148TEXT')
 			elseif rChar then
 				return rChar:getNiceName()
-			-- "unassigned"
             else
 				return g_LM.line('ZONEUI147TEXT')
 			end
         end,
 		callbackFn=function(self)
-		    -- click while selected = bail out of pick mode
 			if GameRules.currentMode == GameRules.MODE_PICK and GameRules.currentModeParam.target == 'Character' then
 				GameRules.setUIMode(GameRules.MODE_INSPECT)
 			else
@@ -147,15 +129,12 @@ local tActionButtonData=
 		end,
 		nXOverride = nButtonRight,
 		nExtraYOffset = 50,
-		-- weird property to keep *next* element on same Y as this one
 		bNextUsesSameY = true,
 	},
-	-- unassign bed
 	{
 		sLayoutFile = 'UILayouts/CancelButtonLayout',
 		sButtonName = 'CancelButton',
 		buttonStatusFn=function(self)
-			-- only enable when a citizen is assigned
 			if self.rSelected:getOwner() then
 				return 'normal'
 			else
@@ -169,20 +148,16 @@ local tActionButtonData=
             local tag = ObjectList.getTag(self.rSelected)
 			return tag and tag.objSubtype == 'Bed'
 		end,
-		-- button width = 160
 		nXOverride = nButtonRight + 160 + 56,
 		nExtraYOffset = 3,
 	},
 }
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.tButtons = {}
-	
     function Ob:init()
         self:processUIInfo(sUILayoutFileName)
         Ob.Parent.init(self)
-		-- special, object-specific controls
         self.rEmergencyAlarmControls = EmergencyAlarmControls.new()
         self.rInfirmaryBedControls = InfirmaryBedControls.new()
         self.rDoorControls = DoorControls.new()
@@ -195,7 +170,6 @@ function m.create()
 		self:setElementHidden(self.rInfirmaryBedControls, true)
 		self:setElementHidden(self.rDoorControls, true)
 		self:setElementHidden(self.rTurretControls, true)
-		-- action buttons
         local x,y = 20,-40
 		local nButtonMargin = 20
         for i,tButtonData in ipairs(tActionButtonData) do
@@ -216,25 +190,19 @@ function m.create()
             table.insert(self.tButtons, rButton)
         end
 		self.rCustomControlsLabel = self:getTemplateElement('CustomControlsLabel')
-		-- set custom button label for research
-		-- (different from CostToggleButtonLayout defaults)
 		local rCostLabel = self.tButtons[2]:getTemplateElement('CostLabel')
 		rCostLabel:setString(g_LM.line('INSPEC122TEXT'))
-		-- hide matter icon and cost
 		self.tButtons[2]:getTemplateElement('CostText'):setVisible(false)
 		self.tButtons[2]:getTemplateElement('CostIcon'):setVisible(false)
     end
-	
     function Ob:refresh()
         if Ob.Parent.refresh then
 			Ob.Parent.refresh(self)
 		end
         self:setObject(self.rSelected)
     end
-	
     function Ob:setObject(rObject)
         self.rSelected = rObject
-		-- TemplateButton behaviors need an object to refer to
         for _,rButton in pairs(self.tButtons) do
 			rButton.rSelected = rObject
 		end
@@ -253,15 +221,12 @@ function m.create()
 		elseif sCustomInspectorName == 'TurretControls' then
 			rCustomInspector = self.rTurretControls
 		elseif self.rSelected.sName == 'Bed' and self.rSelected.getRoom and self.rSelected:getRoom() and self.rSelected:getRoom():getTeam() == Character.TEAM_ID_PLAYER then
-			-- bed assignment
 			self.rCustomControlsLabel:setString(g_LM.line('PROPSX098TEXT'))
 		else
-			-- hide custom controls label if there's nothing there
 			self:setElementHidden(self.rCustomControlsLabel, true)
 		end
 		self:_setCustomInspector(rCustomInspector, rObject)
 	end
-	
     function Ob:citizenSelected(rCitizen)
         local tag = ObjectList.getTag(self.rSelected)
         if tag and tag.objSubtype == 'Bed' then
@@ -269,20 +234,16 @@ function m.create()
 			self.tButtons[4].bClicked = false
         end
     end
-	
     function Ob:_setCustomInspector(rCustomInspector, rObject)
         if self.rCustomInspector and self.rCustomInspector ~= rCustomInspector then
-			-- hide old inspector
 			self:setElementHidden(self.rCustomInspector, true)
         end
         if rCustomInspector then
-			-- show new inspector
 			self:setElementHidden(rCustomInspector, false)
             rCustomInspector:setObject(rObject)
         end
         self.rCustomInspector = rCustomInspector
     end
-	
     function Ob:onFinger(touch, x, y, props)
         local bHandled = false
         for i, rButton in ipairs(self.tButtons) do
@@ -295,14 +256,12 @@ function m.create()
         end
         return bHandled
     end
-	
 	function Ob:hide()
 		Ob.Parent.hide(self)
 		if self.rCustomInspector then
 			self:setElementHidden(self.rCustomInspector, true)
 		end
 	end
-	
 	function Ob:show(nPri)
 		local n = Ob.Parent.show(self, nPri)
 		if self.rCustomInspector then
@@ -310,23 +269,18 @@ function m.create()
 		end
 		return n
 	end
-	
     function Ob:onTick(dt)
         if not self.rSelected then return end
         if self.rCustomInspector then
             self.rCustomInspector:onTick(dt)
-			-- set label for custom controls (on tick in case it changes,
-			-- eg infirmary beds)
 			if self.rCustomInspector.getCustomControlsLabel then
 				self.rCustomControlsLabel:setString(self.rCustomInspector:getCustomControlsLabel())
 			end
         end
-		-- individual buttons tick their status as defined in behavior data
         for _,rButton in pairs(self.tButtons) do
 			rButton:onTick(dt)
 		end
     end
-	
     function Ob:inside(wx, wy)
         local bInside = Ob.Parent.inside(self, wx, wy)
         for i, rButton in ipairs(self.tButtons) do
@@ -337,15 +291,11 @@ function m.create()
         end
         return bInside
     end
-	
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

@@ -1,5 +1,4 @@
 local Gui = require('UI.Gui')
-
 local nBorderScale = 4
 local nBorderHeight = 60
 local nJobBlockScale = 128
@@ -13,15 +12,12 @@ local nSkillLevelIconOffsetX = -32
 local nAffinityIconOffsetX = 76
 local nHorizBorderXScale = 1636
 local nHorizBorderYScale = 2
-
 return
 {
     posInfo =
     {
         alignX = 'left',
         alignY = 'top',
---        offsetX = 40,
---        offsetY = -300,
     offsetX = 0,
         offsetY = 0,
     },
@@ -96,7 +92,6 @@ return
     },
     tElements =
     {
-        -- job1
         {
             key = 'Job1Button',
             type = 'onePixelButton',
@@ -118,7 +113,6 @@ return
                 },
             },
         },
-        -- job2
         {
             key = 'Job2Button',
             type = 'onePixelButton',
@@ -140,7 +134,6 @@ return
                 },
             },
         },
-        -- job3
         {
             key = 'Job3Button',
             type = 'onePixelButton',
@@ -162,7 +155,6 @@ return
                 },
             },
         },
-        -- job4
         {
             key = 'Job4Button',
             type = 'onePixelButton',
@@ -184,7 +176,6 @@ return
                 },
             },
         },
-        -- job5
         {
             key = 'Job5Button',
             type = 'onePixelButton',
@@ -206,10 +197,6 @@ return
                 },
             },
         },
-
-
-
-        -- job6
         {
             key = 'Job6Button',
             type = 'onePixelButton',
@@ -231,7 +218,6 @@ return
                 },
             },
         },
-        -- job7
         {
             key = 'Job7Button',
             type = 'onePixelButton',
@@ -253,7 +239,6 @@ return
                 },
             },
         },
-        -- job8
         {
             key = 'Job8Button',
             type = 'onePixelButton',
@@ -275,7 +260,6 @@ return
                 },
             },
         },
-        -- unassigned
         {
             key = 'UnassignedJobButton',
             type = 'onePixelButton',
@@ -305,7 +289,6 @@ return
                 },
             },
         },
-        -- selected bg
         {
             key = 'ActiveJob1BG',
             type = 'onePixel',
@@ -384,7 +367,6 @@ return
             textureName = 'ui_circlefilled',
             sSpritesheetPath = 'UI/Shared',
             pos = { nJobColStart + (nJobBlockScale * 8) + nBorderScale + nUnassignedJobBGScale + 32, 0  },
-
             color = Gui.AMBER,
             scale = { -1, 1 },
             hidden = true,
@@ -578,7 +560,6 @@ return
             color = Gui.GREY,
             scale = { 1, 1 },
         },
-		-- job affinity smiley icons
         {
             key = 'Job1AffBG',
             type = 'uiTexture',
@@ -588,7 +569,6 @@ return
 			scale = { 1, 1 },
             color = Gui.BLACK,
         },
-		-- (yes, the separate texture for dark circle sucks)
         {
             key = 'Job1Aff',
             type = 'uiTexture',
@@ -796,6 +776,5 @@ return
             color = Gui.AMBER,
             scale = { 1, 1 },
         },
-
 },
 }

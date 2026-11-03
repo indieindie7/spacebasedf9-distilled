@@ -1,13 +1,9 @@
 local Gui = require('UI.Gui')
-
 local nButtonWidth, nButtonHeight  = 418, 90
 local buttonX = 200
-
 local nLabelX = 8
 local nCustomControlLabelY = -120
-
 local nScrollAreaTopMargin = 210
-
 return
 {
     posInfo =

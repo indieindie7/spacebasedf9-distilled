@@ -1,14 +1,10 @@
 local Gui = require('UI.Gui')
-
 local nStatLabelMargin, nStatTextMargin  = 35, 65
-
 local nInspectorWidth = 418
-
 local nIndentX = 30
 local nHeadingHeight = 34
 local nIconOffsetY = -4
 local nSameLineTextOffsetY = -6
-
 local nSelfEsteemY = 10
 local nRoomSatisfactionY = -30
 local nJobSatisfactionY = -70
@@ -16,7 +12,6 @@ local nPersonalityY = -110
 local nGraphY = -205
 local nGraphLabelWidth = 85
 local nGraphLabelY = -630
-
 return
 {
     posInfo =
@@ -57,7 +52,6 @@ return
             { key = 'JobSatisfactionIcon', hidden = false, },
             { key = 'JobSatisfactionLabel', hidden = false, },
             { key = 'JobSatisfactionText', hidden = false, },
-
         },
         tCallbacks =
         {
@@ -95,7 +89,6 @@ return
     },
     tElements =
     {
-		-- alternating tinted backgrounds for every other item
         {
             key = 'RoomSatBG',
             type = 'onePixel',
@@ -117,7 +110,6 @@ return
             scale = { nGraphLabelWidth-10, nInspectorWidth-25 },
             color = Gui.AMBER_OPAQUE_DIM,
         },
-		-- self esteem
 		{
             key = 'SelfEsteemIcon',
             type = 'uiTexture',
@@ -148,7 +140,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- room satisfaction
 		{
             key = 'RoomSatisfactionIcon',
             type = 'uiTexture',
@@ -179,7 +170,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- job satisfaction
 		{
             key = 'JobSatisfactionIcon',
             type = 'uiTexture',
@@ -210,7 +200,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- personality
         {
             key = 'PersonalityIcon',
             type = 'uiTexture',
@@ -241,9 +230,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		--
-		-- needs and morale graph
-		--
         {
             key = 'GraphIcon',
             type = 'uiTexture',
@@ -263,7 +249,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- labels to mark top and bottom of graph
 		{
             key = 'GraphTopLabel',
             type = 'textBox',
@@ -286,27 +271,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER_OPAQUE,
         },
---[[
-		{
-            key = 'GraphTopIcon',
-            type = 'uiTexture',
-            textureName = 'ui_dialogicon_bigsmile',
-            sSpritesheetPath = 'UI/Emoticons',
-            pos = { 418*0.65, nGraphY - 40 },
-			scale = { 1.5, 1.5 },
-            color = Gui.AMBER_OPAQUE,
-        },
-		{
-            key = 'GraphBottomIcon',
-            type = 'uiTexture',
-            textureName = 'ui_dialogicon_bigfrown',
-            sSpritesheetPath = 'UI/Emoticons',
-            pos = { 418*0.7, nGraphLabelY + 45 },
-			scale = { 1.5, 1.5 },
-            color = Gui.AMBER_OPAQUE,
-        },
-]]--
-		-- floating labels for each line
 		{
             key = 'GraphLabelMorale',
             type = 'textBox',
@@ -384,7 +348,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.WHITE,
         },
-		-- x axis labels
 		{
             key = 'GraphLabelX1',
             type = 'textBox',

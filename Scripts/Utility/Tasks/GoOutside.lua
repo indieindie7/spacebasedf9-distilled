@@ -4,14 +4,11 @@ local Pathfinder=require('Pathfinder')
 local Log=require('Log')
 local Airlock=require('Zones.Airlock')
 local Room=require('Room')
-
 local GoOutside = Class.create(Task)
-
 GoOutside.STAGE_WALK_TO_LOCKER = 1
 GoOutside.STAGE_PUT_ON_SUIT = 2
 GoOutside.STAGE_WAIT = 3
 GoOutside.STAGE_GO_OUTSIDE = 4
-
 function GoOutside:init(rChar,tPromisedNeeds,rActivityOption)
     self.super.init(self,rChar,tPromisedNeeds,rActivityOption)
     self.duration = 5
@@ -28,9 +25,8 @@ function GoOutside:init(rChar,tPromisedNeeds,rActivityOption)
         end
     end
 end
-
 function GoOutside:onUpdate(dt)
-    if self.rAirlockZone.bDestroyed then 
+    if self.rAirlockZone.bDestroyed then
         self:interrupt('airlock disappeared')
         return
     end
@@ -42,7 +38,6 @@ function GoOutside:onUpdate(dt)
         self:interrupt('locker disappeared')
         return
     end
-
     if self.nStage == GoOutside.STAGE_WALK_TO_LOCKER then
         if self:tickWalk(dt) then
             self.nStage = self.nStage+1
@@ -80,5 +75,4 @@ function GoOutside:onUpdate(dt)
         end
     end
 end
-
 return GoOutside

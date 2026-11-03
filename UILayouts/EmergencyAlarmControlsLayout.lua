@@ -80,7 +80,6 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.AMBER,
         },
-
         {
             key = 'OffButton',
             type = 'onePixelButton',

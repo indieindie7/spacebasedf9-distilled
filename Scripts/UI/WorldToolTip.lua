@@ -1,16 +1,13 @@
 local m = {}
-
 local DFUtil = require('DFCommon.Util')
 local UIElement = require('UI.UIElement')
 local Gui = require('UI.Gui')
-
 local sUILayoutFileName = 'UILayouts/WorldToolTipLayout'
 local kHEIGHT_PER_LINE = 32
 local kMARGIN = 14
 local kYMARGIN = 10
 local kWIDTH_PER_CHAR = 14
 local kTEXTURE_MARGIN = 30
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.rCurTarget = nil
@@ -18,11 +15,9 @@ function m.create()
     Ob.nOffsetY = -30
     Ob.tTipTexts = {}
     Ob.tTipTextures = {}
-
     function Ob:init()
         self:processUIInfo(sUILayoutFileName)
         Ob.Parent.init(self)
-
         local nIndex = 1
         while true do
             local rTipText = self:getTemplateElement('TipText'..nIndex)
@@ -43,33 +38,27 @@ function m.create()
                 break
             end
         end
-
         self.rBackground = self:getTemplateElement('Background')
         self.rTopBorder = self:getTemplateElement('TopBorder')
         self.rBottomBorder = self:getTemplateElement('BottomBorder')
         self.rLeftBorder = self:getTemplateElement('LeftBorder')
         self.rRightBorder = self:getTemplateElement('RightBorder')
-
         local _, y = self.rTopBorder:getScl()
         self.nBorderThickness = y
     end
-
     function Ob:getCursorOffset()
         return self.nOffsetX, self.nOffsetY
     end
-
     function Ob:setTarget(rTarget)
         self.rCurTarget = rTarget
     end
-
     function Ob:_adjustTooltipSize(nNumEntries, nTextWidth, bAddedTexture)
         local nHeight = kHEIGHT_PER_LINE * nNumEntries + kYMARGIN * 2
         local nWidth = nTextWidth + kMARGIN * 2
         if bAddedTexture then
             nWidth = nWidth + kTEXTURE_MARGIN
         end
-
-        self.rBackground:setScl(nWidth, nHeight)        
+        self.rBackground:setScl(nWidth, nHeight)
         self.rTopBorder:setScl(nWidth, self.nBorderThickness)
         self.rBottomBorder:setScl(nWidth, self.nBorderThickness)
         self.rBottomBorder:setLoc(0, -(nHeight - self.nBorderThickness))
@@ -77,14 +66,12 @@ function m.create()
         self.rRightBorder:setScl(self.nBorderThickness, nHeight)
         self.rRightBorder:setLoc(nWidth, 0)
     end
-
     function Ob:onTick(dt)
         if self.rCurTarget and self.rCurTarget.getToolTipTextInfos then
             local nNumEntries = 1
             local nMaxWidth = 0
             local bAddedTexture = false
             local tStringInfosToShow = self.rCurTarget:getToolTipTextInfos()
-            -- reset the textures
             for i, rTipTexture in ipairs(self.tTipTextures) do
                 local rHideTextureOverride = self:getExtraTemplateInfo('texture'..i..'HideOverride')
                 if rHideTextureOverride then
@@ -118,27 +105,22 @@ function m.create()
                                     self.tTipTextures[i]:setColor(unpack(rInfo.tTextureColor))
                                 end
                                 bAddedTexture = true
-                            end                            
+                            end
                         end
                     end
                 else
                     rTipText:setString("")
                 end
             end
-            nNumEntries = nNumEntries - 1 -- off by one.
-            
+            nNumEntries = nNumEntries - 1
             self:_adjustTooltipSize(nNumEntries, nMaxWidth, bAddedTexture)
         end
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

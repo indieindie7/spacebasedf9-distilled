@@ -1,5 +1,4 @@
 local GuiManager = {}
-
 local DFUtil = require("DFCommon.Util")
 local DFGraphics = require('DFCommon.Graphics')
 local DFInput = require('DFCommon.Input')
@@ -33,21 +32,15 @@ local OnePixelButton = require('UI.OnePixelButton')
 local ProgressBar = require('UI.ProgressBar')
 local WorldToolTip = require('UI.WorldToolTip')
 local Profile = require('Profile')
-
 local Cursor=nil
-
 GuiManager.AMBER = Gui.AMBER
 GuiManager.RED = Gui.RED
 GuiManager.GREEN = Gui.GREEN
 GuiManager.BROWN = Gui.BROWN
 GuiManager.GREY = Gui.GREY
 GuiManager.SIDEBAR_BG = Gui.SIDEBAR_BG
-
 GuiManager.VERSION_SUBTITLE = 'UIMISC040TEXT'
-
---using for debug stuff! JM
 GuiManager.LastClickedPos = {0,0}
-
 GuiManager.tTemplateElementClasses =
 {
     TextureButton = TextureButton,
@@ -55,9 +48,7 @@ GuiManager.tTemplateElementClasses =
     TemplateButton = TemplateButton,
     ProgressBar = ProgressBar,
 }
-
 local kDRAG_SELECT_THRESH = 10
-
 function GuiManager.init()
     g_GuiManager = GuiManager
     GuiManager.dSelectionChanged = Delegate.new()
@@ -65,47 +56,37 @@ function GuiManager.init()
     local StatusBar = require('UI.StatusBar')
     local TutorialText = require('UI.TutorialText')
     Cursor = require('UI.Cursor')
-
-    -- add the scissorrect for the scrollable layer
     GuiManager.tScrollableScissorRects = {}
     local rScrollableUILayerLeft = Renderer.getRenderLayer('UIScrollLayerLeft')
     if rScrollableUILayerLeft then
-        local rScrollableScissorRect = MOAIScissorRect.new()        
+        local rScrollableScissorRect = MOAIScissorRect.new()
         rScrollableScissorRect:setRect(0, -GuiManager.getUIViewportSizeY(), GuiManager.getUIViewportSizeX(), 0)
         rScrollableUILayerLeft:setScissorRect(rScrollableScissorRect)
         GuiManager.tScrollableScissorRects['UIScrollLayerLeft'] = rScrollableScissorRect
-    end    
+    end
     local rScrollableUILayerRight = Renderer.getRenderLayer('UIScrollLayerRight')
     if rScrollableUILayerRight then
-        local rScrollableScissorRect = MOAIScissorRect.new()        
+        local rScrollableScissorRect = MOAIScissorRect.new()
         rScrollableScissorRect:setRect(0, -GuiManager.getUIViewportSizeY(), GuiManager.getUIViewportSizeX(), 0)
         rScrollableUILayerRight:setScissorRect(rScrollableScissorRect)
         GuiManager.tScrollableScissorRects['UIScrollLayerRight'] = rScrollableScissorRect
-    end    
-
+    end
     GuiManager.newSideBar = NewSideBar.new()
     GuiManager.startMenu = StartMenu.new()
     GuiManager.statusBar = StatusBar.new()
 	GuiManager.tutorialText = TutorialText.new()
     GuiManager.tPopupQueue = {}
-
     GuiManager.globalJobs = GlobalJobs.new()
 	GuiManager.debugInfoPane = DebugInfoPane.new()
 	GuiManager.buildHelper = BuildHelper.new()
 	GuiManager.hintPane = HintPane.new()
     GuiManager.alertPane = AlertPane.new()
     GuiManager.uiEffectMask = UIEffectMask.new()
-    
     GuiManager.worldToolTip = WorldToolTip.new()
-
     GuiManager.newBase = require('UI.NewBase').new()
-
     GuiManager.tMaxPriInfo = {}
-    
     local pri = 0
     GuiManager.basePri = pri
-
-    --pri = Gui.setActivePane(GuiManager.newSideBar, nil, pri)
     pri = GuiManager.newSideBar:show(pri)
     pri = GuiManager.statusBar:show(pri)
     pri = GuiManager.tutorialText:show(pri)
@@ -116,54 +97,41 @@ function GuiManager.init()
 	pri = GuiManager.hintPane:show(pri)
     pri = GuiManager.alertPane:show(pri)
     Renderer.dResized:register(GuiManager.onResize,GuiManager)
-    GuiManager.onResize()	
-
+    GuiManager.onResize()
 	GuiManager.createSelectionProp()
-    
-    if MOAIInputMgr.device.pointer then    
-        -- Load up custom cursor
+    if MOAIInputMgr.device.pointer then
         local spriteSheet = DFGraphics.loadSpriteSheet('UI/Shared', false, false, false)
         GuiManager.rCursor = MOAIProp2D.new()
         GuiManager.rCursor:setDeck(spriteSheet)
         GuiManager.rCursor:setIndex(spriteSheet.names['ui_cursor'])
         GuiManager.rCursor:setColor(unpack(Gui.AMBER))
-
         local bUseHardwareCursor = g_Config:getConfigValue("use_os_mouse") or false
-        
         GuiManager.showCursorSprite(not bUseHardwareCursor)
     end
-
     g_GuiManager.bFinishedInit = true
 end
-
 function GuiManager.showCursorSprite(bShowSprite)
     local rRenderLayer = Renderer.getRenderLayer("UIOverlay")
-
     if bShowSprite then
-        rRenderLayer:insertProp(GuiManager.rCursor)    
+        rRenderLayer:insertProp(GuiManager.rCursor)
         MOAIInputMgr.device.pointer:show(false)
     else
-        rRenderLayer:removeProp(GuiManager.rCursor)    
-        MOAIInputMgr.device.pointer:show(true)    
+        rRenderLayer:removeProp(GuiManager.rCursor)
+        MOAIInputMgr.device.pointer:show(true)
     end
 end
-
 function GuiManager.getSideBar()
     return GuiManager.newSideBar
 end
-
 function GuiManager.getStatusBar()
     return GuiManager.statusBar
 end
-
 function GuiManager.isInStartupScreen()
     return GuiManager.bInStartupScreen
 end
-
 function GuiManager.setIsInStartupScreen(bSet)
     GuiManager.bInStartupScreen = bSet
 end
-
 function GuiManager.fadeInCentered(which, scale)
     GuiManager.shim = GuiManager.startMenu:addOnePixel()
     GuiManager.shim:setScl(3000,3000)
@@ -172,26 +140,22 @@ function GuiManager.fadeInCentered(which, scale)
     Renderer.getRenderLayer('UIOverlay'):insertProp(GuiManager.shim)
     GuiManager.shim:setPriority(4)
     GuiManager.shim:setVisible(true)
-
     GuiManager.legalScreen = GuiManager.startMenu:getUITextureProp(which)
     local w,h = DFGraphics.getFullSpriteDims(GuiManager.legalScreen.deck,which)
-    local scaleOverride = scale or 2 -- JM: for some reason stuff is scaled 0.5x sooooo doing this,,,
+    local scaleOverride = scale or 2
     w = w * scaleOverride
     h = h * scaleOverride
     GuiManager.legalScreen:setLoc(Renderer.getViewport().sizeX/2-w/2,-(Renderer.getViewport().sizeY/2-h/2))
-    GuiManager.legalScreen:setScl( scaleOverride,scaleOverride ) 
+    GuiManager.legalScreen:setScl( scaleOverride,scaleOverride )
     Renderer.getRenderLayer('UIOverlay'):insertProp(GuiManager.legalScreen)
     GuiManager.legalScreen:setPriority(5)
     GuiManager.legalScreen:setVisible(true)
     GuiManager.addVersionProp()
 end
-
 function GuiManager.addVersionProp()
     if not GuiManager.rVersionProp then
         GuiManager.rVersionProp = Gui.createTextBox('dosismedium44',MOAITextBox.CENTER_JUSTIFY,MOAITextBox.CENTER_JUSTIFY)
         local str = MOAIEnvironment.appVersion
-		-- no subtitle for 1.0
-        --str = str..': "'..g_LM.line(GuiManager.VERSION_SUBTITLE)..'\"'
         if DFSpace.isDev() then
             str = str..'\nDEBUG VERSION'
         end
@@ -204,17 +168,14 @@ function GuiManager.addVersionProp()
         GuiManager.rVersionProp:setVisible(true)
     end
 end
-
 function GuiManager.removeVersionProp()
     if GuiManager.rVersionProp then
         Renderer.getRenderLayer('UIOverlay'):removeProp(GuiManager.rVersionProp)
         GuiManager.rVersionProp = nil
     end
 end
-
 function GuiManager.fadeOutFullScreen()
     GuiManager.removeVersionProp()
-
     if GuiManager.shim then
         GuiManager.startMenu:removeElement(GuiManager.shim)
         Renderer.getRenderLayer('UIOverlay'):removeProp(GuiManager.shim)
@@ -224,22 +185,16 @@ function GuiManager.fadeOutFullScreen()
     Renderer.getRenderLayer('UIOverlay'):removeProp(GuiManager.legalScreen)
     GuiManager.legalScreen = nil
 end
-
 function GuiManager.killAllEffects()
 	GuiManager.uiEffectMask:removeAllMasks()
 end
-
 function GuiManager.createEffectMaskBox(x,y,w,h,nTime,nIntensity)
     if not nTime then nTime = 5.0 end
     if not nIntensity then nIntensity = 1.0 end
-   
-    --add margins so the mask soft edge sits just outside the intended region
     local borderMarginW = w * 0.1
     local borderMarginH = h * 0.1
-    
     GuiManager.uiEffectMask:addMask(x-borderMarginW,y-borderMarginH,w+borderMarginW*2,h+borderMarginH*2,nTime,nIntensity)
 end
-
 function GuiManager.onResize()
 	if GuiManager.rVersionProp then
 		GuiManager.rVersionProp:setLoc(Renderer.getViewport().sizeX/2,-Renderer.getViewport().sizeY+175)
@@ -256,7 +211,6 @@ function GuiManager.onResize()
         rExistingUI:onResize()
     end
 end
-
 function GuiManager.refresh()
     GuiManager.newSideBar:refresh()
     Cursor.refresh()
@@ -271,56 +225,45 @@ function GuiManager.refresh()
         end
     end
 end
-
 function GuiManager.touchInside(sx,sy)
     GuiManager.touched = GuiManager.hoverInside(sx,sy)
-
     return GuiManager.touched
 end
-
 function GuiManager.inspectMode()
-    if GameRules.currentMode == GameRules.MODE_INSPECT and 
+    if GameRules.currentMode == GameRules.MODE_INSPECT and
             (not GuiManager.newSideBar.rSubmenu or GuiManager.newSideBar.rSubmenu == GuiManager.newSideBar.rInspectMenu) then
         return true
     end
 end
-
 function GuiManager.updateHoverTarget(sx, sy, dt)
-    if not GuiManager.inMainScreen() then -- don't update hovertarget when in pause menu
+    if not GuiManager.inMainScreen() then
         return
     end
 	local wx, wy = Renderer.getRenderLayer(Character.RENDER_LAYER):wndToWorld(sx, sy)
 	local hovering = nil
     if GuiManager.inspectMode() then
-		-- hovering a beacon?
 		hovering = GuiManager._getTargetAt(wx, wy, 'room', Renderer.getRenderLayer(g_ERBeacon.RENDER_LAYER))
 		if hovering ~= g_ERBeacon then
 			hovering = GuiManager._getTargetAt(wx, wy, 'room')
 		end
     elseif GameRules.currentMode == GameRules.MODE_PICK then
         hovering = GuiManager._getTargetAt(wx,wy,'room',nil,GameRules.currentModeParam and GameRules.currentModeParam.target,GameRules.currentModeParam and GameRules.currentModeParam.objSubtype)
-	-- beacon mode: ignore objects
     elseif GameRules.currentMode == GameRules.MODE_BEACON then
 		hovering = GuiManager._getTargetAt(wx, wy, 'room', nil, true)
 	elseif GameRules.currentMode == GameRules.MODE_PLACE_PROP then
 		hovering = GuiManager._getTargetAt(wx, wy, 'room', nil, true)
 	end
     if GuiManager.hoverTarget and GuiManager.hoverTarget.bDestroyed then GuiManager.hoverTarget = nil end
-    
-	-- unhovering anything?
 	if GuiManager.hoverTarget and GuiManager.hoverTarget ~= hovering then
 		if GuiManager.hoverTarget.unHover then
 			GuiManager.hoverTarget:unHover()
 		end
 	end
-	-- hovering nothing?
 	if not hovering then
 		GuiManager.hoverTarget = nil
         GuiManager.hoverTime = 0
 		return
 	end
-	-- determine type
-	-- (not used at the moment, might be handy in the future)
 	local hoverType = nil
 	if hovering._ObjectList_ObjectMarker then
 		if hovering._ObjectList_ObjectMarker.objType == ObjectList.ENVOBJECT then
@@ -331,7 +274,6 @@ function GuiManager.updateHoverTarget(sx, sy, dt)
 			hoverType = ObjectList.ROOM
 		end
 	end
-	-- never hover hidden rooms or objects
 	local bHoveringHidden = false
 	if hoverType == ObjectList.ROOM and hovering.nLastVisibility == World.VISIBILITY_HIDDEN then
 		bHoveringHidden = true
@@ -343,74 +285,55 @@ function GuiManager.updateHoverTarget(sx, sy, dt)
         GuiManager.hoverTime = 0
 		return
 	end
-	-- tell the thing we're hovering (it's only polite)
 	if hovering.hover then
 		hovering:hover(GuiManager.hoverTime or 0)
 	end
-	-- remember what we're hovering for next time
 	GuiManager.hoverTarget = hovering
     if not GuiManager.hoverTime then
-       GuiManager.hoverTime = 0 
+       GuiManager.hoverTime = 0
     end
     GuiManager.hoverTime = GuiManager.hoverTime + dt
 end
-
 function GuiManager.hoverInside(sx,sy)
     GuiManager.touched = nil
     GuiManager.bCanShowWorldToolTip = false
-
     if GameRules.currentMode == GameRules.MODE_GLOBAL_JOB then return GuiManager.globalJobs
     end
-    
     local renderLayer = Renderer.getRenderLayer('UI')
     local wx, wy = renderLayer:wndToWorld(sx,sy)
-
-    --MASSIVE HACK for pause menu taking precedence: KSC
     if Gui.rCurActivePane and Gui.rCurActivePane == GuiManager.startMenu then
         Gui.rCurActivePane:inside(wx,wy)
         return Gui.rCurActivePane
     end
-
     if (table.getn(GuiManager.tPopupQueue) > 0) then
         if GuiManager.tPopupQueue[1] then
             GuiManager.tPopupQueue[1]:inside(wx,wy)
         end
         return GuiManager.tPopupQueue[1]
     end
-    
-    if g_Gui.touchInside(sx,sy) then 
+    if g_Gui.touchInside(sx,sy) then
         return g_Gui
     end
-
     if GuiManager.hintPane:inside(wx,wy) then
         return GuiManager.hintPane
     end
-    
     if GuiManager.alertPane:inside(wx,wy) then
         return GuiManager.alertPane
     end
-
     if GuiManager.statusBar:inside(wx,wy) then
         return GuiManager.statusBar
     end
-    
     if GuiManager.newSideBar:inside(wx,wy) then
         return GuiManager.newSideBar
     end
-
-    -- touching none of the other menus.  Should show tooltip
     GuiManager.bCanShowWorldToolTip = true
-
     return nil
 end
-
 function GuiManager.onTick(dt)
     local DBG_moreProfiling = false
-
     if DBG_moreProfiling then
         Profile.enterScope("Log")
     end
-
     if DBG_moreProfiling then
         Profile.leaveScope("Log")
         Profile.enterScope("SideBar")
@@ -465,8 +388,6 @@ function GuiManager.onTick(dt)
     if DBG_moreProfiling then
         Profile.leaveScope("NewBase")
     end
-    
-     
     if GameRules.bRunning and GameRules.cursorX and GameRules.cursorY then
         if DBG_moreProfiling then
             Profile.enterScope("HoverTarget")
@@ -476,17 +397,15 @@ function GuiManager.onTick(dt)
             Profile.leaveScope("HoverTarget")
         end
     end
-    
     if DBG_moreProfiling then
         Profile.enterScope("AlertSetLoc")
     end
     GuiManager.snapAlertPos()
-
     if GuiManager.worldToolTip then
         if (GameRules.currentMode == GameRules.MODE_INSPECT or
 			GameRules.currentMode == GameRules.MODE_BEACON or
 			GameRules.currentMode == GameRules.MODE_PLACE_PROP) and GuiManager.shouldShowWorldToolTip() then
-            GuiManager.worldToolTip:setTarget(GuiManager.hoverTarget)        
+            GuiManager.worldToolTip:setTarget(GuiManager.hoverTarget)
             GuiManager.worldToolTip:onTick(dt)
             if GuiManager.hoverTarget and GuiManager.worldToolTip.rCurTarget and GuiManager.worldToolTip.rCurTarget.getToolTipTextInfos  then
                 if not GuiManager.worldToolTip:isVisible() then
@@ -506,7 +425,6 @@ function GuiManager.onTick(dt)
     if DBG_moreProfiling then
         Profile.leaveScope("AlertSetLoc")
     end
-
     if MOAIInputMgr.device.pointer then
         if DBG_moreProfiling then
             Profile.enterScope("tooltip")
@@ -517,10 +435,8 @@ function GuiManager.onTick(dt)
             local renderLayer = Renderer.getRenderLayer(sRenderlayer)
             local wx, wy = renderLayer:wndToWorld(x, y)
             GuiManager.rCursor:setLoc(wx, wy)
-            
             local nPri = GuiManager.getMaxPriOnLayer(sRenderlayer)
             GuiManager.rCursor:setPriority(nPri + 1000)
-            
             if GuiManager.worldToolTip then
                 local nOffsetX, nOffsetY = GuiManager.worldToolTip:getCursorOffset()
                 GuiManager.worldToolTip:setLoc(wx + nOffsetX, wy + nOffsetY)
@@ -531,59 +447,48 @@ function GuiManager.onTick(dt)
         end
     end
 end
-
 function GuiManager.snapAlertPos()
     local _,nHintYSize = GuiManager.hintPane:getDims()
     local nHintX, nHintY = GuiManager.hintPane:getLoc()
     local nAlertX, nAlertY = GuiManager.alertPane:getLoc()
     GuiManager.alertPane:setLoc(nAlertX, nHintY + nHintYSize)
 end
-
 function GuiManager.inMainScreen()
-    -- returns false if the new base screen, start menu etc have focus
     return Gui.rCurActivePane ~= GuiManager.startMenu and Gui.rCurActivePane ~= GuiManager.newBase
 end
-
 function GuiManager.showStartMenu(bFirstTime)
     GuiManager.addVersionProp()
     if bFirstTime then GuiManager.startMenu:setFirstTime() end
     Gui.setActivePane(GuiManager.startMenu)
     local w,h = GuiManager.startMenu.width,GuiManager.startMenu.height
-    --GuiManager.startMenu:setLoc(Renderer.getViewport().sizeX*.5 - w*.5,-Renderer.getViewport().sizeY*.5 + h*.5)
     SoundManager.playSfx("menu")
     if g_GameRules.getTimeScale() ~= 0 then
         GuiManager.startMenu.bWasPaused = false
         g_GameRules.togglePause()
     else
-        GuiManager.startMenu.bWasPaused = true        
+        GuiManager.startMenu.bWasPaused = true
     end
 end
-
 function GuiManager.showNewBaseScreen()
-    --Gui.setActivePane(GuiManager.newBase)
     SoundManager.playSfx("menu")
     g_GameRules.lockTimeScale(false)
     if g_GameRules.getTimeScale() ~= 0 then
         g_GameRules.togglePause()
     end
-	-- don't shut down GameRules until new base deploys
 	g_GuiManager.shutdown()
 	g_GuiManager.setCursorVisible(false)
 	g_GuiManager.killAllEffects()
     g_GuiManager.init()
     g_GuiManager.addToPopupQueue(GuiManager.newBase, true)
 end
-
 function GuiManager.setSelectedCharacter(char)
     GameRules.setUIMode(GameRules.MODE_INSPECT)
     GuiManager.setSelected(char)
 end
-
 function GuiManager.selectCharByID(sID)
 	local rChar = CharacterManager.getCharacterByUniqueID(sID)
 	GuiManager.setSelectedCharacter(rChar)
 end
-
 function GuiManager.getSelected(typeName, subType)
     if typeName then
         local objType, objSubtype = ObjectList.getObjType(GuiManager.rSelected)
@@ -595,43 +500,35 @@ function GuiManager.getSelected(typeName, subType)
 	end
     return nil
 end
-
 function GuiManager.getSelectedCharacter()
-    --local char = GuiManager.sidebar.activeSubmenu and GuiManager.sidebar.activeSubmenu.getSelected and GuiManager.sidebar.activeSubmenu:getSelected()
     local char = GuiManager.rSelected
     if char and char._ObjectList_ObjectMarker and char._ObjectList_ObjectMarker.objType == ObjectList.CHARACTER then
         return char
     end
 end
-
 function GuiManager.setSelected(rTarget)
-	-- if we were entering text, bail out cleanly
 	local GameScreen = require('GameScreen')
     GameScreen.endTextEntry()
 	local bDeselecting = false
 	if GuiManager.rSelected and not rTarget then
 		g_GameRules.completeTutorialCondition('DeselectedThing')
 	end
-    -- all clicks clear out selected inventory item, since we don't actually detect clicks on items.
     local rObj = nil
     if rTarget then
         local objType = ObjectList.getObjType(rTarget)
         if objType == 'EnvObject' or objType == 'WorldObject' or objType == 'INVENTORYITEM' then
-			-- never select hidden objects
             local rRoom = rTarget.getRoom and rTarget:getRoom()
 			if rRoom and rRoom.nLastVisibility == World.VISIBILITY_HIDDEN then
 				rTarget = nil
 			else
 				rObj = rTarget
 			end
-		-- never select hidden rooms
         elseif objType == 'Room' and rTarget.nLastVisibility == World.VISIBILITY_HIDDEN then
 			rTarget = nil
 		end
     end
     GuiManager.rSelected = rTarget
     GuiManager.newSideBar.rInspectMenu.rObjectInspector:setObject(rObj)
-    
     GuiManager.dSelectionChanged:dispatch(rTarget)
     GuiManager.refresh()
 	if rTarget then
@@ -641,45 +538,35 @@ function GuiManager.setSelected(rTarget)
 		GuiManager.clearSelectionProp()
 	end
 end
-
 function GuiManager._getTargetAt(wx,wy,sRoomOrWall,rLayerOverride,sOnlyThisType,sOnlyThisSubtype)
-	-- don't hover hidden areas UNLESS we're looking for the beacon
 	local rBeaconLayer = Renderer.getRenderLayer(g_ERBeacon.RENDER_LAYER)
     if World.getVisibility(wx,wy) ~= World.VISIBILITY_FULL and rLayerOverride ~= rBeaconLayer then
 		return nil
 	end
-    
     local tTestLayers={Character.RENDER_LAYER,'WorldFloor',Character.BACKGROUND_RENDER_LAYER}
-    
-    for _,v in ipairs(tTestLayers) do    
+    for _,v in ipairs(tTestLayers) do
         local renderLayer = rLayerOverride or Renderer.getRenderLayer(v)
         local tProps = { renderLayer:getPartition():propListForRay(wx, wy, 15000, 0, 0, -1) }
-
         if #tProps > 0 then
             local rChar = nil
             local rEnvObject = nil
             local rWall,nBestWallZ = nil
             local rRoom = nil
             for i,v in ipairs(tProps) do
-                -- the DFDynamicMesh is what gets returned from the engine, and we've set
-                -- a ref to the entity on it.
                 local rEnt = v.rEntity
                 if rEnt then
                     local rProp = rEnt.rProp
                     if rProp and (not sOnlyThisType or sOnlyThisType == 'Character') then
-						-- rig-based pickups/envobjects use rGroundRig
 						local rRig = rProp.rRig or rProp.rGroundRig
                         local x0, y0, z0, x1, y1, z1 = rRig.rMainMesh:getWorldBounds(false)
                         if wx > x0 and wx < x1 and wy > y0 and wy < y1 then
                             rChar = rProp
                         end
                     end
-                -- include a hydro plant's attached plant prop
                 elseif v.rEnvObjParent then
                     if not sOnlyThisType or sOnlyThisType == 'EnvObject' then
                         rEnvObject = v.rEnvObjParent
                     end
-				-- 2D props
                 elseif v._Instance then
                     local rProp = v._Instance
                     if v._Instance.rEnvObjParent then
@@ -693,18 +580,16 @@ function GuiManager._getTargetAt(wx,wy,sRoomOrWall,rLayerOverride,sOnlyThisType,
                                 rEnvObject = rProp
                             end
                         end
-					-- ER beacon?
                     elseif rProp == g_ERBeacon and g_ERBeacon:getAttr(MOAIProp.ATTR_VISIBLE) == 1 then
                         if not sOnlyThisType or sOnlyThisType == 'Beacon' then
 						    return rProp
                         end
 					end
-				-- walls
                 elseif (sRoomOrWall == 'wall' or sOnlyThisType=='Wall') and v.bWall then
                     if not sOnlyThisType or sOnlyThisType == 'Wall' then
                         if not v.bTop or v.bVisible then
                             local x,y,z = v:getLoc()
-                            if not rWall or z > nBestWallZ then 
+                            if not rWall or z > nBestWallZ then
                                 rWall = v
                                 nBestWallZ = z
                             end
@@ -726,19 +611,18 @@ function GuiManager._getTargetAt(wx,wy,sRoomOrWall,rLayerOverride,sOnlyThisType,
                         rEnvObject = nil
                     end
                 end
-                return rEnvObject 
+                return rEnvObject
             end
-            if rRoom then 
+            if rRoom then
                 if sOnlyThisSubtype then
                     if rRoom:getZoneName() ~= sOnlyThisSubtype then
                         rRoom = nil
                     end
                 end
-                return rRoom 
+                return rRoom
             end
         end
     end
-
     if sRoomOrWall == 'wall' then return nil end
     if not sOnlyThisType or sOnlyThisType == 'Room' then
         local room = Room.getRoomAt(wx,wy,0,1)
@@ -750,10 +634,8 @@ function GuiManager._getTargetAt(wx,wy,sRoomOrWall,rLayerOverride,sOnlyThisType,
         return room
     end
 end
-
 function GuiManager._shouldClick(wx,wy)
     if g_GameRules.bPerformedDrag then
-        -- if it's a small distance, it's ok
         local startDragX = g_GameRules.startDragX or 0
         local startDragY = g_GameRules.startDragY or 0
         local curX = g_GameRules.cursorX or 0
@@ -768,15 +650,13 @@ function GuiManager._shouldClick(wx,wy)
     end
     return true
 end
-
-function GuiManager.inspectTouch(wx,wy)    
+function GuiManager.inspectTouch(wx,wy)
     if GuiManager._shouldClick(wx,wy) then
         local rTarget = GuiManager._getTargetAt(wx,wy,'room')
         GuiManager.setSelected(rTarget)
     end
 end
-
-function GuiManager.pickTouch(wx,wy)    
+function GuiManager.pickTouch(wx,wy)
     if GuiManager._shouldClick(wx,wy) then
         local param = GameRules.currentModeParam
         local rTarget = GuiManager._getTargetAt(wx,wy,'room',nil,param and param.target,param and param.objSubtype)
@@ -784,25 +664,20 @@ function GuiManager.pickTouch(wx,wy)
     end
     GameRules.setUIMode(GameRules.MODE_INSPECT)
 end
-
 function GuiManager.onFinger(touch)
     local renderLayer = Renderer.getRenderLayer('UI')
     local wx, wy = renderLayer:wndToWorld(touch.x, touch.y)
     local tProps = { renderLayer:getPartition():propListForPoint(wx, wy) }
-
-    --MASSIVE HACK for pause menu taking precedence: KSC
     if Gui.rCurActivePane and Gui.rCurActivePane == GuiManager.startMenu then
         Gui.rCurActivePane:onFinger(touch,wx,wy,tProps)
         return true
     end
-
     if (table.getn(GuiManager.tPopupQueue) > 0) then
         if GuiManager.tPopupQueue[1] then
             GuiManager.tPopupQueue[1]:onFinger(touch,wx,wy,tProps)
         end
-        return true -- since popup we ALWAYS handle this
+        return true
     end
-
     local bTouchedSideBar = false
     if Gui.rCurActivePane and Gui.rCurActivePane.onFinger then
         if Gui.rCurActivePane.onFinger(Gui.rCurActivePane,touch,wx,wy,tProps) or (Gui.rCurActivePane and Gui.rCurActivePane.uiBG) then
@@ -811,34 +686,20 @@ function GuiManager.onFinger(touch)
     end
     if GuiManager.statusBar:onFinger(touch,wx,wy,tProps) then
         return true
-    else        
+    else
         if GuiManager.hintPane:onFinger(touch,wx,wy,tProps) then
             return true
         end
         if GuiManager.alertPane:onFinger(touch,wx,wy,tProps) then
             return true
         end
-         -- Gui.rCurActivePane:onFinger(touch,wx,wy,tProps)
         if GameScreen.handleTextEntryClick(wx,wy) then
             return true
         end
         bTouchedSideBar = GuiManager.newSideBar:onFinger(touch,wx,wy,tProps)
-        --[[
-        if GuiManager.touched then 
-            local touched = GuiManager.touched
-            GuiManager.touched = nil 
-            
-            if touched == g_Gui then
-                return (touched.onFinger(touch) or bTouchedSideBar)
-            else
-                return (touched:onFinger(touch,wx,wy,tProps) or bTouchedSideBar)
-            end
-        end
-        ]]--
     end
     return bTouchedSideBar
 end
-
 function GuiManager.onKeyboard(key, bDown)
     local bHandled = false
     for i, rExistingUI in ipairs(GuiManager.tPopupQueue) do
@@ -848,10 +709,9 @@ function GuiManager.onKeyboard(key, bDown)
     end
     if Gui.rCurActivePane and Gui.rCurActivePane.onKeyboard and Gui.rCurActivePane:onKeyboard(key, bDown) then
         return true
-    end    
+    end
     return g_GuiManager.newSideBar:onKeyboard(key, bDown)
 end
-
 function GuiManager.createSelectionProp()
     local spriteSheet = DFGraphics.loadSpriteSheet('UI/UIMisc', false, false, false)
 	local spriteName = 'character_selected'
@@ -862,34 +722,23 @@ function GuiManager.createSelectionProp()
 	DFGraphics.alignSprite(spriteSheet, spriteName, "center", "center", 1, 1)
     Renderer.getRenderLayer(Character.RENDER_LAYER):insertProp(prop)
 	prop:setColor(unpack(GuiManager.AMBER))
-	--prop:setBlendMode(MOAIProp2D.BLEND_MULTIPLY)
 	GuiManager.selectionProp = prop
 end
-
 function GuiManager.setSelectionProp(object)
-	-- we might have been attached to something previously, clear it
 	GuiManager.selectionProp:clearAttrLink( MOAITransform.INHERIT_TRANSFORM )
 	GuiManager.selectionProp:setLoc(0, 0)
-	-- rooms use a different selection viz, don't bother
 	if object.type == ObjectList.ROOM then
 		GuiManager.selectionProp:setVisible(false)
-		-- center on room
-		-- JPL TODO: disabled for now, maybe make this a config option?
-		--local wx,wy = World._getWorldFromTile(object:getCenterTile())
-		--GameRules._centerCameraOnPoint(wx, wy)
 		return
 	end
-	-- set loc offset and scale based on selected object size
 	local scale = 1
 	local wx, wy = object:getLoc()
 	local xoff, yoff = 0, 0
     if not object._ObjectList_ObjectMarker then
-        --
     elseif object._ObjectList_ObjectMarker.objType == ObjectList.CHARACTER or object._ObjectList_ObjectMarker.objType == ObjectList.WORLDOBJECT then
 		GuiManager.selectionProp:setAttrLink( MOAITransform.INHERIT_TRANSFORM, object, MOAITransform.TRANSFORM_TRAIT )
 		scale = 2
 	elseif object._ObjectList_ObjectMarker.objType == ObjectList.ENVOBJECT then
-		-- JPL TODO: read per-object offset and scale from EnvObjectData!
 		local objDef = EnvObject.getObjectData(object.sName)
 		if objDef.width == 2 then
 			xoff, yoff = 30, -10
@@ -905,19 +754,16 @@ function GuiManager.setSelectionProp(object)
 	end
 	GuiManager.selectionProp:setVisible(true)
 end
-
 function GuiManager.clearSelectionProp()
 	GuiManager.selectionProp:setVisible(false)
 	GuiManager.selectionProp:clearAttrLink( MOAITransform.INHERIT_TRANSFORM )
 end
-
 function GuiManager.getTemplateElementClass(sTemplateTypeName)
     if sTemplateTypeName then
         return GuiManager.tTemplateElementClasses[sTemplateTypeName]
     end
     return nil
 end
-
 function GuiManager.addToPopupQueue(rUI, bPauseGame)
     if rUI then
         table.insert(GuiManager.tPopupQueue, rUI)
@@ -927,14 +773,12 @@ function GuiManager.addToPopupQueue(rUI, bPauseGame)
         end
     end
 end
-
 function GuiManager.clearPopupQueue()
         for i, rExistingUI in ipairs(GuiManager.tPopupQueue) do
             table.remove(GuiManager.tPopupQueue, i)
             rExistingUI:hide(true)
         end
 end
-
 function GuiManager.removeFromPopupQueue(rUI, bResumeGame)
     if rUI then
         for i, rExistingUI in ipairs(GuiManager.tPopupQueue) do
@@ -949,24 +793,21 @@ function GuiManager.removeFromPopupQueue(rUI, bResumeGame)
         end
     end
 end
-
 function GuiManager.setScrollableUICutoffY(sScrollLayerName, y)
-    if sScrollLayerName then       
+    if sScrollLayerName then
         local rScrollableScissorRect = GuiManager.tScrollableScissorRects[sScrollLayerName]
         if rScrollableScissorRect then
             rScrollableScissorRect:setRect(0, -GuiManager.getUIViewportSizeY(), GuiManager.getUIViewportSizeX(), y)
         end
     end
 end
-
 function GuiManager.getUIViewportSizeX()
     if not Renderer.getViewport() or not Renderer.getViewport().sizeX then
         Print(TT_Warning, "Getting ui viewport sizex without viewport")
-        return Renderer.ScreenBufferWidth 
+        return Renderer.ScreenBufferWidth
     end
     return Renderer.getViewport().sizeX
 end
-
 function GuiManager.getUIViewportSizeY()
     if not Renderer.getViewport() or not Renderer.getViewport().sizeX then
         Print(TT_Warning, "Getting ui viewport sizey without viewport")
@@ -974,7 +815,6 @@ function GuiManager.getUIViewportSizeY()
     end
     return Renderer.getViewport().sizeY
 end
-
 function GuiManager.setMaxPriOnLayer(sRenderLayerName, nMaxPri)
     if sRenderLayerName and nMaxPri then
         if not GuiManager.tMaxPriInfo[sRenderLayerName] then
@@ -985,7 +825,6 @@ function GuiManager.setMaxPriOnLayer(sRenderLayerName, nMaxPri)
         end
     end
 end
-
 function GuiManager.getMaxPriOnLayer(sRenderLayerName)
     local nMaxPri = 0
     if sRenderLayerName and GuiManager.tMaxPriInfo[sRenderLayerName] then
@@ -993,22 +832,18 @@ function GuiManager.getMaxPriOnLayer(sRenderLayerName)
     end
     return nMaxPri
 end
-
 function GuiManager.setCursorVisible(bVisible)
     if GuiManager.rCursor then
-        GuiManager.bCursorVisible = bVisible -- caching so that we don't make the c++ call every time
+        GuiManager.bCursorVisible = bVisible
         GuiManager.rCursor:setVisible(bVisible)
     end
 end
-
-
 function GuiManager.shouldShowWorldToolTip()
     if not GuiManager.newBase:isVisible() and not GuiManager.startMenu:isVisible() and GuiManager.bCanShowWorldToolTip then
         return true
     end
     return false
 end
-
 function GuiManager.shutdown()
     Gui.setActivePane(nil)
     GuiManager.startMenu:hide(true)
@@ -1033,12 +868,7 @@ function GuiManager.shutdown()
     GuiManager.rSelected = nil
 	GuiManager.hintPane = nil
 end
-
-
-function GuiManager.onFileChange(path)    
+function GuiManager.onFileChange(path)
 end
-
--- Monitor file changes
 DFMoaiDebugger.dFileChanged:register(GuiManager.onFileChange)
-
 return GuiManager

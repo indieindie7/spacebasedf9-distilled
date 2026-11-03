@@ -1,8 +1,6 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
-
 local nButtonWidth, nButtonHeight  = 104, 81
 local nButtonWidthExpanded = 286
 local nButtonStartY = -204
@@ -11,9 +9,7 @@ local nLabelX, nLabelStartY = 105, -10
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 104, -50
 local nHotkeyExpandedX = nButtonWidthExpanded - 112
 local nIconScale = 0.6
--- # is 8 with disaster menu but start with it hidden
 local nNumButtons = 7
-
 return
 {
     posInfo =

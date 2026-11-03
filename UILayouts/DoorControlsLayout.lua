@@ -1,9 +1,7 @@
 local Gui = require('UI.Gui')
-
 local buttonWidth, buttonHeight, buttonSpacing = 120, 35, 10
 local buttonX, buttonY = 18, -225
 local labelY = -191
-
 return
 {
     posInfo =
@@ -78,7 +76,6 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.AMBER,
         },
-
         {
             key = 'LockedButton',
             type = 'onePixelButton',

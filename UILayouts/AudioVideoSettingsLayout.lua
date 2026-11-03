@@ -1,9 +1,7 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
-
-return 
+return
 {
     posInfo =
         {
@@ -67,25 +65,6 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.White,
         },
---[[
-        {
-            key = 'SliderVoice',
-            type = 'slider',
-            pos = { 25, -40 },
-            configKey = "voice_volume",
-        },
-        {
-            key = 'VoiceText',
-            type = 'textBox',
-            pos = { -825, -30 },
-            text = "DIALOG VOLUME",
-            style = 'dosissemibold35',
-            rect = { 0, 70, 800, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.White,
-        },
-]]--
         {
             key = 'CheckboxAutoSave',
             type = 'checkbox',
@@ -153,7 +132,7 @@ return
             hAlign = MOAITextBox.RIGHT_JUSTIFY,
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.White,
-        },        
+        },
         {
             key = 'HeaderText',
             type = 'textBox',

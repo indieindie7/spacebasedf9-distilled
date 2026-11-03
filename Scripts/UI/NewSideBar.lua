@@ -1,5 +1,4 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
@@ -16,20 +15,14 @@ local Renderer = require('Renderer')
 local SoundManager = require('SoundManager')
 local CommandObject = require('Utility.CommandObject')
 local Gui = require('UI.Gui')
-
 local sUILayoutFileName = 'UILayouts/SideBarLayout'
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
-
     Ob.bIsExpanded = true
     Ob.rSubmenu = nil
-
     function Ob:init()
         Ob.Parent.init(self)
-
         self:processUIInfo(sUILayoutFileName)
-
         self.rSmallBarButton = self:getTemplateElement('SmallBarButton')
         if self.rSmallBarButton then
             self.rSmallBarButton:addHoverCallback(self.onSmallbarHovered, self)
@@ -54,7 +47,6 @@ function m.create()
         self.rBeaconHotKeyExpanded = self:getTemplateElement('BeaconHotkeyExpanded')
         self.rDisasterHotKey = self:getTemplateElement('DisasterHotkey')
         self.rDisasterHotKeyExpanded = self:getTemplateElement('DisasterHotkeyExpanded')
-
         self.rInspectLabel = self:getTemplateElement('InspectLabel')
         self.rAssignLabel = self:getTemplateElement('AssignLabel')
         self.rResearchLabel = self:getTemplateElement('ResearchLabel')
@@ -64,7 +56,6 @@ function m.create()
         self.rBeaconLabel = self:getTemplateElement('BeaconLabel')
         self.rDisasterLabel = self:getTemplateElement('DisasterLabel')
         self.rDisasterIcon = self:getTemplateElement('DisasterIcon')
-
         self.rInspectButton = self:getTemplateElement('InspectButton')
         self.rAssignButton = self:getTemplateElement('AssignButton')
         self.rResearchButton = self:getTemplateElement('ResearchButton')
@@ -73,14 +64,11 @@ function m.create()
         self.rMineButton = self:getTemplateElement('MineButton')
         self.rBeaconButton = self:getTemplateElement('BeaconButton')
         self.rDisasterButton = self:getTemplateElement('DisasterButton')
-
         self.rEndCap = self:getTemplateElement('SidebarBottomEndcap')
         self.rEndCapExpanded = self:getTemplateElement('SidebarBottomEndcapExpanded')
-
         self.rInspectIcon = self:getTemplateElement('InspectIcon')
         self.rInspectHotkey = self:getTemplateElement('InspectHotkey')
         self.rSmallBarHighlight = self:getTemplateElement('SmallBarHighlight')
-
         self.rInspectButton:addPressedCallback(self.onInspectButtonPressed, self)
         self.rAssignButton:addPressedCallback(self.onAssignButtonPressed, self)
         self.rResearchButton:addPressedCallback(self.onResearchButtonPressed, self)
@@ -89,7 +77,6 @@ function m.create()
         self.rConstructButton:addPressedCallback(self.onConstructButtonPressed, self)
         self.rBeaconButton:addPressedCallback(self.onBeaconButtonPressed, self)
         self.rDisasterButton:addPressedCallback(self.onDisasterButtonPressed, self)
-
         self.tHotkeyButtons = {}
         self:addHotkey(self.rInspectHotkey.sText, self.rInspectButton)
         self:addHotkey(self.rAssignHotKey.sText, self.rAssignButton)
@@ -99,7 +86,6 @@ function m.create()
         self:addHotkey(self.rMineHotKey.sText, self.rMineButton)
         self:addHotkey(self.rBeaconHotKey.sText, self.rBeaconButton)
         self:setExpanded(false)
-
         self.rMineMenu = MineMenu.new()
         self.rConstructMenu = ConstructMenu.new()
         self.rInspectMenu = NewInspectMenu.new()
@@ -109,24 +95,19 @@ function m.create()
         self.rGoalsList = GoalsList.new()
         self.rBeaconMenu = BeaconMenu.new()
         self.rDisasterMenu = DisasterMenu.new()
-        
-        -- disable + hide disaster menu to start
         self.rDisasterButton:setEnabled(false)
         self:setElementHidden(self.rDisasterButton, true)
         self:setElementHidden(self.rDisasterIcon, true)
         self:setElementHidden(self.rDisasterLabel, true)
         self:setElementHidden(self.rDisasterHotKey, true)
         self:setElementHidden(self.rDisasterHotKeyExpanded, true)
-        -- track UI state to listen for change
         self.bDisasterMode = false
     end
-    
     function Ob:enableDisasterMenu()
         self.bDisasterMode = true
         self.rDisasterButton:setEnabled(true)
         self:setElementHidden(self.rDisasterIcon, false)
         self:setElementHidden(self.rDisasterHotKey, false)
-        -- #s taken from SideBarLayout
         local nButtonHeight, nButtons = 81, 8
         self.rEndCap:setLoc(-152, -nButtonHeight * nButtons)
         self.rEndCapExpanded:setLoc(0, -nButtonHeight * nButtons)
@@ -134,7 +115,6 @@ function m.create()
         self.rLargeBarButton:setScl(286, nButtonHeight * nButtons)
         self:addHotkey(self.rDisasterHotKey.sText, self.rDisasterButton)
     end
-    
     function Ob:onTick(dt)
         if self.elementsVisible or g_GuiManager.inMainScreen() then
             if g_GameRules.bDisasterMode and not self.bDisasterMode then
@@ -148,18 +128,14 @@ function m.create()
             end
         end
     end
-
     function Ob:refresh()
         if self.rSubmenu and self.rSubmenu.refresh then
             self.rSubmenu:refresh()
         end
     end
-
     function Ob:addHotkey(sKey, rButton)
         sKey = string.lower(sKey)
-
         local keyCode = -1
-
         if sKey == "esc" then
             keyCode = 27
         elseif sKey == "ret" then
@@ -168,15 +144,11 @@ function m.create()
             keyCode = 32
         else
             keyCode = string.byte(sKey)
-
-            -- also store the uppercase version because hey why not
             local uppercaseKeyCode = string.byte(string.upper(sKey))
             self.tHotkeyButtons[uppercaseKeyCode] = rButton
         end
-
         self.tHotkeyButtons[keyCode] = rButton
     end
-
     function Ob:setButtonsLocked(bDisabled, bHoveredOverride)
         local bEnabled = not bDisabled
         self.rInspectButton:setEnabled(bEnabled)
@@ -190,7 +162,6 @@ function m.create()
             self.rDisasterButton:setEnabled(bEnabled)
         end
     end
-
     function Ob:playWarbleEffect(bFullscreen, nTimeScale)
         nTimeScale = nTimeScale or 1.0
         if bFullscreen then
@@ -200,7 +171,6 @@ function m.create()
             g_GuiManager.createEffectMaskBox(-80, -80, 500, 1844, 0.3 * nTimeScale, 0.3)
         end
     end
-
     function Ob:setExpanded(bExpanded, nEffectScale)
         if self.bIsExpanded == bExpanded then
             return
@@ -208,7 +178,6 @@ function m.create()
         if nEffectScale then
             self:playWarbleEffect(false, nEffectScale)
         end
-		
         self:setElementHidden(self.rSmallBarButton, bExpanded)
         self:setElementHidden(self.rLargeBarButton, not bExpanded)
         self:setElementHidden(self.rInspectButton, not bExpanded)
@@ -250,32 +219,25 @@ function m.create()
         self:setElementHidden(self.rEndCap, bExpanded)
         self:setElementHidden(self.rEndCapExpanded, not bExpanded)
         self:setElementHidden(self.rSmallBarHighlight, bExpanded)
-
         if bExpanded then
             self:setButtonsLocked(false)
-
             self.rInspectIcon:setColor(unpack(Gui.AMBER))
             self.rInspectHotkey:setColor(unpack(Gui.AMBER))
-
             if self.rInspectButton:isCursorInside() then
                 self.rInspectIcon:setColor(0, 0, 0)
                 self.rInspectHotkey:setColor(0, 0, 0)
             end
-
             self.rLargeBarButton.bDoRolloverCheck = true
             self.rSmallBarButton.bDoRolloverCheck = false
         else
             self:setButtonsLocked(true, false)
-
             self.rInspectIcon:setColor(0, 0, 0)
             self.rInspectHotkey:setColor(0, 0, 0)
-
             self.rLargeBarButton.bDoRolloverCheck = false
             self.rSmallBarButton.bDoRolloverCheck = true
         end
         self.bIsExpanded = bExpanded
     end
-
     function Ob:onSmallbarHovered(rButton, bHovered)
         if bHovered then
             if not self.bIsExpanded then
@@ -284,7 +246,6 @@ function m.create()
             self:setExpanded(true, 0.4)
         end
     end
-
     function Ob:onLargebarHovered(rButton, bHovered)
         if not bHovered then
             if self.bIsExpanded then
@@ -293,7 +254,6 @@ function m.create()
             self:setExpanded(false, 0.75)
         end
     end
-
     function Ob:onAssignButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if g_GameRules.currentMode == g_GameRules.MODE_BEACON then
@@ -302,7 +262,6 @@ function m.create()
             self:openSubmenu(self.rJobRosterMenu)
         end
     end
-
     function Ob:onResearchButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if g_GameRules.currentMode == g_GameRules.MODE_BEACON then
@@ -311,13 +270,11 @@ function m.create()
             self:openSubmenu(self.rResearchMenu)
         end
     end
-	
 	function Ob:onGoalButtonPressed(rButton, eventType)
 		if eventType == DFInput.TOUCH_UP then
             self:openSubmenu(self.rGoalsList)
         end
 	end
-	
     function Ob:openSubmenu(rMenu)
         if self.rSubmenu then
             self.rSubmenu:hide(true)
@@ -330,7 +287,6 @@ function m.create()
             SoundManager.playSfx('selectdegauss')
         end
     end
-
     function Ob:closeSubmenu()
         if self.rSubmenu then
             self:playWarbleEffect()
@@ -339,7 +295,6 @@ function m.create()
             self.rSubmenu = nil
         end
     end
-
     function Ob:hide(bKeepAlive)
         if self.rSubmenu then
             self.rSubmenu:hide(true)
@@ -347,79 +302,64 @@ function m.create()
         end
         Ob.Parent.hide(self, bKeepAlive)
     end
-
     function Ob:onMineButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             self:openSubmenu(self.rMineMenu)
         end
     end
-
     function Ob:onConstructButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if g_GameRules.currentMode == g_GameRules.MODE_BEACON then g_GameRules.setUIMode(g_GameRules.MODE_INSPECT) end
             self:openConstructMenu(true)
         end
     end
-
     function Ob:isConstructMenuOpen()
         return self.bConstructMenuOpen
     end
-
     function Ob:openConstructMenu(bSaveCommandStates)
         self.bConstructMenuOpen = true
         if bSaveCommandStates then
             CommandObject.saveCommandStates()
         end
         self:openSubmenu(self.rConstructMenu)
-
         if g_GameRules.getTimeScale() ~= 0 then
             self.bWasPaused = false
             g_GameRules.togglePause()
         else
             self.bWasPaused = true
         end
-        g_GameRules.lockTimeScale(true) -- time can't move when performing construction
-
+        g_GameRules.lockTimeScale(true)
         self.bCutawayModeWasEnabled = g_GameRules.isCutawayModeEnabled()
-        g_GameRules.enableCutawayMode(true, true) -- hide the back walls
+        g_GameRules.enableCutawayMode(true, true)
     end
-
     function Ob:closeConstructMenu()
         self.bConstructMenuOpen = false
         g_GameRules.lockTimeScale(false)
-
         if g_GameRules.getTimeScale() == 0 and not self.bWasPaused then
             g_GameRules.togglePause()
-        end       
-
+        end
         if self.bCutawayModeWasEnabled then
-            g_GameRules.enableCutawayMode(true) -- show the backwalls
+            g_GameRules.enableCutawayMode(true)
         else
             g_GameRules.enableCutawayMode(false)
         end
-
         self:closeSubmenu()
     end
-
     function Ob:onInspectButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             self:openSubmenu(self.rInspectMenu)
         end
     end
-
     function Ob:onBeaconButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
-            -- do beacon
             self:openSubmenu(self.rBeaconMenu)
         end
     end
-
     function Ob:onDisasterButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             self:openSubmenu(self.rDisasterMenu)
         end
     end
-
     function Ob:onFinger(touch, x, y, props)
         if self.rSubmenu then
             return self.rSubmenu:onFinger(touch, x, y, props)
@@ -428,11 +368,8 @@ function m.create()
         end
         return false
     end
-
-    -- returns true if key was handled
     function Ob:onKeyboard(key, bDown)
         local bHandled = false
-
         if not self.rSubmenu then
             if bDown and self.tHotkeyButtons[key] then
                 local rButton = self.tHotkeyButtons[key]
@@ -440,14 +377,11 @@ function m.create()
                 bHandled = true
             end
         end
-
         if not bHandled and self.rSubmenu and self.rSubmenu.onKeyboard then
             bHandled = self.rSubmenu:onKeyboard(key, bDown)
         end
-
         return bHandled
     end
-
     function Ob:inside(wx, wy)
         if self.rSubmenu then
             return self.rSubmenu:inside(wx, wy)
@@ -455,7 +389,6 @@ function m.create()
             return Ob.Parent.inside(self, wx, wy)
         end
     end
-
     function Ob:onResize()
         Ob.Parent.onResize(self)
         self.rMineMenu:onResize()
@@ -467,15 +400,11 @@ function m.create()
         self.rGoalsList:onResize()
         self.rBeaconMenu:onResize()
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

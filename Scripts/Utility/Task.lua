@@ -15,38 +15,16 @@ local GameRules = require('GameRules')
 local ObjectList = require('ObjectList')
 local MiscUtil = require('MiscUtil')
 local Profile = require('Profile')
-
 local Task = Class.create()
-
---Task.INTERRUPT_PRI_LOW = 1
---Task.INTERRUPT_PRI_NORMAL = 2
---Task.INTERRUPT_PRI_HIGH = 3
-
 Task.MAX_OBSTRUCTION_WAIT = 10
 Task.EMOTICON_INITIAL_DURATION = 5
-
 Task.DURATION_UNKNOWN_LONG = 60
-
 function Task.fromSaveData(rChar, tData)
     local rClass = require(tData.sClass)
     if rClass.staticFromSaveData then
         return rClass.staticFromSaveData(rChar,tData)
-        --[[
-    else
-        local tAOData = tData.tAOData or {}
-        tAOData.bInfinite=true
-        local rResumedAO = ActivityOption.new(tData.activityName, tAOData)
-
-        local bSuccess, sReason = rResumedAO:fillOutBlackboard(rChar)
-        if bSuccess then
-            local rClass = require(tData.sClass)
-            local rTask = rClass.new(rChar, {}, rResumedAO, tData)
-            return rTask
-        end
-        ]]--
     end
 end
-
 function Task:_getGenericSaveData()
     local tData = {}
     tData.tAOData = {}
@@ -58,7 +36,6 @@ function Task:_getGenericSaveData()
     tData.nPromisedUtility = self.nPromisedUtility
     return tData
 end
-
 function Task:init(rChar, tPromisedNeeds, rActivityOption,tSaveData)
     self.tPromisedNeeds = tPromisedNeeds
     self.rChar = rChar
@@ -66,7 +43,6 @@ function Task:init(rChar, tPromisedNeeds, rActivityOption,tSaveData)
     self.rActivityOption = rActivityOption
     self.tCommand = rActivityOption.tData.tCommand
     self.nPriority = rActivityOption:getPriority(rChar)
-    --self.interruptPri = interruptPri or Task.INTERRUPT_PRI_NORMAL
     if self.HELMET_REQUIRED then
         self.rChar:showHelmet()
     end
@@ -75,7 +51,6 @@ function Task:init(rChar, tPromisedNeeds, rActivityOption,tSaveData)
     end
     assert(tPromisedNeeds)
     assert(rChar)
-    
     if rActivityOption.tData then
         if rActivityOption.tData.pathX then
             self.DBG_pathX,self.DBG_pathY = rActivityOption.tData.pathX, rActivityOption.tData.pathY
@@ -87,7 +62,6 @@ function Task:init(rChar, tPromisedNeeds, rActivityOption,tSaveData)
         end
     end
 end
-
 function Task:getTag(sTag)
     if self.rActivityOption then
         local val = self.rActivityOption:getTag(self.rChar,sTag)
@@ -95,21 +69,16 @@ function Task:getTag(sTag)
     end
     if self.rParentTask then return self.rParentTask:getTag(sTag) end
 end
-
-
 function Task:getPriority()
     return self.nPriority
 end
-
 function Task:getOptionData()
     return self.activityName and OptionData.tAdvertisedActivities[self.activityName]
 end
-
 function Task:showEmoticon()
     if not OptionData.tAdvertisedActivities[self.activityName] or not OptionData.tAdvertisedActivities[self.activityName].UIText then
         return
     end
-    
 	if self.emoticon then
         self.rChar:setEmoticon( self.emoticon, g_LM.line(OptionData.tAdvertisedActivities[self.activityName].UIText) )
     else
@@ -117,20 +86,9 @@ function Task:showEmoticon()
     end
 	DFUtil.timedCallback(self.EMOTICON_INITIAL_DURATION, MOAIAction.ACTIONTYPE_GAMEPLAY, false, function() self:dismissEmoticon() end)
 end
-
 function Task:dismissEmoticon()
-    --if (self.emoticon and self.rChar.sEmoticon == 'ui_dialogicon_'..self.emoticon) 
-    --or (self.emoticonText and self.rChar.sEmoticonText == self.emoticonText) then
         self.rChar:setEmoticon()
-    --end
 end
-
---[[
-function Task:canInterruptFor(activityName)
-    return self.interruptPri < Task.INTERRUPT_PRI_NORMAL
-end
-]]--
-
 function Task:_endInteraction()
             if self.rInteractionObject then
                 if self.rInteractionObject.onInteract then
@@ -157,10 +115,8 @@ function Task:_endInteraction()
                 self.rInteractionObject = nil
             end
 end
-
 function Task:_addNeedReward(nFrac)
     nFrac = nFrac or 1
-    
     for k,v in pairs(self.tPromisedNeeds) do
         if k ~= 'Mods' then
             self.rChar:addNeed(k,Needs.getAdjustedPromise(self.rChar.tStats.tPersonality, v, self.rActivityOption.name, k) * nFrac)
@@ -175,7 +131,6 @@ function Task:_addNeedReward(nFrac)
         self.rChar:addJobExperience(tD.JobForXP or self:getTag('Job'), tD.nJobExperience * nFrac)
     end
 end
-
 function Task:onComplete(bSuccess)
     self.rChar:taskCompleting(self,bSuccess,self.rParentTask ~= nil)
     self:_endInteraction()
@@ -185,7 +140,6 @@ function Task:onComplete(bSuccess)
             self.rChar:hideHelmet()
         end
     end
-	-- log task on completion
 	local tTaskData = {}
 	local GameRules = require('GameRules')
 	tTaskData.time = GameRules.sStarDate..':'..GameRules.getStardateMinuteString()
@@ -196,11 +150,9 @@ function Task:onComplete(bSuccess)
 	end
 	self.rChar:logTask(tTaskData)
 end
-
 function Task:estimatedTimeRemaining()
     return self.duration or 10
 end
-
 function Task:_updateQueue()
 	if self.rQueuedTask and self.rQueuedTask.bComplete then
         if self.rQueuedTask.sInterruptReason then
@@ -209,15 +161,13 @@ function Task:_updateQueue()
         end
 		self.rQueuedTask = nil
 	end
-
 	if not self.rQueuedTask and self.tQueue then
 		local tQueueEntry = self.tQueue[1]
 		table.remove(self.tQueue,1)
 		if not next(self.tQueue) then self.tQueue = nil end
-
         self.rQueuedTask = nil
         if tQueueEntry.rTask then
-            self.rQueuedTask = tQueueEntry.rTask 
+            self.rQueuedTask = tQueueEntry.rTask
         else
             tQueueEntry.tData.nPriorityOverride = self.nPriority
             local rStubAO = ActivityOption.new(self.activityName.."_"..tQueueEntry.sClass, tQueueEntry.tData)
@@ -234,7 +184,6 @@ function Task:_updateQueue()
         end
 	end
 end
-
 function Task:getLeafTask()
     local rQueuedTask = self
     while rQueuedTask do
@@ -245,18 +194,13 @@ function Task:getLeafTask()
         end
     end
 end
-
 function Task:getTag(sTag)
     return self.rActivityOption:getTag(self.rChar, sTag)
 end
-
 function Task:update(dt)
     if self.bComplete then return true end
-
 	self:_updateQueue()
-    
     if self.bComplete then return true end
-
 	if self.rQueuedTask then
 		self.rQueuedTask:update(dt)
 	elseif self:onUpdate(dt) then
@@ -264,50 +208,30 @@ function Task:update(dt)
         return true
     end
 end
-
--- For early unreserves. In the standard case, you can just complete or interrupt the 
--- task and the unreserve will be handled for you.
 function Task:unreserve()
     self.rActivityOption:unreserve(self.rChar)
     self.bEarlyUnreserve = true
 end
-
 function Task:interrupt(sReason)
     assertdev(not self.bComplete)
     if self.bComplete then return end
-
     self:dismissEmoticon()
     self.bComplete = true
     self.sInterruptReason = sReason or 'none'
-
     if not self.bInitialized then
-        -- early interrupt
     elseif not self.bEarlyUnreserve then
         self.rActivityOption:unreserve(self.rChar)
     end
-
     self:onComplete(false)
     if self.tCommand then
-        -- SAFETY TEST:
-        -- whether or not we complete a command, let's refresh to catch weird cases where a
-        -- command can be made invalid by circumstances we don't currently test for.
-        -- If we can test for all of them in CommandObject's delegate listeners
-        -- (specifically: prop buffers getting encroached)
-        -- then we can remove this test.
         self.tCommand:retestCommandValidity()
     end
 end
-
 function Task:complete()
     if self.bComplete then
         Print(TT_Error, 'Task already complete: '..tostring(self.activityName))
-        -- nuking this assert for now. Character:angerEvent can interrupt a task, and having to test for that
-        -- every time before returning true is too cumbersome to be reasonable.
-        -- Leaving the error trace though for debugging. For now.
-        --assertdev(not self.bComplete)
         return
     end
-    -- reset emoticon if it's still hanging round
     self:dismissEmoticon()
     self.rChar:setElevatedSpacewalk(false)
     self.bComplete = true
@@ -316,25 +240,18 @@ function Task:complete()
     end
     self:onComplete(true)
     if self.tCommand then
-        -- SAFETY TEST:
-        -- see Task:interrupt
         self.tCommand:retestCommandValidity()
     end
 end
-
 function Task:chainTaskRef(rTask)
     self:complete()
     self.rChar:forceTask(rTask)
 end
-
 function Task:queueTask(sTaskName,tData)
 	if not self.tQueue then self.tQueue={} end
-    tData.bInfinite = true -- don't allow reservations on subtasks
+    tData.bInfinite = true
 	table.insert(self.tQueue, {sClass=sTaskName,tData=tData})
 end
-
-
-
 function Task:obstructionWait(dt)
     if not self.nObstructionTime then
         self.nObstructionTime=0
@@ -347,15 +264,13 @@ function Task:obstructionWait(dt)
     self.nObstructionTime = nil
     return true
 end
-
 function Task:requireSpacesuit()
-    if OptionData.tAdvertisedActivities[self.activityName] then 
+    if OptionData.tAdvertisedActivities[self.activityName] then
         local tPrereqs = OptionData.tAdvertisedActivities[self.activityName].Prerequisites
         return tPrereqs and tPrereqs['WearingSuit']
     end
     return false
 end
-
 function Task:attemptInteractOnObject(sAnim, rObj, nDuration)
     local bSuccess,sReason = self:attemptInteractWithObject(sAnim, rObj, nDuration, false)
     if bSuccess then
@@ -376,21 +291,18 @@ function Task:attemptInteractOnObject(sAnim, rObj, nDuration)
 	    x = x + xOff
 	    y = y + yOff
 	    local z = g_World.getHackySortingZ(x, y) + 100
-	    -- bForce arg tells us to ignore collision with objects
 	    self.rChar:setLoc(x, y, z, true)
         return true
     else
         return bSuccess, sReason
     end
 end
-
 function Task:attemptInteractWithObject(sAnim, rObj, nDuration, bPlayOnce)
     if rObj and not rObj.bDestroyed then
         if rObj.rUser and rObj.rUser ~= self.rChar then
             return false, 'object busy'
         end
         local ctx,cty,ctw = g_World._getTileFromWorld(self.rChar:getLoc())
-        
         local testFn=function(tx,ty,tw)
             if ctw == tw then
                 if self:attemptInteractWithTile(sAnim,tx,ty,nDuration, bPlayOnce) then
@@ -403,13 +315,12 @@ function Task:attemptInteractWithObject(sAnim, rObj, nDuration, bPlayOnce)
                 end
             end
         end
-        
         if rObj.getFootprint then
             local tTiles = rObj:getFootprint()
             for _,addr in ipairs(tTiles) do
                 local tx,ty = g_World.pathGrid:cellAddrToCoord(addr)
-                if testFn(tx,ty,1) then 
-                    return true 
+                if testFn(tx,ty,1) then
+                    return true
                 end
             end
         else
@@ -418,7 +329,6 @@ function Task:attemptInteractWithObject(sAnim, rObj, nDuration, bPlayOnce)
         end
     end
 end
-
 function Task:attemptInteractWithTile(sAnim, tx, ty, nDuration, bPlayOnce)
     local ctx,cty = g_World._getTileFromWorld(self.rChar:getLoc())
     self:_endInteraction()
@@ -429,12 +339,9 @@ function Task:attemptInteractWithTile(sAnim, tx, ty, nDuration, bPlayOnce)
         return true
     end
 end
-
 function Task:interacting()
     return self.nInteracting
 end
-
-
 function Task:tickInteraction(dt)
     if self.nInteracting then
         self.nInteracting = self.nInteracting - dt
@@ -445,29 +352,13 @@ function Task:tickInteraction(dt)
     end
     return (self.nInteracting == nil)
 end
-
--- world coords
-
 function Task:_enteredNewTile()
     self.nObstructionTime = nil
     if self.rChar.tStats.nTeam == Character.TEAM_ID_PLAYER and not self.rChar:isElevated() then
         Room.visibilityBlip(self.rChar:getTileLoc())
     end
     self.rChar:enteredNewTile()
-    --[[
-    if self.rChar.rBlobShadow then
-        local tileValue = World.getTileValueFromWorld( self.rChar:getLoc() )
-        if tileValue == World.logicalTiles.SPACE then        
-            self.rChar.rBlobShadow:setVisible(false)
-        else
-            self.rChar.rBlobShadow:setVisible(true)
-        end
-    end
-    ]]--
 end
-
--- Do we think we'll be available to take on this proposed queued task in a reasonable amount of time?
--- i.e. are we almost done here?
 function Task:availableForInterruption(sProposedQueuedTaskName)
     if sProposedQueuedTaskName == 'Chat' or sProposedQueuedTaskName == 'ChatPartner' then
         return self:estimatedTimeRemaining() < 4.5
@@ -476,18 +367,10 @@ function Task:availableForInterruption(sProposedQueuedTaskName)
     end
     return false
 end
-
--- UTILITY FUNCTIONS:
--- Not used by Task.lua. Intended for subclass use.
-
--- tickWalk
--- Assumes self.tPath is set.
--- @return: true if finished, tx, ty of obstructing tile on unsuccessful exit
 function Task:tickWalk(dt)
     if not self.tPath then
         return true
     end
-
     if self.sSymptomAnim then
         if not self.rChar:isPlayingAnim(self.sSymptomAnim) then
             self.sSymptomAnim = nil
@@ -498,25 +381,19 @@ function Task:tickWalk(dt)
         local tAnimatingMalady
         self.sSymptomAnim,tAnimatingMalady = self.rChar:getIdleAnim()
         if self.sSymptomAnim then
-            -- So, we only actually play the anim if we're not in a spacesuit, but we still
-            -- register it as played anyway.
             if not self.rChar:wearingSpacesuit() then
                 self.rChar:playAnim(self.sSymptomAnim,true)
             end
             self.rChar:playedIdleAnim(self.sSymptomAnim,tAnimatingMalady)
         end
     end
-
     local sTickReturn, tData = self.tPath:tick(dt)
-
     if sTickReturn and sTickReturn ~= 'blocked' and sTickReturn ~= 'deelevate' and sTickReturn ~= 'elevate' then
         self:_enteredNewTile()
     end
     if self.bComplete then
-        -- handle task completion/interruption in _enteredNewTile
         return
     end
-
     if sTickReturn == 'complete' then
         self.tPath = nil
         if tData then
@@ -562,9 +439,7 @@ function Task:tickWalk(dt)
         if self:obstructionWait(dt) then
             Print(TT_Gameplay,'Character giving up on path due to obstruction.',self.rChar:getUniqueID())
             self.bPathCompletionSuccess = false
-            -- give up
             self.tPath = nil
-            --Profile.leaveScope("tickWalk")
             if self.bInterruptOnPathFailure then
                 self:interrupt('Path obstructed.')
                 return
@@ -575,7 +450,6 @@ function Task:tickWalk(dt)
             return
         end
     end
-	-- are we near a door? (do only once we've moved)
 	local tx, ty = World._getTileFromWorld(self.rChar:getLoc())
 	local ObjectList = require('ObjectList')
 	for i=2,9 do
@@ -586,57 +460,13 @@ function Task:tickWalk(dt)
 		end
 	end
 end
-
 function Task:setPath(tPath)
     self.tPath = tPath
-
     assertdev(self.tPath)
     if not self.tPath then return end
-
     self.tPath:start(self.rChar,self.sWalkOverride,self.sBreatheOverride)
     self.tPath.elapsedMoveTime = nil
 end
-
---[[
-function Task:getRandomLocation(bSafe)
-	local x,y
-	local maxMoveDistance = 4 * World.tileWidth
-    -- spacewalking wanderers stay on a leash relative to where they started, so they don't end up off the map.
-    -- MTF TODO: successive wander task selections re-set this leash, so characters can get very far.
-    -- Need to figure out a solution to this.
-    if self.rChar:spacewalking() then
-        x,y = self.startX,self.startY
-        maxMoveDistance = 4 * World.tileWidth
-    else
-        x,y= self.rChar:getLoc()
-    end
-	local maxIterations = 10
-	
-	local iterations = 0
-	while iterations < maxIterations do
-		iterations = iterations + 1
-		local newX, newY = x + math.random(-maxMoveDistance, maxMoveDistance), y + math.random(-maxMoveDistance, maxMoveDistance)
-		local bPasses = World.isPathable( newX, newY ) 
-		if bPasses then            
-			local r = Room.getRoomAt(newX,newY)
-            if self.rChar:spacewalking() then
-                if r and (r:getOxygenScore() > Character.OXYGEN_SUFFOCATING or r:isDangerous()) then
-                    bPasses = false
-                end
-			elseif not r or r:isDangerous(self.rChar) then
-				bPasses = false
-			end
-		end
-		if bPasses then                
-			x,y = newX,newY
-			break
-		end
-	end
-	
-	return x,y
-end
-]]--
-
 function Task:createPathTo(rTarget,requiredDirection)
     local wx,wy = self.rChar:getLoc()
     local targetX,targetY
@@ -650,22 +480,17 @@ function Task:createPathTo(rTarget,requiredDirection)
         return self:createPath(wx,wy,targetX,targetY,true)
     end
 end
-
--- world coords
 function Task:createPath(wx,wy, targetX,targetY, bNearest, bAllowHostilePathing)
     if bAllowHostilePathing == nil then bAllowHostilePathing = self.rActivityOption.tData.bAllowHostilePathing end
-    
     local tPath = Pathfinder.getPath(wx, wy, targetX, targetY, self.rChar, {bPathToNearest=bNearest, nRequiredTeam=(not bAllowHostilePathing and self.rChar:getTeam())})
     if tPath then
         self:setPath(tPath)
         return true
     end
 end
-
 function Task:setWait(nSeconds)
     self.nTaskWait = nSeconds
 end
-
 function Task:tickWait(dt)
     if self.nTaskWait then
         self.nTaskWait = self.nTaskWait-dt
@@ -677,12 +502,8 @@ function Task:tickWait(dt)
     end
     return false
 end
-
--- Generic handler for anim events to pass data to tasks
 function Task:handleGenericAnimEvent(sAnimEventName, tParameters)
-
 end
-
 function Task:getDuration(nMinDuration, nMaxDuration, nJobID)
     if nJobID then
         return DFMath.lerp(nMaxDuration, nMinDuration, self.rChar:getJobCompetency(nJobID))
@@ -690,29 +511,18 @@ function Task:getDuration(nMinDuration, nMaxDuration, nJobID)
         return DFMath.lerp(nMinDuration, nMaxDuration, math.random())
     end
 end
-
 function Task:getJobSuccess(nJob)
-	-- common logic for job skill (competence) checks
 	local competency = self.rChar:getJobCompetency(nJob)
     local nNoFailThreshold = self.NO_FAIL_COMPETENCY_THRESHOLD or CharacterConstants.NO_FAIL_COMPETENCY_THRESHOLD
 	if competency >= nNoFailThreshold then
-        --Print(TT_Gameplay, '** Task:getJobSuccess auto-succeed; thresh: comp '..competency..', job '..nJob..', char '..self.rChar:getUniqueID())
 		return true
 	end
-    -- MAX_CHANCE_TO_FAIL = % chance to fail at 0% competence
-    -- MIN_CHANCE_TO_FAIL = % chance to fail at 100% competence
     local nMaxFailChance = self.MAX_CHANCE_TO_FAIL or CharacterConstants.MAX_CHANCE_TO_FAIL
     local nMinFailChance = self.MIN_CHANCE_TO_FAIL or CharacterConstants.MIN_CHANCE_TO_FAIL
 	local nChanceToSucceed = 1 - DFMath.lerp(nMaxFailChance, nMinFailChance, competency)
     local bSuccess = math.random() < nChanceToSucceed
-    --Print(TT_Gameplay, '** Task:getJobSuccess '..tostring(bSuccess)..'; chance ' .. tostring(nChanceToSucceed) .. ', comp '..tostring(competency)..', job '..tostring(nJob)..', char '..tostring(self.rChar:getUniqueID()))
     return bSuccess
 end
-
----------------------------------------------
--- COOPERATIVE TASK UTILITIES
----------------------------------------------
--- hacky, low-quality timeout test just for egregiously bad failures.
 function Task:_hackyFollowTimeoutTest(dt)
     if GameRules.elapsedTime > self.nNextTimeoutTest then
         self.nNextTimeoutTest=GameRules.elapsedTime+5
@@ -728,23 +538,19 @@ function Task:_hackyFollowTimeoutTest(dt)
         end
     end
 end
-
 function Task:_testCoopStillValid(sPendingTaskRequired)
     if self.rTargetObject:getCurrentTaskName() == sPendingTaskRequired then
         if self.rTargetObject.rCurrentTask.rTargetObject ~= self.rChar then
             return false, "Target has an appointment with another character."
         end
-    elseif self.rTargetObject:getPendingTaskName() ~= sPendingTaskRequired then 
+    elseif self.rTargetObject:getPendingTaskName() ~= sPendingTaskRequired then
         return false, "Target character not waiting for the task we want."
     elseif self.rTargetObject:getPendingTaskPartner() ~= self.rChar then
         return false, "Target character waiting for correct task, but not with us."
     end
     return true
 end
-
 function Task:getActivityFriendlyName()
-	-- override in subclasses for fancier behavior, eg Tasks/Explore.lua
 	return g_LM.line(OptionData.tAdvertisedActivities[self.activityName].UIText)
 end
-
 return Task

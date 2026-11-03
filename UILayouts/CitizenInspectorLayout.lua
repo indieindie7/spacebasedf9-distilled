@@ -1,16 +1,12 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
-
 local nButtonWidth, nButtonHeight  = 418, 90
 local nTabWidth, nTabHeight = 83, 47
 local nTabLineHeight = 3
-
 local nLabelX, nTextStartY = 40, -276
 local nLineHeight = 36
-
 return
 {
     posInfo =
@@ -30,7 +26,6 @@ return
         {
             {
                 key = 'StatsBG',
-                --scale = { nButtonWidth, 212 },
             },
             {
                 key = 'FolderTop',
@@ -45,7 +40,6 @@ return
         {
             {
                 key = 'StatsBG',
-                --scale = { nButtonWidth, 152 },
             },
             {
                 key = 'FolderTop',
@@ -66,7 +60,6 @@ return
             scale = { nButtonWidth, 106 },
             color = Gui.AMBER,
         },
-		-- "editing name" BG
         {
             key = 'NameEditBG',
             type = 'onePixelButton',
@@ -74,7 +67,6 @@ return
             scale = { nButtonWidth, 35 },
             color = Gui.AMBER,
         },
-        -- Portrait
         {
             key = 'PictureBG',
             type = 'onePixel',
@@ -123,7 +115,6 @@ return
             hidden = true,
             clickWhileHidden = true,
         },
-        -- Name
         {
             key = 'NameLabel',
             type = 'textBox',
@@ -135,7 +126,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 0, 0, 0 },
         },
-        -- Name Edit Button
         {
             key = 'NameEditButton',
             type = 'onePixelButton',
@@ -178,7 +168,6 @@ return
             color = Gui.AMBER,
 			hidden = true,
         },
-        -- Job Title
         {
             key = 'TitleLabel',
             type = 'textBox',
@@ -190,7 +179,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 0, 0, 0 },
         },
-        -- stats
         {
             key = 'StatsBG',
             type = 'onePixel',
@@ -198,7 +186,6 @@ return
             scale = { nButtonWidth, 152 },
             color = Gui.AMBER_OPAQUE,
         },
-        -- clickable buttons shortcut to tabs/room
         {
             key = 'HealthStatButton',
             type = 'onePixelButton',
@@ -259,7 +246,6 @@ return
                 { key = 'ActivityButton', color = Gui.AMBER_OPAQUE }
             },
         },
-        -- health stat
         {
             key = 'HealthIcon',
             type = 'uiTexture',
@@ -291,7 +277,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- morale stat
         {
             key = 'MoraleIcon',
             type = 'uiTexture',
@@ -323,7 +308,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- cause of death
         {
             key = 'DeathIcon',
             type = 'uiTexture',
@@ -355,7 +339,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- location stat
         {
             key = 'LocationIcon',
             type = 'uiTexture',
@@ -387,7 +370,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- activity stat
         {
             key = 'ActivityIcon',
             type = 'uiTexture',
@@ -419,7 +401,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- "behind tab" box
         {
             key = 'TabBGSpacer',
             type = 'onePixel',
@@ -427,7 +408,6 @@ return
             scale = { nTabWidth*2 + 3, nTabHeight },
             color = Gui.AMBER_OPAQUE,
         },
-		-- line that completes the tab row
         {
             key = 'TabLineSpacer',
             type = 'onePixel',
@@ -435,7 +415,6 @@ return
             scale = { nTabWidth*2 + 3, nTabLineHeight },
             color = Gui.AMBER,
         },
-         -- Tabbed Pane
         {
             key = 'TabbedPane',
             type = 'tabbedPane',

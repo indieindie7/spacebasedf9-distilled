@@ -3,23 +3,17 @@ local World = {
     VISIBILITY_DIM = 2,
     VISIBILITY_FULL = 3,
 }
-
--- Color constants for building and whatnot
--- scaling colors b/c of premul alpha
 World.prebuiltColor={.25*.5,.25*.5,1*.5,.5}
 World.dimColor={0,0,.1*.4,.4}
 World.rightFacingColor={1,1,1,1}
 World.leftFacingColor={.85,.85,.85,1}
-
 World.TILE_STARTING_HIT_POINTS = 100
 World.TILE_DAMAGE_HEALTHY = 4
 World.TILE_DAMAGE_LIGHT_DAMAGE = 3
 World.TILE_DAMAGE_HEAVY_DAMAGE = 2
 World.TILE_DAMAGE_DESTROYED = 1
 World.TILE_HEAL_OVER_TIME = 0.05
-
-World.CHARACTER_SAFETY_TOLERANCE = 2 -- Don't allow most actions within this close of a boundary. This gives us room to path around the edge of bases for construction, mining and the like
-
+World.CHARACTER_SAFETY_TOLERANCE = 2
 World.directions = {
     SAME = 1,
     NW = 2,
@@ -31,7 +25,6 @@ World.directions = {
     S = 8,
     W = 9,
 }
-
 World.oppositeDirections={
     [1]=World.directions.SAME,
     [2]=World.directions.SE,
@@ -78,8 +71,6 @@ World.directionVectors = {
     {0,-1},
     {-1,0},
 }
-
--- lookup table for the direction a given wall should be receiving light
 World.wallLightDirections={}
 World.wallLightDirections[World.wallDirections.NWSE] = World.directions.SW
 World.wallLightDirections[World.wallDirections.NESW] = World.directions.SE
@@ -93,22 +84,13 @@ World.wallLightDirections[World.wallDirections.T_NE] = World.directions.SW
 World.wallLightDirections[World.wallDirections.T_SE] = World.directions.S
 World.wallLightDirections[World.wallDirections.T_SW] = World.directions.S
 World.wallLightDirections[World.wallDirections.T_NW] = World.directions.SE
-
 World.logicalTiles = {
-    -- Don't insert/renumber this list or you'll invalidate savegames
-    -- and saved layouts
-    SPACE = 1,    
+    SPACE = 1,
     WALL = 4,
-    DOOR = 5, 
+    DOOR = 5,
     WALL_DESTROYED = 6,
-
-    -- list of zones starts at this value.
     ZONE_LIST_START=8,
-
-    -- a full asteroid has this value; it increases as the asteroid gets mined out
-    -- until it gets turned to space.
     ASTEROID_VALUE_START=1024,
     ASTEROID_VALUE_END=1124,
 }
-
 return World

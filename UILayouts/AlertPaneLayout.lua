@@ -1,6 +1,5 @@
 local Gui = require('UI.Gui')
-
-return 
+return
 {
     posInfo =
     {
@@ -33,16 +32,16 @@ return
                 pos = { -30, 0 },
             },
         },
-    },    
+    },
     tElements =
-    {   
+    {
         {
             key = 'Button',
             type = 'onePixelButton',
             pos = { -50, 0 },
             scale = { 50, 50 },
             color = Gui.AMBER,
-        },    
+        },
         {
             key = 'ButtonLabel',
             type = 'textBox',
@@ -53,6 +52,6 @@ return
             hAlign = MOAITextBox.LEFT_JUSTIFY,
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 0, 0, 0 },
-        },   
+        },
    },
 }

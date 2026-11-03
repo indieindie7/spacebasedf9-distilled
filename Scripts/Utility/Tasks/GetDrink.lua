@@ -5,14 +5,10 @@ local Room=require('Room')
 local Malady=require('Malady')
 local Log=require('Log')
 local CharacterConstants=require('CharacterConstants')
-
 local GetDrink = Class.create(Task)
-
 GetDrink.emoticon = 'beer'
-
 GetDrink.DURATION_MIN = 8
 GetDrink.DURATION_MAX = 18
-
 function GetDrink:init(rChar,tPromisedNeeds,rActivityOption)
     Task.init(self, rChar, tPromisedNeeds, rActivityOption)
     self.duration = math.random(GetDrink.DURATION_MIN, GetDrink.DURATION_MAX)
@@ -24,17 +20,14 @@ function GetDrink:init(rChar,tPromisedNeeds,rActivityOption)
     local dir = self.rBar:getFacing()
     self.nBarTX,self.nBarTY = rActivityOption.tData.barTX,rActivityOption.tData.barTY
 end
-
 function GetDrink:drinkServed()
     self:_receiveDrink()
 end
-
 function GetDrink:_waitForDrink()
     self:attemptInteractWithTile('breathe', self.nBarTX,self.nBarTY, 1)
     self.bWaitingForDrink = true
     self.rBar:waitingForDrink(self,self.nBarSlot,true)
 end
-
 function GetDrink:_receiveDrink()
     Malady.interactedWith(self.rChar,self.rBar)
     self.bReceivedDrink=true
@@ -55,16 +48,13 @@ function GetDrink:_receiveDrink()
         self:_drinkInPlace()
     end
 end
-
 function GetDrink:onComplete(bSuccess)
     Task.onComplete(self,bSuccess)
     self.rBar:waitingForDrink(self,self.nBarSlot,false)
 end
-
 function GetDrink:_drinkInPlace()
     local tx,ty = self.rChar:getTileLoc()
     self:attemptInteractWithTile('drinkbooze', tx,ty, math.random(5,10))
-
     if not self.bLogged then
         if self.rChar:getRoom() and self.rChar:getRoom() ~= Room.getSpaceRoom() then
 	        local tLogData = {
@@ -79,12 +69,10 @@ function GetDrink:_drinkInPlace()
         self.bLogged = true
     end
 end
-
 function GetDrink:onUpdate(dt)
     if self.nDrinkingDuration then
         self.nDrinkingDuration = self.nDrinkingDuration - dt
     end
-
     if self:interacting() then
         self:tickInteraction(dt)
     elseif self.nDrinkingDuration and self.nDrinkingDuration < 0 then
@@ -105,5 +93,4 @@ function GetDrink:onUpdate(dt)
         end
 	end
 end
-
 return GetDrink

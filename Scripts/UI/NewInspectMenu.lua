@@ -1,5 +1,4 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
@@ -8,34 +7,25 @@ local ObjectInspector = require('UI.ObjectInspector')
 local ZoneInspector = require('UI.ZoneInspector')
 local ObjectList = require('ObjectList')
 local SoundManager = require('SoundManager')
-
 local sUILayoutFileName = 'UILayouts/InspectMenuLayout'
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.rSelectedButton = nil
-
     function Ob:init()
         self:processUIInfo(sUILayoutFileName)
-
         self.rCitizenInspector = CitizenInspector.new()
         self.rObjectInspector = ObjectInspector.new()
         self.rZoneInspector = ZoneInspector.new()
-
-        self.rBackButton = self:getTemplateElement('BackButton')        
+        self.rBackButton = self:getTemplateElement('BackButton')
         self.rBackButton:addPressedCallback(self.onBackButtonPressed, self)
         self.rLargeBar = self:getTemplateElement('LargeBar')
-        
         self.tHotkeyButtons = {}
         self:addHotkey(self:getTemplateElement('BackHotkey').sText, self.rBackButton)
 		self.rSelected = nil
     end
-
     function Ob:addHotkey(sKey, rButton)
         sKey = string.lower(sKey)
-    
         local keyCode = -1
-    
         if sKey == "esc" then
             keyCode = 27
         elseif sKey == "ret" or sKey == "ent" then
@@ -44,19 +34,13 @@ function m.create()
             keyCode = 32
         else
             keyCode = string.byte(sKey)
-            
-            -- also store the uppercase version because hey why not
             local uppercaseKeyCode = string.byte(string.upper(sKey))
             self.tHotkeyButtons[uppercaseKeyCode] = rButton
         end
-    
         self.tHotkeyButtons[keyCode] = rButton
     end
-    
-    -- returns true if key was handled
     function Ob:onKeyboard(key, bDown)
         local bHandled = false
-
         if not self.rSubmenu then
             if bDown and self.tHotkeyButtons[key] then
                 local rButton = self.tHotkeyButtons[key]
@@ -64,14 +48,11 @@ function m.create()
                 bHandled = true
             end
         end
-        
         if not bHandled and self.rSubmenu and self.rSubmenu.onKeyboard then
             bHandled = self.rSubmenu:onKeyboard(key, bDown)
         end
-        
         return bHandled
     end
-    
     function Ob:setActiveInspector(rInspector)
         if self.rCurInspector ~= rInspector then
             if self.rCurInspector then
@@ -90,10 +71,8 @@ function m.create()
             end
         end
     end
-
     function Ob:onTick(dt)
         local rSelected = g_GuiManager.getSelected()
-        
         if self.rSelected ~= rSelected then
             local objType = ObjectList.getObjType(rSelected)
             if objType == 'Character' then
@@ -109,34 +88,30 @@ function m.create()
             self.rSelected = rSelected
             if not rSelected then
                 g_GuiManager.newSideBar:closeSubmenu()
-                SoundManager.playSfx('degauss')                
+                SoundManager.playSfx('degauss')
             end
         end
         if self.rCurInspector then
             self.rCurInspector:onTick(dt)
         end
     end
-
     function Ob:onFinger(touch, x, y, props)
         local bTouched = false
         if Ob.Parent.onFinger(self, touch, x, y, props) then
             bTouched = true
         end
-        
         if self.rCurInspector and self.rCurInspector:onFinger(touch, x, y, props) then
             bTouched = true
         end
-        
         if not bTouched and props then
             for i, rProp in ipairs(props) do
                 if rProp == self.rLargeBar then
-                    return true -- disallow button presses through the menu
+                    return true
                 end
             end
         end
         return bTouched
     end
-
     function Ob:inside(wx, wy)
         local bHandled = false
         if Ob.Parent.inside(self, wx, wy) then
@@ -149,46 +124,36 @@ function m.create()
         end
         return bHandled
     end
-
     function Ob:onBackButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if g_GuiManager.newSideBar then
 				g_GameRules.completeTutorialCondition('DeselectedThing')
                 g_GuiManager.newSideBar:closeSubmenu()
-                --g_GuiManager.clearSelectionProp()
                 g_GuiManager.setSelected(nil)
                 SoundManager.playSfx('degauss')
             end
         end
-    end   
-
+    end
     function Ob:show(basePri)
         g_GameRules.setUIMode(g_GameRules.MODE_INSPECT)
         return Ob.Parent.show(self, basePri)
     end
-
     function Ob:hide()
         Ob.Parent.hide(self)
         self.rSelected = nil
         self:setActiveInspector(nil)
     end
-
     function Ob:onResize()
         Ob.Parent.onResize(self)
         if self.rCurInspector then
             self.rCurInspector:onResize()
         end
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m
-    

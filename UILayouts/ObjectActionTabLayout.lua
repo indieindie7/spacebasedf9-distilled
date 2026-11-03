@@ -1,7 +1,5 @@
 local Gui = require('UI.Gui')
-
 local nLabelX, nLabelY = 16, -170
-
 return
 {
     posInfo =

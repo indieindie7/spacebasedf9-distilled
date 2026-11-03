@@ -1,10 +1,8 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
-
-return 
+return
 {
     posInfo =
     {
@@ -12,9 +10,9 @@ return
         alignY = 'top',
         offsetX = 0,
         offsetY = 0,
-    },  
+    },
     tElements =
-    {       
+    {
         {
             key = 'Button',
             type = 'onePixelButton',
@@ -86,7 +84,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.WHITE,
             layerOverride = 'UIScrollLayerLeft',
-        },        
+        },
         {
             key = 'ProgressBar',
             type = 'progressBar',

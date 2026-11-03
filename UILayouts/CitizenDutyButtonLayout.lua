@@ -1,10 +1,8 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.1 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
-
-return 
+return
 {
     posInfo =
     {
@@ -15,11 +13,10 @@ return
     },
 	tExtraInfo =
 	{
-		-- padding between buttons
 		nMarginY = 12,
 	},
     tElements =
-    {       
+    {
         {
             key = 'Button',
             type = 'onePixelButton',
@@ -49,7 +46,7 @@ return
                 {
                     key = 'ButtonDescription',
                     color = {0,0,0},
-                },                
+                },
                 {
                     playSfx = 'hilight',
                 },
@@ -57,7 +54,7 @@ return
             onHoverOff =
             {
                 {
-                    key = 'StarBG',  
+                    key = 'StarBG',
                     hidden = true
                 },
                 {
@@ -75,9 +72,9 @@ return
                 {
                     key = 'ButtonDescription',
                     color = Gui.AMBER,
-                },                
+                },
             },
-        },  
+        },
         {
             key = 'StarBG',
             type = 'onePixel',
@@ -95,7 +92,7 @@ return
             scale = { 1, 1 },
             color = Gui.AMBER,
             layerOverride = 'UIScrollLayerLeft',
-        },   
+        },
         {
             key = 'DutyButtonLabelBG',
             type = 'uiTexture',
@@ -105,7 +102,7 @@ return
             scale = { 1, 1 },
             color = Gui.AMBER_OPAQUE,
             layerOverride = 'UIScrollLayerLeft',
-        },        
+        },
         {
             key = 'ButtonLabel',
             type = 'textBox',
@@ -130,8 +127,6 @@ return
             color = Gui.AMBER,
             layerOverride = 'UIScrollLayerLeft',
         },
-             
-        -- prop labels
         {
             key = 'PropDescription',
             type = 'textBox',
@@ -144,7 +139,6 @@ return
             color = Gui.AMBER,
             layerOverride = 'UIScrollLayerLeft',
         },
-        --duty icon
         {
             key = 'DutyIcon',
             type = 'uiTexture',
@@ -164,7 +158,7 @@ return
             scale = { 1.25, 1.25 },
             color = { 0, 0, 0},
             hidden = false,
-        },      
+        },
         {
             key = 'NumText',
             type = 'textBox',

@@ -1,23 +1,17 @@
 local Gui = require('UI.Gui')
-
 local nButtonWidth, nButtonHeight  = 286, 98
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 110, -68
-
 local nScrollAreaTopMargin = 160
-
 local nZoneButtonX = 16
 local nHeadingY = 110
 local nHeadingHeight = 90
 local nHeadingLineWidth = 4
-
 local nZoneHeadingWidth = 402
 local nProjectHeadingX = nZoneHeadingWidth + nZoneButtonX + 4
 local nProjectHeadingWidth = 480
-
 local nProjectTabY = 48
 local nProjectTabScale = 1.25
-
-return 
+return
 {
     posInfo =
         {
@@ -47,7 +41,6 @@ return
             key = 'ZoneScrollPane',
             type = 'scrollPane',
             pos = { 0, -nScrollAreaTopMargin },
-			-- { upper left X, upper left Y, lower right X, lower right Y }
             rect = { 0, 0, 925, 'g_GuiManager.getUIViewportSizeY() - 192' },
             scissorLayerName='UIScrollLayerLeft',
         },
@@ -79,7 +72,6 @@ return
                 { key = 'BackHotkey', color = Gui.AMBER, },
             },
         },
-		-- back button / research heading
         {
             key = 'BackLabel',
             type = 'textBox',
@@ -113,7 +105,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- zone select heading
         {
             key = 'ZoneHeadingShade',
             type = 'onePixel',
@@ -139,7 +130,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- project select heading
         {
             key = 'ProjectHeadingShade',
             type = 'onePixel',
@@ -165,7 +155,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- tech/disease project tabs
         {
             key = 'TechTabButton',
             type = 'templateButton',
@@ -196,6 +185,6 @@ return
             pos = { 1000 + (172 * nProjectTabScale * 2) - 5, -nProjectTabY - (42 * nProjectTabScale) + 3},
             scale = { 515, 4 },
             color = Gui.AMBER,
-        },		
+        },
     },
 }

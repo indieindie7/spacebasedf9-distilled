@@ -1,10 +1,8 @@
 local Geo = {}
-
 Geo.vertexFormat = MOAIVertexFormat.new()
 Geo.vertexFormat:declareCoord(1, MOAIVertexFormat.GL_FLOAT, 3)
 Geo.vertexFormat:declareUV(2, MOAIVertexFormat.GL_FLOAT, 2)
 Geo.vertexFormat:declareColor(3, MOAIVertexFormat.GL_UNSIGNED_BYTE)
-
 local DFSchema = require('DFCommon.DFSchema')
 Geo.rGeometrySchema = DFSchema.object(
     {
@@ -31,14 +29,10 @@ Geo.rGeometrySchema = DFSchema.object(
     },
     "A geometry definition."
 )
-
 Geo.rSchema = DFSchema.object(
     {
-        -- Editable data
         tDefaultGeometry = Geo.rGeometrySchema,
         tFrameGeometry = DFSchema.table(Geo.rGeometrySchema, "A table of frame-specific geometry overrides."),
-        
-        -- Generated data
         tVertices = DFSchema.array(
             DFSchema.object(
                 {
@@ -61,12 +55,10 @@ Geo.rSchema = DFSchema.object(
     },
     "A geometry object definition."
 )
-
 function Geo.load(sDataPath)
 	local rGeo = Geo.new( dofile(sDataPath) )
 	return rGeo
 end
-
 function Geo.new(tData)
     local self = {}
     setmetatable(self, { __index = Geo })
@@ -82,7 +74,6 @@ function Geo.new(tData)
     end
     return self
 end
-
 function Geo:createBuffers()
     local vb = MOAIVertexBuffer.new()
     vb:setFormat(Geo.vertexFormat)
@@ -94,15 +85,13 @@ function Geo:createBuffers()
         vb:writeColor32(1, 1, 1, 1)
     end
     vb:bless()
-    
     local ib = MOAIIndexBuffer.new()
     ib:reserve(#self.tData.tIndices)
     for i, index in ipairs(self.tData.tIndices) do
         ib:setIndex(i, index)
-    end    
+    end
     return vb, ib
 end
-
 function Geo:getGeometry(frame)
     if self.tData.tFrameGeometry then
         local tGeometry = self.tData.tFrameGeometry[frame]
@@ -112,7 +101,6 @@ function Geo:getGeometry(frame)
     end
     return self.tData.tDefaultGeometry
 end
-
 function Geo:getIndexRange(frame)
     if self.tData.tFrameIndexRanges then
         local tRange = self.tData.tFrameIndexRanges[frame]
@@ -122,37 +110,14 @@ function Geo:getIndexRange(frame)
     end
     return unpack(self.tData.tDefaultIndexRange)
 end
-
 function Geo:getPoint(pointIndex)
     local container, index = self:_getContainer(pointIndex)
     return unpack(container[index])
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function Geo:polygon(pointIndex)
     local container, index = self:_getContainer(pointIndex)
     return container
 end
-
-
-
-
-
-
-
-
 function Geo:closestPoint(frame, u, v)
     local closestPolygon = nil
     local closestNegativePoly = nil
@@ -190,7 +155,6 @@ function Geo:closestPoint(frame, u, v)
     end
     return { frame, closestPolygon, closestNegativePoly, closestPoint }, closestPointDistSq
 end
-
 function Geo:closestSegment(frame, u, v)
     local closestPolygon = nil
     local closestNegativePoly = nil
@@ -240,9 +204,8 @@ function Geo:closestSegment(frame, u, v)
     if closestPolygon == nil then
         return
     end
-    return { frame, closestPolygon, closestNegativePoly, closestSegment }, closestPointDistSq    
+    return { frame, closestPolygon, closestNegativePoly, closestSegment }, closestPointDistSq
 end
-
 function Geo:triangulate()
     self.tData.tVertices = {}
     self.tData.tIndices = {}
@@ -252,23 +215,16 @@ function Geo:triangulate()
         self.tData.tFrameIndexRanges[frame] = { self:_triangulateGeometry(frame, tGeometry) }
     end
 end
-
 function Geo:_triangulateGeometry(frame, tGeometry)
     local rangeStart = #self.tData.tIndices + 1
     self.tTempIndexMap = {}
     for polyIndex, tPolygon in ipairs(tGeometry.tPolygons) do
-    
-        -- Gather up the vertices contained in this polygon, computing the
-        -- area as we go so that we can determine the winding of each part
         local tIndices = {}
         local tWindings = {}
         local tPolygonMonotoneEdges = {}
         local tVisitedIndices = {}
-        
         local tPrev = {}
         local tNext = {}
-        
-        -- Accumulate all of the exterior points
         local exteriorArea = 0
         local exteriorCount = #tPolygon.tExteriorPoints
         local last = { frame, polyIndex, 0, exteriorCount }
@@ -290,8 +246,6 @@ function Geo:_triangulateGeometry(frame, tGeometry)
             prev = vertex
         end
         tWindings[0] = exteriorArea > 0
-        
-        -- Accumulate all of the negative points
         if tPolygon.tNegativePolygons then
             for negativeIndex, tNegativePolygon in ipairs(tPolygon.tNegativePolygons) do
                 local interiorArea = 0
@@ -317,7 +271,6 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                 tWindings[negativeIndex] = interiorArea < 0
             end
         end
-        
         function less(edge, u, v)
             local e0 = edge
             local e1 = tNext[edge]
@@ -330,18 +283,10 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                 return eu < u
             end
         end
-     
-        -- Sort the points from top to bottom
         self:_sortPoints(tIndices)
-        
-        -- Begin sweeping down the vertex list
         local edgeList = {}
         for i, index in ipairs(tIndices) do
             local u, v = self:getPoint(index)
-        
-            -- Todo: this is the slowest part of the algorithm.
-            -- Easy optimization: convert to a binary search to make search O(log(n))
-            -- Harder optimization: store edge list in a binary tree to make search and insertions O(log(n))
             local edgeCursor = 0
             local edgeLess = true
             local edgeLength = #edgeList
@@ -352,30 +297,19 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                     edgeLess = less(edge, u, v)
                 end
             end
-            
-            -- Postcondition: edgeCursor points to the first edge to the right of the point
             local a = edgeList[edgeCursor - 1]
             local b = edgeList[edgeCursor]
-            
-            -- Grab the two neighboring edges to this vertex
             local c = tPrev[index]
             local d = index
-            
-            -- Determine if these edges are below our current vertex
             local cBelow = self:_pointBelow(c, index)
             local dBelow = self:_pointBelow(tNext[d], index)
-            
-            -- Determine if the sort order of the neighbors is flipped
             local dLeft = less(d, self:getPoint(c))
             if dLeft then
                 c, d = d, c
                 cBelow, dBelow = dBelow, cBelow
             end
-
             local negativeIndex = index[3]
             local bWoundCCW = tWindings[negativeIndex]
-
-            -- Case 1: one edge above and one edge below
             if cBelow ~= dBelow then
                 if not cBelow then
                     c, d = d, c
@@ -387,10 +321,7 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                 else
                     table.insert(edgeList, edgeCursor, d)
                 end
-                
-            -- Case 2: both edges below
             elseif cBelow then
-            
                 while self:_pointsEqual(c, a) or self:_pointsEqual(d, a) do
                     edgeCursor = edgeCursor - 1
                     table.remove(edgeList, edgeCursor)
@@ -400,11 +331,7 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                     table.remove(edgeList, edgeCursor)
                     b = edgeList[edgeCursor]
                 end
-            
-                -- Check to see if this is an interior supporting vertex
                 if a and b and dLeft == bWoundCCW then
-                
-                    -- Find the higher point on a
                     local aEnd = tNext[a]
                     local aAbove
                     if self:_pointBelow(a, aEnd) then
@@ -412,8 +339,6 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                     else
                         aAbove = a
                     end
-                    
-                    -- Find the higher point on b
                     local bEnd = tNext[b]
                     local bAbove
                     if self:_pointBelow(b, bEnd) then
@@ -421,9 +346,6 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                     else
                         bAbove = b
                     end
-                    
-                    -- Look at vertices above this one until we find one between a and b
-                    -- that we can connect a diagonal to
                     local target = nil
                     local j = i + 1
                     while not target and j < #tIndices do
@@ -445,14 +367,8 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                         table.insert(tPolygonMonotoneEdges, { index, target })
                     end
                 end
-                                
-            -- Case 3: both edges above
             else
-                -- Check to see if this is an interior supporting vertex (that hasn't
-                -- already been connected by a monotone edge)
                 if not tVisitedIndices[index] and a and b and dLeft ~= bWoundCCW then
-                
-                    -- Find the lower point on a
                     local aEnd = tNext[a]
                     local aBelow
                     if self:_pointBelow(a, aEnd) then
@@ -460,8 +376,6 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                     else
                         aBelow = aEnd
                     end
-                    
-                    -- Find the lower point on b
                     local bEnd = tNext[b]
                     local bBelow
                     if self:_pointBelow(b, bEnd) then
@@ -469,9 +383,6 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                     else
                         bBelow = bEnd
                     end
-                    
-                    -- Look at vertices above this one until we find one between a and b
-                    -- that we can connect a diagonal to
                     local target = nil
                     local j = i - 1
                     while not target and j > 0 do
@@ -491,8 +402,7 @@ function Geo:_triangulateGeometry(frame, tGeometry)
                     if target then
                         table.insert(tPolygonMonotoneEdges, { index, target })
                     end
-                end                
-            
+                end
                 if not self:_pointsEqual(d, a) and not self:_pointsEqual(d, b) then
                     table.insert(edgeList, edgeCursor, d)
                 end
@@ -506,11 +416,9 @@ function Geo:_triangulateGeometry(frame, tGeometry)
     self.tTempIndexMap = nil
     return rangeStart, #self.tData.tIndices
 end
-
 function Geo:_sortPoints(tPoints)
     table.sort(tPoints, function(a, b) return self:_pointBelow(a, b) end)
 end
-
 function Geo:_pointBelow(a, b)
     local au, av = self:getPoint(a)
     local bu, bv = self:getPoint(b)
@@ -519,14 +427,7 @@ function Geo:_pointBelow(a, b)
     end
     return av < bv
 end
-
 function Geo:_findMonotone(tGeometry, tIndices, tNext, tPrev, tWindings, tExtraEdges)
-
-    -- Preconditions:
-    --    tIndices is sorted from lowest point to highest
-    --    tExtraEdges a list of <source, target> pairs of indices
-
-    -- First build an associative map for looking up edges    
     local tEdgeMap = {}
     for _, edgePair in ipairs(tExtraEdges) do
         local source, target = unpack(edgePair)
@@ -539,8 +440,6 @@ function Geo:_findMonotone(tGeometry, tIndices, tNext, tPrev, tWindings, tExtraE
         end
         table.insert(tEdgeMap[target], source)
     end
-        
-    -- Begin traversing
     local tVisitedEdges = {}
     for _, edge in ipairs(tIndices) do
         if not tVisitedEdges[edge] then
@@ -550,7 +449,6 @@ function Geo:_findMonotone(tGeometry, tIndices, tNext, tPrev, tWindings, tExtraE
             else
                 windingDir = -1
             end
-            
             function windingNeighbor(point)
                 if windingDir > 0 then
                     return tNext[point]
@@ -558,27 +456,21 @@ function Geo:_findMonotone(tGeometry, tIndices, tNext, tPrev, tWindings, tExtraE
                     return tPrev[point]
                 end
             end
-            
             local edgeCursor = windingNeighbor(edge)
             local prevCursor = edge
-
             tVisitedEdges[edge] = true
             local tMonotoneVertices = { edge }
-
             while not self:_pointsEqual(edgeCursor, edge) and #tMonotoneVertices < #tIndices do
                 table.insert(tMonotoneVertices, edgeCursor)
                 tBranches = tEdgeMap[edgeCursor]
                 local branchTarget = nil
                 if tBranches then
-                
-                    -- Get the direction of our current edge
                     local bWindUp = self:_pointBelow(prevCursor, edgeCursor)
                     local u0, v0 = self:getPoint(edgeCursor)
                     local u1, v1 = self:getPoint(prevCursor)
                     local du, dv = u1 - u0, v1 - v0
                     local length = math.sqrt(du * du + dv * dv)
                     du, dv = du / length, dv / length
-
                     function getTheta(target)
                         local bu, bv = self:getPoint(target)
                         local bdu, bdv = bu - u0, bv - v0
@@ -592,8 +484,6 @@ function Geo:_findMonotone(tGeometry, tIndices, tNext, tPrev, tWindings, tExtraE
                         end
                         return theta
                     end
-                    
-                    -- Select the branch with the minimum angle (branch closest to our edge)
                     local bestTheta = getTheta(windingNeighbor(edgeCursor))
                     for _, branch in ipairs(tBranches) do
                         if not self:_pointsEqual(branch, edgeCursor) and not self:_pointsEqual(branch, prevCursor) then
@@ -605,7 +495,6 @@ function Geo:_findMonotone(tGeometry, tIndices, tNext, tPrev, tWindings, tExtraE
                         end
                     end
                 end
-
                 prevCursor = edgeCursor
                 if branchTarget then
                     local sourceWinding = tWindings[edgeCursor[3]]
@@ -622,19 +511,11 @@ function Geo:_findMonotone(tGeometry, tIndices, tNext, tPrev, tWindings, tExtraE
             if #tMonotoneVertices > #tIndices then
                 print("Degenerate tesselation loop detected!")
             end
-            
-            -- We've now got a triangle that forms a monotone chain, so triangulate it
             self:_triangulateMonotone(tGeometry, tMonotoneVertices)
-            
         end
     end
-    
 end
-
 function Geo:_triangulateMonotone(tGeometry, tVertices)
-
-    -- The vertices are currently arranged in winding order, so build a connectivity map
-    -- and compute the winding direction
     local tPrev = {}
     local tNext = {}
     local prevVertex = tVertices[#tVertices]
@@ -643,36 +524,20 @@ function Geo:_triangulateMonotone(tGeometry, tVertices)
         tPrev[vertex] = prevVertex
         prevVertex = vertex
     end
-    
-    -- Now sort the vertices bottom to top
     self:_sortPoints(tVertices)
-    
-    -- Set up the initial stack
     local tStack = { tVertices[1], tVertices[2] }
     local index = 3
-    
-    -- Iterate through the remaining vertices, bottom to top
     for index = 3, #tVertices do
         local vertex = tVertices[index]
         local vBottom, vTop = tStack[1], tStack[#tStack]
         local bottomAdjacent = tPrev[vertex] == vBottom or tNext[vertex] == vBottom
         local topAdjacent = tPrev[vertex] == vTop or tNext[vertex] == vTop
-        
-        -- Case 1: vertex is adjacent to the vertex on the bottom of the stack
-        -- but not the vertex on the top
         if bottomAdjacent and not topAdjacent then
-        
-            -- Create a fan with this point as the root from bottom to top
             for i = 1, #tStack - 1 do
                 self:_addTriangle(tGeometry, vertex, tStack[i], tStack[i + 1])
             end
-            
-            -- Clear the stack and push our last edge
             tStack = { vTop, vertex }
-        
-        -- Case 2: vertex is adjacent to the top of the stack but not the bottom
         elseif not bottomAdjacent and topAdjacent then
-            
             function cross(p0, p1, p2)
                 local u0, v0 = self:getPoint(p0)
                 local u1, v1 = self:getPoint(p1)
@@ -681,36 +546,25 @@ function Geo:_triangulateMonotone(tGeometry, tVertices)
                 local bu, bv = u2 - u0, v2 - v0
                 return au * bv - av * bu
             end
-            
             function matchesWinding(p0, p1, p2)
                 local triCross = cross(p1, p0, p2)
                 local bWindUp = self:_pointBelow(tPrev[p2], p2)
                 return (triCross > 0) == bWindUp
             end
-            
-            -- Create a fan with this point as the root from top to bottom
             local i = #tStack
             while i > 1 and matchesWinding(tStack[i - 1], tStack[i], vertex) do
                 self:_addTriangle(tGeometry, tStack[i - 1], tStack[i], vertex)
                 table.remove(tStack, i)
                 i = i - 1
             end
-            
-            -- Push ourselves onto the stack
             table.insert(tStack, vertex)
-
-        -- Case 3: vertex is adjacent to both the top and the bottom (termination case)
         elseif bottomAdjacent and topAdjacent then
-            -- Create a fan with this point as the root from bottom to top
             for i = 1, #tStack - 1 do
                 self:_addTriangle(tGeometry, vertex, tStack[i], tStack[i + 1])
             end
         end
-        
     end
-    
 end
-
 function Geo:_addTriangle(tGeometry, p0, p1, p2)
     local i0, i1, i2 = self.tTempIndexMap[p0], self.tTempIndexMap[p1], self.tTempIndexMap[p2]
     function makeVertex(point)
@@ -738,17 +592,10 @@ function Geo:_addTriangle(tGeometry, p0, p1, p2)
     table.insert(self.tData.tIndices, i1)
     table.insert(self.tData.tIndices, i2)
 end
-
-
-
-
-
-
 function Geo:_pointsEqual(lhs, rhs)
     return lhs and rhs and lhs[1] == rhs[1] and lhs[2] == rhs[2] and lhs[3] == rhs[3] and lhs[4] == rhs[4]
 end
-
-function Geo:_getContainer(pointIndex)    
+function Geo:_getContainer(pointIndex)
     local frame, polyIndex, negativeIndex, point = unpack(pointIndex)
     local tGeometry = self:getGeometry(frame)
     local tPoly = tGeometry.tPolygons[polyIndex]
@@ -756,19 +603,15 @@ function Geo:_getContainer(pointIndex)
         return tPoly.tExteriorPoints, point
     else
         return tPoly.tNegativePolygons[negativeIndex], point
-    end    
+    end
 end
-
 function Geo:_segmentDistSq(u, v, u0, v0, u1, v1)
     local du, dv = u - u0, v - v0
     local vu, vv = u1 - u0, v1 - v0
-    
-    -- Project the vector from uv0 to uv onto v
     local t = (du * vu + dv * vv) / (vu * vu + vv * vv)
     t = math.max(0, math.min(t, 1))
     local u2, v2 = u0 + vu * t, v0 + vv * t
     local vu2, vv2 = u - u2, v - v2
     return vu2 * vu2 + vv2 * vv2
 end
-
 return Geo

@@ -1,11 +1,9 @@
 local Gui = require('UI.Gui')
-
 local nButtonWidth, nButtonHeight  = 418, 98
 local nStatLabelMargin, nStatTextMargin  = 35, 210
 local nStatsStartY = 0
 local nLineSize = 40
 local nInspectorWidth = 418
-
 return
 {
     posInfo =
@@ -21,7 +19,6 @@ return
     },
     tElements =
     {
-		-- flavor text, eg manual excerpts, customer reviews, etc
         {
             key = 'FlavorText',
             type = 'textBox',

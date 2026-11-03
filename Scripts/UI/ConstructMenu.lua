@@ -1,22 +1,16 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local CommandObject = require('Utility.CommandObject')
 local SoundManager = require('SoundManager')
-
 local sUILayoutFileName = 'UILayouts/ConstructMenuLayout'
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
-
     function Ob:init()
         self:processUIInfo(sUILayoutFileName)
-
         self.rCancelButton = self:getTemplateElement('CancelButton')
         self.rEraseButton = self:getTemplateElement('EraseButton')
-
         self.rAreaButton = self:getTemplateElement('AreaButton')
         self.rWallButton = self:getTemplateElement('WallButton')
         self.rFloorButton = self:getTemplateElement('FloorButton')
@@ -29,7 +23,6 @@ function m.create()
 		self.rPendingCostDisplay = self:getTemplateElement('PendingCost')
         self.rSelectionHighlight = self:getTemplateElement('SelectionHighlight')
         self.rCostText = self:getTemplateElement('CostText')
-
         self.rCancelButton:addPressedCallback(self.onCancelButtonPressed, self)
         self.rEraseButton:addPressedCallback(self.onBuildTypeButtonPressed, self)
         self.rAreaButton:addPressedCallback(self.onBuildTypeButtonPressed, self)
@@ -39,7 +32,6 @@ function m.create()
         self.rVaporizeButton:addPressedCallback(self.onBuildTypeButtonPressed, self)
         self.rObjectButton:addPressedCallback(self.onObjectButtonPressed, self)
         self.rConfirmButton:addPressedCallback(self.onConfirmButtonPressed, self)
-
         self.tHotkeyButtons = {}
         self:addHotkey(self:getTemplateElement('CancelHotkey').sText, self.rCancelButton)
         self:addHotkey(self:getTemplateElement('EraseHotkey').sText, self.rEraseButton)
@@ -50,20 +42,15 @@ function m.create()
         self:addHotkey(self:getTemplateElement('DemolishHotkey').sText, self.rDemolishButton)
         self:addHotkey(self:getTemplateElement('ConfirmHotkey').sText, self.rConfirmButton)
         self:addHotkey(self:getTemplateElement('ObjectHotkey').sText, self.rObjectButton)
-
         self.sBuildCostLabel = g_LM.line("BUILDM017TEXT")
         self.sVaporizeLabel = g_LM.line("BUILDM021TEXT")
         self.sDemolishLabel = g_LM.line("BUILDM018TEXT")
         self.sUndoLabel = g_LM.line("BUILDM019TEXT")
-
         self:setMatterCostVisible(false)
     end
-
     function Ob:addHotkey(sKey, rButton)
         sKey = string.lower(sKey)
-    
         local keyCode = -1
-    
         if sKey == "esc" then
             keyCode = 27
         elseif sKey == "ret" or sKey == "ent" then
@@ -74,19 +61,13 @@ function m.create()
             keyCode = 8
         else
             keyCode = string.byte(sKey)
-            
-            -- also store the uppercase version because hey why not
             local uppercaseKeyCode = string.byte(string.upper(sKey))
             self.tHotkeyButtons[uppercaseKeyCode] = rButton
         end
-    
         self.tHotkeyButtons[keyCode] = rButton
     end
-    
-    -- returns true if key was handled
     function Ob:onKeyboard(key, bDown)
         local bHandled = false
-
         if not self.rSubmenu then
             if bDown and self.tHotkeyButtons[key] then
                 local rButton = self.tHotkeyButtons[key]
@@ -94,22 +75,17 @@ function m.create()
                 bHandled = true
             end
         end
-        
         if not bHandled and self.rSubmenu and self.rSubmenu.onKeyboard then
             bHandled = self.rSubmenu:onKeyboard(key, bDown)
         end
-        
         return bHandled
     end
-    
     function Ob:setModeSelected(rModeButton)
         for k,v in pairs(self.tHotkeyButtons) do
             v:setSelected(false)
         end
-        --if self.rCurModeButton then self.rCurModeButton:setSelected(false) end
         self.rCurModeButton = rModeButton
         if rModeButton then
-            --self.rSelectionHighlight:setVisible(true)
             if rModeButton == self.rAreaButton then
                 g_GameRules.setUIMode(g_GameRules.MODE_BUILD_ROOM)
             elseif rModeButton == self.rWallButton then
@@ -123,14 +99,11 @@ function m.create()
             elseif rModeButton == self.rEraseButton then
                 g_GameRules.setUIMode(g_GameRules.MODE_CANCEL_COMMAND, CommandObject.CANCEL_PARAM_BUILD)
             end
-            --local x, y = self.rCurModeButton:getLoc()
             self.rCurModeButton:setSelected(true)
-            --self.rSelectionHighlight:setLoc(x, y)
         else
             self.rSelectionHighlight:setVisible(false)
         end
     end
-
     function Ob:onCancelButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if g_GuiManager.newSideBar then
@@ -140,14 +113,12 @@ function m.create()
             end
         end
     end
-
     function Ob:onBuildTypeButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
-            self:setModeSelected(rButton)            
+            self:setModeSelected(rButton)
             SoundManager.playSfx('select')
         end
     end
-
     function Ob:onConfirmButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if g_GuiManager.newSideBar then
@@ -158,25 +129,21 @@ function m.create()
             end
         end
     end
-	
     function Ob:onObjectButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             g_GuiManager.newSideBar:openSubmenu(g_GuiManager.newSideBar.rObjectMenu)
         end
-    end    
-
+    end
     function Ob:show(basePri)
         local nPri = Ob.Parent.show(self, basePri)
         self:setModeSelected(nil)
         return nPri
     end
-
     function Ob:hide()
         Ob.Parent.hide(self)
         self:setModeSelected(nil)
         g_GameRules.setUIMode(g_GameRules.MODE_INSPECT)
     end
-
     function Ob:setMatterCostVisible(bVisible)
         if self.bMatterCostVisible ~= bVisible then
             local sTemplateInfoToApply = nil
@@ -193,7 +160,6 @@ function m.create()
             self.rConfirmButton:setSelected(false)
         end
     end
-
 	function Ob:getMatterCostText()
 		local text = ''
         local sPlus = ''
@@ -201,18 +167,17 @@ function m.create()
         if nPendingBuildCost < 0 then sPlus = '+' else sPlus = '-' end
 		if nPendingBuildCost ~= 0 then
             text = sPlus..(math.abs(nPendingBuildCost))..' '..self.sBuildCostLabel..'\n'
-		end       
+		end
         if CommandObject.pendingVaporizeCost < 0 then sPlus = '+' else sPlus = '-' end
 		if CommandObject.pendingVaporizeCost ~= 0 then
             text = text .. sPlus .. math.abs(CommandObject.pendingVaporizeCost) .. ' ' .. self.sDemolishLabel .. '\n'
-		end        
+		end
         if CommandObject.pendingCancelCost < 0 then sPlus = '+' else sPlus = '-' end
 		if CommandObject.pendingCancelCost ~= 0 then
             text = text .. sPlus .. math.abs(CommandObject.pendingCancelCost) .. ' ' .. self.sUndoLabel
 		end
 		return text
-	end	
-
+	end
     function Ob:onTick(dt)
         local sMatterCostText = self:getMatterCostText()
         if sMatterCostText ~= '' then
@@ -222,15 +187,11 @@ function m.create()
             self:setMatterCostVisible(false)
         end
     end
-  
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

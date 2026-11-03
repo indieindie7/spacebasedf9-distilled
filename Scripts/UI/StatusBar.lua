@@ -1,5 +1,4 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
 local UIElement = require('UI.UIElement')
@@ -12,45 +11,30 @@ local TemplateButton = require('UI.TemplateButton')
 local GameScreen=require('GameScreen')
 local sUILayoutFileName = 'UILayouts/StatusBarLayout'
 local Character = require('Character')
-
-local tMatterCountRateMultiplier = -- needs to be in order of max
+local tMatterCountRateMultiplier =
 {
     { nMax = 500, nCounterMultiplier = 1 },
     { nMax = 1500, nCounterMultiplier = 2 },
     { nMax = 2500, nCounterMultiplier = 4 },
     { nCounterMultiplier = 6 },
 }
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
-
     function Ob:init()
         Ob.Parent.init(self)
-        
         self.sCounterTickSound = 'mattercounter'
         self.nCounterTickIncrement = 2
         self.nCounterTickMult = 1
-        
         self.nextCharacter = 1
-
         self.mix = 1030
         self.cix = 1210
-        --self.style = "gothicSmallTitle"
         self.style = "statusBar"
-
         self.debugText = self:addTextBox("", "nevisSmallTitle",0,0,1000,100,0,-215)
         self.tileTipText = self:addTextBox("", "nevisSmallTitle",0,0,800,100,-240,-115)
-        --self.tileTipText:setString("TEST this is a test there might be a thing here")
-        --self.debugText:setString("SOME debug text asdfasdf")
-        
-        -- counter values that lerp up/down to show change in "real" figure
         self.nMatterCount = g_GameRules:getMatter() or 0
-        
         self.tileTipRefreshTime = 150
         self.tileTipTimeBeforeClear = self.tileTipRefreshTime
-
         self:processUIInfo(sUILayoutFileName)
-
         self.rTimePauseButton = self:getTemplateElement('PauseButton')
         self.rSpeed1Button = self:getTemplateElement('Speed1Button')
         self.rSpeed2Button = self:getTemplateElement('Speed2Button')
@@ -65,11 +49,9 @@ function m.create()
         self.rFlipButton:setButtonName('FlipButton')
         self:addElement(self.rFlipButton)
         self:setElementHidden(self.rFlipButton,true)
-
 		self.rCapacityText = self:getTemplateElement('CapacityText')
 		self.rCapacityIcon = self:getTemplateElement('CapacityIcon')
 		self.rCapacityLabel = self:getTemplateElement('CapacityLabel')
-
         self.rTimePauseButton:addPressedCallback(self.onTimeButtonPressed, self)
         self.rSpeed1Button:addPressedCallback(self.onTimeButtonPressed, self)
         self.rSpeed2Button:addPressedCallback(self.onTimeButtonPressed, self)
@@ -79,21 +61,16 @@ function m.create()
         self.rZoomoutButton:addPressedCallback(self.onZoomButtonPressed, self)
         self.rZoominButton:addPressedCallback(self.onZoomButtonPressed, self)
         self.rFlipButton:addPressedCallback(self.onFlipButtonPressed, self)
-
         self:showFlipZone(false)
         g_GameRules.dGameLoaded:register(function() self.nMatterCount = g_GameRules:getMatter() or 0 end)
     end
-	
     function Ob:setDebugString(str)
         self.debugText:setString(str)
     end
-
     function Ob:setTileTipText(str)
-        --last clicked
         self.tileTipText:setString(g_LM.line("HUDHUD001TEXT").." "..str)
         self.tileTipTimeBeforeClear = self.tileTipRefreshTime
     end
-
     function Ob:checkTileTipTime(dt)
         self.tileTipTimeBeforeClear = self.tileTipTimeBeforeClear - dt
         if self.tileTipTimeBeforeClear < 0 then
@@ -101,7 +78,6 @@ function m.create()
             self.tileTipTimeBeforeClear = self.tileTipRefreshTime
         end
     end
-
     function Ob:onMatterChanged(nNewMatter)
         if nNewMatter then
             local nDelta = math.abs(self.nMatterCount - nNewMatter)
@@ -119,11 +95,9 @@ function m.create()
             end
         end
     end
-
     function Ob:tickMatterCount()
         local nIncrement = self.nCounterTickMult * self.nCounterTickIncrement
         if g_GameRules:getMatter() > self.nMatterCount then
-            -- snap if close enough
             if g_GameRules:getMatter() - self.nMatterCount < nIncrement then
                 self.nMatterCount = g_GameRules:getMatter()
             else
@@ -144,9 +118,7 @@ function m.create()
             return Gui.AMBER
         end
     end
-
     function Ob:onTick(dt)
-        -- update matter count
         if g_GameRules and g_GameRules.bRunning then
             if not self.rMatterText then
                 self.rMatterText = self:getTemplateElement('MatterText')
@@ -155,7 +127,6 @@ function m.create()
                 self.rMatterLabel = self:getTemplateElement('MatterLabel')
             end
             if self.rMatterText and self.rMatterLabel then
-                -- increment # and color over time to clarify change
                 local color = self:tickMatterCount()
                 self.rMatterText:setString(tostring(self.nMatterCount))
                 self.rMatterText:setColor(unpack(color))
@@ -165,7 +136,6 @@ function m.create()
                 local tChars, nNumChars = CharacterManager.getTeamCharacters(Character.TEAM_ID_PLAYER)
 				local nCapacity = g_GameRules:getCapacity()
                 self.rCapacityText:setString(nNumChars.."/"..nCapacity)
-				-- text red if capacity insufficient
 				local color = Gui.AMBER
 				if nNumChars > nCapacity then
 					color = Gui.RED
@@ -193,7 +163,6 @@ function m.create()
         end
         self:checkTileTipTime(dt)
     end
-
     function Ob:onTimeButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if not g_GameRules.bInCutscene then
@@ -221,35 +190,30 @@ function m.create()
             end
         end
     end
-
     function Ob:showFlipZone(bShow)
         if nil == bShow then bShow = true end
         self.bShowFlipZone = bShow
         self.rFlipButton:setLoc(0,-g_GuiManager.getUIViewportSizeY()+152)
         self:setElementHidden(self.rFlipButton,not bShow)
     end
-
     function Ob:onFlipButtonPressed(rButton, eventType)
         if self.bShowFlipZone and eventType == DFInput.TOUCH_UP then
             GameScreen.bFlipProp = not GameScreen.bFlipProp
 			GameRules.completeTutorialCondition('FlippedObject')
         end
     end
-
     function Ob:onOxygenButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             g_GameRules.cycleVisualizer()
 			GameRules.completeTutorialCondition('UsedVizModes')
         end
     end
-
     function Ob:onWallButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             g_GameRules.cycleCutawayMode()
 			GameRules.completeTutorialCondition('UsedVizModes')
         end
     end
-
     function Ob:onZoomButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if rButton == self.rZoomoutButton then
@@ -259,14 +223,12 @@ function m.create()
             end
         end
     end
-
     function Ob:onAlertsExpanded(bExpanded)
         if bExpanded then
-            -- do nothing if alerts won't overlap
             if self.rZoomoutButton and g_GuiManager.alertPane then
                 local x, y = self.rZoomoutButton:getLoc()
                 local alertY = g_GuiManager.alertPane:getMaxY()
-                if alertY > y then -- since negative y
+                if alertY > y then
                     return
                 end
             end
@@ -288,15 +250,11 @@ function m.create()
             end
         end
     end
-    
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

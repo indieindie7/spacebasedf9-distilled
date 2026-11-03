@@ -1,7 +1,5 @@
 local Gui = require('UI.Gui')
-
 local nButtonWidth,nButtonHeight = 31, 31
-
 return
 {
     posInfo =

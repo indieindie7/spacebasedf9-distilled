@@ -1,18 +1,8 @@
 local Gui = require('UI.Gui')
-
-return 
+return
 {
---[[
-    posInfo =
-    {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-    },
-    ]]--
     tElements =
-    {       
+    {
         {
             key = 'UpButton',
             type = 'textureButton',

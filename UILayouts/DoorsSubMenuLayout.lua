@@ -1,12 +1,9 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
-
 local CONSTRUCT_CANCEL = Gui.RED
 local CONSTRUCT_CONFIRM = Gui.GREEN
-
 local nButtonWidth, nButtonHeight  = 430, 81
 local nTextHeight = nButtonHeight + 20
 local nButtonStartY = 278
@@ -19,7 +16,6 @@ local nCancelIconStartY = -82
 local nCancelLabelStartY = -90
 local nCancelHotkeyY = -130
 local nBGWidth = 160
-
 return
 {
     posInfo =
@@ -411,7 +407,7 @@ return
             color = Gui.AMBER,
         },
         {
-            key = 'AirlockHotkey', --now AIRLOCK DOOR
+            key = 'AirlockHotkey',
             type = 'textBox',
             pos = { nHotkeyX, nHotkeyStartY - nButtonHeight },
             text = '2',
@@ -484,7 +480,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- cost submenu
         {
             key = 'CostBackground',
             type = 'onePixel',

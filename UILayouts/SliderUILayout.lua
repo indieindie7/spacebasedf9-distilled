@@ -1,6 +1,5 @@
 local Gui = require('UI.Gui')
-
-return 
+return
 {
     posInfo =
     {
@@ -10,7 +9,7 @@ return
         offsetY = 0,
     },
     tElements =
-    {       
+    {
         {
             key = 'Background',
             type = 'onePixel',

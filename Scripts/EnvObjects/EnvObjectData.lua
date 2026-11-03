@@ -1,7 +1,6 @@
 local Character=require('CharacterConstants')
 local EnvObjectData = {}
 local World=require('WorldConstants')
-
 EnvObjectData.tMenus=
 {
     ALL={ 'Door','Airlock','HeavyDoor','FirePanel','EmergencyAlarm',},
@@ -16,7 +15,6 @@ EnvObjectData.tMenus=
     INFIRMARY={},
     RESEARCH={},
 }
-
 EnvObjectData.tObjects=
 {
     Spawner=
@@ -38,7 +36,7 @@ EnvObjectData.tObjects=
         description='PROPSX095TEXT',
 		bCanBuildInSpace=true,
         noRoom=true,
-        margin=1, -- this margin is a hack: it's to indicate where it will provide power.
+        margin=1,
         width=2,
         height=3,
         noRoom=true,
@@ -63,7 +61,7 @@ EnvObjectData.tObjects=
     },
     Door=
     {
-        layer='worldWall',        
+        layer='worldWall',
         friendlyNameLinecode='PROPSX019TEXT',
         description='PROPSX020TEXT',
         door=true,
@@ -75,8 +73,6 @@ EnvObjectData.tObjects=
         decayPerSecond=0.01,
         maintainJob=Character.TECHNICIAN,
         createJob=Character.BUILDER,
---        spriteName='door_closed',
---        spriteSheetPath='Environments/Tiles/Wall',
         customClass='EnvObjects.Door',
         commandSpriteName='door_closed',
         commandSpriteNameFlipped='door_closed_flip',
@@ -92,7 +88,7 @@ EnvObjectData.tObjects=
     },
     HeavyDoor=
     {
-        layer='worldWall',        
+        layer='worldWall',
         friendlyNameLinecode='PROPSX064TEXT',
         description='PROPSX065TEXT',
         door=true,
@@ -104,8 +100,6 @@ EnvObjectData.tObjects=
         decayPerSecond=0.01,
         maintainJob=Character.TECHNICIAN,
         createJob=Character.BUILDER,
---        spriteName='door_closed',
---        spriteSheetPath='Environments/Tiles/Wall',
         customClass='EnvObjects.HeavyDoor',
         commandSpriteName='door_heavy_closed',
         commandSpriteNameFlipped='door_closed_flip',
@@ -136,8 +130,6 @@ EnvObjectData.tObjects=
         decayPerSecond=0.01,
         maintainJob=Character.TECHNICIAN,
         createJob=Character.BUILDER,
---        spriteName='airlock_door_closed',
---        spriteSheetPath='Environments/Tiles/Wall',
         customClass='EnvObjects.Airlock',
         commandSpriteName='airlock_door_closed',
         commandSpriteNameFlipped='airlock_door_closed_flip',
@@ -202,41 +194,6 @@ EnvObjectData.tObjects=
 		bCanDeactivate = true,
 		sFlavorText = 'OBFLAV022TEXT',
     },
-    --[[
-    ReactorTileGuts=
-    {
-        spriteName='reactor_tileguts',
-        zoneName='POWER',
-        friendlyNameLinecode='PROPSX013TEXT',
-        description='PROPSX014TEXT',
-        width=1,
-        height=1,
-        margin=0,
-        createJob=Character.BUILDER,
-        bBlocksPathing=false,
-        noRoom=true,
-		matterCost=5,        
-        portrait = 'Env_ReactorTileGuts',
-        placeSound = 'placereactortile',
-    },
-    ReactorServerMachine=
-    {
-        spriteName='reactor_server_machine',
-        zoneName='POWER',
-        friendlyNameLinecode='PROPSX015TEXT',
-        description='PROPSX016TEXT',
-        width=1,
-        height=1,
-        margin=0,
-        createJob=Character.BUILDER,
-        bBlocksPathing=false,
-        noRoom=true,
-        againstWall=true,
-		matterCost=5,        
-        portrait = 'Env_Reactor_ServerMachine',
-        placeSound = 'placereactorserver',
-    },
-    ]]--
     FirePanel=
     {
         spriteName='fire_panel',
@@ -266,7 +223,7 @@ EnvObjectData.tObjects=
         width=1,
         height=1,
         margin=0,
-        customClass='EnvObjects.FoodReplicator',        
+        customClass='EnvObjects.FoodReplicator',
         againstWall=true,
         noRoom=true,
         decayPerSecond=0.01,
@@ -323,7 +280,6 @@ EnvObjectData.tObjects=
         createJob=Character.BUILDER,
         bBlocksPathing=true,
 		matterCost=150,
-        -- This gets added to this tile every 1/10 of a second.
         oxygenLevel=50,
         clickSound = 'oxygenrecycler',
         ambientSound = 'oxygenrecyclerloop',
@@ -350,7 +306,6 @@ EnvObjectData.tObjects=
         createJob=Character.BUILDER,
         bBlocksPathing=true,
 		matterCost=250,
-        -- This gets added to this tile every 1/10 of a second.
         oxygenLevel=200,
         clickSound = 'oxygenrecycler',
         ambientSound = 'oxygenrecyclerloop',
@@ -395,7 +350,6 @@ EnvObjectData.tObjects=
     {
         spriteName='airlock_locker',
         customClass='EnvObjects.AirlockLocker',
-        --spriteNameFlipped='airlock_locker_flipped',
         zoneName='AIRLOCK',
         friendlyNameLinecode='ZONEUI040TEXT',
         description='ZONEUI053TEXT',
@@ -425,12 +379,10 @@ EnvObjectData.tObjects=
         width=2,
         height=1,
         margin=1,
-        --decayPerSecond=0.005,
         maintainJob=Character.TECHNICIAN,
         createJob=Character.BUILDER,
         customClass='EnvObjects.Bed',
         bBlocksPathing=true,
-        --inherentActivities={ 'SleepInBed', },
         clickSound = 'spacebed',
         portrait = 'Env_Bed',
 		matterCost=150,
@@ -438,7 +390,6 @@ EnvObjectData.tObjects=
         sidebarIcon = 'icon_bed',
         tAnimOffset = {x=55, y=60},
         tAnimOffsetFlipped = {x=55, y=25},
-        --animDirFlipped = 'E',
         sFlavorText = 'OBFLAV026TEXT',
     },
     Bar=
@@ -506,7 +457,7 @@ EnvObjectData.tObjects=
         placeSound = 'placefridge',
         sidebarIcon = 'icon_fridge',
         bInventory=true,
-        researchPrereq='FridgeLevel2',        
+        researchPrereq='FridgeLevel2',
         nCapacity=50,
         sFunctionality='Fridge',
         GenerateStartingInventory={tWhitelist={'Corn','Pod','Glowfruit'},tRange={0,2},tStackRange={1,7},},
@@ -554,7 +505,7 @@ EnvObjectData.tObjects=
         placeSound = 'placetable',
         sidebarIcon = 'icon_standingtable',
 		sFlavorText = 'OBFLAV005TEXT',
-    },     
+    },
     RefineryDropoff=
     {
         spriteName='refinery',
@@ -570,7 +521,6 @@ EnvObjectData.tObjects=
         maintainJob=Character.TECHNICIAN,
         createJob=Character.BUILDER,
         bBlocksPathing=true,
-        --inherentActivities={ 'DropOffRocks', },
         clickSound = 'spacebed',
         ambientSound = 'refineryloop',
 		matterCost=200,
@@ -597,7 +547,6 @@ EnvObjectData.tObjects=
         maintainJob=Character.TECHNICIAN,
         createJob=Character.BUILDER,
         bBlocksPathing=true,
-        --inherentActivities={ 'DropOffRocks', },
         clickSound = 'spacebed',
         ambientSound = 'refineryloop',
 		matterCost=400,
@@ -626,8 +575,6 @@ EnvObjectData.tObjects=
         portrait = 'Env_Plant_01',
         placeSound = 'placeplant',
         sidebarIcon = 'icon_plant',
-		-- plants generate small amounts of oxygen
-		-- (amount added to tile every 1/10 of a second)
 		oxygenLevel=5,
 		nMoraleScore=3,
 		sFlavorText='OBFLAV015TEXT',
@@ -637,7 +584,6 @@ EnvObjectData.tObjects=
         spriteName='residence_dresser01',
         friendlyNameLinecode='ZONEUI061TEXT',
         description='ZONEUI062TEXT',
-        --zoneName='RESIDENCE',
         width=1,
         height=1,
         margin=0,
@@ -655,8 +601,6 @@ EnvObjectData.tObjects=
         GenerateStartingInventory={bStuff=true,tRange={0,2}},
         tDisplaySlots=
         {
-            --{x=-64,y=50,z=10},
-            --{x=-32,y=64,z=5},
             {x=-155,y=-12,z=10},
             {x=-125,y=3,z=5},
         },
@@ -668,7 +612,6 @@ EnvObjectData.tObjects=
         spriteOffsetXFlipped=15,
         friendlyNameLinecode='PROPSX092TEXT',
         description='PROPSX093TEXT',
-        --zoneName='RESIDENCE',
         width=1,
         height=1,
         margin=0,
@@ -830,7 +773,7 @@ EnvObjectData.tObjects=
         height=1,
         margin=1,
         customClass='EnvObjects.HydroPlant',
-        decayPerSecond=0, -- the planter itself doesn't deteriorate
+        decayPerSecond=0,
         healthDecayPerSecond=0.01,
         maintainJob=Character.BOTANIST,
         createJob=Character.BUILDER,
@@ -839,8 +782,6 @@ EnvObjectData.tObjects=
 		matterCost=150,
         placeSound = 'placehydroplant',
         sidebarIcon = 'icon_plant_tray',
-		-- plants generate small amounts of oxygen
-		-- (amount added to tile every 1/10 of a second)
 		oxygenLevel=10,
 		nMoraleScore=4,
 		sFlavorText = 'OBFLAV034TEXT',
@@ -883,7 +824,6 @@ EnvObjectData.tObjects=
         createJob=Character.BUILDER,
         explodeOnFailure=true,
         bBlocksPathing=true,
-        --inherentActivities={ 'ResearchInLab', },
         clickSound = 'spacebed',
         portrait = 'Env_Research_Desk',
 		matterCost=300,
@@ -939,7 +879,6 @@ EnvObjectData.tObjects=
         bCanFlipY=true,
         noRoom=true,
 		bCanBuildInSpace=true,
-        --decayPerSecond=0.01,
         maintainJob=Character.TECHNICIAN,
         createJob=Character.BUILDER,
         bBlocksPathing=false,
@@ -956,31 +895,6 @@ EnvObjectData.tObjects=
 		sFunctionality='Turret',
 		sFlavorText = 'OBFLAV024TEXT',
     },
-    --[[
-	InteriorTurret=
-    {
-        spriteName='turret_frames0003',
-        spriteOffset=-128,
-        customClass='EnvObjects.Turret',
-        friendlyNameLinecode='PROPSX073TEXT',
-        description='PROPSX074TEXT',
-        width=1,
-        height=1,
-        margin=1,
-        againstWall=true,
-        noRoom=true,
-        --decayPerSecond=0.01,
-        maintainJob=Character.TECHNICIAN,
-        createJob=Character.BUILDER,
-        bBlocksPathing=false,
-        explodeOnFailure=true,
-        clickSound = 'spacebed',
-        portrait = 'Env_TurretExt',
-		matterCost=300,
-        placeSound = 'placebed',
-        sidebarIcon = 'icon_turret_ext',
-    },
-    ]]--
     HospitalBed=
     {
         spriteName='hospital_bed',
@@ -997,7 +911,6 @@ EnvObjectData.tObjects=
         maintainJob=Character.TECHNICIAN,
         createJob=Character.BUILDER,
         bBlocksPathing=true,
-        --inherentActivities={ 'SleepInBed', },
         clickSound = 'spacebed',
         portrait = 'Env_HospitalBed',
 		matterCost=400,
@@ -1019,5 +932,4 @@ EnvObjectData.tAliases=
     pizzaSign='PizzaSign',
     friesSign='FriesSign',
 }
-
 return EnvObjectData

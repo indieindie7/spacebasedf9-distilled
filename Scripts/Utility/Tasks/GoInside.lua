@@ -7,22 +7,17 @@ local Character=require('CharacterConstants')
 local Room=require('Room')
 local Airlock=require('Zones.Airlock')
 local OptionData=require('Utility.OptionData')
-
 local GoInside = Class.create(Task)
-
 local Task=require('Utility.Task')
 local Class=require('Class')
 local Log=require('Log')
-
 local GoInside = Class.create(Task)
-
 GoInside.STAGE_WALK_TO_DOOR = 1
 GoInside.STAGE_WAIT_FOR_OPEN = 2
 GoInside.STAGE_WALK_TO_LOCKER = 3
 GoInside.STAGE_WAIT_FOR_CLOSE = 4
 GoInside.STAGE_WAIT_FOR_FINISHED = 5
 GoInside.STAGE_DROP_OFF = 6
-
 function GoInside:init(rChar,tPromisedNeeds,rActivityOption)
     self.super.init(self,rChar,tPromisedNeeds,rActivityOption)
     self.duration = 5
@@ -34,9 +29,8 @@ function GoInside:init(rChar,tPromisedNeeds,rActivityOption)
     self:setPath(rActivityOption.tBlackboard.tPath)
     self.nStage = GoInside.STAGE_WALK_TO_DOOR
 end
-
 function GoInside:onUpdate(dt)
-    if self.rAirlockZone.bDestroyed then 
+    if self.rAirlockZone.bDestroyed then
         self:interrupt('airlock disappeared.')
         return
     end
@@ -48,20 +42,16 @@ function GoInside:onUpdate(dt)
         self:interrupt('locker disappeared.')
         return
     end
-
     if self.nStage == GoInside.STAGE_WALK_TO_DOOR then
         if self:tickWalk(dt) then
             self.nStage = self.nStage+1
         end
     elseif self.nStage == GoInside.STAGE_WAIT_FOR_OPEN then
         if self.rAirlockZone:canGoOutside() or not self.rChar:spacewalking() then
-            --local x1,y1 = self.rLocker:getLoc()
             local x1,y1 = self.rLocker:getAccessWorldLoc()
             local x0,y0 = self.rChar:getLoc()
             local tPath = x1 and Pathfinder.getPath(x0,y0,x1,y1,self.rChar)
             if not tPath then
-                -- We REALLY don't want to fail here, because the pathing system depends on a functional airlock actually being functional.
-                -- So we'll first try any adjacent tile to the locker, and then if that fails, just a random point in the airlock.
                 x1,y1 = self.rLocker:getLoc()
                 tPath = Pathfinder.getPath(x0,y0,x1,y1,self.rChar,{bPathToNearest=true})
                 if not tPath then
@@ -122,5 +112,4 @@ function GoInside:onUpdate(dt)
         end
     end
 end
-
 return GoInside

@@ -1,24 +1,18 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
 local CitizenLogEntry = require('UI.CitizenLogEntry')
 local UIElement = require('UI.UIElement')
-
 local sUILayoutFileName = 'UILayouts/CitizenLogLayout'
-
-local kMAX_ENTRIES = 20 -- for now
-
+local kMAX_ENTRIES = 20
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.rCitizen = nil
     Ob.tLogEntries = {}
     Ob.bDoRolloverCheck = true
-
     function Ob:init()
         self:processUIInfo(sUILayoutFileName)
         Ob.Parent.init(self)
-
         for i = 1, kMAX_ENTRIES do
             local rLogEntry = CitizenLogEntry.new()
             self:addElement(rLogEntry)
@@ -26,7 +20,6 @@ function m.create()
             table.insert(self.tLogEntries, rLogEntry)
         end
     end
-
     function Ob:onTick(dt)
         self.uiHeight=0
         if self.rCitizen then
@@ -49,11 +42,9 @@ function m.create()
             end
         end
     end
-
     function Ob:setCitizen(rCitizen)
-        self.rCitizen = rCitizen        
+        self.rCitizen = rCitizen
     end
-
     function Ob:setHostileMode(bSet)
         self.bHostileMode = bSet
         if bSet then
@@ -68,15 +59,11 @@ function m.create()
             end
         end
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

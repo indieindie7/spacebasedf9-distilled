@@ -1,11 +1,9 @@
 local Gui = require('UI.Gui')
-
 local nButtonWidth, nButtonHeight  = 418, 98
 local nStatLabelMargin, nStatTextMargin  = 35, 210
 local nStatsStartY = 0
 local nLineSize = 40
 local nInspectorWidth = 418
-
 return
 {
     posInfo =
@@ -26,7 +24,6 @@ return
     },
     tElements =
     {
-		-- alternating tinted backgrounds for every other item
         {
             key = 'BuilderButton',
             type = 'onePixelButton',
@@ -59,7 +56,6 @@ return
 				{ key = 'MaintainerButton', color = Gui.AMBER_OPAQUE_DIM, },
 			},
 		},
-		-- power draw/output
         {
             key = 'PowerIcon',
             type = 'uiTexture',
@@ -90,7 +86,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- build time
         {
             key = 'BuildTimeIcon',
             type = 'uiTexture',
@@ -121,7 +116,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- builder
         {
             key = 'BuilderIcon',
             type = 'uiTexture',
@@ -152,7 +146,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- last maintain time
         {
             key = 'MaintainTimeIcon',
             type = 'uiTexture',
@@ -183,7 +176,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- last maintainer
         {
             key = 'MaintainerIcon',
             type = 'uiTexture',
@@ -214,7 +206,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- contents
         {
             key = 'ContentsIcon',
             type = 'uiTexture',
@@ -223,7 +214,6 @@ return
             pos = { nStatLabelMargin - 30, nStatsStartY - nLineSize * 5 - 6 },
             color = Gui.AMBER,
         },
-		-- contents entry provides its own label - weird/dumb
         {
             key = 'ContentsLabel',
             type = 'textBox',

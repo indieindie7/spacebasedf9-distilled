@@ -1,10 +1,8 @@
 local Gui = require('UI.Gui')
 local LOG_DATE_COLOR = { 0/255, 0/255, 0/255, 0.5 }
 local LOG_TEXT_COLOR = { 0/255, 0/255, 0/255, 1 }
-
 local nButtonWidth, nButtonHeight  = 381, 98
-
-return 
+return
 {
     posInfo =
         {
@@ -31,15 +29,13 @@ return
         },
     },
     tElements =
-    { 
+    {
         {
             key = 'BGButton',
             type = 'onePixelButton',
             pos = { 0, 0 },
             scale = { nButtonWidth, 100 },
             color = Gui.SPACEFACE_FG,
---			color = {0.15, 0.15, 0.15, 0.05},
---            color = Gui.BLACK_NO_ALPHA,
             layerOverride = 'UIScrollLayerLeft',
         },
         {

@@ -12,24 +12,17 @@ local Character = require('CharacterConstants')
 local Topics = require('Topics')
 local Log = require('Log')
 local Profile = require('Profile')
-
-local CharacterManager = 
+local CharacterManager =
 {
     profilerName='CharacterManager',
 }
-
 CharacterManager.bDBGExtendedProfiler = false
-
 local tCharacters
 local tOwnedCharacters
 local tDeadCharacters
 local tDecisionNeededHash
 local tDecisionNeeded
-
-
--- simulation details
 local UPDATES_PER_TICK = 10
-
 function CharacterManager.init()
     tCharacters = {}
     tOwnedCharacters = {}
@@ -40,8 +33,6 @@ function CharacterManager.init()
     CharacterManager.DBG_tCharacters = tCharacters
     CharacterManager.DBG_tOwnedCharacters = tOwnedCharacters
     CharacterManager.DBG_tDeadCharacters = tDeadCharacters
-
-    -- preload anims
     for _, t in pairs(Character.RIG_TYPE) do
         local sAnimFile = t.sAnimPath
         local tAnimations = require(sAnimFile)
@@ -56,27 +47,19 @@ function CharacterManager.init()
             end
         end
     end
-
     for k,v in pairs(Character.JOB_NAMES_CAPS) do
         CharacterManager.tJobCount[k] = 0
-    end    
-    
+    end
     CharacterManager.bFirstTime = true
 end
-
---------------------------------------------------------
--- PUBLIC
---------------------------------------------------------
-
 function CharacterManager.debugDrawRigs()
     if not tCharacters then return end
     for i,v in ipairs(tCharacters) do
         if v.rCurrentRig then
-            v.rCurrentRig:debugDraw(true, true) --, bDebugDrawSubsetBounds, bDebugDrawSubsetNames)
+            v.rCurrentRig:debugDraw(true, true)
         end
     end
 end
-
 function CharacterManager.debugDrawPathing()
 	local rChar = g_GuiManager.getSelectedCharacter()
 	if not rChar then
@@ -84,19 +67,14 @@ function CharacterManager.debugDrawPathing()
 	end
 	rChar:drawDebugPath()
 end
-
 function CharacterManager.addNewCharacter(x,y,tData,nTeam)
     local bGenerateStartingStuff = not tData or not tData.tInventory or (next(tData.tInventory) == nil)
     if bGenerateStartingStuff and tData and tData.bNoStuff then bGenerateStartingStuff = false end
-
     local rChar = CharacterManager.loadCharacter(DFUtil.deepCopy(tData or {}),x,y,nTeam)
-	-- if we're just starting, don't log
     if rChar:isPlayersTeam() and GameRules.elapsedTime > 2 then
         Base.eventOccurred(Base.EVENTS.CitizenJoined, {rReporter=rChar})
-		-- small chance to create a new topic
 		if math.random() < Character.IMMIGRATION_ADD_TOPIC_CHANCE then
 			local category = Topics.getRandomCategory()
-			-- some topics, such as people, shouldn't be auto-generated
 			while not Topics.TopicList[category].bCanGenerateOnImmigration do
 				category = Topics.getRandomCategory()
 			end
@@ -104,30 +82,23 @@ function CharacterManager.addNewCharacter(x,y,tData,nTeam)
 			Print(TT_Info, 'New topic created in category '..category)
 		end
     end
-	-- remember "join date"
 	rChar.tStats.nJoinTime = GameRules.elapsedTime
-	-- add new character to topic list & everyone's affinity map
 	Topics.addTopic('People', rChar.tStats.sUniqueID)
-	-- make this new character like and hate stuff
 	Topics.generateCharacterAffinities(rChar)
     if bGenerateStartingStuff then
         rChar:generateStartingStuff()
     end
     return rChar
 end
-
 function CharacterManager.getCharacters()
     return tCharacters
 end
-
 function CharacterManager.getOwnedCharacters()
     return tOwnedCharacters
 end
-
 function CharacterManager.getDeadCharacters()
     return tDeadCharacters
 end
-
 function CharacterManager.getOwnedCharactersWithTask(sTaskName)
 	local tChars = {}
 	for _,char in pairs(CharacterManager.getOwnedCharacters()) do
@@ -137,8 +108,6 @@ function CharacterManager.getOwnedCharactersWithTask(sTaskName)
 	end
 	return tChars
 end
-
--- Convenience mode, grabs first player-run character.
 function CharacterManager.getPlayerCharacter()
     for _,rChar in ipairs(tOwnedCharacters) do
 		if rChar.tStats.nTeam == Character.TEAM_ID_PLAYER then
@@ -146,7 +115,6 @@ function CharacterManager.getPlayerCharacter()
         end
     end
 end
-
 function CharacterManager.getTeamCharacters(nTeam,bAll)
 	local tChars = {}
     local tSource = (bAll and tCharacters) or tOwnedCharacters
@@ -157,7 +125,6 @@ function CharacterManager.getTeamCharacters(nTeam,bAll)
 	end
 	return tChars,#tChars
 end
-
 function CharacterManager.getHostileCharacters(rAsking)
 	local tHostiles = {}
 	for _,rChar in pairs(tCharacters) do
@@ -167,7 +134,6 @@ function CharacterManager.getHostileCharacters(rAsking)
 	end
 	return tHostiles
 end
-
 function CharacterManager.getCharactersInRange(wx, wy, nMaxRange, tChars)
     nMaxRange = nMaxRange * nMaxRange
 	local tRanges = {}
@@ -180,17 +146,14 @@ function CharacterManager.getCharactersInRange(wx, wy, nMaxRange, tChars)
 	end
     return tRanges
 end
-
 function CharacterManager.getLivingCharactersInRange(wx, wy, nMaxRange)
 	local tChars = CharacterManager.getCharacters()
 	return CharacterManager.getCharactersInRange(wx, wy, nMaxRange, tChars)
 end
-
 function CharacterManager.getHostileCharactersInRange(wx, wy, nMaxRange, rAsking)
 	local tHostiles = CharacterManager.getHostileCharacters(rAsking)
 	return CharacterManager.getCharactersInRange(wx, wy, nMaxRange, tHostiles)
 end
-
 function CharacterManager.updateOwnedCharacters()
     if not tCharacters then
         tCharacters = {}
@@ -207,16 +170,13 @@ function CharacterManager.updateOwnedCharacters()
         end
     end
 end
-
 function CharacterManager._updateJobCounts()
     CharacterManager.tCharsByJob = {}
     for k,v in pairs(Character.JOB_NAMES_CAPS) do
         CharacterManager.tJobCount[k] = 0
         CharacterManager.tCharsByJob[k] = {}
     end
-
     for i,v in ipairs(tOwnedCharacters) do
-        -- let's count ONLY the player owner characters
         if v:isPlayersTeam() then
             local idx = v:getJob()
             CharacterManager.tJobCount[idx] = CharacterManager.tJobCount[idx] + 1
@@ -224,26 +184,20 @@ function CharacterManager._updateJobCounts()
         end
     end
 end
-
-
 function CharacterManager.getOwnedCitizenPopulation()
     tOwnedCharacters = CharacterManager.getOwnedCharacters()
     return #tOwnedCharacters
 end
-
 function CharacterManager.deleteCharacter( rCharacter )
-    CharacterManager.destroyCharacter( rCharacter )    
+    CharacterManager.destroyCharacter( rCharacter )
 	tDeadCharacters[rCharacter] = nil
 	rCharacter:_remove()
 end
-
 function CharacterManager.killCharacter(rCharacterProp, cause, tAdditionalInfo)
     assert(ObjectList.getObjType(rCharacterProp) == ObjectList.CHARACTER)
 	rCharacterProp:unHover()
-    -- let the character know they're being destroyed and have them do a callback
     rCharacterProp:_kill( CharacterManager.destroyCharacter, false, cause, tAdditionalInfo or {})
 	tDeadCharacters[rCharacterProp] = GameRules.elapsedTime
-	-- morale hit if death is non-debug + for a friendly
 	if rCharacterProp.tStats.nTeam ~= Character.TEAM_ID_PLAYER then
 		return
 	end
@@ -254,12 +208,9 @@ function CharacterManager.killCharacter(rCharacterProp, cause, tAdditionalInfo)
 		sOtherID = char.tStats.sUniqueID
 		if sID ~= sOtherID then
 			local tLogData = { sDeceased = sName }
-			-- friend dying = extra bummer :[
             if char:isPlayersTeam() then
                 if rCharacterProp:isPlayersTeam() then
-					-- morale loss on death based on familiarity and affinity
 					local nFamiliarity = math.min(char:getFamiliarity(sID), Character.MORALE_MAX_FAMILIARITY_DEATH)
-					-- negative affinity == 0 bonus
 					local nAffinity = DFMath.clamp(char:getAffinity(sID), 0, Character.MORALE_MAX_AFFINITY_DEATH)
 					local nLossPct = (nFamiliarity * nAffinity) / (Character.MORALE_MAX_FAMILIARITY_DEATH * Character.MORALE_MAX_AFFINITY_DEATH)
 					local nLoss = DFMath.lerp(Character.MORALE_CITIZEN_DIES_MIN, Character.MORALE_CITIZEN_DIES_MAX, nLossPct)
@@ -272,7 +223,7 @@ function CharacterManager.killCharacter(rCharacterProp, cause, tAdditionalInfo)
 				else
 					Log.add(Log.tTypes.DEATH_REACT_ENEMY, char, tLogData)
 				end
-			else --enemy comments
+			else
                 if rCharacterProp:isPlayersTeam() then
 					Log.add(Log.tTypes.DEATH_REACT_RAIDER_TO_CITZ, char, tLogData)
 				else
@@ -282,9 +233,7 @@ function CharacterManager.killCharacter(rCharacterProp, cause, tAdditionalInfo)
 		end
 	end
 end
-
-function CharacterManager.destroyCharacter( rCharacterProp )    
-    -- remove it from our table
+function CharacterManager.destroyCharacter( rCharacterProp )
     for i, rCharacter in ipairs( tCharacters ) do
         if rCharacter == rCharacterProp then
             table.remove( tCharacters, i )
@@ -293,18 +242,15 @@ function CharacterManager.destroyCharacter( rCharacterProp )
     end
     for i, rCharacter in ipairs( tOwnedCharacters ) do
         if rCharacter == rCharacterProp then
-            table.remove( tOwnedCharacters, i )            
+            table.remove( tOwnedCharacters, i )
             break
         end
     end
 end
-
-
 function CharacterManager.shutdown()
     if not tCharacters then
         return
     end
-
     local tKillList = DFUtil.copyi( tCharacters )
     for _,rCharacter in ipairs( tKillList ) do
 		CharacterManager.deleteCharacter( rCharacter )
@@ -314,7 +260,6 @@ function CharacterManager.shutdown()
         tDeadCharacters[rCharacter] = nil
     end
     tKillList = nil
-
     tCharacters = nil
 	tDeadCharacters = nil
 	tOwnedCharacters = nil
@@ -324,35 +269,20 @@ function CharacterManager.shutdown()
     CharacterManager.DBG_tOwnedCharacters = tOwnedCharacters
     CharacterManager.DBG_tDeadCharacters = tDeadCharacters
 end
-
 function CharacterManager.loadCharacter( tData, xOff, yOff, nTeam )
-    --ObjectList.reconstructTagsOnLoad(tData)
 	tData.tStats = tData.tStats or {}
     if nTeam then tData.tStats.nTeam = nTeam end
-    
-    --[[
-    if tData.tInventory then
-        ObjectList.reconstructTagsOnLoad(tData.tInventory)
-    else
-        tData.tInventory = {}
-    end
-    ]]--
-    
     tData.x, tData.y = (tData.x or 0) + (xOff or 0), (tData.y or 0) + (yOff or 0)
     local rCharacter = require('Character').new( tData )
     table.insert( tCharacters, rCharacter )
 	rCharacter:setJob(rCharacter.tStats.nJob, true)
     if rCharacter:isDead() then
-        -- SPECIAL CASE for generating corpses.
-        -- TODO: Will need to fix for derelicts, so they don't decay until the derelict is discovered.
         rCharacter:_kill( CharacterManager.destroyCharacter, true, nil, {})
         rCharacter:playAnim('death_pose')
         tDeadCharacters[rCharacter] = 1
     end
     return rCharacter
 end
-
-
 function CharacterManager.getCharacterByUniqueID( sUniqueID, bExcludeDeadCharacters )
     for _,rCharacter in ipairs( tCharacters ) do
         if rCharacter:getUniqueID() == sUniqueID then
@@ -368,14 +298,8 @@ function CharacterManager.getCharacterByUniqueID( sUniqueID, bExcludeDeadCharact
 	end
     return nil
 end
-
---------------------------------------------------------
--- PRIVATE
---------------------------------------------------------
-
 function CharacterManager.onTick( dt )
     CharacterManager._updateJobCounts()
-
     if CharacterManager.bFirstTime then
         for _,rCharacter in ipairs( tOwnedCharacters ) do
            rCharacter:updateAI(0)
@@ -384,24 +308,18 @@ function CharacterManager.onTick( dt )
         local b= CharacterManager.getCharacterByUniqueID('Kill Bot9')
         g_GuiManager.setSelectedCharacter(b)
     end
-    
     Profile.enterScope("CharacterUpdate")
     for _,rCharacter in ipairs( tOwnedCharacters ) do
        rCharacter:updateAI(dt)
     end
     Profile.leaveScope("CharacterUpdate")
-    
     Profile.enterScope("CharacterMover")
-    -- update all moves (and oxygen, too)
     for k=1, #tOwnedCharacters do
         local rCharacter = tOwnedCharacters[k]
-        
         if not tDecisionNeededHash[rCharacter] and rCharacter:needsNewTask() then
-            -- Double list: hash to avoid dupes, and array to offer FIFO queueing.
             tDecisionNeededHash[rCharacter] = 1
             table.insert(tDecisionNeeded,rCharacter)
         end
-
         rCharacter:updateAnimation(dt)
         if CharacterManager.bDBGExtendedProfiler then
             Profile.enterScope("CharacterLights")
@@ -412,7 +330,6 @@ function CharacterManager.onTick( dt )
         end
     end
     Profile.leaveScope("CharacterMover")
-    
     Profile.enterScope("CharacterSelectTask")
     if #tDecisionNeeded > 0 then
         local rCharDecide = tDecisionNeeded[1]
@@ -423,7 +340,6 @@ function CharacterManager.onTick( dt )
         end
     end
     Profile.leaveScope("CharacterSelectTask")
-    
     Profile.enterScope("CharacterCorpser")
     for rCharacter,_ in pairs(tDeadCharacters) do
         if rCharacter.deathTick then
@@ -432,19 +348,12 @@ function CharacterManager.onTick( dt )
     end
     Profile.leaveScope("CharacterCorpser")
 end
-
---------------------------------------------------------
--- DEBUG
---------------------------------------------------------
-
--- spawns a monster out of this dude's chest, which is a mean thing to do
 function CharacterManager.DBG_spawnMonster()
     local DFInput = require('DFCommon.Input')
     local x,y = DFInput.m_x, DFInput.m_y
     local worldLayer = g_World.getWorldRenderLayer()
     local wx, wy = worldLayer:wndToWorld(x, y)
     local tx, ty = g_World._getTileFromWorld(wx,wy)
-    
     local Malady = require('Malady')
     local rChar = ObjectList.getObjAtTile(tx,ty,ObjectList.CHARACTER)
     if rChar and not rChar:isDead() then
@@ -453,20 +362,15 @@ function CharacterManager.DBG_spawnMonster()
         rChar:diseaseInteraction(nil,tMalady)
     end
 end
-
 function CharacterManager.DBG_addExperience()
     local DFInput = require('DFCommon.Input')
     local x,y = DFInput.m_x, DFInput.m_y
     local worldLayer = g_World.getWorldRenderLayer()
     local wx, wy = worldLayer:wndToWorld(x, y)
     local tx, ty = g_World._getTileFromWorld(wx,wy)
-    
     local rChar = ObjectList.getObjAtTile(tx,ty,ObjectList.CHARACTER)
     if rChar and not rChar:isDead() then
         rChar:DBG_increaseCurrentJobLevel()
     end
 end
-
-
-
 return CharacterManager

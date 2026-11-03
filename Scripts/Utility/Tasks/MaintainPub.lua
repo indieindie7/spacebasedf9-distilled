@@ -7,20 +7,17 @@ local Character=require('Character')
 local DFMath=require('DFCommon.Math')
 local UtilityAI=require('Utility.UtilityAI')
 local MaintainPub = Class.create(Task)
-
 function MaintainPub:init(rChar,tPromisedNeeds,rActivityOption)
     self.super.init(self,rChar,tPromisedNeeds,rActivityOption)
     self.duration = math.random(45,60)
     self.rPub = rActivityOption.tData.rPub
     self:setPath(rActivityOption.tBlackboard.tPath)
 end
-
 function MaintainPub:_idle()
     self.idleTime = DFMath.randomFloat(.5,1.5)
     self.currentTaskIdle = true
     self.rChar:playAnim('breathe')
 end
-
 function MaintainPub:_gatherPubJobs()
     local r = self.rChar:getRoom()
     local tJobs = {}
@@ -28,17 +25,14 @@ function MaintainPub:_gatherPubJobs()
 	    for rProp,_ in pairs(r:getProps()) do
             local tList = rProp:getAvailableActivities()
             for i,rOption in ipairs(tList) do
-                
                 if rOption:getTag(self.rChar,'WorkShift') == true and rOption:getAdvertisedData() and rOption:getTag(self.rChar,'Job') == Character.BARTENDER then
                     table.insert(tJobs, rOption)
                 end
             end
         end
     end
-
     return { {tUtilityOptions=tJobs} }
 end
-
 function MaintainPub:_lookForWork()
     local tGatherers = {MaintainPub={ gatherFn=function() return self:_gatherPubJobs() end } }
     local rNewOption,nNewUtility, logStr = UtilityAI.getBestTask(self.rChar,self.rChar:getCurrentTaskPriority(),true,tGatherers)
@@ -48,7 +42,6 @@ function MaintainPub:_lookForWork()
         return true
     end
 end
-
 function MaintainPub:_walk()
     local r = self.rPub.rRoom
     if not r then
@@ -69,13 +62,11 @@ function MaintainPub:_walk()
         else
             self:interrupt('Character cannot path to random loc.')
             return
-        end    
+        end
     end
 end
-
 function MaintainPub:onUpdate(dt)
     self.duration = self.duration - dt
-
     if self.currentTaskIdle then
         self.idleTime = self.idleTime - dt
         if self.duration < 0 then
@@ -93,5 +84,4 @@ function MaintainPub:onUpdate(dt)
         end
     end
 end
-
 return MaintainPub

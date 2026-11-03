@@ -1,24 +1,18 @@
 local Gui = require('UI.Gui')
-
 local nButtonWidth, nButtonHeight  = 286, 98
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 110, -68
-
 local nScrollAreaTopMargin = 160
 local nRoomScrollerX = 400
-
 local nZoneButtonX = 16
 local nHeadingY = 110
 local nHeadingHeight = 90
 local nHeadingLineWidth = 4
-
 local nZoneHeadingWidth = 402
 local nProjectHeadingX = nZoneHeadingWidth + nZoneButtonX + 4
 local nProjectHeadingWidth = 480
-
 local nProjectTabY = 48
 local nProjectTabScale = 1.25
-
-return 
+return
 {
     posInfo =
         {
@@ -41,7 +35,6 @@ return
             key = 'ZoneScrollPane',
             type = 'scrollPane',
             pos = { nRoomScrollerX, -nScrollAreaTopMargin },
-			-- { upper left X, upper left Y, lower right X, lower right Y }
             rect = { 0, 0, 925, 'g_GuiManager.getUIViewportSizeY() - 192' },
             scissorLayerName='UIScrollLayerLeft',
         },
@@ -66,7 +59,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- zone select heading
         {
             key = 'ZoneHeadingShade',
             type = 'onePixel',

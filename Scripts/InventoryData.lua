@@ -1,14 +1,8 @@
 local Character=require('CharacterConstants')
 local InventoryData = {}
-
-InventoryData.MINE_PICKUP_NAME = 'Rock' -- Actually the template name, not the item name.
+InventoryData.MINE_PICKUP_NAME = 'Rock'
 InventoryData.DEFAULT_SPRITE_SHEET = 'Environments/Objects'
--- every 14.4 seconds (every needs reduce tick)
--- Let's say a favorite item can become totally uninteresting (1->0) after 5 hours of gameplay,
--- e.g. 18000 seconds, e.g. 1250 ticks, so 1/1250. (*20 for aff system)
--- We may want to make this higher, and just flag sentimental items for slower decay individually.
 InventoryData.DEFAULT_AFFINITY_DECAY = .016
-
 InventoryData.tTags=
 {
     Color={
@@ -55,22 +49,10 @@ InventoryData.tTags=
         Hip={ lc='TAGSXX028TEXT', },
     },
 }
-
 InventoryData.sDefaultPickup = 'TransientCrate'
 InventoryData.nDefaultMaxStacks = 20
-
 InventoryData.tTemplates=
 {
-    -- bHeldOnly: can't go into backpack. If in inv must be in hands.
-    -- bDisappearOnDrop: if you drop it it goes poof
-    -- bSatisfier: advertise for HeldItem prereq purposes
-    -- bStuff: is innately desirable to characters, who may choose to collect it and possibly display it if bDisplayable.
-    -- bDisplayable: can be displayed on a shelf.
-    -- Job: If a prereq satisfier, then will only be picked up by characters with this job.
-    --      If a stuff, will be much more attractive to this profession, and less attractive to characters outside the profession.
-    -- bSingleton: don't collect more than one object with this template.
-    
-    -- DISAPPEAR ON DROP + HELD-ONLY
     FryingPan=
     {
         bHeldOnly=true,
@@ -95,8 +77,6 @@ InventoryData.tTemplates=
         sName='PROPSX044TEXT',
         sDesc='PROPSX045TEXT',
     },
-
-    -- HELD-ONLY
     Rock=
     {
         sName='PROPSX023TEXT',
@@ -107,7 +87,6 @@ InventoryData.tTemplates=
         bStackable=true,
         nMaxStacks=6,
         bSatisfier=true,
-		-- tags
 		Texture='Bumpy',
 		Color='Brown',
 		Material='Stone',
@@ -147,8 +126,6 @@ InventoryData.tTemplates=
 		Shape='Square',
 		Material='Steel',
     },
-
-    -- FOOD
     Corn=
     {
         bStackable=true,
@@ -177,11 +154,8 @@ InventoryData.tTemplates=
         bStackable=true,
         Style='Gaudy',
     },
-
-    -- Job Objects. JobObs.
 	ArmorLevel0=
 	{
-        -- Extra bad armor for initial raiders.
         sName='INVOBJ019TEXT',
         sDesc='INVOBJ020TEXT',
         Job=Character.EMERGENCY,
@@ -195,7 +169,6 @@ InventoryData.tTemplates=
 	{
         sName='INVOBJ018TEXT',
         sDesc='INVOBJ021TEXT',
-    
         Job=Character.EMERGENCY,
         sOutfit='Level1',
         bDisappearOnDrop=true,
@@ -207,7 +180,6 @@ InventoryData.tTemplates=
 	{
         sName='INVOBJ015TEXT',
         sDesc='INVOBJ016TEXT',
-    
         Job=Character.EMERGENCY,
         sOutfit='Level2',
         bDisappearOnDrop=true,
@@ -219,7 +191,6 @@ InventoryData.tTemplates=
 	{
         sName='INVOBJ014TEXT',
         sDesc='INVOBJ017TEXT',
-    
         bStuff=true,
         Job=Character.EMERGENCY,
         sOutfit='Level3',
@@ -231,7 +202,6 @@ InventoryData.tTemplates=
 	{
         sName='INVOBJ022TEXT',
         sDesc='INVOBJ023TEXT',
-    
         Job=Character.EMERGENCY,
         bJobTool=true,
         sStance = 'pistol',
@@ -244,7 +214,6 @@ InventoryData.tTemplates=
 	{
         sName='INVOBJ024TEXT',
         sDesc='INVOBJ025TEXT',
-    
         bDisappearOnDrop=true,
         nDamage = 20,
         nRange=18,
@@ -254,7 +223,6 @@ InventoryData.tTemplates=
 	{
         sName='INVOBJ026TEXT',
         sDesc='INVOBJ027TEXT',
-    
         Job=Character.EMERGENCY,
         bJobTool=true,
         sStance = 'rifle',
@@ -267,7 +235,6 @@ InventoryData.tTemplates=
 	{
         sName='INVOBJ028TEXT',
         sDesc='INVOBJ054TEXT',
-    
         bDisappearOnDrop=true,
         Job=Character.EMERGENCY,
         bJobTool=true,
@@ -280,7 +247,6 @@ InventoryData.tTemplates=
 	{
         sName='INVOBJ028TEXT',
         sDesc='INVOBJ055TEXT',
-    
         bStuff=true,
         Job=Character.EMERGENCY,
         tPossibleTags={'Color','Style','Texture'},
@@ -294,7 +260,6 @@ InventoryData.tTemplates=
 	{
         sName='INVOBJ030TEXT',
         sDesc='INVOBJ056TEXT',
-    
         bStuff=true,
         Job=Character.EMERGENCY,
         tPossibleTags={'Color','Style','Texture'},
@@ -304,67 +269,51 @@ InventoryData.tTemplates=
         nRange=18,
         nDamageType = Character.DAMAGE_TYPE.Laser,
 	},
-    -- Stops condition decay on an object for several minutes on maintain.
-    -- See MaintainEnvObject.
     SuperMaintainer=
     {
         sName='INVOBJ031TEXT',
         sDesc='INVOBJ057TEXT',
-    
         bStuff=true,
         Job=Character.TECHNICIAN,
         tPossibleTags={'Color','Style','Texture','Shape'},
         bJobTool=true,
     },
-    -- Slows decay on built objects (see BuildEnvObject); builds at turbo even if level 2 not researched.
     SuperBuilder=
     {
         sName='INVOBJ032TEXT',
         sDesc='INVOBJ058TEXT',
-    
         bStuff=true,
         Job=Character.BUILDER,
         tPossibleTags={'Color','Style','Texture','Shape'},
         bJobTool=true,
     },
-    -- Miner gets more matter when returning a rock to the refinery.
     EfficientMiner=
     {
         sName='INVOBJ033TEXT',
         sDesc='INVOBJ059TEXT',
-    
         bStuff=true,
         Job=Character.MINER,
         tPossibleTags={'Color','Style','Texture','Shape'},
         bJobTool=true,
     },
-    -- Maintains as level 2 without research.
-    -- Also, ages plant on maintain.
     SuperGreenThumb=
     {
         sName='INVOBJ034TEXT',
         sDesc='INVOBJ060TEXT',
-    
         bStuff=true,
         Job=Character.BOTANIST,
         tPossibleTags={'Color','Style','Texture','Shape'},
         bJobTool=true,
     },
-    -- Heals many more HP in field checkup.
-    -- Improves diagnosis success rate in field checkup.
     SuperDoctorTool=
     {
         sName='INVOBJ035TEXT',
         sDesc='INVOBJ061TEXT',
-    
         bStuff=true,
         Job=Character.DOCTOR,
         tPossibleTags={'Color','Style','Texture','Shape'},
         bJobTool=true,
     },
-	--
-    -- DECORATIONS (aka inventory aka things that can go on shelves)
-	--
     AlarmClock=
     {
         bStuff=true,
@@ -664,7 +613,6 @@ InventoryData.tTemplates=
 		tForcedTags={Color='Beige'},
 	},
 }
-
 function InventoryData.recalcStuffNames()
     InventoryData.tStuffNames = {}
     for k,v in pairs(InventoryData.tTemplates) do
@@ -674,5 +622,4 @@ function InventoryData.recalcStuffNames()
     end
 end
 InventoryData.recalcStuffNames()
-
 return InventoryData

@@ -9,20 +9,15 @@ local Room = require('Room')
 local Character = require('Character')
 local CharacterManager = require('CharacterManager')
 local MiscUtil = require('MiscUtil')
-
 HostileDerelictEvent.sEventType = 'hostileDerelictEvents'
-
 function HostileDerelictEvent.getSpawnLocationModifier()
     return Event._getExpMod('derelict') * Event.getHostilityMod(true)
 end
-
 function HostileDerelictEvent.allowEvent(nPopulation, nElapsedTime)
     return not g_Config:getConfigValue('disable_hostiles') and (nPopulation > 4 or GameRules.elapsedTime > 10*60)
 end
-
 function HostileDerelictEvent.getWeight(nPop,nElapsed,bForecast)
     if bForecast then return 10.0 end
-    
     local _,nPlayerRooms,nHiddenRooms = Room.getRoomsOfTeam(Character.TEAM_ID_PLAYER)
     local bAllowDerelict = nHiddenRooms < DerelictEvent.nMaxUndiscoveredRooms
     if bAllowDerelict then
@@ -33,10 +28,8 @@ function HostileDerelictEvent.getWeight(nPop,nElapsed,bForecast)
     end
     return 0
 end
-
 function HostileDerelictEvent.onQueue(rController, tUpcomingEventPersistentState, nPopulation, nElapsedTime)
     tUpcomingEventPersistentState.bHostile=true
     DerelictEvent.onQueue(rController, tUpcomingEventPersistentState, nPopulation, nElapsedTime)
 end
-
 return HostileDerelictEvent

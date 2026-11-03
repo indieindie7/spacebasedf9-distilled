@@ -1,5 +1,4 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local Character = require('Character')
 local UIElement = require('UI.UIElement')
@@ -10,14 +9,10 @@ local GameRules = require('GameRules')
 local ObjectList = require('ObjectList')
 local TemplateButton = require('UI.TemplateButton')
 local BedAssignment=require('UI.BedAssignment')
-
 local sUILayoutFileName = 'UILayouts/CitizenActionTabLayout'
-
 local nButtonRight = 160
-
 local tActionButtonData=
 {
-	-- assign residence
 	{
 		sLayoutFile = 'UILayouts/ActionButtonLayout',
 		sLabelElement = 'ActionLabel',
@@ -33,10 +28,8 @@ local tActionButtonData=
 			local tBedTag = self.rSelected and Base.tCharToBed[self.rSelected.tag]
 			local rBed = tBedTag and ObjectList.getObject(tBedTag)
             local sBed = rBed and rBed:getResidenceString()
-			-- "click to assign"
 			if GameRules.currentMode == GameRules.MODE_PICK and GameRules.currentModeParam.objSubtype == 'Bed' then
 				return g_LM.line('ZONEUI150TEXT')
-			-- unassigned
 			elseif not sBed then
 				return g_LM.line('INSPEC160TEXT')
 			else
@@ -44,7 +37,6 @@ local tActionButtonData=
 			end
 		end,
 		callbackFn=function(self)
-		    -- click while selected = bail out of pick mode
 			if GameRules.currentMode == GameRules.MODE_PICK and GameRules.currentModeParam.objSubtype == 'Bed' then
 				GameRules.setUIMode(GameRules.MODE_INSPECT)
 			else
@@ -57,15 +49,12 @@ local tActionButtonData=
 			end
 		end,
 		nXOverride = nButtonRight,
-		-- weird property to keep *next* element on same Y as this one
 		bNextUsesSameY = true,
 	},
-	-- unassign residence
 	{
 		sLayoutFile = 'UILayouts/CancelButtonLayout',
 		sButtonName = 'CancelButton',
 		buttonStatusFn=function(self)
-			-- only enable when a residence is assigned
 			local tBedTag = self.rSelected and Base.tCharToBed[self.rSelected.tag]
 			if tBedTag then
 				return 'normal'
@@ -76,11 +65,9 @@ local tActionButtonData=
 		callbackFn=function(self)
 			Base.assignBed(self.rSelected, nil)
 		end,
-		-- button width = 160
 		nXOverride = nButtonRight + 160 + 56,
 		nExtraYOffset = 3,
 	},
-	-- go to quarantine
     {
 		sLayoutFile = 'UILayouts/ActionButtonLayout',
 		sLabelElement = 'ActionLabel',
@@ -110,7 +97,6 @@ local tActionButtonData=
         end,
 		nExtraYOffset = 90,
     },
-	-- cuff
 	{
 		sLayoutFile = 'UILayouts/ActionButtonLayout',
 		sLabelElement = 'ActionLabel',
@@ -134,7 +120,6 @@ local tActionButtonData=
 		end,
         bCuffButton=true,
 	},
-	-- execute
 	{
 		sLayoutFile = 'UILayouts/ActionButtonLayout',
 		sLabelElement = 'ActionLabel',
@@ -160,12 +145,10 @@ local tActionButtonData=
 			self.rSelected.tStatus.bMarkedForExecution = not self.rSelected.tStatus.bMarkedForExecution
 		end,
 	},
-	-- assign brig
 	{
 		sLayoutFile = 'UILayouts/ActionButtonLayout',
 		sLabelElement = 'ActionLabel',
 		buttonStatusFn=function(self)
-			-- can't embriggen parasites or killbots :[
 			if self.rSelected.tStats.nRace == Character.RACE_MONSTER or self.rSelected.tStats.nRace == Character.RACE_KILLBOT or self.rSelected:isDead() then
 				return 'disabled'
 			elseif GameRules.currentMode == GameRules.MODE_PICK and GameRules.currentModeParam.objSubtype == 'BRIG' then
@@ -199,12 +182,10 @@ local tActionButtonData=
 		nXOverride = nButtonRight,
 		bNextUsesSameY = true,
 	},
-	-- unassign brig
 	{
 		sLayoutFile = 'UILayouts/CancelButtonLayout',
 		sButtonName = 'CancelButton',
 		buttonStatusFn=function(self)
-			-- only enabled when assigned to brig
 			if self.rSelected.tStatus.tAssignedToBrig then
 				return 'normal'
 			else
@@ -217,20 +198,16 @@ local tActionButtonData=
 			    rBrig.zoneObj:unassignChar(self.rSelected)
             end
 		end,
-		-- button width = 160
 		nXOverride = nButtonRight + 160 + 56,
 		nExtraYOffset = 3,
 	},
 }
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.tButtons = {}
-
     function Ob:init()
         self:processUIInfo(sUILayoutFileName)
         Ob.Parent.init(self)
-
         local x=110
         local y=-40
 		local nButtonMargin = 20
@@ -247,30 +224,25 @@ function m.create()
 			end
             rButton.bCuffButton = tButtonData.bCuffButton
             rButton:setLoc(tButtonData.nXOverride or x, y)
-			-- weird property to keep *next* element on same Y as this one
 			if not tButtonData.bNextUsesSameY then
 				y = y + h - nButtonMargin
 			end
             table.insert(self.tButtons, rButton)
         end
---		self.bBedButtonClicked = false
 		self.bBrigButtonClicked = false
     end
-    
 	function Ob:setCitizen(rCitizen)
         self.rSelected = rCitizen
         for _,rButton in pairs(self.tButtons) do
 			rButton.rSelected = rCitizen
 		end
 	end
-
     function Ob:bedSelected(rBed)
         local rCitizen = self.rSelected
         if rCitizen then
             Base.assignBed(rCitizen,rBed)
         end
     end
-    
     function Ob:brigSelected(rBrig)
         local rCitizen = self.rSelected
         if rCitizen then
@@ -283,14 +255,11 @@ function m.create()
 			end
         end
     end
-    
     function Ob:onTick(dt)
-		-- individual buttons tick their status as defined in behavior data
         for _,rButton in pairs(self.tButtons) do
 			rButton:onTick(dt)
 		end
     end
-	
     function Ob:inside(wx, wy)
         local bInside = Ob.Parent.inside(self, wx, wy)
         for i, rButton in ipairs(self.tButtons) do
@@ -298,15 +267,11 @@ function m.create()
         end
         return bInside
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

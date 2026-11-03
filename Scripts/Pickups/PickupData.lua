@@ -1,6 +1,5 @@
 local Character=require('CharacterConstants')
 local PickupData = {}
-
 PickupData.tObjects=
 {
     Rock=
@@ -42,7 +41,6 @@ PickupData.tObjects=
         tDisplaySlots=
         {
             {x=-140,y=-75,z=10},
---            {x=-145,y=180,z=10},
         },
     },
     CookedMeal=
@@ -126,7 +124,6 @@ PickupData.tObjects=
         portrait = 'Env_BodyBag',
         bLeaveEnvObject=true,
 		bCanDemolish=false,
-		-- dead bodies = icky, makes citizens unhappy
 		nMoraleScore=-20,
 		sCustomCarryAnim='carry_walk_corpse',
 		sCustomBreatheAnim='carry_breathe_corpse',
@@ -136,11 +133,9 @@ PickupData.tObjects=
 		tGroundScale = { 0.5, 0.5 },
     },
 }
-
 for k,v in pairs(PickupData.tObjects) do
     v.bPickup = true
     v.noRoom = true
     v.bInventory = true
 end
-
 return PickupData

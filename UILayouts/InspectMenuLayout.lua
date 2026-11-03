@@ -1,14 +1,11 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
-
 local nButtonWidth, nButtonHeight  = 418, 98
 local nLabelX, nLabelStartY = 105, -228
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 52, -270
-
-return 
+return
 {
     posInfo =
         {
@@ -19,7 +16,7 @@ return
         scale = { 1, 1 },
     },
     tElements =
-    {       
+    {
         {
             key = 'LargeBar',
             type = 'onePixel',
@@ -39,14 +36,14 @@ return
                 {
                     key = 'BackButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'BackButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -57,11 +54,11 @@ return
                 {
                     key = 'BackLabel',
                     color = { 0, 0, 0 },
-                },          
+                },
                 {
                     key = 'BackHotkey',
-                    color = { 0, 0, 0 },                    
-                },                
+                    color = { 0, 0, 0 },
+                },
                 {
                     playSfx = 'hilight',
                 },

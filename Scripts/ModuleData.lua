@@ -1,7 +1,6 @@
 local Character=require('CharacterConstants')
 local MiscUtil=require('MiscUtil')
 local DFUtil = require('DFCommon.Util')
-
 local t=
 {
     editMode=
@@ -22,7 +21,6 @@ local t=
             weight = 1,
         },
     },
-
     asteroidModules=
     {
         asteroid01={weight=1, filename="asteroid01",},
@@ -43,17 +41,14 @@ local t=
         asteroid16={weight=3, filename="asteroid16",},
         asteroid17={weight=2, filename="asteroid17",},
     },
-
     immigrationEvents=
     {
         basicImmigration={},
     },
-	
     hostileImmigrationEvents=
     {
         hostileImmigration={},
     },
-	
     friendlyDerelictEvents=
     {
         tinycross1Friendly={ shipsWithCrew='tinycross1Friendly', weight=1, difficulty=0 },
@@ -75,50 +70,45 @@ local t=
 		monsterFreighter={ shipsWithCrew='monsterFreighter', weight=1, difficulty=0.25 },
 		enemyUFO={ shipsWithCrew='enemyUFO', weight=1, difficulty=0.25 },
 	},
-	
-    -- Can be used in the shipsWithCrew table below.
     characterSpawns={
-        -- FRIENDLIES
         AllRandom={ nFactionBehavior=Character.FACTION_BEHAVIOR.Friendly, },
         Friendly={ nFactionBehavior=Character.FACTION_BEHAVIOR.Friendly, },
         FriendlyNoItems={ nFactionBehavior=Character.FACTION_BEHAVIOR.Friendly, bNoStuff=true },
-        Settler={ 
-            nFactionBehavior=Character.FACTION_BEHAVIOR.Citizen, 
+        Settler={
+            nFactionBehavior=Character.FACTION_BEHAVIOR.Citizen,
             tStatus={bBaseFounder=true,
 					 bImmuneToParasite=true,
 					 nMorale=50},
             tNeeds={Energy=80,Hunger=80},
         },
-        SpacewalkingSettler={ 
-            nFactionBehavior=Character.FACTION_BEHAVIOR.Citizen, 
+        SpacewalkingSettler={
+            nFactionBehavior=Character.FACTION_BEHAVIOR.Citizen,
             tStatus={bSpacewalking=true,
 					 bBaseFounder=true,
 					 bImmuneToParasite=true,
 					 nMorale=50},
             tNeeds={Energy=80,Hunger=80},
         },
-		Spacewalker={ 
-            nFactionBehavior=Character.FACTION_BEHAVIOR.Friendly, 
+		Spacewalker={
+            nFactionBehavior=Character.FACTION_BEHAVIOR.Friendly,
             tStatus={bSpacewalking=true},
         },
-        Human={ 
-            nFactionBehavior=Character.FACTION_BEHAVIOR.Friendly, 
+        Human={
+            nFactionBehavior=Character.FACTION_BEHAVIOR.Friendly,
             tStats={nRace=Character.RACE_HUMAN},
         },
-        Jelly={ 
-            nFactionBehavior=Character.FACTION_BEHAVIOR.Friendly, 
+        Jelly={
+            nFactionBehavior=Character.FACTION_BEHAVIOR.Friendly,
             tStats={nRace=Character.RACE_JELLY},
         },
-
-        -- HOSTILES
-        Monster={ 
+        Monster={
             nFactionBehavior=Character.FACTION_BEHAVIOR.EnemyGroup,
             tStats={
                 nRace = Character.RACE_MONSTER,
                 sName = 'Monster',
             },
         },
-        KillBot={ 
+        KillBot={
             nFactionBehavior=Character.FACTION_BEHAVIOR.EnemyGroup,
             tStats={
                 nRace = Character.RACE_KILLBOT,
@@ -132,8 +122,6 @@ local t=
                 nJob = Character.RAIDER,
             },
         },
-
-        -- CORPSES
         DeadRandom={
 			tStatus={
 				health = Character.STATUS_DEAD,
@@ -141,20 +129,14 @@ local t=
 			},
 		},
     },
-	-- for spawning (envobject and non-envobject) stuff on ships
 	objectSpawns={
 		Datacube={ bInvItem=true, sTemplate='ResearchDatacube' },
 		RandomStuff={ bInvItem=true, },
 		TurretV1={ sTemplate='WallMountedTurret' },
 		TurretV2={ sTemplate='WallMountedTurret2' },
 	},
-	
-    -- file + crew. these layouts are used by derelicts, boarders, etc.
     shipsWithCrew=
     {
-        ----------------------------------------------
-        -- STARTING SHIP LAYOUTS
-        ----------------------------------------------
         easyMode=
         {
             filename="Box",
@@ -166,7 +148,6 @@ local t=
                 Power1={Settler=1},
             },
         },
-		
 		emptySpace=
 		{
 			filename="DeepSpace",
@@ -176,10 +157,6 @@ local t=
                 Citizen3={SpacewalkingSettler=1},
             },
 		},
-
-        ----------------------------------------------
-        -- BOARDING aka docking LAYOUTS
-        ----------------------------------------------
         planeBoardingFriendly=
         {
             filename="lilplane",
@@ -303,10 +280,6 @@ local t=
 				Ext2={TurretV1=1, Nothing=1},
 			},
         },
-
-        ----------------------------------------------
-        -- DERELICT LAYOUTS
-        ----------------------------------------------
         monsterFreighter=
         {
             bHostile=true,
@@ -509,8 +482,6 @@ local t=
 			},
         },
     },
-
-    -- DOCKING
     friendlyDockingEvents=
     {
         planeBoardingFriendly={ shipsWithCrew='planeBoardingFriendly', weight=1, difficulty=0 },
@@ -532,5 +503,4 @@ local t=
         wingshipHostile={ shipsWithCrew='wingshipHostile', weight=1, difficulty=0 },
     },
 }
-
 return t

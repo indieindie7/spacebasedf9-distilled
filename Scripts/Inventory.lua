@@ -7,11 +7,9 @@ local CompoundProp=require('CompoundProp')
 local DFGraphics = require('DFCommon.Graphics')
 local DFUtil=require('DFCommon.Util')
 local Inventory = {}
-
 Inventory.TIME_UNWANTED_BEFORE_INCINERATE_MIN = 60*5
 Inventory.TIME_UNWANTED_BEFORE_INCINERATE_MAX = 60*20
 Inventory.JOB_ITEM_NO_INCINERATE_MULT = 4
-
 function Inventory.dupeItem(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     local tNew=DFUtil.deepCopy(tItem)
@@ -23,14 +21,13 @@ function Inventory.dupeItem(tItem)
     end
     return tNew
 end
-
 function Inventory.getIncinerateBias(tItem)
     if not tItem.nTimeUnwanted then return 0 end
     local nDiff = GameRules.elapsedTime - tItem.nTimeUnwanted
     local nMin = Inventory.TIME_UNWANTED_BEFORE_INCINERATE_MIN
     local nMax = Inventory.TIME_UNWANTED_BEFORE_INCINERATE_MAX
     local _,bJobItem = Inventory.getItemJob(tItem)
-    if bJobItem then 
+    if bJobItem then
         nMin = nMin * Inventory.JOB_ITEM_NO_INCINERATE_MULT
         nMax = nMax * Inventory.JOB_ITEM_NO_INCINERATE_MULT
     end
@@ -38,7 +35,6 @@ function Inventory.getIncinerateBias(tItem)
     nDiff = math.min(nDiff, Inventory.TIME_UNWANTED_BEFORE_INCINERATE_MAX) - Inventory.TIME_UNWANTED_BEFORE_INCINERATE_MIN
     return nDiff / (Inventory.TIME_UNWANTED_BEFORE_INCINERATE_MAX - Inventory.TIME_UNWANTED_BEFORE_INCINERATE_MIN)
 end
-
 function Inventory.allowIncinerate(tItem)
     if tItem.bEligibleForIncinerate then return true end
     local _,bJobItem = Inventory.getItemJob(tItem)
@@ -50,35 +46,30 @@ function Inventory.allowIncinerate(tItem)
     end
     return false
 end
-
 function Inventory.getWeaponData(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     if tItemTemplate then
         return tItemTemplate.nDamage,tItemTemplate.nDamageType,tItemTemplate.nRange,tItemTemplate.sStance
     end
 end
-
 function Inventory.getArmorData(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     if tItemTemplate then
         return tItemTemplate.nDamageReduction, tItemTemplate.nDodgeChance
     end
 end
-
 function Inventory.getItemJob(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     if tItemTemplate then
         return tItemTemplate.Job,tItemTemplate.bJobTool
     end
 end
-
 function Inventory.getOutfitOverride(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     if tItemTemplate and tItemTemplate.sOutfit then
         return tItemTemplate.sOutfit, tItemTemplate.Job
     end
 end
-
 function Inventory.removeItemFromContainer(tContainer,sObjectKey,nCount)
     local tData = tContainer[sObjectKey]
     if tData then
@@ -94,28 +85,23 @@ function Inventory.removeItemFromContainer(tContainer,sObjectKey,nCount)
         end
     end
 end
-
 function Inventory.createRandomStartingStuff()
     local idx = math.random(1,#InventoryData.tStuffNames)
     return Inventory.createItem(InventoryData.tStuffNames[idx])
 end
-
 function Inventory.portFromSave(sKey,tItem)
     if not tItem then return end
-    
     if type(tItem) == 'number' then
-        -- old save
         if sKey and InventoryData.tTemplates[sKey] then
             tItem = Inventory.createItem(sKey, { nCount = tItem })
         else
             tItem = nil
         end
-    elseif tItem.tag and tItem.tag.bInvalid then 
-        return 
+    elseif tItem.tag and tItem.tag.bInvalid then
+        return
     elseif not tItem.tag and tItem.sTemplate then
         if InventoryData.tTemplates[tItem.sTemplate] then
             if InventoryData.tTemplates[tItem.sTemplate].bStackable then
-                -- nothing: stackable items don't get tags
             else
                 tItem = Inventory.createItem(tItem.sName, {nCount = tItem.nCount or 1})
             end
@@ -123,54 +109,42 @@ function Inventory.portFromSave(sKey,tItem)
             tItem = nil
         end
     else
-        -- New save.
-        -- Fall through, allow the other tests to verify the item template still exists.
         assertdev(tItem.sTemplate)
         assertdev(tItem.sName)
         if not tItem.sTemplate or not tItem.sName then tItem = nil end
     end
     if not tItem then return end
-    
     if tItem.tag and tItem.tag.bInvalid then
         assertdev(false)
     end
-    
     if tItem.sTemplate == 'ResearchDatacube' then
         if not tItem.sResearchData then
             return
         end
     end
-    
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     if not tItemTemplate or tItemTemplate.bDisappearOnDrop then return nil end
     if not tItem.nCount then tItem.nCount = 1 end
-    
     if tItemTemplate.sTintSprite and (not tItem.Color or not InventoryData.tTags.Color[tItem.Color]) then
         tItem.Color = MiscUtil.randomKey(InventoryData.tTags.Color)
     end
-    
     return tItem
 end
-
 function Inventory.getSaveTable(tItem)
     if ObjectList.isValidObject(tItem) then return tItem end
 end
-
 function Inventory.getDesc(tItem)
     if tItem.sDesc then return tItem.sDesc end
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     if tItemTemplate.sDesc then return g_LM.line(tItemTemplate.sDesc) end
 end
-
 function Inventory.getFlavorText(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     if tItemTemplate.sFlavorText then return g_LM.line(tItemTemplate.sFlavorText) end
 end
-
 function Inventory.assignOwner(tItem,rOwner)
     tItem.tOwnerTag = ObjectList.getTag(rOwner)
 end
-
 function Inventory.alreadyHasSingleton(tItem,rChar)
     if tItem and rChar and InventoryData.tTemplates[tItem.sTemplate] and InventoryData.tTemplates[tItem.sTemplate].bSingleton then
         for _,tHeldItem in pairs(rChar.tInventory) do
@@ -181,14 +155,12 @@ function Inventory.alreadyHasSingleton(tItem,rChar)
     end
     return false
 end
-
 function Inventory.getOwner(tItem)
     local tOwner = tItem.tOwnerTag
     local rOwner = tOwner and ObjectList.getObject(tOwner)
     if tOwner and not rOwner then tItem.tOwnerTag = nil end
     return rOwner
 end
-
 function Inventory.getPortrait(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     local sSpriteSheet = tItemTemplate.sSpriteSheet or InventoryData.DEFAULT_SPRITE_SHEET
@@ -196,23 +168,20 @@ function Inventory.getPortrait(tItem)
 	if not sSprite and tItemTemplate.tPortraitSprites then
 		sSprite = MiscUtil.randomValue(tItemTemplate.tPortraitSprites)
 	end
-    
     local sTintSprite = tItemTemplate.sTintSprite
     local tColor = tItem.Color and InventoryData.tTags.Color[ tItem.Color ].color
-
     local nPortraitScl,nPortraitOffX,nPortraitOffY,bUsePortraitOffsetHack
-    if tItemTemplate.nPortraitScl ~= nil then 
+    if tItemTemplate.nPortraitScl ~= nil then
         nPortraitScl = tItemTemplate.nPortraitScl
-    --elseif sSpriteSheet == 'Environments/Objects' then 
     else
-        nPortraitScl = 2 
+        nPortraitScl = 2
     end
-    if tItemTemplate.nPortraitOffX ~= nil then 
+    if tItemTemplate.nPortraitOffX ~= nil then
         nPortraitOffX = tItemTemplate.nPortraitOffX
     else
         nPortraitOffX=-200
     end
-    if tItemTemplate.nPortraitOffY ~= nil then 
+    if tItemTemplate.nPortraitOffY ~= nil then
         nPortraitOffY = tItemTemplate.nPortraitOffY
     else
         nPortraitOffY=-240
@@ -222,13 +191,10 @@ function Inventory.getPortrait(tItem)
     else
         bUsePortraitOffsetHack = true
     end
-    
     return sSprite,sSpriteSheet, sTintSprite,tColor,nPortraitScl,nPortraitOffX,nPortraitOffY,bUsePortraitOffsetHack
 end
-
 function Inventory.getDisplaySprite(tItem)
-    if not tItem then return end 
-    
+    if not tItem then return end
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     if not tItemTemplate or not tItemTemplate.bDisplayable then return end
     local sSprite = tItemTemplate.sDisplaySprite or tItemTemplate.sPortraitSprite
@@ -238,12 +204,10 @@ function Inventory.getDisplaySprite(tItem)
     local sSpriteSheet = tItemTemplate.sSpriteSheet or InventoryData.DEFAULT_SPRITE_SHEET
     return sSprite, sSpriteSheet, tItemTemplate.tScl
 end
-
--- per every needs reduce tick, 14.4 seconds
 function Inventory.getAffinityDecay(tItem)
     if tItem.nAffinityDecay then return tItem.nAffinityDecay end
     if InventoryData.tTemplates[tItem.sTemplate] then
-        if InventoryData.tTemplates[tItem.sTemplate].nAffinityDecay then 
+        if InventoryData.tTemplates[tItem.sTemplate].nAffinityDecay then
             return InventoryData.tTemplates[tItem.sTemplate].nAffinityDecay
         end
     end
@@ -251,18 +215,14 @@ function Inventory.getAffinityDecay(tItem)
     if bJobTool then
         return 0
     end
-
     return InventoryData.DEFAULT_AFFINITY_DECAY
 end
-
 function Inventory.createDisplayProps(tItem,bFlipX)
     local sSprite,sSpriteSheet = Inventory.getDisplaySprite(tItem)
     if not sSprite then return end
-    
     local rProp = CompoundProp.new()
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     local sTintSprite = tItemTemplate.sTintSprite
-    --local rSpriteSheet = DFGraphics.loadSpriteSheet(sSpriteSheet, false, false, false)
     rProp:addSprite(sSprite,sSpriteSheet)
     if sTintSprite then
         local rTintProp = rProp:addSprite(sTintSprite,sSpriteSheet)
@@ -274,11 +234,9 @@ function Inventory.createDisplayProps(tItem,bFlipX)
     end
     local sclX,sclY = 1,1
     if bFlipX then sclX=-sclX end
-    rProp:setScl(sclX,sclY) 
-    
+    rProp:setScl(sclX,sclY)
     return rProp
 end
-
 function Inventory.getMaxStacks(itemTableOrTemplateName)
     local sTemplate = itemTableOrTemplateName
     if type(sTemplate) == 'table' then sTemplate = sTemplate.sTemplate end
@@ -286,22 +244,17 @@ function Inventory.getMaxStacks(itemTableOrTemplateName)
     if not tItemTemplate.bStackable then return 1 end
     return tItemTemplate.nMaxStacks or InventoryData.nDefaultMaxStacks
 end
-
 function Inventory.getHeldItemSatisfier(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     if tItemTemplate.bSatisfier then
         return tItem.sTemplate,tItemTemplate.Job
     end
 end
-
 function Inventory.putItemIntoContainer(tContainer,tItem)
     local tContainerTemplate = InventoryData.tTemplates[tContainer.sTemplate]
-    
     assertdev(tContainerTemplate.bContainer)
     if not tContainerTemplate.bContainer then return end
-   
     tItem.tContainer = ObjectList.getTag(tContainer)
-    
         if tContainer.tContents[tItem.sName] then
             local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
             if tItemTemplate.bStackable then
@@ -312,59 +265,43 @@ function Inventory.putItemIntoContainer(tContainer,tItem)
             tContainer.tContents[tItem.sName] = tItem
         end
 end
-
 function Inventory.putItemListIntoContainer(tContainer,tList)
     for k,v in pairs(tList) do
         Inventory.putItemIntoContainer(tContainer,v)
     end
 end
-
 function Inventory.getPickupName(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     return tItemTemplate.Pickup or InventoryData.sDefaultPickup
 end
-
 function Inventory.isStuff(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     return tItemTemplate.bStuff
 end
-
 function Inventory.disappearOnDrop(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     return tItemTemplate.bDisappearOnDrop
 end
-
 function Inventory.heldOnly(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     return tItemTemplate.bHeldOnly
 end
-
-
 function Inventory.createItem(sTemplate, tOverrides)
     local tItem = {sTemplate=sTemplate}
     local tItemTemplate = InventoryData.tTemplates[sTemplate]
-
     tItem.nCount = 1
     if tItemTemplate.bContainer then
         tItem.tContents = {}
     end
-
     if tOverrides then
         for k,v in pairs(tOverrides) do
             tItem[k] = v
         end
     end
-
     if tItemTemplate.bStackable then
-        -- Stackable items are defined entirely by a combo of the tItem table and the tItemTemplate table.
     else
-        -- Unique items contain lots of additional data.
         tItem.tag = ObjectList.addObject(ObjectList.INVENTORYITEM, sTemplate, tItem, nil, false, false, nil, nil, false)
         if tItemTemplate.tPossibleTags then
-			-- pick between 0 and 2 / # of allowed tags
-			-- cap # of tags for name / behavior readability
-			-- eg Teddy Bear, Blue Teddy Bear, Fuzzy Hip Teddy Bear, but NOT
-			-- Punk Yellow Wood Bumpy Teddy Bear
             local nTotalTags = #tItemTemplate.tPossibleTags
 			local nTags = math.min(math.random(0, #tItemTemplate.tPossibleTags),2)
             local tPossible = {}
@@ -378,14 +315,12 @@ function Inventory.createItem(sTemplate, tOverrides)
 				tTags[sTag] = MiscUtil.randomKey(InventoryData.tTags[sTag])
 			end
         end
-		-- populate "forced" tags
 		if tItemTemplate.tForcedTags then
 			for k,v in pairs(tItemTemplate.tForcedTags) do
 				tItem[k] = v
 			end
 		end
     end
-
     if not tItem.sName then
         if tItemTemplate.sName then
             tItem.sName = g_LM.line(tItemTemplate.sName)
@@ -393,17 +328,13 @@ function Inventory.createItem(sTemplate, tOverrides)
             tItem.sName = Inventory._generateName(tItem)
         end
     end
-
     if tItemTemplate.sTintSprite and not tItem.Color then
         tItem.Color = MiscUtil.randomKey(InventoryData.tTags.Color)
     end
-
     assertdev(tItem.sName)
     if not tItem.sName then tItem.sName = '' end
-
     return tItem
 end
-
 function Inventory._generateName(tItem)
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]
     local sName = tItemTemplate.sSuffix
@@ -415,7 +346,6 @@ function Inventory._generateName(tItem)
     end
     local tTags={}
     for k,v in pairs(InventoryData.tTags) do
-		-- exclude tag if intrinsic
         if tItem[k] and (not tItemTemplate.tForcedTags or not tItemTemplate.tForcedTags[k]) then
             table.insert(tTags, {tagName=k, tagValue=tItem[k]})
         end
@@ -427,6 +357,4 @@ function Inventory._generateName(tItem)
 	end
     return sName
 end
-
-
 return Inventory

@@ -1,47 +1,34 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local CommandObject = require('Utility.CommandObject')
 local SoundManager = require('SoundManager')
-
 local sUILayoutFileName = 'UILayouts/MineMenuLayout'
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.rSelectedButton = nil
-
     function Ob:init()
         Ob.Parent.init(self)
-    
         self:processUIInfo(sUILayoutFileName)
-
         self.rMineButton = self:getTemplateElement('MineButton')
         self.rEraseButton = self:getTemplateElement('EraseButton')
         self.rDoneButton = self:getTemplateElement('DoneButton')
         self.rSelectionHighlight = self:getTemplateElement('SelectionHighlight')
         self.rCostText = self:getTemplateElement('CostText')
-
         self.rMineButton:addPressedCallback(self.onMineButtonPressed, self)
         self.rEraseButton:addPressedCallback(self.onEraseButtonPressed, self)
         self.rDoneButton:addPressedCallback(self.onDoneButtonPressed, self)
-        
         self.tHotkeyButtons = {}
         self:addHotkey(self:getTemplateElement('EraseHotkey').sText, self.rEraseButton)
         self:addHotkey(self:getTemplateElement('MineHotkey').sText, self.rMineButton)
         self:addHotkey(self:getTemplateElement('DoneHotkey').sText, self.rDoneButton)
-
         self.sMineLabel = g_LM.line("BUILDM020TEXT")
-
         self:setMatterCostVisible(false)
     end
-
     function Ob:addHotkey(sKey, rButton)
         sKey = string.lower(sKey)
-    
         local keyCode = -1
-    
         if sKey == "esc" then
             keyCode = 27
         elseif sKey == "ret" or sKey == "ent" then
@@ -50,19 +37,13 @@ function m.create()
             keyCode = 32
         else
             keyCode = string.byte(sKey)
-            
-            -- also store the uppercase version because hey why not
             local uppercaseKeyCode = string.byte(string.upper(sKey))
             self.tHotkeyButtons[uppercaseKeyCode] = rButton
         end
-    
         self.tHotkeyButtons[keyCode] = rButton
     end
-    
-    -- returns true if key was handled
     function Ob:onKeyboard(key, bDown)
         local bHandled = false
-
         if not self.rSubmenu then
             if bDown and self.tHotkeyButtons[key] then
                 local rButton = self.tHotkeyButtons[key]
@@ -70,28 +51,23 @@ function m.create()
                 bHandled = true
             end
         end
-        
         if not bHandled and self.rSubmenu and self.rSubmenu.onKeyboard then
             bHandled = self.rSubmenu:onKeyboard(key, bDown)
         end
-        
         return bHandled
     end
-    
     function Ob:onMineButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             self:setModeSelected(self.rMineButton)
             SoundManager.playSfx('select')
         end
     end
-
     function Ob:onEraseButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
-            self:setModeSelected(self.rEraseButton)            
+            self:setModeSelected(self.rEraseButton)
             SoundManager.playSfx('select')
         end
     end
-
     function Ob:onDoneButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
 			g_GameRules.completeTutorialCondition('MineConfirm')
@@ -100,7 +76,6 @@ function m.create()
             SoundManager.playSfx('confirm')
         end
     end
-
     function Ob:setModeSelected(rModeButton)
         if rModeButton then
             self.rCurModeButton = rModeButton
@@ -113,7 +88,6 @@ function m.create()
             self.rSelectionHighlight:setLoc(x, y)
         end
     end
-
     function Ob:setMatterCostVisible(bVisible)
         if self.bMatterCostVisible ~= bVisible then
             local sTemplateInfoToApply = nil
@@ -130,7 +104,6 @@ function m.create()
             self.rDoneButton:setEnabled(true)
         end
     end
-
 	function Ob:getMatterCostText()
 		local text = ''
         local sPlus = ''
@@ -139,8 +112,7 @@ function m.create()
 			text = text .. sPlus .. CommandObject.pendingMineCost .. self.sMineLabel
 		end
 		return text
-	end	
-
+	end
     function Ob:onTick(dt)
         local sMatterCostText = self:getMatterCostText()
         if sMatterCostText ~= '' then
@@ -150,26 +122,20 @@ function m.create()
             self:setMatterCostVisible(false)
         end
     end
-
     function Ob:show(basePri)
         local nPri = Ob.Parent.show(self, basePri)
         self:setModeSelected(self.rMineButton)
         return nPri
     end
-
     function Ob:hide()
         Ob.Parent.hide(self)
         g_GameRules.setUIMode(g_GameRules.MODE_INSPECT)
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

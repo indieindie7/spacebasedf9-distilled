@@ -1,5 +1,4 @@
 local Gui = require('UI.Gui')
-
 local nButtonWidth, nButtonHeight  = 330, 81
 local nTextHeight = nButtonHeight + 20
 local nButtonStartY = -134
@@ -13,7 +12,6 @@ local nDoneHotkeyY = -46
 local nIconScale = .6
 local numButtons = 8
 local nBGWidth = 160
-
 return
 {
     posInfo =
@@ -86,10 +84,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.GREY,
         },
-        --
-        -- fire
-        --
-        --raider breach, raider attack, raider dock, hostile derelict, killbot cube, parasite
         {
             key = 'FireButton',
             type = 'templateButton',

@@ -1,15 +1,11 @@
 local Gui = require('UI.Gui')
-
 local nButtonWidth, nButtonHeight  = 286, 98
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 110, -68
-
 local nScrollAreaTopMargin = 160
-
 local nSortButton1X = 1106
 local nSortButton2X = nSortButton1X + 190
 local nSortButtonY = -80
-
-return 
+return
 {
     posInfo =
         {
@@ -64,7 +60,6 @@ return
                 { key = 'BackHotkey', color = Gui.AMBER, },
             },
         },
-		-- back button / research heading
         {
             key = 'BackLabel',
             type = 'textBox',
@@ -115,7 +110,6 @@ return
             layoutFile = 'UILayouts/ActionButtonLayout',
             replacements = {
                 ActionLabel={linecode='GOALSS012TEXT',
-							 -- nuuudge
 							 pos={0+0-10,0-5}
 				},
 				ActionButtonTexture={textureName='buttontoggle2_left'},

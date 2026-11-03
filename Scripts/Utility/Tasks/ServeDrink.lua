@@ -5,14 +5,10 @@ local Room=require('Room')
 local Log=require('Log')
 local CharacterConstants=require('CharacterConstants')
 local Malady = require('Malady')
-
 local ServeDrink = Class.create(Task)
-
 ServeDrink.emoticon = 'beer'
-
 ServeDrink.DURATION_MIN = 3
 ServeDrink.DURATION_MAX = 5
-
 function ServeDrink:init(rChar,tPromisedNeeds,rActivityOption)
     Task.init(self, rChar, tPromisedNeeds, rActivityOption)
     self.duration = math.random(ServeDrink.DURATION_MIN, ServeDrink.DURATION_MAX)
@@ -21,12 +17,10 @@ function ServeDrink:init(rChar,tPromisedNeeds,rActivityOption)
     self.nBarSlot = rActivityOption.tData.nBarSlot
     self:setPath(rActivityOption.tBlackboard.tPath)
 end
-
 function ServeDrink:onComplete(bSuccess)
     Task.onComplete(self,bSuccess)
 	Log.add(Log.tTypes.DUTY_SERVE_DRINK, self.rChar)
 end
-
 function ServeDrink:onUpdate(dt)
     if self:interacting() then
         if self.bDone then
@@ -44,5 +38,4 @@ function ServeDrink:onUpdate(dt)
         self:attemptInteractWithTile('bartender_mix', self.nBarTX, self.nBarTY, self.duration)
 	end
 end
-
 return ServeDrink

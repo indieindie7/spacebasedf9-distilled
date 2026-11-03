@@ -1,16 +1,12 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
---local Character = require('Character')
 local CharacterManager = require('CharacterManager')
 local Character = require('CharacterConstants')
 local SoundManager = require('SoundManager')
 local Gui = require("UI.Gui")
-
 local sUILayoutFileName = 'UILayouts/JobRosterEntryLayout'
-
 local tJobInfo =
 {
     [Character.BUILDER] = 'Job1',
@@ -100,20 +96,15 @@ local tJobButtonButtonMapping =
     [Character.DOCTOR] = 'Job8Button',
     [Character.UNEMPLOYED] = 'UnassignedJobButton',
 }
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.rCitizen = nil
-
     function Ob:init()
         self:setRenderLayer('UIScrollLayerLeft')
-
         Ob.Parent.init(self)
         self:processUIInfo(sUILayoutFileName)
-
         self.rNameLabel = self:getTemplateElement('NameLabel')
         self.rNameButton = self:getTemplateElement('NameButton')
-
         self.tJobButtons = {}
         for eJob, sElementName in pairs(tJobButtonButtonMapping) do
             local rButton = self:getTemplateElement(sElementName)
@@ -129,12 +120,10 @@ function m.create()
 		for i,_ in pairs(Character.tJobs) do
 			self.tAffIcons[i] = self:getTemplateElement('Job'..i..'Aff')
 		end
-
         self.rActiveJobInfo = self:getExtraTemplateInfo('tActiveJobInfo')
         self:_calcDimsFromElements()
         self.rNameButton:addPressedCallback(self.onNameButtonPressed, self)
     end
-
     function Ob:setJob(eJob)
         if eJob then
             local sInfoKey = tJobInfo[eJob]
@@ -153,7 +142,6 @@ function m.create()
             end
         end
     end
-
     function Ob:onTick(dt)
         if self.rCitizen then
             local eCurJob = self.rCitizen:getJob()
@@ -177,8 +165,6 @@ function m.create()
                 end
             end
             self.eJobAtLastTick = eCurJob
-			-- show affinity
-			-- icons line up with jobs b/c we iterate through the same list as above
 			for i,nJob in pairs(Character.tJobs) do
 				local nAff = self.rCitizen:getJobAffinity(nJob)
 				local sIcon,tColor = self.rCitizen:getAffinityIconAndColor(nAff)
@@ -187,7 +173,6 @@ function m.create()
 			end
         end
     end
-
     function Ob:onJobButtonPressed(rButton, eventType)
         if rButton and self.rCitizen and eventType == DFInput.TOUCH_UP then
             local eJob = self.tJobButtons[rButton]
@@ -197,22 +182,18 @@ function m.create()
             end
         end
     end
-
     function Ob:onNameButtonPressed(rButton, eventType)
         if rButton and self.rCitizen and eventType == DFInput.TOUCH_UP then
             g_GuiManager.setSelected(self.rCitizen)
             g_GuiManager.newSideBar:closeSubmenu()
         end
     end
-
     function Ob:setCitizen(rCitizen)
         self.rCitizen = rCitizen
-
         if rCitizen then
             self.rNameLabel:setString(self.rCitizen:getNiceName())
         end
     end
-
     function Ob:isActive()
         if self.rCitizen then
             return true
@@ -220,15 +201,11 @@ function m.create()
             return false
         end
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

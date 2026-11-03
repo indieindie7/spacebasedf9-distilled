@@ -1,25 +1,21 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
-
 local CONSTRUCT_CANCEL = Gui.RED
 local CONSTRUCT_CONFIRM = Gui.GREEN
-
 local nButtonWidth, nButtonHeight  = 430, 81
 local nButtonStartY = 278
 local nIconX, nIconStartY = 20, -280
 local nLabelX, nLabelStartY =  105, -288
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 112, -330
 local nIconScale = .6
-local numButtons = 7 
+local numButtons = 7
 local nCancelIconStartY = -82
 local nCancelLabelStartY = -90
 local nCancelHotkeyY = -130
 local nBGWidth = 160
-
-return 
+return
 {
     posInfo =
         {
@@ -75,11 +71,11 @@ return
             {
                 key = 'CostText',
                 hidden = true,
-            },            
+            },
         },
-    }, 
+    },
     tElements =
-    {       
+    {
         {
             key = 'LargeBar',
             type = 'onePixel',
@@ -98,14 +94,14 @@ return
                 {
                     key = 'BackButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'BackButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -116,10 +112,10 @@ return
                 {
                     key = 'BackLabel',
                     color = { 0, 0, 0 },
-                },          
+                },
                 {
                     key = 'BackHotkey',
-                    color = { 0, 0, 0 },                    
+                    color = { 0, 0, 0 },
                 },
                 {
                     playSfx = 'hilight',
@@ -189,14 +185,14 @@ return
                 {
                     key = 'CancelIcon',
                     color = { 0, 0, 0 },
-                },   
+                },
                 {
                     key = 'CancelLabel',
                     color = { 0, 0, 0 },
-                },          
+                },
                 {
                     key = 'CancelHotkey',
-                    color = { 0, 0, 0 },                    
+                    color = { 0, 0, 0 },
                 },
                 {
                     playSfx = 'hilight',
@@ -211,7 +207,7 @@ return
                 {
                     key = 'CancelIcon',
                     color = CONSTRUCT_CANCEL,
-                },   
+                },
                 {
                     key = 'CancelLabel',
                     color = CONSTRUCT_CANCEL,
@@ -233,7 +229,7 @@ return
                 {
                     key = 'ConfirmButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
@@ -255,7 +251,7 @@ return
                 {
                     key = 'ConfirmIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'ConfirmHotkey',
                     color = { 0, 0, 0 },
@@ -297,7 +293,7 @@ return
                 {
                     key = 'ConfirmIcon',
                     color = CONSTRUCT_CONFIRM,
-                },  
+                },
                 {
                     key = 'ConfirmHotkey',
                     color = CONSTRUCT_CONFIRM,
@@ -398,14 +394,13 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.RED,
         },
-        -- cost submenu
         {
             key = 'CostBackground',
             type = 'onePixel',
             pos = { nButtonWidth, -nButtonHeight * 2 },
             scale = { nBGWidth, nButtonHeight },
             color = CONSTRUCT_CONFIRM,
-        },    
+        },
         {
             key = 'CostBackgroundEndCap',
             type = 'uiTexture',
@@ -413,7 +408,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth + nBGWidth - 1, -nButtonHeight * 2 },
             color = CONSTRUCT_CONFIRM,
-        },   
+        },
         {
             key = 'CostVerticalRule',
             type = 'uiTexture',
@@ -421,7 +416,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth, -(nButtonHeight * 2) - 4 },
             color = { 0, 0, 0 },
-        },     
+        },
         {
             key = 'CostIconMatter',
             type = 'uiTexture',
@@ -429,7 +424,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth + 10, -(nButtonHeight * 2) - 10 },
             color = { 0, 0, 0 },
-        },   
+        },
         {
             key = 'CostText',
             type = 'textBox',
@@ -447,7 +442,7 @@ return
             textureName = 'ui_hud_anglebottom',
             sSpritesheetPath = 'UI/HUD',
             pos = { 0, -(nButtonStartY + 7*nButtonHeight) + 1 },
-            scale = { 1.68, 1.68 },            
+            scale = { 1.68, 1.68 },
             color = Gui.SIDEBAR_BG,
         },
     }

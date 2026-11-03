@@ -1,13 +1,10 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BLACK = { Gui.BLACK[1], Gui.BLACK[2], Gui.BLACK[3], 1 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
-
 local CONSTRUCT_CANCEL = Gui.RED
 local CONSTRUCT_CONFIRM = Gui.GREEN
-
 local nButtonWidth, nButtonHeight  = 330, 78
 local nButtonStartY = 278
 local nIconX, nIconStartY = 20, -280
@@ -19,8 +16,7 @@ local nCancelIconStartY = -82
 local nCancelLabelStartY = -90
 local nCancelHotkeyY = -130
 local nBGWidth = 160
-
-return 
+return
 {
     posInfo =
         {
@@ -76,11 +72,11 @@ return
             {
                 key = 'CostText',
                 hidden = true,
-            },            
+            },
         },
-    }, 
+    },
     tElements =
-    {       
+    {
         {
             key = 'LargeBar',
             type = 'onePixel',
@@ -99,14 +95,14 @@ return
                 {
                     key = 'BackButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'BackButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -117,10 +113,10 @@ return
                 {
                     key = 'BackLabel',
                     color = { 0, 0, 0 },
-                },          
+                },
                 {
                     key = 'BackHotkey',
-                    color = { 0, 0, 0 },                    
+                    color = { 0, 0, 0 },
                 },
                 {
                     playSfx = 'hilight',
@@ -157,14 +153,14 @@ return
                 {
                     key = 'CancelIcon',
                     color = { 0, 0, 0 },
-                },   
+                },
                 {
                     key = 'CancelLabel',
                     color = { 0, 0, 0 },
-                },          
+                },
                 {
                     key = 'CancelHotkey',
-                    color = { 0, 0, 0 },                    
+                    color = { 0, 0, 0 },
                 },
                 {
                     playSfx = 'hilight',
@@ -179,7 +175,7 @@ return
                 {
                     key = 'CancelIcon',
                     color = CONSTRUCT_CANCEL,
-                },   
+                },
                 {
                     key = 'CancelLabel',
                     color = CONSTRUCT_CANCEL,
@@ -201,7 +197,7 @@ return
                 {
                     key = 'ConfirmButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
@@ -223,7 +219,7 @@ return
                 {
                     key = 'ConfirmIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'ConfirmHotkey',
                     color = { 0, 0, 0 },
@@ -265,7 +261,7 @@ return
                 {
                     key = 'ConfirmIcon',
                     color = CONSTRUCT_CONFIRM,
-                },  
+                },
                 {
                     key = 'ConfirmHotkey',
                     color = CONSTRUCT_CONFIRM,
@@ -303,14 +299,14 @@ return
                 {
                     key = 'AllButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'AllButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -325,7 +321,7 @@ return
                 {
                     key = 'AllIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'AllHotkey',
                     color = { 0, 0, 0 },
@@ -347,7 +343,7 @@ return
                 {
                     key = 'AllIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'AllHotkey',
                     color = Gui.AMBER,
@@ -365,14 +361,14 @@ return
                 {
                     key = 'AirlockButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'AirlockButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -387,7 +383,7 @@ return
                 {
                     key = 'AirlockIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'AirlockHotkey',
                     color = { 0, 0, 0 },
@@ -409,7 +405,7 @@ return
                 {
                     key = 'AirlockIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'AirlockHotkey',
                     color = Gui.AMBER,
@@ -427,14 +423,14 @@ return
                 {
                     key = 'ReactorButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'ReactorButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -449,7 +445,7 @@ return
                 {
                     key = 'ReactorIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'ReactorHotkey',
                     color = { 0, 0, 0 },
@@ -471,7 +467,7 @@ return
                 {
                     key = 'ReactorIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'ReactorHotkey',
                     color = Gui.AMBER,
@@ -489,14 +485,14 @@ return
                 {
                     key = 'GardenButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'GardenButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -511,7 +507,7 @@ return
                 {
                     key = 'GardenIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'GardenHotkey',
                     color = { 0, 0, 0 },
@@ -533,7 +529,7 @@ return
                 {
                     key = 'GardenIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'GardenHotkey',
                     color = Gui.AMBER,
@@ -551,14 +547,14 @@ return
                 {
                     key = 'LifeSupportButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'LifeSupportButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -573,7 +569,7 @@ return
                 {
                     key = 'LifeSupportIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'LifeSupportHotkey',
                     color = { 0, 0, 0 },
@@ -595,7 +591,7 @@ return
                 {
                     key = 'LifeSupportIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'LifeSupportHotkey',
                     color = Gui.AMBER,
@@ -613,14 +609,14 @@ return
                 {
                     key = 'PubButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'PubButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -635,7 +631,7 @@ return
                 {
                     key = 'PubIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'PubHotkey',
                     color = { 0, 0, 0 },
@@ -657,7 +653,7 @@ return
                 {
                     key = 'PubIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'PubHotkey',
                     color = Gui.AMBER,
@@ -675,14 +671,14 @@ return
                 {
                     key = 'RefineryButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'RefineryButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -697,7 +693,7 @@ return
                 {
                     key = 'RefineryIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'RefineryHotkey',
                     color = { 0, 0, 0 },
@@ -719,7 +715,7 @@ return
                 {
                     key = 'RefineryIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'RefineryHotkey',
                     color = Gui.AMBER,
@@ -737,7 +733,7 @@ return
                 {
                     key = 'ResidenceButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
@@ -759,7 +755,7 @@ return
                 {
                     key = 'ResidenceIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'ResidenceHotkey',
                     color = { 0, 0, 0 },
@@ -781,13 +777,13 @@ return
                 {
                     key = 'ResidenceIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'ResidenceHotkey',
                     color = Gui.AMBER,
                 },
             },
-        },		
+        },
         {
             key = 'FitnessButton',
             type = 'onePixelButton',
@@ -799,7 +795,7 @@ return
                 {
                     key = 'FitnessButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
@@ -821,7 +817,7 @@ return
                 {
                     key = 'FitnessIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'FitnessHotkey',
                     color = { 0, 0, 0 },
@@ -861,7 +857,7 @@ return
                 {
                     key = 'ResearchButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
@@ -883,7 +879,7 @@ return
                 {
                     key = 'ResearchIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'ResearchHotkey',
                     color = { 0, 0, 0 },
@@ -923,7 +919,7 @@ return
                 {
                     key = 'InfirmaryButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
@@ -945,7 +941,7 @@ return
                 {
                     key = 'InfirmaryIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'InfirmaryHotkey',
                     color = { 0, 0, 0 },
@@ -1010,17 +1006,6 @@ return
             color = Gui.AMBER,
             scale = { nIconScale, nIconScale},
         },
---[[
-        {
-            key = 'DoorsIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_door',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - (nButtonHeight * 2) },
-            color = Gui.AMBER,
-            scale = { nIconScale, nIconScale},
-        },
-]]--
         {
             key = 'ReactorIcon',
             type = 'uiTexture',
@@ -1116,7 +1101,7 @@ return
         {
             key = 'BackLabel',
             type = 'textBox',
-            pos = { nLabelX, -10 },            
+            pos = { nLabelX, -10 },
             linecode = 'HUDHUD009TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, 400, 0 },
@@ -1150,7 +1135,7 @@ return
             key = 'AllLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY },
-            linecode = 'ZONEUI058TEXT', --all
+            linecode = 'ZONEUI058TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
@@ -1161,31 +1146,18 @@ return
             key = 'AirlockLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY - nButtonHeight },
-            linecode = 'ZONEUI036TEXT', -- airlock
+            linecode = 'ZONEUI036TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
---[[
-        {
-            key = 'DoorsLabel',
-            type = 'textBox',
-            pos = { nLabelX, nLabelStartY - (nButtonHeight * 2) },
-            linecode = 'HUDHUD038TEXT', -- doors
-            style = 'dosisregular40',
-            rect = { 0, 300, nButtonWidth, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-]]--
         {
             key = 'ReactorLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY - (nButtonHeight * 2) },
-            linecode = 'ZONEUI003TEXT', -- reactor
+            linecode = 'ZONEUI003TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
@@ -1196,7 +1168,7 @@ return
             key = 'GardenLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY - (nButtonHeight * 3) },
-            linecode = 'ZONEUI069TEXT', -- doors
+            linecode = 'ZONEUI069TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
@@ -1207,7 +1179,7 @@ return
             key = 'LifeSupportLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY - (nButtonHeight * 4) },
-            linecode = 'ZONEUI001TEXT', -- lifesupport
+            linecode = 'ZONEUI001TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
@@ -1218,7 +1190,7 @@ return
             key = 'PubLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY - (nButtonHeight * 5) },
-            linecode = 'ZONEUI046TEXT', -- pub
+            linecode = 'ZONEUI046TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
@@ -1229,7 +1201,7 @@ return
             key = 'RefineryLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY - (nButtonHeight * 6) },
-            linecode = 'ZONEUI037TEXT', -- refinery
+            linecode = 'ZONEUI037TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
@@ -1240,7 +1212,7 @@ return
             key = 'ResidenceLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY - (nButtonHeight * 7) },
-            linecode = 'ZONEUI042TEXT', -- residence
+            linecode = 'ZONEUI042TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
@@ -1251,7 +1223,7 @@ return
             key = 'FitnessLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY - (nButtonHeight * 8) },
-            linecode = 'ZONEUI109TEXT', -- fitness
+            linecode = 'ZONEUI109TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
@@ -1262,7 +1234,7 @@ return
             key = 'ResearchLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY - (nButtonHeight * 9) },
-            linecode = 'ZONEUI126TEXT', -- research
+            linecode = 'ZONEUI126TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
@@ -1273,7 +1245,7 @@ return
             key = 'InfirmaryLabel',
             type = 'textBox',
             pos = { nLabelX, nLabelStartY - (nButtonHeight * 10) },
-            linecode = 'ZONEUI049TEXT', -- infirmary
+            linecode = 'ZONEUI049TEXT',
             style = 'dosisregular40',
             rect = { 0, 300, nButtonWidth, 0 },
             hAlign = MOAITextBox.LEFT_JUSTIFY,
@@ -1335,19 +1307,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
---[[
-        {
-            key = 'DoorsHotkey',
-            type = 'textBox',
-            pos = { nHotkeyX, nHotkeyStartY - (nButtonHeight * 2) },
-            text = 'D',
-            style = 'dosissemibold22',
-            rect = { 0, 100, 100, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-]]--
         {
             key = 'ReactorHotkey',
             type = 'textBox',
@@ -1455,14 +1414,13 @@ return
             color = SELECTION_AMBER,
             hidden = true,
         },
-        -- cost submenu
         {
             key = 'CostBackground',
             type = 'onePixel',
             pos = { nButtonWidth, -nButtonHeight * 2 },
             scale = { nBGWidth, nButtonHeight },
             color = CONSTRUCT_CONFIRM,
-        },    
+        },
         {
             key = 'CostBackgroundEndCap',
             type = 'uiTexture',
@@ -1470,7 +1428,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth + nBGWidth - 1, -nButtonHeight * 2 },
             color = CONSTRUCT_CONFIRM,
-        },   
+        },
         {
             key = 'CostVerticalRule',
             type = 'uiTexture',
@@ -1478,7 +1436,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth, -(nButtonHeight * 2) - 4 },
             color = { 0, 0, 0 },
-        },     
+        },
         {
             key = 'CostIconMatter',
             type = 'uiTexture',
@@ -1486,7 +1444,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth + 10, -(nButtonHeight * 2) - 10 },
             color = { 0, 0, 0 },
-        },   
+        },
         {
             key = 'CostText',
             type = 'textBox',
@@ -1504,7 +1462,7 @@ return
             textureName = 'ui_hud_anglebottom',
             sSpritesheetPath = 'UI/HUD',
             pos = { 0, -(nButtonStartY + numButtons*nButtonHeight) + 1 },
-            scale = { 1.28, 1.28 },            
+            scale = { 1.28, 1.28 },
             color = Gui.SIDEBAR_BG,
         },
     },

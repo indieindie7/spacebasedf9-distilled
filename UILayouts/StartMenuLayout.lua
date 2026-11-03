@@ -1,16 +1,12 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.BRIGHT_AMBER[1], Gui.BRIGHT_AMBER[2], Gui.BRIGHT_AMBER[3], 1 }
-
 local PAUSESCREEN_BG = { 0, 0, 0, 0.3 }
-
 local nMenuItemsX = 100
 local nMOTDX = -900
 local nLineStartY = 120
 local nLineHeight = 80
-
-return 
+return
 {
     posInfo =
         {
@@ -42,7 +38,6 @@ return
             pos = { -1920/2 - 64, 239 },
             scale = { 2568/64, 1 },
             color = {0, 0, 0, 0.6},
-			--color = Gui.AMBER,
         },
         {
             key = 'MOTDTextBackground',
@@ -165,7 +160,6 @@ return
                 { key = 'ButtonTutorialText', color = Gui.AMBER, },
             },
         },
-
         {
             key = 'ButtonSettings',
             type = 'onePixelButton',
@@ -246,7 +240,6 @@ return
             key = 'ButtonTutorialText',
             type = 'textBox',
             pos = { nMenuItemsX, nLineStartY - nLineHeight*2 },
-			--linecode = 'UIMISC023TEXT',
 			text = 'LEARN TO PLAY',
             style = 'orbitronWhite',
             rect = { 0, 70, 800, 0 },

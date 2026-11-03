@@ -23,9 +23,7 @@ local EnvObject=nil
 local PickupData=nil
 local Room=nil
 local Profile = require('Profile')
-
 local CommandObject = Class.create()
-
 CommandObject.COMMAND_BUILD_TILE=1
 CommandObject.COMMAND_VAPORIZE=2
 CommandObject.COMMAND_MINE=3
@@ -44,20 +42,15 @@ CommandObject.VaporizeCommandSprite='wall_block_temp'
 CommandObject.MineCommandSprite='asteroid01'
 CommandObject.TileCommandSpriteSheet='Environments/Tiles/Wall'
 CommandObject.profilerName = 'CommandObject'
-
 CommandObject.BUILD_PARAM_VAPORIZE = -1
 CommandObject.CANCEL_PARAM_MINE = -2
 CommandObject.CANCEL_PARAM_BUILD = -3
 CommandObject.BUILD_PARAM_DEMOLISH = -4
-
 CommandObject.DEBUG_PROFILE=true
-
--- total matter costs of new, yet-to-be-confirmed construction
 CommandObject.pendingBuildCost = 0
 CommandObject.pendingVaporizeCost = 0
 CommandObject.pendingCancelCost = 0
 CommandObject.pendingMineCost = 0
-
 function countsAsVaporize(commandAction,commandParam,coord)
     if commandAction == CommandObject.COMMAND_VAPORIZE then return true end
     if commandAction == CommandObject.COMMAND_BUILD_TILE then
@@ -65,7 +58,6 @@ function countsAsVaporize(commandAction,commandParam,coord)
     end
     return false
 end
-
 function countsAsDemolish(commandAction,commandParam,coord)
     if commandAction == CommandObject.COMMAND_DEMOLISH then return true end
     if commandAction == CommandObject.COMMAND_BUILD_TILE then
@@ -73,7 +65,6 @@ function countsAsDemolish(commandAction,commandParam,coord)
     end
     return false
 end
-
 function CommandObject._canPerformAt(commandAction, commandParam, coord)
     local validity
     if countsAsVaporize(commandAction,commandParam,coord) then
@@ -83,7 +74,7 @@ function CommandObject._canPerformAt(commandAction, commandParam, coord)
     elseif commandAction == CommandObject.COMMAND_CANCEL then
         local addr = g_World.pathGrid:getCellAddr(coord.x,coord.y)
         local rCommand = CommandObject.tCommands[addr]
-        if rCommand then            
+        if rCommand then
             if commandParam == CommandObject.CANCEL_PARAM_MINE then
                 if rCommand.commandAction == CommandObject.COMMAND_MINE then
                     validity = CommandObject.TILE_VALID
@@ -94,7 +85,7 @@ function CommandObject._canPerformAt(commandAction, commandParam, coord)
                 if rCommand.commandAction ~= CommandObject.COMMAND_MINE then
                     validity = CommandObject.TILE_VALID
                 else
-                    validity = CommandObject.TILE_INVALID                    
+                    validity = CommandObject.TILE_INVALID
                 end
             end
         else
@@ -110,11 +101,11 @@ function CommandObject._canPerformAt(commandAction, commandParam, coord)
             if not coord.buildTileType then
                 coord.buildTileType = commandParam
             end
-            if GameRules.inEditMode then 
-                validity = CommandObject.TILE_VALID             
+            if GameRules.inEditMode then
+                validity = CommandObject.TILE_VALID
             elseif coord.buildTileType == g_World.logicalTiles.WALL then
-                if g_World.canBuildWall(coord.x,coord.y,g_World.logicalTiles.WALL) then 
-                    validity = CommandObject.TILE_VALID 
+                if g_World.canBuildWall(coord.x,coord.y,g_World.logicalTiles.WALL) then
+                    validity = CommandObject.TILE_VALID
                 else
                     validity = CommandObject.TILE_INVALID
                 end
@@ -122,17 +113,15 @@ function CommandObject._canPerformAt(commandAction, commandParam, coord)
                 validity = CommandObject._testBuildFloor(coord.x,coord.y)
             end
     elseif commandAction == CommandObject.COMMAND_BUILD_ENVOBJECT then
-        if GameRules.inEditMode then 
+        if GameRules.inEditMode then
             validity = CommandObject.TILE_VALID
         else
             local bFound = g_World._findPropFit(coord.x, coord.y, commandParam, coord.bFlipX, coord.bFlipY,false,true)
             validity = (bFound and CommandObject.TILE_VALID) or CommandObject.TILE_INVALID
         end
     end
-
     return validity
 end
-
 function CommandObject:init(commandAction,commandParam)
     self.bTemp=true
     self.bValid=true
@@ -142,18 +131,15 @@ function CommandObject:init(commandAction,commandParam)
     self.tInvalidTiles={}
     self.tAffectedTiles={}
 end
-
 function CommandObject:getSaveData()
     local param = self.commandParam
     if ObjectList.isTag(param) then param = ObjectList.getTagSaveData(param) end
     local tData = {commandAction=self.commandAction,commandParam=param}
-    -- strip out spriteProp, etc.
     tData.tTiles = MiscUtil.deepCopyData(self.tTiles)
     tData.tInvalidTiles = MiscUtil.deepCopyData(self.tInvalidTiles)
     tData.tAffectedTiles = MiscUtil.deepCopyData(self.tAffectedTiles)
     return tData
 end
-
 function CommandObject:getMatterCost(sHackParam)
     if self.commandAction == CommandObject.COMMAND_BATCH then
         local cost,items=0,{}
@@ -164,7 +150,6 @@ function CommandObject:getMatterCost(sHackParam)
         end
         return cost,items
     end
-
 	local cost = 0
 	local tTiles = (self.bValid and self.tTiles) or (not self.bValid and self.tInvalidTiles)
 	local tItems = {}
@@ -175,7 +160,6 @@ function CommandObject:getMatterCost(sHackParam)
 	for addr,coord in pairs(tTiles) do
         if self.commandAction == CommandObject.COMMAND_BUILD_ENVOBJECT then
 			tItems.door = tItems.door + 1
-			-- get envobject type, charge for doors
 			if not coord.objectType then
 			elseif coord.objectType == 'Door' then
 				cost = cost + GameRules.MAT_BUILD_DOOR
@@ -186,12 +170,10 @@ function CommandObject:getMatterCost(sHackParam)
 			end
 		elseif self.commandAction == CommandObject.COMMAND_MINE then
 			tItems.mine = tItems.mine + 1
-			-- JPL TODO: get # of rocks present in this tile instead of assuming max
 			local Mine=require('Utility.Tasks.Mine')
 			local nRocks = Inventory.getMaxStacks(InventoryData.MINE_PICKUP_NAME)
 			cost = cost + GameRules.MAT_MINE_ROCK_MIN * nRocks
 		elseif self.commandAction == CommandObject.COMMAND_CANCEL then
-			-- get value of thing being cancelled
 			local tileAddr = g_World.pathGrid:getCellAddr(coord.x, coord.y)
 			local buildCoord = CommandObject.tBuildCmd.tTiles[tileAddr]
 			if buildCoord then
@@ -203,7 +185,7 @@ function CommandObject:getMatterCost(sHackParam)
 					tItems.cancelWall = tItems.cancelWall + 1
 				elseif buildCoord.buildTileType == g_World.logicalTiles.ZONE_LIST_START then
 					tItems.cancelFloor = tItems.cancelFloor + 1
-					cost = cost - GameRules.MAT_BUILD_FLOOR				                    
+					cost = cost - GameRules.MAT_BUILD_FLOOR
 				end
 			end
         elseif countsAsVaporize(self.commandAction,coord.buildTileType) then
@@ -216,13 +198,12 @@ function CommandObject:getMatterCost(sHackParam)
                 local bFloor = g_World.countsAsFloor(tileValue) or g_World.isDoor(tileValue)
                 local bWall = g_World.countsAsWall(tileValue)
 		        if bFloor or bWall then
-                    -- walls count for wall AND floor, since both will be vaped.
 			        tItems.vapeFloor = tItems.vapeFloor + 1
 			        cost = cost - GameRules.MAT_VAPE_FLOOR
                     if bWall then
                         local rObjOnWall = g_World._getEnvObjectOnWall(coord.x, coord.y)
                         if rObjOnWall then
-                            tObjectsToBeVaporizedCost[rObjOnWall] = rObjOnWall:getVaporizeCost()                            
+                            tObjectsToBeVaporizedCost[rObjOnWall] = rObjOnWall:getVaporizeCost()
                         end
                     end
                 end
@@ -235,7 +216,7 @@ function CommandObject:getMatterCost(sHackParam)
             if rObj and not tObjectsToBeVaporizedCost[rObj] then
                 tObjectsToBeVaporizedCost[rObj] = rObj:getVaporizeCost()
             end
-		elseif self.commandAction == CommandObject.COMMAND_BUILD_TILE and 
+		elseif self.commandAction == CommandObject.COMMAND_BUILD_TILE and
                 (coord.buildTileType == CommandObject.BUILD_PARAM_VAPORIZE or coord.buildTileType == CommandObject.BUILD_PARAM_DEMOLISH) then
             if sHackParam ~= 'novaporize' then
                 local rObj = ObjectList.getObjAtTile(coord.x,coord.y,ObjectList.ENVOBJECT)
@@ -266,14 +247,12 @@ function CommandObject:getMatterCost(sHackParam)
     end
 	return cost, tItems
 end
-
 function CommandObject.getDemolishObjectCommand(obj)
     if not obj then return end
     local objTX,objTY = g_World._getTileFromWorld(obj:getLoc())
     local objAddr = g_World.pathGrid:getCellAddr(objTX,objTY)
     local objectDemolishCmd = CommandObject.new(CommandObject.COMMAND_DEMOLISH, obj.tag)
     local tPropTiles = obj:getFootprint()
-
     local bHasChildren=false
     for _,footprintAddr in ipairs(tPropTiles) do
         local footprintTX,footprintTY = g_World.pathGrid:cellAddrToCoord(footprintAddr)
@@ -286,18 +265,14 @@ function CommandObject.getDemolishObjectCommand(obj)
     objectDemolishCmd.tTiles[objAddr].bHasChildren=bHasChildren
     return objectDemolishCmd
 end
-
 function CommandObject._getDemolishCommandsFromDragOperation(commandAction, tTiles, commandParam)
     local tCmds = {}
     local tCmdsByAddr = {}
-
     local rDemolishBaseCmd = CommandObject.new(CommandObject.COMMAND_BUILD_TILE, CommandObject.BUILD_PARAM_DEMOLISH)
     local bInsertedVaporize=false
-
     for addr,coord in pairs(tTiles) do
         local tileValue = g_World._getTileValue(coord.x, coord.y)
         if CommandObject._canPerformAt(commandAction, commandParam, coord) ~= CommandObject.TILE_VALID then
-            -- nothing
         elseif g_World.countsAsWall(tileValue) then
             if not bInsertedVaporize then
                 table.insert(tCmds,rDemolishBaseCmd)
@@ -321,10 +296,8 @@ function CommandObject._getDemolishCommandsFromDragOperation(commandAction, tTil
             end
         end
     end
-
     return tCmds
 end
-
 function CommandObject.demolishObject(tx, ty)
     assertdev(tx and ty)
     if tx and ty then
@@ -333,32 +306,24 @@ function CommandObject.demolishObject(tx, ty)
         if command then
             CommandObject.saveCommandStates()
             CommandObject.addCommand(command)
-            CommandObject.clearSavedCommandStates() -- confirm right away
+            CommandObject.clearSavedCommandStates()
         end
-    end    
+    end
 end
-
 function CommandObject.undoDemolishObject(tx, ty)
     if tx and ty then
-        CommandObject.saveCommandStates()            
+        CommandObject.saveCommandStates()
         local cmdObj = CommandObject.getCommandAtTile(tx,ty)
         if cmdObj and cmdObj.commandAction == CommandObject.COMMAND_DEMOLISH then
             cmdObj:remove()
         end
     end
 end
-
 function CommandObject.getCommandFromDragOperation(commandAction, tTiles, commandParam, cursorMode, bDrag)
     Profile.enterScope("Command.fromDragOp")
     local tCmds = {}
-
     if commandAction == CommandObject.COMMAND_DEMOLISH then
-        --if bDrag then
             tCmds = CommandObject._getDemolishCommandsFromDragOperation(commandAction, tTiles)
-        --elseif commandParam then
-            --local command = CommandObject.getDemolishObjectCommand(commandParam)
-            --if command then table.insert(tCmds,command) end
-        --end
     else
         if commandAction == CommandObject.COMMAND_VAPORIZE then
             commandAction = CommandObject.COMMAND_BUILD_TILE
@@ -367,14 +332,11 @@ function CommandObject.getCommandFromDragOperation(commandAction, tTiles, comman
         local tempCommand = CommandObject.new(commandAction,commandParam)
         local tAffectedTiles = {}
         local tValid = {}
-
         for addr,coord in pairs(tTiles) do
             local validity = CommandObject._canPerformAt(commandAction, commandParam, coord)
             if validity == CommandObject.TILE_INTERRUPT then
                 tempCommand.bValid = false
-                --tempCommand.tInvalidTiles = tTiles
                 break
-                --return tempCommand
             else
                 if validity == CommandObject.TILE_VALID then
                     if commandAction == CommandObject.COMMAND_MINE then
@@ -391,9 +353,6 @@ function CommandObject.getCommandFromDragOperation(commandAction, tTiles, comman
                         elseif cursorMode == GameRules.MODE_BUILD_ROOM then
                             coord.buildTileType = g_World.logicalTiles.ZONE_LIST_START
                             if coord.edge then
-                                -- edge of the drag. if it touches space (without pending construction), then it's a wall.
-                                -- if it does not, and it touches a wall or planned wall, then it's floor.
-                                -- if it touches a door, it's always floor. that's a rhyming mnemonic device i made up for you.
                                 local bTouchesSpace=false
                                 local bTouchesWall=false
                                 local bTouchesDoor=false
@@ -406,7 +365,6 @@ function CommandObject.getCommandFromDragOperation(commandAction, tTiles, comman
                                     if i < 6 then
                                         local bWall = g_World.countsAsWall(tv) or (pendingCoord and pendingCoord.buildTileType == g_World.logicalTiles.WALL)
                                         local bDoor = tv == g_World.logicalTiles.DOOR or (pendingCoord and pendingCoord.buildTileType == g_World.logicalTiles.DOOR)
-
                                         if bWall then bTouchesWall = true end
                                         if bDoor then bTouchesDoor = true end
                                     end
@@ -416,7 +374,6 @@ function CommandObject.getCommandFromDragOperation(commandAction, tTiles, comman
                                 end
                             end
                             if coord.buildTileType == g_World.logicalTiles.ZONE_LIST_START then
-                                -- special case: in build room mode, don't turn existing wall commands into floor commands.
                                 local cmdObj = CommandObject.getCommandAtTile(coord.x,coord.y,true)
                                 if cmdObj and cmdObj.tTiles[addr].buildTileType == g_World.logicalTiles.WALL then
                                     coord.buildTileType = g_World.logicalTiles.WALL
@@ -425,17 +382,7 @@ function CommandObject.getCommandFromDragOperation(commandAction, tTiles, comman
                         end
                         tValid[addr] = coord
                     elseif commandAction == CommandObject.COMMAND_BUILD_ENVOBJECT then
-                        --[[
-                        --MTF: tAffectedTiles not currently used.
-                        --Reinstate if we enable re-testing a command when its tAffectedTiles are modified.
-                        local tPropTiles = g_World._getPropFootprint(coord.x,coord.y, commandParam, true, coord.bFlipX)
-                        for i,tile in ipairs(tPropTiles) do 
-                            tAffectedTiles[tile] = 1
-                        end
-                        ]]--
-        
                         if coord.sourceCmdAddr then
-                            -- these get handled by the source command.
                         else
                             local bFound,txPlaced,tyPlaced,bFlipX,bFlipY,tPropTiles = g_World._findPropFit(coord.x,coord.y, commandParam, coord.bFlipX, coord.bFlipY, true, true)
                             if bFound and txPlaced == coord.x and tyPlaced == coord.y then
@@ -459,7 +406,6 @@ function CommandObject.getCommandFromDragOperation(commandAction, tTiles, comman
         tempCommand.tAffectedTiles = tAffectedTiles
         table.insert(tCmds,tempCommand)
     end
-
     local batchCommand = CommandObject.new(CommandObject.COMMAND_BATCH, tCmds)
     batchCommand.tInvalidTiles = tTiles
     for _,cmd in ipairs(tCmds) do
@@ -468,17 +414,14 @@ function CommandObject.getCommandFromDragOperation(commandAction, tTiles, comman
         end
     end
     Profile.leaveScope("Command.fromDragOp")
-
     return batchCommand
 end
-
 function CommandObject._invalidateCommandTile(addr, bNoRetest)
     local cmdObj = CommandObject.tCommands[addr]
     if cmdObj then
         cmdObj:invalidateTile(addr, bNoRetest)
     end
 end
-
 function CommandObject:setTileVisible(addr,bVisible)
     local coord = self.tTiles[addr]
     local bValid = true
@@ -487,29 +430,24 @@ function CommandObject:setTileVisible(addr,bVisible)
         bValid = false
     end
     if not coord then return end
-	
     if self.commandAction == CommandObject.COMMAND_BUILD_ENVOBJECT and coord.sourceCmdAddr then
         return
     end
     if self.commandAction == CommandObject.COMMAND_DEMOLISH and coord.sourceCmdAddr then
         return
     end
-	
     if bVisible and bValid then
         local spriteProp = coord.spriteProp
         local propTable = coord.propTable
-        
         if propTable and (not propTable.top and not propTable.bottom) then
             propTable = nil
             coord.propTable = nil
         end
-        -- if loading a wall, propTable will exist but be empty
         if not spriteProp and (not propTable or (propTable and not next(propTable))) then
             local spriteSheetPath
             local spriteName
             local color = Gui.GREEN
             local tileAlpha = nil
-
             if self.commandAction == CommandObject.COMMAND_BUILD_ENVOBJECT then
                 local tData = EnvObject.getObjectData(self.commandParam)
                 spriteSheetPath = tData.commandSpriteSheet or EnvObject.spriteSheetPath
@@ -525,88 +463,61 @@ function CommandObject:setTileVisible(addr,bVisible)
                     local tileValue = g_World._getTileValue(coord.x,coord.y)
                     if g_World.countsAsFloor(tileValue) then
                         spriteName = CommandObject.FloorCommandSprite
-                        color = Gui.RED--{1, 0.25, 0.25, 1}
+                        color = Gui.RED
                     else
-					    --local tDetails = g_World._getWallTileDetails(coord.x,coord.y)
-                        --propTable = g_World._getWallPropTable(g_World.layers.worldWall, coord.x, coord.y, tDetails.topIdx, tDetails.bottomIdx, tDetails.bFlip, true)
-                        --color = Gui.RED --{1, 0.25, 0.25, 1}
                         spriteName = CommandObject.FloorCommandSprite
                         spriteSheetPath = CommandObject.TileCommandSpriteSheet
-                        color = Gui.RED --{1, 0.25, 0.25, 1}
---[[
-					    -- vaporize = red version of construction viz
-					    local tDetails = g_World._getWallTileDetails(coord.x,coord.y)
-                        propTable = g_World._getWallPropTable(g_World.layers.worldWall, coord.x, coord.y, tDetails.topIdx, tDetails.bottomIdx, tDetails.bFlip, true)
-                        color = Gui.RED --{1, 0.25, 0.25, 1}
-                        ]]--
+                        color = Gui.RED
                     end
                     tileAlpha = .2
                 elseif coord.buildTileType == CommandObject.BUILD_PARAM_DEMOLISH then
                     local tileValue = g_World._getTileValue(coord.x,coord.y)
                     if g_World.isDoor(tileValue) then
                         spriteName = CommandObject.FloorCommandSprite
-                        color = Gui.RED--{1, 0.25, 0.25, 1}
+                        color = Gui.RED
                     elseif g_World.countsAsWall(tileValue) then
 					    local tDetails = g_World._getWallTileDetails(coord.x,coord.y)
                         tDetails.topIdx = g_World.layers.worldWall.spriteSheet.names[next(Zone.CONSTRUCTION.wallCrossTop)]
                         tDetails.bottomIdx = g_World.layers.worldWall.spriteSheet.names[next(Zone.CONSTRUCTION.wallCrossBottom)]
                         propTable = g_World._getWallPropTable(g_World.layers.worldWall, coord.x, coord.y, tDetails.topIdx, tDetails.bottomIdx, tDetails.bFlip, true)
-                        color = Gui.RED --{1, 0.25, 0.25, 1}
-                        
-                    --[[
-					    -- red version of construction viz
-					    local tDetails = g_World._getWallTileDetails(coord.x,coord.y)
-                        propTable = g_World._getWallPropTable(g_World.layers.worldWall, coord.x, coord.y, tDetails.topIdx, tDetails.bottomIdx, tDetails.bFlip, true)
-                        color = Gui.RED --{1, 0.25, 0.25, 1}
-                        spriteName = CommandObject.FloorCommandSprite
-                        spriteSheetPath = CommandObject.TileCommandSpriteSheet
-                        ]]--
+                        color = Gui.RED
                     end
                 elseif coord.buildTileType == g_World.logicalTiles.WALL then
-                    -- use World's rules for determining wireframe wall type
-                    -- local top, bottom, flip = g_World._getBaseWallTile(coord.x, coord.y)
                     local tDetails = g_World._getWallTileDetails(coord.x,coord.y)
 					color = {1, 1, 1, 1}
                     propTable = g_World._getWallPropTable(g_World.layers.worldWall, coord.x, coord.y, tDetails.topIdx, tDetails.bottomIdx, tDetails.bFlip, true, coord.propTable)
-                    -- for now show top and bottom, regardless of cutaway status
                 elseif coord.buildTileType == g_World.logicalTiles.ZONE_LIST_START then
                     spriteName = CommandObject.FloorCommandSprite
                     color = {1, 1, 1}
                 else
-                    --assertdev(false)
                     Print(TT_Warning, "bad command coord buildTileType "..tostring(coord.buildTileType))
                     self:invalidateTile(addr)
                     return
                 end
-                --color = {1,0,0,1}
             elseif self.commandAction == CommandObject.COMMAND_CANCEL then
             elseif self.commandAction == CommandObject.COMMAND_DEMOLISH then
             else
                 spriteSheetPath = CommandObject.TileCommandSpriteSheet
                 spriteName = CommandObject.VaporizeCommandSprite
             end
-
             if self.commandAction == CommandObject.COMMAND_DEMOLISH or
-                (self.commandAction == CommandObject.COMMAND_BUILD_TILE and 
+                (self.commandAction == CommandObject.COMMAND_BUILD_TILE and
                     (coord.buildTileType == CommandObject.BUILD_PARAM_VAPORIZE or coord.buildTileType == CommandObject.BUILD_PARAM_DEMOLISH)) then
                 local rObj = ObjectList.getObjAtTile(coord.x,coord.y,ObjectList.ENVOBJECT)
                 if rObj then
                     rObj:setSlatedForDemolition(true)
                 end
             end
-
-			-- display the prop(s)
 			local renderLayer = Renderer.getRenderLayer(CommandObject.CommandRenderLayer)
             if spriteName then
                 local spriteSheet = DFGraphics.loadSpriteSheet( spriteSheetPath )
                 spriteProp = MOAIProp.new()
                 spriteProp:setDeck(spriteSheet)
-                local index = spriteSheet.names[spriteName] 
+                local index = spriteSheet.names[spriteName]
                 spriteProp:setIndex(index)
                 spriteProp:setColor(unpack(color))
                 renderLayer:insertProp(spriteProp)
                 coord.spriteProp = spriteProp
-				-- remember name for eg determining EnvObject type later
 				coord.objectType = self.commandParam
             end
             if propTable then
@@ -619,31 +530,19 @@ function CommandObject:setTileVisible(addr,bVisible)
                 local x,y,z = coord.propTable.top:getLoc()
                 coord.propTable.top:setLoc(x,y,z+10)
                 coord.propTable.top.bVisible = true
-                
-				-- respect cutaway
-				--if GameRules.cutawayMode then
---					Renderer.getRenderLayer('WorldWall'):removeProp(coord.propTable.top)
-				--end
-                -- TODO MTF:
-                -- I only add where there aren't walls already, because this was clobbering
-                -- real walls and screwing up cutaway. But that means cutaway doesn't work for
-                -- commands such as "vaporize that wall."
                 if not g_World.tWalls[addr] then
-                    --g_World.addWall(addr, {tProps=coord.propTable})
                 end
 			end
             if tileAlpha then
                 coord.tileAlpha=tileAlpha
             end
         end
-		
         local wx,wy,wz
         if self.commandAction == CommandObject.COMMAND_BUILD_ENVOBJECT then
             wx,wy,wz = EnvObject.getSpriteLocFromTile(self.commandParam,coord.x,coord.y,coord.bFlipX)
         else
             wx,wy = g_World._getWorldFromTile(coord.x,coord.y, 1, MOAIGridSpace.TILE_LEFT_TOP)
             wz = g_World.getHackySortingZ(wx,wy,true)
-            -- floor tiles sorting in front of nearby walls, cheat em a bit
             if coord.buildTileType == g_World.logicalTiles.ZONE_LIST_START then
                 wz = wz - 40
             else
@@ -668,29 +567,21 @@ function CommandObject:setTileVisible(addr,bVisible)
             Renderer.getRenderLayer(CommandObject.CommandRenderLayer):removeProp(coord.spriteProp)
             coord.spriteProp = nil
         elseif coord.propTable then
-			-- remove from cutaway list
             g_World.removeWall(addr,coord.propTable)
-            -- if this was a wall, clear out its possibly-multiple props
             for _,prop in pairs(coord.propTable) do
                 g_World.layers.worldWall.renderLayer:removeProp(prop)
             end
             coord.propTable = nil
         end
-
-        -- Re-test an object's "to be demolished" state. Just because this command is being hidden
-        -- doesn't mean other commands aren't setting it up for demolition.
         local rObj,bDemolish = self:_retestObjectForDemolition(coord.x,coord.y)
-        if rObj then 
-            rObj:setSlatedForDemolition(bDemolish) 
+        if rObj then
+            rObj:setSlatedForDemolition(bDemolish)
         end
-        
         if CommandObject.tCommands[addr] and CommandObject.tCommands[addr] ~= self and CommandObject.tCommands[addr].bVisible then
-            -- hack to refresh visuals on the command underneath this one.
             CommandObject.tCommands[addr]:setTileVisible(addr,true)
         end
 	end
 end
-
 function CommandObject:_retestObjectForDemolition(tx,ty)
     local rObj = ObjectList.getObjAtTile(tx,ty,ObjectList.ENVOBJECT)
     if rObj then
@@ -699,7 +590,7 @@ function CommandObject:_retestObjectForDemolition(tx,ty)
         local bDemolish = false
         for _,addr in ipairs(tAddrs) do
             local testX,testY = g_World.pathGrid:cellAddrToCoord(addr)
-            local tCmd = CommandObject.tCommands[addr] 
+            local tCmd = CommandObject.tCommands[addr]
             if tCmd and (tCmd ~= self or addr ~= ignoreAddr) and (tCmd.commandAction == CommandObject.COMMAND_DEMOLISH or
                 (tCmd.commandAction == CommandObject.COMMAND_BUILD_TILE and
                     tCmd.tTiles[addr].buildTileType  == CommandObject.BUILD_PARAM_VAPORIZE)) then
@@ -710,34 +601,26 @@ function CommandObject:_retestObjectForDemolition(tx,ty)
         return rObj,bDemolish
     end
 end
-
 function CommandObject:invalidateTile(addr, bNoRetest)
     local coord = self.tTiles[addr]
     if not coord then return end
-
     local function removeTile(addr)
-        local bConstruction = self:isConstruction(addr) 
+        local bConstruction = self:isConstruction(addr)
         self:setTileVisible(addr,false)
         self.tTiles[addr] = nil
         self.tAffectedTiles[addr] = nil
         CommandObject.tCommands[addr] = nil
-
         CommandObject.tBuildTiles['inside']['wall'][addr] = nil
         CommandObject.tBuildTiles['inside']['floor'][addr] = nil
         CommandObject.tBuildTiles['inside']['asteroid'][addr] = nil
         CommandObject.tBuildTiles['outside']['wall'][addr] = nil
         CommandObject.tBuildTiles['outside']['floor'][addr] = nil
         CommandObject.tBuildTiles['outside']['asteroid'][addr] = nil
-        
-        -- MTF fixupVisuals hack: might be better to use a delegate if we're going to base a lot of 
-        -- world visuals on construction status.
         if bConstruction then
             g_World._dirtyTile(g_World.pathGrid:cellAddrToCoord(addr))
         end
-
         CommandObject.bActivitiesDirty=true
     end
-
     if coord.sourceCmdAddr then
         return self:invalidateTile(coord.sourceCmdAddr,bNoRetest)
     elseif coord.bHasChildren then
@@ -749,12 +632,10 @@ function CommandObject:invalidateTile(addr, bNoRetest)
     else
         removeTile(addr)
     end
-
     if not bNoRetest then
         self:retestCommandValidity()
     end
 end
-
 function CommandObject:onAdd()
     self.bTemp = false
     self.tInvalid = {}
@@ -764,37 +645,29 @@ function CommandObject:onAdd()
             oldCmd:invalidateTile(addr)
             oldCmd = CommandObject.tCommands[addr]
         end
-
         assert(not oldCmd or oldCmd == self)
-
         coord.addr = addr
         CommandObject.tCommands[addr] = self
-        --tempCommand:updateCommandVisuals(coord, true)
     end
 end
-
 function CommandObject:remove()
     self.bValid = false
     for addr,coord in pairs(self.tTiles) do
         CommandObject.tCommands[addr] = nil
         CommandObject.bActivitiesDirty=true
-        --self:updateCommandVisuals(coord, false)
     end
     self:setCommandVisible(false)
 end
-
 function CommandObject:addTile(addr,coord)
     if self.tTiles[addr] and self.bVisible then
         self:setTileVisible(addr,false)
     end
-
     local oldCmd = CommandObject.tCommands[addr]
     if oldCmd and oldCmd ~= self then
         oldCmd:invalidateTile(addr)
         oldCmd = CommandObject.tCommands[addr]
     end
     assert(not oldCmd or oldCmd == self)
-
     coord.addr = addr
     CommandObject.tCommands[addr] = self
     self.tTiles[addr] = coord
@@ -802,7 +675,6 @@ function CommandObject:addTile(addr,coord)
         self:setTileVisible(addr,true)
     end
 end
-
 function CommandObject:getCoord(addr)
     if self.commandAction == CommandObject.COMMAND_BATCH then
         for _,cmd in ipairs(self.commandParam) do
@@ -813,8 +685,6 @@ function CommandObject:getCoord(addr)
         return self.tTiles[addr]
     end
 end
-
-
 function CommandObject:retestCommandValidity()
     if not self.bValid then
         return false
@@ -839,17 +709,12 @@ function CommandObject:retestCommandValidity()
     end
     return true
 end
-
--- command "state saving" - used for back/confirm functionality
-
 function CommandObject.saveCommandStates()
-	-- saves current command states for possible restore later
 	CommandObject.tPrevCommands = CommandObject.getSaveTable()
     CommandObject.tPrevCosts = CommandObject.computePendingCosts()
     CommandObject.updatePendingCosts()
 	print('entered build mode, saved command state')
 end
-
 function CommandObject.restoreCommandStates()
 	CommandObject.pendingBuildCost = 0
 	CommandObject.pendingVaporizeCost = 0
@@ -862,24 +727,19 @@ function CommandObject.restoreCommandStates()
     Room.removeAllPendingObjectCancels()
 	print('aborted build mode, restored command state')
 end
-
 function CommandObject.getTotalPendingCost()
 	return CommandObject.pendingBuildCost + CommandObject.pendingCancelCost + Room.getPendingPropPlacementCost() - Room.getPendingObjectCancelCost()
 end
-
 function CommandObject.getCurrentPendingBuildCost()
     return CommandObject.pendingBuildCost + Room.getPendingPropPlacementCost() - Room.getPendingObjectCancelCost()
 end
-
 function CommandObject.canAffordCost()
 	return GameRules.nMatter - CommandObject.getTotalPendingCost() > 0
 end
-
 function CommandObject.clearSavedCommandStates(bRestoring, bDontExpendMatter)
 	CommandObject.tPrevCommands = nil
 	if not bRestoring then
         if not bDontExpendMatter then
-            -- commit total matter cost, sans mine or vaporize
             local total = CommandObject.getTotalPendingCost()
             GameRules.expendMatter(total)
         end
@@ -892,8 +752,6 @@ function CommandObject.clearSavedCommandStates(bRestoring, bDontExpendMatter)
 		print('confirmed build, wiped command state')
 	end
 end
-
-
 function CommandObject.addCommand(tempCommandObject)
     if tempCommandObject.commandAction == CommandObject.COMMAND_BATCH then
         for _,cmd in ipairs(tempCommandObject.commandParam) do
@@ -901,14 +759,12 @@ function CommandObject.addCommand(tempCommandObject)
         end
         return
     end
-    
     if tempCommandObject.bValid then
         local rAddedCommand = CommandObject._addCommand(tempCommandObject)
         CommandObject.updatePendingCosts()
         return rAddedCommand
     end
 end
-
 function CommandObject.updatePendingCosts()
     local tPendingCosts = CommandObject.computePendingCosts()
     local nOldBuild=(CommandObject.tPrevCosts and CommandObject.tPrevCosts.pendingBuildCost) or 0
@@ -920,7 +776,6 @@ function CommandObject.updatePendingCosts()
 	CommandObject.pendingMineCost = tPendingCosts.pendingMineCost-nOldMine
 	CommandObject.pendingCancelCost = tPendingCosts.pendingCancelCost-nOldCancel
 end
-
 function CommandObject.computePendingCosts()
     local t = {}
 	t.pendingBuildCost = 0
@@ -940,7 +795,6 @@ function CommandObject.computePendingCosts()
     end
     return t
 end
-
 function CommandObject:computeCosts()
 	local pB = 0
 	local pV = 0
@@ -966,38 +820,31 @@ function CommandObject:computeCosts()
 			pB = pB + self:getMatterCost()
 		end
     end
-    
     return pB,pV,pM,pC
 end
-
 function CommandObject._addCommand(tempCommand)
     assert(tempCommand.bValid)
     assert(tempCommand.bTemp)
-    
     local addedCommand = nil
-
     for addr,coord in pairs(tempCommand.tTiles) do
         CommandObject._invalidateCommandTile(addr, true)
     end
     local tTested = {}
     for addr,coord in pairs(tempCommand.tTiles) do
         if coord.sourceCmdAddr and tempCommand.commandAction ~= CommandObject.COMMAND_DEMOLISH and tempCommand.commandAction ~= CommandObject.COMMAND_BUILD_ENVOBJECT then
-            -- taking care of old savedata: only two command types can have a sourceCmdAddr.
             tempCommand.tTiles[addr] = nil
         elseif CommandObject.tCommands then
             local cmdObj = CommandObject.tCommands[addr]
-            if cmdObj and not tTested[cmdObj] then    
+            if cmdObj and not tTested[cmdObj] then
                 tTested[cmdObj] = 1
                 cmdObj:retestCommandValidity()
             end
         end
     end
-    
     if not next(tempCommand.tTiles) then
         tempCommand:remove()
         return nil
     end
-
     if tempCommand.commandAction == CommandObject.COMMAND_MINE then
         for addr,coord in pairs(tempCommand.tTiles) do
             CommandObject.tMineCmd:addTile(addr,coord)
@@ -1005,13 +852,10 @@ function CommandObject._addCommand(tempCommand)
         CommandObject.tMineCmd:setCommandVisible(true)
         addedCommand = CommandObject.tMineCmd
     elseif tempCommand.commandAction == CommandObject.COMMAND_DEMOLISH then
-        -- object demolish
         tempCommand:onAdd()
         tempCommand:setCommandVisible(true)
         addedCommand = tempCommand
     elseif tempCommand.commandAction == CommandObject.COMMAND_BUILD_TILE or tempCommand.commandAction == CommandObject.COMMAND_VAPORIZE then
-        -- Here, build, demolish, and vaporize tile commands all get lumped together into one mega-command.
-        -- Demolish has already been converted.
         for addr,coord in pairs(tempCommand.tTiles) do
             CommandObject.tBuildCmd:addTile(addr,coord)
             if tempCommand.commandAction == CommandObject.COMMAND_VAPORIZE then
@@ -1024,7 +868,6 @@ function CommandObject._addCommand(tempCommand)
     elseif tempCommand.commandAction == CommandObject.COMMAND_CANCEL then
         for addr,coord in pairs(tempCommand.tTiles) do
             CommandObject._invalidateCommandTile(addr)
-            -- see if there's any object placements we need to cancel
             Room.removePendingPropPlacementAtTile(coord.x, coord.y)
             local rObj = ObjectList.getObjAtTile(coord.x,coord.y,ObjectList.ENVOBJECT)
             if rObj then
@@ -1041,15 +884,11 @@ function CommandObject._addCommand(tempCommand)
         tempCommand:setCommandVisible(true)
         addedCommand = tempCommand
     end
-
     CommandObject.bActivitiesDirty=true
-
     return addedCommand
 end
-
 function CommandObject:setCommandVisible(bVisible,bDrawInvalid)
     self.bVisible = bVisible
-
     if self.commandAction == CommandObject.COMMAND_BATCH then
         Profile.enterScope("Cursor.setCommandVisibleBatch")
         for _,cmd in ipairs(self.commandParam) do
@@ -1059,7 +898,6 @@ function CommandObject:setCommandVisible(bVisible,bDrawInvalid)
         Profile.leaveScope("Cursor.setCommandVisibleBatch")
         return
     end
-
         Profile.enterScope("Cursor.setCommandVisible")
     if self.commandAction == CommandObject.COMMAND_CANCEL then
         Cursor.drawTiles(self.tTiles,true,bVisible)
@@ -1069,55 +907,39 @@ function CommandObject:setCommandVisible(bVisible,bDrawInvalid)
         end
     end
     Cursor.drawTiles(self.tInvalidTiles,false,bVisible)
-    
         Profile.leaveScope("Cursor.setCommandVisible")
 end
-
 function CommandObject._canVaporizeTile(tx,ty)
     local tileValue = g_World._getTileValue(tx, ty)
     if g_World.countsAsWall(tileValue) then
         return CommandObject.TILE_VALID
-        -- doors
     elseif g_World.countsAsFloor(tileValue) or g_World.isDoor(tileValue) then
         return CommandObject.TILE_VALID
-        --local oldObj = ObjectList.getObjAtTile(tx, ty,ObjectList.ENVOBJECT)
-        --if not oldObj then
-            --return CommandObject.TILE_VALID
-        --end
-        -- unmined, non-dim asteroids
     elseif GameRules.inEditMode then
         return CommandObject.TILE_VALID
     end
     return CommandObject.TILE_INVALID
 end
-
 function CommandObject._canDemolishTile(tx,ty)
-    -- Let's disallow demolishing indoor tiles that we can't see.
-    -- But space-adjacent is fine.
     if g_World._getVisibility(tx,ty,1) == g_World.VISIBILITY_HIDDEN then
         if not g_World.isAdjacentToSpace(tx,ty,true,false) then
             return CommandObject.TILE_INVALID
         end
     end
-
     local tileValue = g_World._getTileValue(tx, ty)
     if g_World.countsAsWall(tileValue) then
         return CommandObject.TILE_VALID
-        -- doors
     elseif g_World.isDoor(tileValue) then
         return CommandObject.TILE_VALID
-        -- unmined, non-dim asteroids
     elseif GameRules.inEditMode then
         return CommandObject.TILE_VALID
     end
-    
     local obj = ObjectList.getObjAtTile(tx, ty,ObjectList.ENVOBJECT)
     if obj then
         return CommandObject.TILE_VALID
     end
     return CommandObject.TILE_INVALID
 end
-
 function CommandObject._testMine(tx,ty)
     local tileValue = g_World._getTileValue(tx, ty)
     if Asteroid.isAsteroid(tileValue) then
@@ -1125,32 +947,22 @@ function CommandObject._testMine(tx,ty)
     end
     return CommandObject.TILE_INVALID
 end
-
 function CommandObject._testBuildFloor(tx,ty)
     if GameRules.inEditMode then return CommandObject.TILE_VALID end
-    
     local tileValue = g_World._getTileValue(tx, ty)
     if Asteroid.isAsteroid(tileValue) then
         return CommandObject.TILE_INVALID
     elseif tileValue == g_World.logicalTiles.WALL or g_World.countsAsFloor(tileValue) or g_World.isDoor(tileValue) then
         return CommandObject.TILE_INVALID
     end
-    -- deliberately allowing WALL_DESTROYED to fall through-- let people build floor on top of destroyed wall if they want.
     return CommandObject.TILE_VALID
 end
-
 function CommandObject.tileChanged(tx,ty,addr,tileValue)
-    -- MTF TODO: this doesn't check tAffectedTiles. tAffectedTiles includes things like buffer space for props,
-    -- and violates the 1-command-per-tile assumption.
-    -- So we could see bugs where characters don't realize a command is invalid until they try to perform it.
-
     local cmdObj = CommandObject.tCommands[addr]
     if cmdObj then
-        cmdObj:retestCommandValidity() 
+        cmdObj:retestCommandValidity()
     end
 end
-
--- Actually gets all tiles.
 function CommandObject.getSortedTilesInRange(wx,wy,_,commandType,rTask,bInside)
     local tAllTiles = {}
     if commandType == CommandObject.COMMAND_BUILD_TILE then
@@ -1169,18 +981,12 @@ function CommandObject.getSortedTilesInRange(wx,wy,_,commandType,rTask,bInside)
         end)
     return tSortedTiles, true
 end
-
-
--- find a build command at the specified location, or adjacent.
--- returns world coordinates, despite the name.
-
 function CommandObject.findMineTile(worldX,worldY,rTask,nRange)
-    local tileX,tileY = g_World._getTileFromWorld(worldX,worldY) 
+    local tileX,tileY = g_World._getTileFromWorld(worldX,worldY)
     local testFn=function(tx,ty)
         if rTask then
             if rTask.rActivityOption:reserved(tx,ty,rTask.rChar) then return false end
         end
-
         local addr = g_World.pathGrid:getCellAddr(tx,ty)
         local cmdObj = CommandObject.tCommands[addr]
         if cmdObj and cmdObj.commandAction == CommandObject.COMMAND_MINE then
@@ -1188,25 +994,14 @@ function CommandObject.findMineTile(worldX,worldY,rTask,nRange)
         end
     end
     return CommandObject._findAppropriateTile(worldX,worldY,testFn,nRange)
-    --[[
-    local adjx,adjy = g_World.isAdjacentToFn(tileX, tileY, testFn, true, true)
-    if adjx then
-        local adjcmd = CommandObject.tCommands[g_World.pathGrid:getCellAddr(adjx,adjy)]
-        local targetWorldX,targetWorldY = g_World._getWorldFromTile(adjx,adjy)
-        return targetWorldX,targetWorldY,adjcmd
-    end
-    ]]--
 end
-
 function CommandObject._findAppropriateTile(wx,wy,testFn,nRange)
     local tileX,tileY = g_World._getTileFromWorld(wx,wy)
-    local foundTX,foundTY 
+    local foundTX,foundTY
     if not nRange then
         foundTX,foundTY = g_World.isAdjacentToFn(tileX, tileY, testFn, true, true)
     else
-		-- only modify the range in x, since the iso rect will grab us a good range of y as well.
         local tTiles = GridUtil.GetTilesForIsoRectangle(tileX-nRange,tileY,tileX+nRange,tileY)
-        -- first test adjacent
         for i=1,9 do
             local atx,aty = g_World._getAdjacentTile(tileX,tileY, i)
             local addr = g_World.pathGrid:getCellAddr(atx,aty)
@@ -1219,7 +1014,6 @@ function CommandObject._findAppropriateTile(wx,wy,testFn,nRange)
             end
         end
         if not foundTX then
-            -- random order, so we don't always head the same direction every time.
             local tList = {}
             for addr, coord in pairs(tTiles) do
                 table.insert(tList,coord)
@@ -1242,7 +1036,6 @@ function CommandObject._findAppropriateTile(wx,wy,testFn,nRange)
         return targetWorldX,targetWorldY,adjcmd,adjcmd.tTiles[addr]
     end
 end
-
 function CommandObject._performAllCommands()
     local addr = next(CommandObject.tCommands)
     while addr do
@@ -1251,55 +1044,44 @@ function CommandObject._performAllCommands()
         addr = next(CommandObject.tCommands)
     end
 end
-
 function CommandObject._removeAllCommands()
     for addr,cmd in pairs(CommandObject.tCommands) do
         cmd:remove()
     end
 end
-
 function CommandObject.performCommandAtTile(cmdObj,tx,ty)
     if CommandObject._performCommand(cmdObj,tx,ty) then
         return true
     end
 end
-
 function CommandObject._performCommand(cmdObj,tx,ty)
     local tileAddr
-
     if tx then
         tileAddr = g_World.pathGrid:getCellAddr(tx,ty)
     else
         local firstCoord = cmdObj.tTiles[ next(cmdObj.tTiles) ]
         tileAddr = g_World.pathGrid:getCellAddr(firstCoord.x, firstCoord.y)
     end
-
     local coord = cmdObj.tTiles[tileAddr]
-    
     if coord.sourceCmdAddr then
         coord = cmdObj.tTiles[coord.sourceCmdAddr]
     end
     assert(coord)
-
     local bSuccess = false
-
     if cmdObj.commandAction == CommandObject.COMMAND_BUILD_TILE then
         bSuccess = g_World._buildTile(coord.x,coord.y,coord.buildTileType)
         cmdObj:invalidateTile(tileAddr)
     elseif cmdObj.commandAction == CommandObject.COMMAND_BUILD_ENVOBJECT then
         local wx,wy = g_World._getWorldFromTile(coord.x,coord.y)
-        -- For now, we assume all EnvObjects are exclusive.
-        -- May not always be the case.
         local tPropTiles = g_World._getPropFootprint(coord.x,coord.y, cmdObj.commandParam, false, coord.bFlipX)
         if GameRules.inEditMode then
-            for i,tile in ipairs(tPropTiles) do 
+            for i,tile in ipairs(tPropTiles) do
                 local oldObj = ObjectList.getObjAtTile(coord.x,coord.y,ObjectList.ENVOBJECT)
                 if oldObj then
                     oldObj:remove()
                 end
             end
         end
-
         local rProp = require('EnvObjects.EnvObject').createEnvObject(cmdObj.commandParam, wx,wy, coord.bFlipX, coord.bFlipY, GameRules.inEditMode)
         cmdObj:remove()
         bSuccess = (rProp ~= nil)
@@ -1321,21 +1103,17 @@ function CommandObject._performCommand(cmdObj,tx,ty)
     end
     return bSuccess
 end
-
 function CommandObject.getConstructionAtTile(tx,ty)
     local cmdObj,coord = CommandObject.getCommandAtTile(tx,ty,true)
     if cmdObj and cmdObj:isConstruction(coord.addr) then return coord.buildTileType,cmdObj,coord end
 end
-
 function CommandObject:isConstruction(addr)
-
     if self.commandAction  == CommandObject.COMMAND_BATCH then
         for _,cmd in ipairs(self.commandParam) do
             if cmd:isConstruction(addr) then return true end
         end
     end
     if not self.tTiles[addr] then return false end
-
     if self.commandAction == CommandObject.COMMAND_BUILD_TILE then
         if self.tTiles[addr].buildTileType ~= CommandObject.BUILD_PARAM_VAPORIZE and self.tTiles[addr].buildTileType ~= CommandObject.BUILD_PARAM_DEMOLISH then
             return true
@@ -1343,32 +1121,20 @@ function CommandObject:isConstruction(addr)
     end
     return false
 end
-
 function CommandObject.getCommandAtWorld(wx,wy)
     local tx,ty = g_World._getTileFromWorld(wx,wy)
 	return CommandObject.getCommandAtTile(tx,ty)
 end
-
 function CommandObject.getCommandAtTile(tx,ty,bIncludeTemp)
     local addr = g_World.pathGrid:getCellAddr(tx,ty)
     if bIncludeTemp and Cursor.tempCommand and Cursor.tempCommand:getCoord(addr) then
         return Cursor.tempCommand,Cursor.tempCommand:getCoord(addr)
     end
-
     local cmdObj = CommandObject.tCommands[addr]
     if cmdObj then
         return cmdObj,cmdObj.tTiles[addr]
     end
 end
-
---[[
-function CommandObject.getCommandColorAtAddr(addr)
-    if CommandObject.tCommands[addr] then
-        return CommandObject.orderTargetColor
-    end
-end
-]]--
-
 function CommandObject.getSaveTable(xOff,yOff)
     if not xOff then
         local tDone={}
@@ -1376,15 +1142,12 @@ function CommandObject.getSaveTable(xOff,yOff)
         for addr,cmd in pairs(CommandObject.tCommands) do
             if not tDone[cmd] then
                 tDone[cmd] = 1
-
                 table.insert(tSave,cmd:getSaveData())
             end
         end
-
         return tSave
     end
 end
-
 function CommandObject.fromSaveTable(tSave, xOff, yOff, bClearSavedCommandStates)
     if tSave and not xOff then
         CommandObject.shutdown()
@@ -1397,20 +1160,16 @@ function CommandObject.fromSaveTable(tSave, xOff, yOff, bClearSavedCommandStates
             cmd.tAffectedTiles=data.tAffectedTiles or {}
             CommandObject.addCommand(cmd)
         end
-        -- the following is mainly here when you load up a game
-        -- this clears out all pending costs so that loaded costs aren't computed
         if bClearSavedCommandStates then
             CommandObject.clearSavedCommandStates(false, true)
         end
     end
 end
-
 function CommandObject.shutdown()
     if CommandObject.tCommands then
         CommandObject._removeAllCommands()
     end
 end
-
 function CommandObject.staticInit()
     UtilityAI = require('Utility.UtilityAI')
     Cursor = require('UI.Cursor')
@@ -1419,10 +1178,9 @@ function CommandObject.staticInit()
     EnvObject=require('EnvObjects.EnvObject')
     PickupData=require('Pickups.PickupData')
     Room=require('Room')
-    
     CommandObject.tBuildTiles = { inside={ floor={}, wall={},asteroid={} }, outside={ floor={}, wall={},asteroid={} } }
     CommandObject.activityOptionList = ActivityOptionList.new(CommandObject)
-    CommandObject.tCommands = {}    
+    CommandObject.tCommands = {}
     CommandObject.bActivitiesDirty = true
     CommandObject.tBuildCmd = CommandObject.new(CommandObject.COMMAND_BUILD_TILE)
     CommandObject.tMineCmd = CommandObject.new(CommandObject.COMMAND_MINE)
@@ -1430,14 +1188,11 @@ function CommandObject.staticInit()
     CommandObject.coMineTileIter = CommandObject._cmdTileIter('mine')
     g_World.dTileChanged:register(CommandObject.tileChanged)
     ObjectList.dTileContentsChanged:register(function(tx,ty,sourceTag,bSet) CommandObject.tileChanged(tx,ty,sourceTag.addr) end)
-    --g_World.dPropGridChanged:register(CommandObject.propGridChanged)
 end
-
 function CommandObject.onTick( dt )
     CommandObject._refreshBuildTiles()
     CommandObject._refreshMineTiles()
 end
-
 function CommandObject.getActivityOptions(rChar, tObjects)
     local tCmds = {}
     if CommandObject.bActivitiesDirty then
@@ -1455,8 +1210,6 @@ function CommandObject.getActivityOptions(rChar, tObjects)
     table.insert(tObjects, CommandObject.activityOptionList:getListAsUtilityOptions())
     return tObjects
 end
-
--- Returns ipairs {x=worldX,y=worldX,val=desiredBuildTileType,addr=addr}
 function CommandObject.getBuildTiles(bInside,sGroup,rTask)
     local insideIdx = (bInside and 'inside') or 'outside'
     if rTask then
@@ -1471,7 +1224,6 @@ function CommandObject.getBuildTiles(bInside,sGroup,rTask)
         return CommandObject.tBuildTiles[insideIdx][sGroup]
     end
 end
-
 function CommandObject._cmdTileIter(sType)
     return coroutine.wrap(function()
         while true do
@@ -1485,41 +1237,30 @@ function CommandObject._cmdTileIter(sType)
         end
     end)
 end
-
     CommandObject._indoorFn = function(tx,ty)
         local tileValue = g_World._getTileValue(tx,ty)
         if not g_World.countsAsFloor(tileValue) then return false end
-
         local rRoom = Room.getRoomAtTile(tx,ty,1)
         if rRoom and rRoom:isBreached() then return false end
-        
         local o2 = g_World.oxygenGrid:getOxygen(tx,ty)
-        return o2 > Character.OXYGEN_LOW 
+        return o2 > Character.OXYGEN_LOW
     end
-
     CommandObject._getTargetTableMine = function(coord,addr)
         local tileValue = g_World._getTileValue(coord.x,coord.y)
-
         if g_World.isAdjacentToFn(coord.x, coord.y, CommandObject._indoorFn) then
             return CommandObject.tBuildTiles['inside']['asteroid']
         end
         if g_World.isAdjacentToSpace(coord.x,coord.y,true,true) then
             return CommandObject.tBuildTiles['outside']['asteroid']
         end
-        -- If we're not indoors and not adjacent to space, we're likely embedded in an asteroid. 
-        -- We don't know if that'll be reached via space or indoors, so just don't add for now.
         return nil
     end
-
     CommandObject._getTargetTable = function(coord,addr)
         local tileValue = g_World._getTileValue(coord.x,coord.y)
         local o2
-
-        if coord.buildTileType == CommandObject.BUILD_PARAM_VAPORIZE then 
-            -- Vaporize will be outside by the time the operation is done, so it needs a spacesuit.
+        if coord.buildTileType == CommandObject.BUILD_PARAM_VAPORIZE then
             return CommandObject.tBuildTiles['outside'][(g_World.countsAsFloor(tileValue) and 'floor') or 'wall']
         end
-
         local wallOrFloor = (coord.buildTileType == g_World.logicalTiles.WALL and 'wall') or 'floor'
         if g_World.isAdjacentToSpace(coord.x,coord.y,true,true) then
             return CommandObject.tBuildTiles['outside'][wallOrFloor]
@@ -1527,57 +1268,43 @@ end
         if g_World.oxygenGrid:checkTileFlag(coord.x, coord.y,DFOxygenGrid.TILE_OCCLUDE) then
             return CommandObject.tBuildTiles['inside'][wallOrFloor]
         end
-
         o2 = g_World.oxygenGrid:getOxygen(coord.x,coord.y)
         local bOutside = o2 < Character.OXYGEN_SUFFOCATING
         return CommandObject.tBuildTiles[(bOutside and 'outside') or 'inside'][wallOrFloor]
     end
-
 function CommandObject._refreshMineTiles()
     local addr, coord = CommandObject.coMineTileIter()
-
-    if not addr then 
-        return 
+    if not addr then
+        return
     end
-
     CommandObject.tBuildTiles['inside']['asteroid'][addr] = nil
     CommandObject.tBuildTiles['outside']['asteroid'][addr] = nil
-
     local wx,wy = g_World._getWorldFromTile(coord.x,coord.y)
     local tTileData = {x=wx,y=wy,val=coord.buildTileType,addr=addr,tx=coord.x,ty=coord.y}
-
     local t = CommandObject._getTargetTableMine(coord,addr)
     if t then
         t[addr] = tTileData
     end
 end
-
 function CommandObject._refreshBuildTiles()
     if CommandObject.DEBUG_PROFILE then Profile.enterScope("CO.RefreshBuildTiles") end
-    
     local addr, coord = CommandObject.coBuildTileIter()
-    
-    if not addr then 
+    if not addr then
         if CommandObject.DEBUG_PROFILE then Profile.leaveScope("CO.RefreshBuildTiles") end
-        return 
+        return
     end
-
     CommandObject.tBuildTiles['inside']['wall'][addr] = nil
     CommandObject.tBuildTiles['inside']['floor'][addr] = nil
     CommandObject.tBuildTiles['outside']['wall'][addr] = nil
     CommandObject.tBuildTiles['outside']['floor'][addr] = nil
-    
     local wx,wy = g_World._getWorldFromTile(coord.x,coord.y)
     local tTileData = {x=wx,y=wy,val=coord.buildTileType,addr=addr,tx=coord.x,ty=coord.y}
-
     local t = CommandObject._getTargetTable(coord,addr)
     if t then
         t[addr] = tTileData
     end
-
     if CommandObject.DEBUG_PROFILE then Profile.leaveScope("CO.RefreshBuildTiles") end
 end
-
 function CommandObject.jobGate(rChar, job)
     if rChar:getJob() == job then
         return true
@@ -1585,14 +1312,12 @@ function CommandObject.jobGate(rChar, job)
         return false, 'wrong job'
     end
 end
-
 function CommandObject._addCommandAsActivity(cmdObj,tTarget)
-    if cmdObj.commandAction == CommandObject.COMMAND_BUILD_TILE 
---            or (cmdObj.commandAction == CommandObject.COMMAND_VAPORIZE and cmdObj.commandAction == CommandObject.BUILD_PARAM_VAPORIZE) then
+    if cmdObj.commandAction == CommandObject.COMMAND_BUILD_TILE
             or cmdObj.commandAction == CommandObject.COMMAND_MINE then
         local tData
         tData={
-            targetTileListFn=function(rChar,rAO) 
+            targetTileListFn=function(rChar,rAO)
                 local cx,cy = rChar:getLoc()
                 return CommandObject.getSortedTilesInRange(cx,cy,nil,CommandObject.COMMAND_BUILD_TILE,nil,false)
             end,
@@ -1602,7 +1327,7 @@ function CommandObject._addCommandAsActivity(cmdObj,tTarget)
         }
         table.insert(tTarget, ActivityOption.new('BuildSpace',tData))
         tData={
-            targetTileListFn=function(rChar,rAO) 
+            targetTileListFn=function(rChar,rAO)
                 local cx,cy = rChar:getLoc()
                 return CommandObject.getSortedTilesInRange(cx,cy,nil,CommandObject.COMMAND_BUILD_TILE,nil,true)
             end,
@@ -1611,29 +1336,27 @@ function CommandObject._addCommandAsActivity(cmdObj,tTarget)
             utilityGateFn=function(rChar, rAO) return CommandObject.jobGate(rChar, Character.BUILDER) end,
         }
         table.insert(tTarget, ActivityOption.new('BuildInside',tData))
-
         tData={
             targetTileListFn=function() return CommandObject.getBuildTiles(true,'asteroid') end,
             pathToNearest=true,
             bInside=true,
-            utilityGateFn=function(rChar, rAO) 
+            utilityGateFn=function(rChar, rAO)
                 if rChar:getInventoryCountByTemplate(InventoryData.MINE_PICKUP_NAME) >= Inventory.getMaxStacks(InventoryData.MINE_PICKUP_NAME) then
                     return false, 'too many rocks'
                 end
-                return CommandObject.jobGate(rChar, Character.MINER) 
+                return CommandObject.jobGate(rChar, Character.MINER)
             end,
         }
         table.insert(tTarget, ActivityOption.new('MineInside',tData))
-
         tData={
             targetTileListFn=function() return CommandObject.getBuildTiles(false,'asteroid') end,
             pathToNearest=true,
             bInside=false,
-            utilityGateFn=function(rChar, rAO) 
+            utilityGateFn=function(rChar, rAO)
                 if rChar:getInventoryCountByTemplate(InventoryData.MINE_PICKUP_NAME) >= Inventory.getMaxStacks(InventoryData.MINE_PICKUP_NAME) then
                     return false, 'too many rocks'
                 end
-                return CommandObject.jobGate(rChar, Character.MINER) 
+                return CommandObject.jobGate(rChar, Character.MINER)
             end,
         }
         table.insert(tTarget, ActivityOption.new('MineSpace',tData))
@@ -1641,10 +1364,9 @@ function CommandObject._addCommandAsActivity(cmdObj,tTarget)
         local targetAddr = next(cmdObj.tTiles)
         local targetCoord = cmdObj.tTiles[targetAddr]
         if targetCoord.sourceCmdAddr then
-            targetAddr = targetCoord.sourceCmdAddr 
+            targetAddr = targetCoord.sourceCmdAddr
             targetCoord = cmdObj.tTiles[targetAddr]
         end
-
         local tx,ty = g_World.pathGrid:cellAddrToCoord(targetAddr)
         assert(tx == targetCoord.x and ty == targetCoord.y)
         local wx,wy = g_World._getWorldFromTile(tx,ty)
@@ -1665,5 +1387,4 @@ function CommandObject._addCommandAsActivity(cmdObj,tTarget)
         assert(false)
     end
 end
-
 return CommandObject

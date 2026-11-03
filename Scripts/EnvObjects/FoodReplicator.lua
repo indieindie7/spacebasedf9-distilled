@@ -5,9 +5,7 @@ local EnvObject=require('EnvObjects.EnvObject')
 local ObjectList=require('ObjectList')
 local ActivityOptionList=require('Utility.ActivityOptionList')
 g_ActivityOption=g_ActivityOption or require('Utility.ActivityOption')
-
 local FoodReplicator = Class.create(EnvObject, MOAIProp.new)
-
 function FoodReplicator:canBuyFood(rChar)
     if self:getTeam() ~= Character.TEAM_ID_PLAYER then
         return false, 'replicator not on player team'
@@ -23,7 +21,7 @@ function FoodReplicator:canBuyFood(rChar)
     end
     if not self:isFunctioning() then
         return false, 'replicator not functional'
-    end    
+    end
     local r = self:getRoom()
     if not r then return false, 'no room' end
     if r:getZoneName() == 'BRIG' then
@@ -31,7 +29,6 @@ function FoodReplicator:canBuyFood(rChar)
     end
     return true
 end
-
 function FoodReplicator:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
     self.nReplicatorPrice = EnvObject.getObjectData('FoodReplicator').nFoodPrice
     local tData=
@@ -42,10 +39,8 @@ function FoodReplicator:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, n
 		bInfinite=true,
     }
     self.rGetFoodOption = g_ActivityOption.new('EatAtFoodReplicator',tData)
-
     EnvObject.init(self,sName, wx,wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
 end
-
 function FoodReplicator:getAvailableActivities()
     local tActivities = EnvObject.getAvailableActivities(self)
     if self.rGetFoodOption then
@@ -55,6 +50,4 @@ function FoodReplicator:getAvailableActivities()
     end
     return tActivities
 end
-
 return FoodReplicator
-

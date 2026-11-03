@@ -5,15 +5,11 @@ local Zone=require('Zones.Zone')
 local Room=require('Room')
 local GameRules=require('GameRules')
 local ObjectList=require('ObjectList')
-
 local BrigZone = Class.create(Zone)
-
 BrigZone.tBrigs={}
-
 function BrigZone.reset()
     BrigZone.tBrigs = {}
 end
-
 function BrigZone.getBrigRoomForChar(rChar)
     local tag = rChar and rChar.tStatus.tAssignedToBrig
     if not tag then return end
@@ -24,13 +20,11 @@ function BrigZone.getBrigRoomForChar(rChar)
     end
     return rRoom
 end
-
 function BrigZone:init(rRoom)
 	Zone.init(self, rRoom)
     BrigZone.tBrigs[rRoom.id] = rRoom
     self.tAssignmentSlots = {}
 end
-
 function BrigZone:getAssignmentSlots()
     if not self.lastCheckTime or GameRules.elapsedTime-self.lastCheckTime > .1 then
         self.lastCheckTime=GameRules.elapsedTime
@@ -41,20 +35,17 @@ function BrigZone:getAssignmentSlots()
                 table.remove(self.tAssignmentSlots,n)
             end
         end
-
         if #self.tAssignmentSlots == 0 or (self.tAssignmentSlots[ #self.tAssignmentSlots ].char and ObjectList.getObject(self.tAssignmentSlots[ #self.tAssignmentSlots ].char)) then
             table.insert(self.tAssignmentSlots,{})
         end
     end
     return self.tAssignmentSlots,#self.tAssignmentSlots-1
 end
-
 function BrigZone:remove()
     local id = self:getRoom() and self:getRoom().id
     if id then BrigZone.tBrigs[id] = nil end
     Zone.remove(self)
 end
-
 function BrigZone:isCharAssigned(rChar)
     local t = ObjectList.getTag(rChar)
     for i,v in ipairs(self.tAssignmentSlots) do
@@ -64,13 +55,11 @@ function BrigZone:isCharAssigned(rChar)
     end
     return false
 end
-
 function BrigZone:charAssigned(rChar)
     if not self:isCharAssigned(rChar) then
         self:assignChar(nil,rChar)
     end
 end
-
 function BrigZone:unassignChar(rChar)
     if not rChar then return end
     local tag = ObjectList.getTag(rChar)
@@ -83,7 +72,6 @@ function BrigZone:unassignChar(rChar)
     end
     self.lastCheckTime = nil
 end
-
 function BrigZone:assignChar(nSlotIdx,rChar)
     if not nSlotIdx then nSlotIdx = #self.tAssignmentSlots+1 end
     if not rChar then
@@ -97,12 +85,9 @@ function BrigZone:assignChar(nSlotIdx,rChar)
         self.tAssignmentSlots[nSlotIdx] = {char=ObjectList.getTag(rChar)}
         rChar:assignedToBrig(self.rRoom,prevBrig ~= nil)
     end
-    -- ensure there's always an empty slot.
     if #self.tAssignmentSlots < 1 or self.tAssignmentSlots[#self.tAssignmentSlots].char then
         table.insert(self.tAssignmentSlots,{})
     end
     self.lastCheckTime = nil
 end
-
 return BrigZone
-

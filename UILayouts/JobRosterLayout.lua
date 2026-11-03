@@ -1,30 +1,24 @@
 local Gui = require('UI.Gui')
 local CharacterConstants = require('CharacterConstants')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
 local HIGHLIGHT_COLOR = { 0.1, 0.1, 0.1, 0.75 }
-
 local nBGWidth = 1800
-
 local nButtonWidth, nButtonHeight  = 286, 98
 local nButtonStartY = -204
 local nIconX, nIconStartY = 10, -12
 local nLabelX, nLabelStartY = 105, -20
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 110, -68
 local nIconScale = .6
-
 local nTopLabelY = -206
 local nTopLabelTextY = -154
 local nTopBarHeight = 5
 local nHighlightY = -110
-
 local nBorderScale = 2
 local nJobColX = 10
 local nNameColX = 106
 local nSortTextureSize = 44
-
 local nJobColScale = 128
 local nJobBlockScale = 162
 local nJob1ColX = 554
@@ -36,21 +30,16 @@ local nJob6ColX = nJob1ColX + nJobColScale * 5
 local nJob7ColX = nJob1ColX + nJobColScale * 6
 local nJob8ColX = nJob1ColX + nJobColScale * 7
 local nJob9ColX = nJob1ColX + nJobColScale * 8
-
 local nJobDivScl = 40
 local nJobLabelDivScl = 24
 local nJobCatLabelRectSize = nJobDivScl * 2 + nSortTextureSize
 local nJobLabelRectSize = nJobLabelDivScl * 2 + nSortTextureSize
-
 local nJobTextureXOffset = math.floor(nJobDivScl / 2) + 16
 local nJobTextureYOffset = nTopLabelTextY + 36
-
 local nJobNumXOffset = math.floor(nJobDivScl / 2) + 58
 local nJobNumYOffset = nTopLabelTextY + 40
-
 local nSortHighlightScaleY = 90
-
-return 
+return
 {
     posInfo =
         {
@@ -64,7 +53,7 @@ return
     {
     },
     tElements =
-    {       
+    {
         {
             key = 'LargeBar',
             type = 'onePixel',
@@ -99,14 +88,14 @@ return
                 {
                     key = 'BackButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'BackButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -117,10 +106,10 @@ return
                 {
                     key = 'BackLabel',
                     color = { 0, 0, 0 },
-                },          
+                },
                 {
                     key = 'BackHotkey',
-                    color = { 0, 0, 0 },                    
+                    color = { 0, 0, 0 },
                 },
                 {
                     playSfx = 'hilight',
@@ -175,8 +164,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- top bar
-        -- job
         {
             key = 'JobSortButton',
             type = 'onePixelButton',
@@ -225,7 +212,7 @@ return
             pos = { nJobColX, nTopLabelY },
             scale = { nJobLabelDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'jobSortDivMid',
             type = 'onePixel',
@@ -233,7 +220,7 @@ return
             scale = { 45, nTopBarHeight },
             color = Gui.GREY,
             hidden = true,
-        },   
+        },
         {
             key = 'jobSortDown',
             type = 'uiTexture',
@@ -260,8 +247,7 @@ return
             pos = { nJobColX + nJobLabelDivScl + nSortTextureSize, nTopLabelY },
             scale = { nJobLabelDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },        
-        -- name
+        },
         {
             key = 'NameSortButton',
             type = 'onePixelButton',
@@ -298,7 +284,7 @@ return
         {
             key = 'NameLabel',
             type = 'textBox',
-            pos = { nNameColX + 20, nTopLabelTextY },            
+            pos = { nNameColX + 20, nTopLabelTextY },
             linecode = 'HUDHUD033TEXT',
             style = 'dosissemibold26',
             rect = { 0, 100, 100, 0 },
@@ -312,7 +298,7 @@ return
             pos = { nNameColX, nTopLabelY },
             scale = { 38, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'nameSortDivMid',
             type = 'onePixel',
@@ -320,7 +306,7 @@ return
             scale = { 45, nTopBarHeight },
             color = Gui.GREY,
             hidden = true,
-        },   
+        },
         {
             key = 'nameSortDown',
             type = 'uiTexture',
@@ -347,8 +333,7 @@ return
             pos = { nNameColX + 81, nTopLabelY },
             scale = { 364, nTopBarHeight },
             color = Gui.GREY,
-        },        
-        -- job1
+        },
         {
             key = 'Job1SortButton',
             type = 'onePixelButton',
@@ -384,7 +369,7 @@ return
         {
             key = 'job1Label',
             type = 'textBox',
-            pos = { nJob1ColX, nTopLabelTextY },            
+            pos = { nJob1ColX, nTopLabelTextY },
             linecode = 'DUTIES003TEXT',
             style = 'dosissemibold26',
             rect = { 0, 100, nJobCatLabelRectSize, 0 },
@@ -418,7 +403,7 @@ return
             pos = { nJob1ColX, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'job1SortDivMid',
             type = 'onePixel',
@@ -426,7 +411,7 @@ return
             scale = { nSortTextureSize, nTopBarHeight },
             color = Gui.GREY,
             hidden = true,
-        },   
+        },
         {
             key = 'job1SortDown',
             type = 'uiTexture',
@@ -453,8 +438,7 @@ return
             pos = { nJob1ColX + nJobDivScl + nSortTextureSize, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },        
-        -- job2
+        },
         {
             key = 'Job2SortButton',
             type = 'onePixelButton',
@@ -490,7 +474,7 @@ return
         {
             key = 'job2Label',
             type = 'textBox',
-            pos = { nJob2ColX, nTopLabelTextY },            
+            pos = { nJob2ColX, nTopLabelTextY },
             linecode = 'DUTIES005TEXT',
             style = 'dosissemibold26',
             rect = { 0, 100, nJobCatLabelRectSize, 0 },
@@ -524,7 +508,7 @@ return
             pos = { nJob2ColX, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'job2SortDivMid',
             type = 'onePixel',
@@ -532,7 +516,7 @@ return
             scale = { nSortTextureSize, nTopBarHeight },
             color = Gui.GREY,
             hidden = true,
-        },   
+        },
         {
             key = 'job2SortDown',
             type = 'uiTexture',
@@ -559,8 +543,7 @@ return
             pos = { nJob2ColX + nJobDivScl + nSortTextureSize, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },        
-        -- job3
+        },
         {
             key = 'Job3SortButton',
             type = 'onePixelButton',
@@ -596,7 +579,7 @@ return
         {
             key = 'job3Label',
             type = 'textBox',
-            pos = { nJob3ColX, nTopLabelTextY },            
+            pos = { nJob3ColX, nTopLabelTextY },
             linecode = 'DUTIES007TEXT',
             style = 'dosissemibold26',
             rect = { 0, 100, nJobCatLabelRectSize, 0 },
@@ -630,7 +613,7 @@ return
             pos = { nJob3ColX, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'job3SortDivMid',
             type = 'onePixel',
@@ -638,7 +621,7 @@ return
             scale = { nSortTextureSize, nTopBarHeight },
             color = Gui.GREY,
             hidden = true,
-        },   
+        },
         {
             key = 'job3SortDown',
             type = 'uiTexture',
@@ -665,8 +648,7 @@ return
             pos = { nJob3ColX + nJobDivScl + nSortTextureSize, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },        
-        -- job4
+        },
         {
             key = 'Job4SortButton',
             type = 'onePixelButton',
@@ -702,7 +684,7 @@ return
         {
             key = 'job4Label',
             type = 'textBox',
-            pos = { nJob4ColX, nTopLabelTextY },            
+            pos = { nJob4ColX, nTopLabelTextY },
             linecode = 'DUTIES009TEXT',
             style = 'dosissemibold26',
             rect = { 0, 100, nJobCatLabelRectSize, 0 },
@@ -736,7 +718,7 @@ return
             pos = { nJob4ColX, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'job4SortDivMid',
             type = 'onePixel',
@@ -744,7 +726,7 @@ return
             scale = { nSortTextureSize, nTopBarHeight },
             color = Gui.GREY,
             hidden = true,
-        },   
+        },
         {
             key = 'job4SortDown',
             type = 'uiTexture',
@@ -771,8 +753,7 @@ return
             pos = { nJob4ColX + nJobDivScl + nSortTextureSize, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },     
-        -- job5
+        },
         {
             key = 'Job5SortButton',
             type = 'onePixelButton',
@@ -808,7 +789,7 @@ return
         {
             key = 'job5Label',
             type = 'textBox',
-            pos = { nJob5ColX, nTopLabelTextY },            
+            pos = { nJob5ColX, nTopLabelTextY },
             linecode = 'DUTIES013TEXT',
             style = 'dosissemibold26',
             rect = { 0, 100, nJobCatLabelRectSize, 0 },
@@ -842,7 +823,7 @@ return
             pos = { nJob5ColX, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'job5SortDivMid',
             type = 'onePixel',
@@ -850,7 +831,7 @@ return
             scale = { nSortTextureSize, nTopBarHeight },
             color = Gui.GREY,
             hidden = true,
-        },   
+        },
         {
             key = 'job5SortDown',
             type = 'uiTexture',
@@ -877,8 +858,7 @@ return
             pos = { nJob5ColX + nJobDivScl + nSortTextureSize, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },           
-        -- job6
+        },
         {
             key = 'Job6SortButton',
             type = 'onePixelButton',
@@ -914,7 +894,7 @@ return
         {
             key = 'job6Label',
             type = 'textBox',
-            pos = { nJob6ColX, nTopLabelTextY },            
+            pos = { nJob6ColX, nTopLabelTextY },
             linecode = 'DUTIES016TEXT',
             style = 'dosissemibold26',
             rect = { 0, 100, nJobCatLabelRectSize, 0 },
@@ -948,7 +928,7 @@ return
             pos = { nJob6ColX, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'job6SortDivMid',
             type = 'onePixel',
@@ -956,7 +936,7 @@ return
             scale = { nSortTextureSize, nTopBarHeight },
             color = Gui.GREY,
             hidden = true,
-        },   
+        },
         {
             key = 'job6SortDown',
             type = 'uiTexture',
@@ -984,8 +964,6 @@ return
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
         },
-
-        -- job7
         {
             key = 'Job7SortButton',
             type = 'onePixelButton',
@@ -1021,7 +999,7 @@ return
         {
             key = 'job7Label',
             type = 'textBox',
-            pos = { nJob7ColX, nTopLabelTextY },            
+            pos = { nJob7ColX, nTopLabelTextY },
             linecode = 'DUTIES018TEXT',
             style = 'dosissemibold26',
             rect = { 0, 100, nJobCatLabelRectSize, 0 },
@@ -1055,7 +1033,7 @@ return
             pos = { nJob7ColX, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'job7SortDivMid',
             type = 'onePixel',
@@ -1063,7 +1041,7 @@ return
             scale = { nSortTextureSize, nTopBarHeight },
             color = Gui.GREY,
             hidden = true,
-        },   
+        },
         {
             key = 'job7SortDown',
             type = 'uiTexture',
@@ -1090,9 +1068,7 @@ return
             pos = { nJob7ColX + nJobDivScl + nSortTextureSize, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },           
-
-        -- job8
+        },
         {
             key = 'Job8SortButton',
             type = 'onePixelButton',
@@ -1128,7 +1104,7 @@ return
         {
             key = 'job8Label',
             type = 'textBox',
-            pos = { nJob8ColX, nTopLabelTextY },            
+            pos = { nJob8ColX, nTopLabelTextY },
             linecode = 'DUTIES020TEXT',
             style = 'dosissemibold26',
             rect = { 0, 100, nJobCatLabelRectSize, 0 },
@@ -1162,7 +1138,7 @@ return
             pos = { nJob8ColX, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'job8SortDivMid',
             type = 'onePixel',
@@ -1170,7 +1146,7 @@ return
             scale = { nSortTextureSize, nTopBarHeight },
             color = Gui.GREY,
             hidden = true,
-        },   
+        },
         {
             key = 'job8SortDown',
             type = 'uiTexture',
@@ -1197,9 +1173,7 @@ return
             pos = { nJob8ColX + nJobDivScl + nSortTextureSize, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },           
-
-        -- job9
+        },
         {
             key = 'Job9SortButton',
             type = 'onePixelButton',
@@ -1210,7 +1184,7 @@ return
         {
             key = 'job9Label',
             type = 'textBox',
-            pos = { nJob9ColX, nTopLabelTextY },            
+            pos = { nJob9ColX, nTopLabelTextY },
             linecode = 'DUTIES001TEXT',
             style = 'dosissemibold26',
             rect = { 0, 100, nJobCatLabelRectSize, 0 },
@@ -1244,20 +1218,20 @@ return
             pos = { nJob9ColX, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'Job9LabelDivMid',
             type = 'onePixel',
             pos = { nJob9ColX + nJobDivScl, nTopLabelY },
             scale = { nSortTextureSize, nTopBarHeight },
             color = Gui.GREY,
-        },   
+        },
         {
             key = 'Job9LabelDivRt',
             type = 'onePixel',
             pos = { nJob9ColX + nJobDivScl + nSortTextureSize, nTopLabelY },
             scale = { nJobDivScl, nTopBarHeight },
             color = Gui.GREY,
-        },        
+        },
     },
 }

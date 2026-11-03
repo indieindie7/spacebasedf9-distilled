@@ -1,5 +1,4 @@
 local m = {}
-
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
@@ -12,25 +11,19 @@ local ZoneActionTab = require('UI.ZoneActionTab')
 local GameScreen = require('GameScreen')
 local Gui = require('UI.Gui')
 local Character = require('CharacterConstants')
-
 local sUILayoutFileName = 'UILayouts/ZoneInspectorLayout'
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.rRoom = nil
     Ob.bDoRolloverCheck = true
-
     function Ob:init()
         Ob.Parent.init(self)
-
         self:processUIInfo(sUILayoutFileName)
-
         self.rZoneStatsTab = ZoneStatsTab.new()
         self.rZoneRezoneTab = ZoneRezoneTab.new()
         self.rZoneActionTab = ZoneActionTab.new()
         self.rZoneSpecificTab = ZoneSpecificTab.new()
 		self.rZoneActionTab.rZoneInspector = self
-
         self.rTabbedPane = self:getTemplateElement('TabbedPane')
         local tIcons={'ui_icon_stats','ui_icon_zoning','ui_icon_activity','ui_icon_research'}
         local tButtons = {}
@@ -44,26 +37,19 @@ function m.create()
         self.rTabbedPane:addTab(self.rZoneRezoneTab, 'ZoneRezoneTab', true, tButtons[2])
         self.rTabbedPane:addTab(self.rZoneActionTab, 'ZoneActionTab', true, tButtons[3])
         self.rTabbedPane:addTab(self.rZoneSpecificTab, 'ZoneSpecificTab', true, tButtons[4])
-
         self.tTabButtons = tButtons
-
         self.rNameText = self:getTemplateElement('NameLabel')
         self.rNameEditBG = self:getTemplateElement('NameEditBG')
         self.rAlertText = self:getTemplateElement('AlertLabel')
         self.rDescriptionText = self:getTemplateElement('DescriptionText')
         self.rNameEditButton = self:getTemplateElement('NameEditButton')
-		
-		-- stretch box + line to fill space where tabs could be
 		self.rTabSpacer = self:getTemplateElement('TabBGSpacer')
 		self.rTabLineSpacer = self:getTemplateElement('TabLineSpacer')
-		-- read vars from layout to avoid data duplication
 		self.nTabWidth = self:getExtraTemplateInfo('nTabWidth')
 		self.nTabHeight = self:getExtraTemplateInfo('nTabHeight')
 		self.nTabLineHeight = self:getExtraTemplateInfo('nTabLineHeight')
-		
         self.rNameEditButton:addPressedCallback(self.onNameEditButtonPressed, self)
     end
-
     function Ob:onTick(dt)
 		if self.rRoom:getTeam() ~= Character.TEAM_ID_PLAYER then
 			self.rTabbedPane:hideTab('ZoneRezoneTab')
@@ -91,25 +77,21 @@ function m.create()
 			self:setTemplateUITexture('Picture', self.rRoom.sPortrait, self.rRoom.sPortraitPath)
 		end
     end
-
     function Ob:onNameEditButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP and not GameScreen.inTextEntry() then
             GameScreen.beginTextEntry(self.rNameText, self, self.confirmTextEntry, self.cancelTextEntry)
 			self.rNameEditButton:setSelected(true)
         end
     end
-
     function Ob:confirmTextEntry(text)
         if self.rRoom then
             self.rRoom.uniqueZoneName = text
 			self.rNameEditButton:setSelected(false)
         end
     end
-
 	function Ob:cancelTextEntry(text)
 		self.rNameEditButton:setSelected(false)
 	end
-
     function Ob:onFinger(touch, x, y, props)
         local bHandled = false
         if Ob.Parent.onFinger(self, touch, x, y, props) then
@@ -117,51 +99,30 @@ function m.create()
         end
         return bHandled
     end
-
     function Ob:inside(wx, wy)
         local bHandled = Ob.Parent.inside(self, wx, wy)
         bHandled = self.rTabbedPane:inside(wx, wy) or bHandled
     end
-
-    --[[
-    function Ob:show(nPri)
-        local nPri = Ob.Parent.show(self, nPri)
-		-- if unzoned, show zoning tab first, else show command tab
-		if self.rRoom and self.rRoom:getZoneName() == 'PLAIN' then
-			self.rTabbedPane:setTabSelectedByKey('ZoneRezoneTab')
-		else
-			self.rTabbedPane:setTabSelectedByKey('ZoneActionTab')
-		end
-        return nPri
-    end
-    ]]--
-	
 	function Ob:getNumberOfTabs()
 		if not self.rRoom then
 			return 0
 		end
 		local nTabs = 2
-		-- claimed?
 		if self.rRoom:getTeam() == Character.TEAM_ID_PLAYER then
 			nTabs = nTabs + 1
 		end
-		-- zone-specific tab?
 		if self.rRoom.zoneObj.sZoneInspector then
 			nTabs = nTabs + 1
 		end
 		return nTabs
 	end
-	
 	function Ob:adjustSpacer()
 		local nTabs = self:getNumberOfTabs()
-		-- shaded background
 		self.rTabSpacer:setLoc(self.nTabWidth * nTabs, -420)
 		self.rTabSpacer:setScl(self.nTabWidth * (5 - nTabs) + 3, self.nTabHeight)
-		-- line that completes tab row
 		self.rTabLineSpacer:setLoc(self.nTabWidth * nTabs, -420 - self.nTabHeight)
 		self.rTabLineSpacer:setScl(self.nTabWidth * (5 - nTabs) + 3, self.nTabLineHeight)
 	end
-	
     function Ob:setRoom(rRoom)
         local bChanged = self.rRoom ~= rRoom
         if bChanged then
@@ -173,15 +134,13 @@ function m.create()
         self.rZoneStatsTab:setRoom(rRoom)
         self.rZoneRezoneTab:setRoom(rRoom)
 		self.rZoneActionTab:setRoom(rRoom)
-
         if bChanged then
             if self.rRoom and self.rRoom:getZoneName() == 'PLAIN' then
                 self.rTabbedPane:setTabSelectedByKey('ZoneRezoneTab')
             else
                 self.rTabbedPane:setTabSelectedByKey('ZoneActionTab')
-            end         
-        end   
-
+            end
+        end
         if self.rRoom and self.rRoom.zoneObj.sZoneInspector then
             if not self.rTabbedPane:hasTab('ZoneSpecificTab') then
                 self.rTabbedPane:addTab(self.rZoneSpecificTab, 'ZoneSpecificTab', true, self.tTabButtons[4])
@@ -190,7 +149,6 @@ function m.create()
             self.rTabbedPane:setElementHidden(self.rZoneSpecificTab,false)
 			self:adjustSpacer()
             if bChanged then
-				-- if zone specific tab exists, default to that
 				self.rTabbedPane:setTabSelectedByKey('ZoneSpecificTab')
             end
         else
@@ -209,20 +167,15 @@ function m.create()
 		end
 		self.rDescriptionText:setString(sDescription)
     end
-
     function Ob:onResize()
         Ob.Parent.onResize(self)
         self.rTabbedPane:onResize()
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

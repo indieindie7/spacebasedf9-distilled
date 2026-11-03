@@ -1,35 +1,12 @@
--- NEEDS DEF FORMAT:
--- Needs: { NeedName=Score, ... }
--- ScoreMods:
---  Priority: set it for survival-level actions.
---  BaseScore: added to the resultant score from the needs-based calculation.
--- PersonalityMods:
---  nBravery={min,max}: characters with bravery outside this range will not take this action. Tests >min, <=max.
---  (similar for all personality traits w/ a score)
--- Prerequisites: { PrereqName=true/false, ... }
--- Satisfies: { PrereqName=true/false, ... }
--- Tags:
---  Job: gates to only allow the option for character of that job.
---  DestOwned: the target location must be on the character's team. If no target loc specified, assumes character loc.
---  DestSafe: like DestOwned, but for: not breached; not on fire; no hostiles; not an airlock. Uses character memory.
---      Special value: 'AllowAirlock' is like DestSafe=true, but also allows activity to occur in an airlock.        
--- nJobExperience: xp to grant after completing the task. Will be given to JobForXP or Job
-
 local Character=require('CharacterConstants')
-
 local tPriorities=
 {
     NO_ACTIVITY = -1,
     NORMAL = 0,
-    -- Tasks that are high priority and should be undertaken as soon as possible
-    -- e.g. responding to a beacon
     SURVIVAL_LOW = 1,
-    -- Other survival events that are more urgent than fire. Suffocation.
     SURVIVAL_NORMAL = 2,
-    -- Do not interrupt. Character is being controlled.
     PUPPET = 3,
 }
-
 local tAdvertisedActivities=
 {
     WanderAround = {
@@ -39,13 +16,13 @@ local tAdvertisedActivities=
         UIText='UITASK001TEXT',
         Tags={ DestOwned=true, },
     },
-    WanderAroundSpace = { 
+    WanderAroundSpace = {
         ScoreMods={BaseScore=.002, } ,
         ClassPath='Utility.Tasks.WanderAround',
         Prerequisites={ Spacewalking=true, EmptyHands=true },
-        UIText='UITASK001TEXT',        
+        UIText='UITASK001TEXT',
     },
-    Explore = { 
+    Explore = {
         Needs={ Duty=2, },
         ClassPath='Utility.Tasks.Patrol',
         Tags={WorkShift=true,},
@@ -53,7 +30,7 @@ local tAdvertisedActivities=
         UIText='UITASK002TEXT',
         bAllowHostilePathing=true,
     },
-    SleepOnFloor = 
+    SleepOnFloor =
     {
         Needs={ Energy=2, },
         ScoreMods={ BaseScore=-2, },
@@ -90,7 +67,6 @@ local tAdvertisedActivities=
         nJobExperience=2,
         bTestMemoryBreach=false,
     },
-
     Chat = {
         Needs={ Social=9, },
         ClassPath='Utility.Tasks.Chat',
@@ -110,7 +86,6 @@ local tAdvertisedActivities=
         Prerequisites={ EmptyHands=true },
         UIText='UITASK009TEXT',
 	},
-
     BuildEnvObject = {
         Needs={ Duty=10, },
         ClassPath='Utility.Tasks.BuildEnvObject',
@@ -140,12 +115,11 @@ local tAdvertisedActivities=
         UIText='UITASK012TEXT',
         nJobExperience=20,
     },
-
     ERCircleBeaconInside={
         Needs={Duty=20, },
         ScoreMods={BaseScore=5,Priority=tPriorities.SURVIVAL_LOW },
         Tags={WorkShift=true, },
-        Prerequisites={ EmptyHands=true },        
+        Prerequisites={ EmptyHands=true },
         ClassPath='Utility.Tasks.CircleBeacon',
         UIText='UITASK002TEXT',
     },
@@ -154,7 +128,7 @@ local tAdvertisedActivities=
         ScoreMods={BaseScore=5,Priority=tPriorities.SURVIVAL_LOW  } ,
         Tags={WorkShift=true, },
         ClassPath='Utility.Tasks.CircleBeacon',
-        Prerequisites={ EmptyHands=true },        
+        Prerequisites={ EmptyHands=true },
         UIText='UITASK013TEXT',
     },
     ERBeaconExplore={
@@ -162,16 +136,15 @@ local tAdvertisedActivities=
         ScoreMods={BaseScore=5,Priority=tPriorities.SURVIVAL_LOW },
         Tags={WorkShift=true, },
         ClassPath='Utility.Tasks.Explore',
-        Prerequisites={ EmptyHands=true },        
+        Prerequisites={ EmptyHands=true },
         UIText='UITASK002TEXT',
         bAllowHostilePathing=true,
     },
-
     MineInside = {
         Needs={ Duty=20, },
         ScoreMods={BaseScore=.25, } ,
         Tags={WorkShift=true,Job=Character.MINER,},
-        Prerequisites={ EmptyHands=true },        
+        Prerequisites={ EmptyHands=true },
         ClassPath='Utility.Tasks.Mine',
         Prerequisites={ EmptyHands=true },
         UIText='UITASK014TEXT',
@@ -181,15 +154,14 @@ local tAdvertisedActivities=
         Needs={ Duty=15, },
         ScoreMods={BaseScore=.25, } ,
         Tags={WorkShift=true,Job=Character.MINER,},
-        Prerequisites={ EmptyHands=true },        
+        Prerequisites={ EmptyHands=true },
         ClassPath='Utility.Tasks.Mine',
         UIText='UITASK015TEXT',
         nJobExperience=24,
-        --Prerequisites={ Spacewalking=true, },
     },
     DropOffRocks = {
         Needs={ Duty=7, },
-        ScoreMods={BaseScore=5, }, -- HACK: really want these cleaned up, but we don't want to overfill duty.
+        ScoreMods={BaseScore=5, },
         ClassPath='Utility.Tasks.DropOffRocks',
         Tags={WorkShift=true,Job=Character.MINER, DestOwned=true},
         Prerequisites={ HeldItem='Rock' },
@@ -198,19 +170,16 @@ local tAdvertisedActivities=
     DropRocksOnFloor = {
         ClassPath='Utility.Tasks.DropEverything',
         Needs={ Duty=1, },
-        Prerequisites={ HeldItem='Rock', Spacewalking=false,},        
+        Prerequisites={ HeldItem='Rock', Spacewalking=false,},
         UIText='UITASK017TEXT',
     },
-
-    -- Botany
     HarvestAndDeliverFood = {
         Needs={ Duty=7, },
         ClassPath='Utility.Tasks.HarvestAndDeliverFood',
         Tags={WorkShift=true,DestOwned=true,DestSafe=true,Job=Character.BOTANIST,},
-        Prerequisites={ EmptyHands=true },        
+        Prerequisites={ EmptyHands=true },
         UIText='UITASK057TEXT',
     },
-
     MaintainPlants = {
         Needs={ Duty=5, },
         ClassPath='Utility.Tasks.MaintainPlants',
@@ -219,8 +188,6 @@ local tAdvertisedActivities=
         UIText='UITASK058TEXT',
         nJobExperience=20,
     },
-	
-	-- SCIENCE!
     ResearchInLab = {
         Needs={ Duty=5, },
         ClassPath='Utility.Tasks.ResearchInLab',
@@ -233,19 +200,6 @@ local tAdvertisedActivities=
 		},
         UIText='UITASK062TEXT',
     },
-    --[[
-    CollectResearchDatacube = {
-        Needs={ Duty=10, },
-        ClassPath='Utility.Tasks.CollectResearchDatacube',
-        Tags={
-			WorkShift=true,
-			DestSafe=true,
-            Job=Character.SCIENTIST,
-        },
-        Prerequisites={ EmptyHands=true, Spacewalking=false, },
-        UIText='UITASK063TEXT',
-    },
-    ]]--
     DeliverResearchDatacube = {
         Needs={ Duty=20, },
         ClassPath='Utility.Tasks.DeliverResearchDatacube',
@@ -258,7 +212,6 @@ local tAdvertisedActivities=
         Prerequisites={ HeldItem='ResearchDatacube', Spacewalking=false, },
         UIText='UITASK063TEXT',
     },
-    -- If there are no research desks, just put it, you know, wherever.
     PutResearchDatacubeWherever = {
         Needs={ Duty=7, },
         ClassPath='Utility.Tasks.DropEverything',
@@ -271,8 +224,6 @@ local tAdvertisedActivities=
         Prerequisites={ HeldItem='ResearchDatacube', Spacewalking=false, HeldItemInDanger='ResearchDatacube' },
         UIText='UITASK063TEXT',
     },
-
-    -- Doctor
     BedHeal = {
         Needs={ Duty=16, },
         Tags={WorkShift=true,DestOwned=true, DestSafe=true,Job=Character.DOCTOR, },
@@ -289,7 +240,6 @@ local tAdvertisedActivities=
         UIText='UITASK069TEXT',
     },
     FieldScanAndHeal = {
-        -- Can get up to 4 Duty added to it based on disease severity and time since checkup.
         Needs={ Duty=4, },
         Tags={WorkShift=true,DestOwned=true, DestSafe=true,Job=Character.DOCTOR,},
         ClassPath='Utility.Tasks.FieldScanAndHeal',
@@ -302,7 +252,6 @@ local tAdvertisedActivities=
         ClassPath='Utility.Tasks.CheckInToHospital',
         Prerequisites={ EmptyHands=true,},
         UIText='UITASK068TEXT',
-        --ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=0.01},
     },
     DropOffCorpse = {
         Needs={ Duty=6, },
@@ -312,24 +261,19 @@ local tAdvertisedActivities=
         Prerequisites={ HeldItem='Corpse' },
         UIText='UITASK071TEXT',
     },
-    
-    -- Emergency/security
-    Patrol = { 
+    Patrol = {
         Needs={ Duty=2, },
         ClassPath='Utility.Tasks.Patrol',
         Tags={WorkShift=true,DestOwned=true,Job=Character.EMERGENCY,},
         Prerequisites={ Spacewalking=false, EmptyHands=true },
         UIText='UITASK003TEXT',
     },
-    Cuff = { 
+    Cuff = {
         Needs={ Duty=10, },
         ClassPath='Utility.Tasks.Cuff',
         Tags={WorkShift=true,Job=Character.EMERGENCY,},
         Prerequisites={ EmptyHands=true },
-        --UIText='UITASK003TEXT',
     },
-
-    -- Bartender
     OpenPub = {
 		Needs={ Duty=8, },
         Tags={WorkShift=true,DestOwned=true, DestSafe=true,Job=Character.BARTENDER,},
@@ -360,7 +304,6 @@ local tAdvertisedActivities=
         UIText='UITASK054TEXT',
         nJobExperience=30,
 	},
-
     EatAtFoodReplicator = {
         Needs={ Hunger=10, },
         ClassPath='Utility.Tasks.EatAtFoodReplicator',
@@ -400,24 +343,20 @@ local tAdvertisedActivities=
         Tags={DestSafe=true,},
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=0.01},
     },
-
     VoluntarilyWalkToBrig={
         ScoreMods={BaseScore=40, Priority=tPriorities.SURVIVAL_LOW },
         Tags={ NonThreatening=true, },
         ClassPath='Utility.Tasks.WalkTo',
-        Prerequisites={ },        
+        Prerequisites={ },
         UIText='UITASK075TEXT',
     },
     VoluntarilyGetCuffed={
         ScoreMods={BaseScore=39,Priority=tPriorities.SURVIVAL_LOW },
         Tags={ NonThreatening=true, },
         ClassPath='Utility.Tasks.Breathe',
-        Prerequisites={ },        
+        Prerequisites={ },
         UIText='UITASK078TEXT',
     },
-    ----------------------------------------------------
-    --HOBBIES
-    ----------------------------------------------------
     WorkOutNoGym = {
         Needs={ Amusement=3, },
         ClassPath='Utility.Tasks.WorkOut',
@@ -458,29 +397,21 @@ local tAdvertisedActivities=
 		    DestSafe=true,
         },
     },
-
-
-    ------------------------------------------------------------------
-    -- SURVIVAL
-    ------------------------------------------------------------------
-    
-    FleeEmergencyAlarm = { 
+    FleeEmergencyAlarm = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=100 },
         ClassPath='Utility.Tasks.RunTo',
         Prerequisites={ },
         UIText='UITASK026TEXT',
     },
-    FleeTemperTantrum = { 
+    FleeTemperTantrum = {
         ScoreMods={Priority=tPriorities.SURVIVAL_LOW, BaseScore=1 },
         ClassPath='Utility.Tasks.RunTo',
         Prerequisites={ },
         UIText='UITASK026TEXT',
     },
-    -- FIRE. Score range 1-10.
-    ExtinguishFireWithTool = { 
+    ExtinguishFireWithTool = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=8, } ,
         PersonalityMods={ nBravery={.05,1} },
-        
         ClassPath='Utility.Tasks.ExtinguishFireWithTool',
         Prerequisites={ EmptyHands=true },
         UIText='UITASK018TEXT',
@@ -488,7 +419,7 @@ local tAdvertisedActivities=
         JobForXP=Character.EMERGENCY,
         Tags={DestOwned=true,},
     },
-    ExtinguishFireBareHanded = { 
+    ExtinguishFireBareHanded = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=6, } ,
         PersonalityMods={ nBravery={.15,1} },
         ClassPath='Utility.Tasks.ExtinguishFireBareHanded',
@@ -498,30 +429,27 @@ local tAdvertisedActivities=
         JobForXP=Character.EMERGENCY,
         Tags={DestOwned=true,},
     },
-    FireFleeArea = { 
+    FireFleeArea = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=4, } ,
         PersonalityMods={ nBravery={.2,1} },
         ClassPath='Utility.Tasks.RunTo',
         Prerequisites={ },
         UIText='UITASK020TEXT',
     },
-    PanicFire = { 
+    PanicFire = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=2, } ,
         PersonalityMods={ nBravery={0,.4} },
         ClassPath='Utility.Tasks.PanicFire',
         Prerequisites={ },
         UIText='UITASK021TEXT',
     },
-    -- Manual/forced.
-    PanicOnFire = { 
+    PanicOnFire = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL,} ,
         ClassPath='Utility.Tasks.PanicOnFire',
         Prerequisites={ EmptyHands=true },
         UIText='UITASK022TEXT',
     },
-
-    -- COMBAT. Score range 100-120.
-    RangedAttackThreat = { 
+    RangedAttackThreat = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=120, } ,
         PersonalityMods={ nBravery={.1,1} },
         Needs={ Duty=10, },
@@ -531,7 +459,7 @@ local tAdvertisedActivities=
         UIText='UITASK023TEXT',
         bAllowHostilePathing=true,
     },
-    AttackThreatFallback = { 
+    AttackThreatFallback = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=99, } ,
         Needs={ },
         Tags={ HighDistPenalty=true, },
@@ -540,7 +468,7 @@ local tAdvertisedActivities=
         UIText='UITASK024TEXT',
         bAllowHostilePathing=true,
     },
-    AttackThreat = { 
+    AttackThreat = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=110, } ,
         PersonalityMods={ nBravery={.8,1} },
         Needs={ Duty=5, },
@@ -556,106 +484,80 @@ local tAdvertisedActivities=
         Prerequisites={ EmptyHands=true, },
         UIText='UITASK076TEXT',
     },
-    FleeThreat = { 
+    FleeThreat = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=110, },
         PersonalityMods={ nBravery={.4,1} },
         ClassPath='Utility.Tasks.RunTo',
         Prerequisites={ EmptyHandsOrCuffed=true, },
         UIText='UITASK026TEXT',
     },
-    PanicThreat = { 
+    PanicThreat = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=110 },
         PersonalityMods={ nBravery={0,.2} },
         ClassPath='Utility.Tasks.PanicFire',
-        Prerequisites={ EmptyHands=true },        
+        Prerequisites={ EmptyHands=true },
         UIText='UITASK025TEXT',
     },
-
-    OxygenFleeArea = { 
+    OxygenFleeArea = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=200} ,
         ClassPath='Utility.Tasks.RunTo',
         UIText='UITASK027TEXT',
     },
-    PanicOxygen = { 
+    PanicOxygen = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=1 } ,
         PersonalityMods={ nBravery={0,.4} },
         ClassPath='Utility.Tasks.PanicFire',
         Prerequisites={ EmptyHands=true },
         UIText='UITASK039TEXT',
     },
-    -- Dawgness.
     IncapacitatedOnFloor = {
         ClassPath='Utility.Tasks.Incapacitated',
         UIText='UITASK070TEXT',
-        ScoreMods={BaseScore=.002, 
-            -- gets normal pri. see note in incapacitated.lua on getPriority
-            --Priority=tPriorities.PUPPET
+        ScoreMods={BaseScore=.002,
             } ,
         Tags={ NonThreatening=true, },
     },
-    -- Rampage Tasks
-    -- Tasks gated by being on a rampage.
-    --
-    ViolentRampageBreathe = { 
+    ViolentRampageBreathe = {
         ScoreMods={BaseScore=100, Priority=tPriorities.SURVIVAL_NORMAL, },
         Tags={ Status=Character.STATUS_RAMPAGE_VIOLENT, Cooldown=15, },
         ClassPath='Utility.Tasks.RampageTantrum',
         Prerequisites={ EmptyHands=true },
-        --UIText='UITASK039TEXT',
     },
-    ViolentRampagePatrol = { 
+    ViolentRampagePatrol = {
         ScoreMods={BaseScore=100, Priority=tPriorities.SURVIVAL_NORMAL, } ,
         Tags={ Status=Character.STATUS_RAMPAGE_VIOLENT, },
         ClassPath='Utility.Tasks.Patrol',
         Prerequisites={ EmptyHands=true },
-        --UIText='UITASK039TEXT',
     },
-    NonviolentRampageSabotage = { 
+    NonviolentRampageSabotage = {
         ScoreMods={BaseScore=105, Priority=tPriorities.SURVIVAL_LOW, } ,
         Tags={ Status=Character.STATUS_RAMPAGE_NONVIOLENT, },
         ClassPath='Utility.Tasks.Sabotage',
         Prerequisites={ EmptyHands=true },
-        --UIText='UITASK039TEXT',
     },
-    
-    -----------------------------------------------
-    -- FALLBACKS; PREREQS
-    -----------------------------------------------
-    Breathe = { 
+    Breathe = {
         ScoreMods={BaseScore=0.001} ,
-        ClassPath='Utility.Tasks.Breathe',        
+        ClassPath='Utility.Tasks.Breathe',
         UIText='UITASK029TEXT',
     },
-    FallbackDropEverything = { 
+    FallbackDropEverything = {
         ScoreMods={BaseScore=0.002},
         ClassPath='Utility.Tasks.DropEverything',
         UIText='UITASK032TEXT',
     },
-    -- Available to people in an airlock with nothing better to do.
     GoOutsideStandalone = {
         ClassPath='Utility.Tasks.RunTo',
         UIText='UITASK036TEXT',
         ScoreMods={BaseScore=0.002},
     },
-    -- Available to people without much to do inside, but who would still probably prefer not to suffocate.
     GoInsideStandalone = {
         ClassPath='Utility.Tasks.RunTo',
         ScoreMods={ BaseScore=.75, MinimumScore=.01, },
         Prerequisites={ Spacewalking=true, },
         UIText='UITASK030TEXT',
-        --Satisfies={ Spacewalking=false, },
-		--OverridePathTest=true,
-        -- Why allow hostile pathing? because airlocks already have a team check in their gate function.
-        -- So this is basically to allow raiders inside.
-        -- Since the character is already in space, there's no way this makes them walk through hostile
-        -- territory on the way inside.
         bAllowHostilePathing=true,
     },
-
-    ----------------------------------------------------
-    -- MONSTER-SPECIFIC
-    ----------------------------------------------------
-    MonsterPatrol = { 
+    MonsterPatrol = {
         ScoreMods={BaseScore=1} ,
         ClassPath='Utility.Tasks.Patrol',
         Prerequisites={ Spacewalking=false, EmptyHands=true },
@@ -664,8 +566,6 @@ local tAdvertisedActivities=
     },
     MonsterAttackEquipment = {
         ScoreMods={BaseScore=2} ,
-        --ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=101, } ,
-        --Needs={ Duty=2, },
         ClassPath='Utility.Tasks.AttackEnemy',
         Prerequisites={ Spacewalking=false, EmptyHands=true },
         UIText='UITASK074TEXT',
@@ -678,21 +578,17 @@ local tAdvertisedActivities=
         UIText='UITASK001TEXT',
         bAllowHostilePathing=true,
     },
-    RaiderOxygenFleeArea = { 
+    RaiderOxygenFleeArea = {
         ScoreMods={ BaseScore=3 },
         ClassPath='Utility.Tasks.RunTo',
         UIText='UITASK027TEXT',
     },
-    RaiderFleeThreat = { 
+    RaiderFleeThreat = {
         ScoreMods={BaseScore=.2, },
         ClassPath='Utility.Tasks.RunTo',
         Prerequisites={  },
         UIText='UITASK026TEXT',
     },
-    
-    ----------------------------------------------------
-    -- Prereq satisfiers.
-    ----------------------------------------------------
     DropEverything = {
         ClassPath='Utility.Tasks.DropEverything',
         Needs={ Duty=-10, },
@@ -702,30 +598,23 @@ local tAdvertisedActivities=
 	},
     PickUpFloorItem = {
         ClassPath='Utility.Tasks.PickUpFloorItem',
-        Satisfies={ 
-            --HeldItem='FILLED_IN_BY_PICKUP', 
+        Satisfies={
         },
         UIText='UITASK033TEXT',
         Tags={DestOwned=true,},
-        Prerequisites={ EmptyHands=true },        
+        Prerequisites={ EmptyHands=true },
 	},
     PutOnSuit = {
         ClassPath='Utility.Tasks.PutOnSuit',
         Satisfies={ WearingSuit=true, },
         bTestMemoryBreach=false,
     },
-
-    ----------------------------------------------------
-    -- Stuff
-    ----------------------------------------------------
-
-    -- most of the scoring is done in Pickup's utilityOverrideFn.
     PickUpStuff = {
         ScoreMods={BaseScore=1 } ,
         ClassPath='Utility.Tasks.PickUpFloorItem',
         UIText='UITASK033TEXT',
         Tags={DestSafe='AllowAirlock',},
-        Prerequisites={ EmptyHands=true },        
+        Prerequisites={ EmptyHands=true },
 	},
     DisplayInventoryItem = {
         ScoreMods={ BaseScore=4 },
@@ -739,7 +628,7 @@ local tAdvertisedActivities=
         ClassPath='Utility.Tasks.DropEverything',
         UIText='UITASK080TEXT',
         Tags={DestSafe=true,},
-        Prerequisites={ EmptyHands=true },        
+        Prerequisites={ EmptyHands=true },
 	},
     IncinerateStuff = {
         ScoreMods={} ,
@@ -748,41 +637,30 @@ local tAdvertisedActivities=
         Tags={DestSafe=true,},
         Prerequisites={ EmptyHands=true },
 	},
-    
-    ----------------------------------------------------
-    -- Manually created only.
-    ----------------------------------------------------
     GoOutside = {
         ClassPath='Utility.Tasks.GoOutside',
         UIText='UITASK036TEXT',
         Satisfies={ WearingSuit=true, },
-		-- small tweak downwards to approximate the distance cost of whatever's outside
-        --ScoreMods={ BaseScore=-.05, },
-        --Satisfies={ Spacewalking=true, },
-		--OverridePathTest=true,
     },
     GoInside = {
         ClassPath='Utility.Tasks.GoInside',
         UIText='UITASK030TEXT',
-        bAllowHostilePathing=true,        
+        bAllowHostilePathing=true,
     },
-    VacuumPull = { 
+    VacuumPull = {
         ScoreMods={Priority=tPriorities.PUPPET,} ,
         ClassPath='Utility.Tasks.VacuumPull',
         UIText='UITASK037TEXT',
     },
-    Puppet = { 
+    Puppet = {
         ScoreMods={Priority=tPriorities.PUPPET,} ,
         ClassPath='Utility.Tasks.Puppet',
         UIText='UITASK038TEXT',
     },
-
 }
-
 local OptionData=
 {
     tAdvertisedActivities=tAdvertisedActivities,
     tPriorities=tPriorities,
 }
-
 return OptionData

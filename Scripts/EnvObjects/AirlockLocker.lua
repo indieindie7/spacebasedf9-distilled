@@ -6,9 +6,7 @@ local ObjectList=require('ObjectList')
 local Room=require('Room')
 local ActivityOptionList=require('Utility.ActivityOptionList')
 g_ActivityOption=g_ActivityOption or require('Utility.ActivityOption')
-
 local AirlockLocker = Class.create(EnvObject, MOAIProp.new)
-
 function AirlockLocker:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
     EnvObject.init(self,sName, wx,wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
     local tData=
@@ -25,13 +23,8 @@ function AirlockLocker:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nT
         end,
 		bInfinite=true,
     }
-
     self.rAirlockOption = g_ActivityOption.new('PutOnSuit',tData)
 end
-
--- find a good spot to stand to get your suit.
--- Usually returns the spot right in front of it, but if that's no good,
--- it'll try some other adjacent ones.
 function AirlockLocker:getAccessWorldLoc()
     if self.rRoom then
         local tx,ty = self:getTileInFrontOf()
@@ -55,7 +48,6 @@ function AirlockLocker:getAccessWorldLoc()
     end
     return nil
 end
-
 function AirlockLocker:getAvailableActivities()
     local tActivities = EnvObject.getAvailableActivities(self)
     if self.rAirlockOption then
@@ -63,6 +55,4 @@ function AirlockLocker:getAvailableActivities()
     end
     return tActivities
 end
-
 return AirlockLocker
-

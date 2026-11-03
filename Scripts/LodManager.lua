@@ -1,7 +1,6 @@
 local LodManager = {}
-
 LodManager.tLodProfiles = {
-    ["very_low"] = { 
+    ["very_low"] = {
         tSceneLods = {
             "ambient_low",
             "gameplay_low",
@@ -13,8 +12,7 @@ LodManager.tLodProfiles = {
             },
         },
     },
-    
-    ["low"] = { 
+    ["low"] = {
         tSceneLods = {
             "ambient_low",
             "gameplay_medium",
@@ -25,8 +23,7 @@ LodManager.tLodProfiles = {
             },
         },
     },
-    
-    ["medium"] = { 
+    ["medium"] = {
         tSceneLods = {
             "ambient_medium",
             "gameplay_medium",
@@ -37,70 +34,47 @@ LodManager.tLodProfiles = {
             },
         },
     },
-    
-    ["high"] = { 
+    ["high"] = {
         tSceneLods = {
             "ambient_medium",
             "gameplay_high",
         },
     },
-    
-    ["very_high"] = { 
+    ["very_high"] = {
         tSceneLods = {
             "ambient_high",
             "gameplay_high",
         },
     },
 }
-
 LodManager.tAcceptedSceneLods = {}
-
-
-
-
 function LodManager.acceptExplicitSceneLod(sLodName)
-
     sLodName = sLodName or "default"
     if LodManager.tAcceptedSceneLods[sLodName] == true then
         return true
     end
-    
     return false
 end
-    
 function LodManager.acceptSceneLod(sLodName, sLodType)
-
     sLodName = sLodName or "default"
     if LodManager.acceptExplicitSceneLod(sLodName) then
         return true
     end
-    
-    -- The requested LOD wasn't found explicitly...
     sLodType = sLodType or "explicit"
     if sLodType ~= "explicit" and sLodName ~= "default" then
-        
-        -- ...so let's check if it's included in the selector
         local idxSeperator = string.find(sLodName, "_")
         if idxSeperator ~= nil then
-        
             local sGroupName = string.sub(sLodName, 1, idxSeperator)
-            
             local lodNameLength = #sLodName
             local sCurType = string.sub(sLodName, idxSeperator + 1, lodNameLength)
-            
-            -- Include LODs above the requested one?
             if sLodType == "include_higher" then
-            
                 if sCurType == "low" then
                     if LodManager.acceptExplicitSceneLod(sGroupName .. "medium") then return true end
                     if LodManager.acceptExplicitSceneLod(sGroupName .. "high") then return true end
                 elseif sCurType == "medium" then
                     if LodManager.acceptExplicitSceneLod(sGroupName .. "high") then return true end
                 end
-            
-            -- Include LODs below the requested one?
             elseif sLodType == "include_lower" then
-            
                 if sCurType == "high" then
                     if LodManager.acceptExplicitSceneLod(sGroupName .. "medium") then return true end
                     if LodManager.acceptExplicitSceneLod(sGroupName .. "low") then return true end
@@ -110,8 +84,6 @@ function LodManager.acceptSceneLod(sLodName, sLodType)
             end
         end
     end
-    
     return false
 end
-
 return LodManager

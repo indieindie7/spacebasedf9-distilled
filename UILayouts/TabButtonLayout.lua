@@ -1,12 +1,9 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
-
 local nButtonWidth, nButtonHeight  = 418, 98
-
-return 
+return
 {
     posInfo =
     {
@@ -18,15 +15,14 @@ return
         tCallbacks =
         {
         },
-    },    
+    },
     tElements =
-    {       
+    {
         {
             key = 'ActiveTabTexture',
             type = 'uiTexture',
             textureName = 'ui_tabTopActive',
             sSpritesheetPath = 'UI/Shared',
-            --pos = { 1000, -nProjectTabY },
             color = Gui.AMBER,
             onHoverOn =
             {
@@ -37,11 +33,11 @@ return
                 {
                     key = 'ActiveTabTexture',
                     hidden = false,
-                }, 
+                },
                 {
                     key = 'InactiveTabTexture',
                     hidden = true,
-                }, 
+                },
             },
             onHoverOff =
             {
@@ -52,11 +48,11 @@ return
                 {
                     key = 'ActiveTabTexture',
                     hidden = true,
-                }, 
+                },
                 {
                     key = 'InactiveTabTexture',
                     hidden = false,
-                }, 
+                },
             },
             onSelectedOn =
             {
@@ -67,11 +63,11 @@ return
                 {
                     key = 'ActiveTabTexture',
                     hidden = false,
-                }, 
+                },
                 {
                     key = 'InactiveTabTexture',
                     hidden = true,
-                }, 
+                },
             },
             onSelectedOff =
             {
@@ -82,11 +78,11 @@ return
                 {
                     key = 'ActiveTabTexture',
                     hidden = true,
-                }, 
+                },
                 {
                     key = 'InactiveTabTexture',
                     hidden = false,
-                }, 
+                },
             },
         },
         {
@@ -94,14 +90,12 @@ return
             type = 'uiTexture',
             textureName = 'ui_tabTopInactive',
             sSpritesheetPath = 'UI/Shared',
-            --pos = { 1000, -nProjectTabY },
             color = Gui.AMBER,
         },
         {
             key = 'TabText',
             type = 'textBox',
             pos = {32,-8},
-            --pos = { 1000 + 32, -nProjectTabY - 8 },
             linecode = 'RSCHUI005TEXT',
             style = 'dosissemibold30',
             rect = { 0, 300, 200, 0 },
@@ -111,4 +105,3 @@ return
         },
     },
 }
-

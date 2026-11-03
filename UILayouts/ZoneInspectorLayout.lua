@@ -1,14 +1,11 @@
 local Gui = require('UI.Gui')
-
 local nButtonWidth, nButtonHeight  = 418, 98
 local nTabWidth, nTabHeight = 83, 47
 local nTabLineHeight = 3
-
 local nControlButtonX, nControlButtonY = 32, -370
 local nControlButtonSpacing = 36
 local nControlButtonWidth, nControlButtonHeight = 160, 37
 local labelX, labelY = -20, nControlButtonY - 5
-
 return
 {
     posInfo =
@@ -33,7 +30,6 @@ return
             scale = { nButtonWidth, 106 },
             color = Gui.AMBER,
         },
-		-- "editing name" BG
         {
             key = 'NameEditBG',
             type = 'onePixelButton',
@@ -41,7 +37,6 @@ return
             scale = { nButtonWidth, 35 },
             color = Gui.AMBER,
         },
-        -- Portrait
         {
             key = 'PictureBG',
             type = 'onePixel',
@@ -58,7 +53,6 @@ return
             scale = { 0.84, 0.84 },
             color = Gui.AMBER,
         },
-        -- Name
         {
             key = 'NameLabel',
             type = 'textBox',
@@ -70,7 +64,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 0, 0, 0 },
         },
-        -- Name Edit Button
         {
             key = 'NameEditButton',
             type = 'onePixelButton',
@@ -113,7 +106,6 @@ return
             color = Gui.AMBER,
 			hidden = true,
         },
-        -- Alert
         {
             key = 'AlertLabel',
             type = 'textBox',
@@ -125,7 +117,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 0, 0, 0 },
         },
-        -- stats
         {
             key = 'StatsBG',
             type = 'onePixel',
@@ -133,7 +124,6 @@ return
             scale = { nButtonWidth, 152 },
             color = Gui.AMBER_OPAQUE,
         },
-        -- description
         {
             key = 'DescriptionText',
             type = 'textBox',
@@ -145,7 +135,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- "behind tab" box
         {
             key = 'TabBGSpacer',
             type = 'onePixel',
@@ -153,7 +142,6 @@ return
             scale = { nTabWidth*2 + 3, nTabHeight },
             color = Gui.AMBER_OPAQUE,
         },
-		-- line that completes the tab row
         {
             key = 'TabLineSpacer',
             type = 'onePixel',
@@ -161,12 +149,11 @@ return
             scale = { nTabWidth*2 + 3, nTabLineHeight },
             color = Gui.AMBER,
         },
-        -- Tabbed Pane
         {
             key = 'TabbedPane',
             type = 'tabbedPane',
             pos = { 0, -428 },
-            rect = { 0, 0, nButtonWidth-20, '(g_GuiManager.getUIViewportSizeY()-497)' }, --655 
+            rect = { 0, 0, nButtonWidth-20, '(g_GuiManager.getUIViewportSizeY()-497)' },
         },
     },
 }

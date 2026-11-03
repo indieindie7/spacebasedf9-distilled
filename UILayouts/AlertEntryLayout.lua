@@ -1,10 +1,8 @@
 local Gui = require('UI.Gui')
-
 local tLayout =
 {
     posInfo =
         {
---        alignX = 'right',
         alignY = 'top',
         offsetX = 0,
         offsetY = 0,
@@ -12,15 +10,6 @@ local tLayout =
     },
     tElements =
     {
-    --[[
-        {
-            key = 'ButtonBG',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { 40, 100 },
-            color = Gui.ALERTLOG_BG,
-        },
-        ]]--
         {
             key = 'Button',
             type = 'onePixelButton',
@@ -33,12 +22,6 @@ local tLayout =
                     key = 'Button',
                     color = Gui.AMBER,
                 },
-            --[[
-                {
-                    key = 'ButtonBG',
-                    color = Gui.AMBER,
-                },
-                ]]--
             },
             onHoverOff =
             {
@@ -46,12 +29,6 @@ local tLayout =
                     key = 'Button',
                     color = Gui.ALERTLOG_BG,
                 },
-                --[[
-                {
-                    key = 'ButtonBG',
-                    color = Gui.ALERTLOG_BG,
-                },
-                ]]--
             },
         },
         {
@@ -64,7 +41,7 @@ local tLayout =
             hAlign = MOAITextBox.LEFT_JUSTIFY,
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.BLACK,
-        },   
+        },
         {
             key = 'TimeText',
             type = 'textBox',
@@ -75,8 +52,7 @@ local tLayout =
             hAlign = MOAITextBox.LEFT_JUSTIFY,
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.BLACK,
-        },       
+        },
     },
 }
-
 return tLayout

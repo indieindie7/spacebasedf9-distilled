@@ -5,21 +5,10 @@ local Room = require('Room')
 local Topics = require('Topics')
 local Character = require('CharacterConstants')
 local MiscUtil = require('MiscUtil')
-
 local Log = {}
-
--- if false, citizens will log every last thought that pops into their heads
--- (useful for debugging)
 Log.bFilter = true
-
--- debug logging for this system, should only be enabled for non-shipping builds!
 Log.bLog = false
-
---
--- log types
---
 Log.tTypes = {
-	-- super general observations: life, the universe, and everything
 	GENERIC={
 		lineCodes={ 'SFGNRC001CITZ', 'SFGNRC002CITZ', 'SFGNRC003CITZ', 'SFGNRC004CITZ', 'SFGNRC005CITZ',
                     'SFGNRC006CITZ', 'SFGNRC007CITZ', 'SFGNRC008CITZ', 'SFGNRC009CITZ', 'SFGNRC010CITZ',
@@ -36,16 +25,15 @@ Log.tTypes = {
                 },
 		priority=0,
 	},
-	-- like/dislike "interesting" (strong affinity*familiarity) person in room
 	LIKE_NEARBY_PERSON={
-		lineCodes={ 'SFNEAR001CITZ', 'SFNEAR005CITZ', 'SFNEAR006CITZ', 'SFNEAR007CITZ', 'SFNEAR013CITZ', 
+		lineCodes={ 'SFNEAR001CITZ', 'SFNEAR005CITZ', 'SFNEAR006CITZ', 'SFNEAR007CITZ', 'SFNEAR013CITZ',
 					'SFNEAR014CITZ',
 				},
 		priority=0,
 	},
 	DISLIKE_NEARBY_PERSON={
 		lineCodes={ 'SFNEAR002CITZ', 'SFNEAR008CITZ', 'SFNEAR009CITZ', 'SFNEAR010CITZ', 'SFNEAR011CITZ',
-					'SFNEAR012CITZ', 
+					'SFNEAR012CITZ',
 				},
 		priority=0,
 	},
@@ -55,20 +43,15 @@ Log.tTypes = {
 				},
 		priority=0,
 	},
-	-- became a citizen of the base
 	JOINED={
 		lineCodes={ 'SFSPWN001CITZ', 'SFSPWN002CITZ', 'SFSPWN003CITZ', 'SFSPWN004CITZ', 'SFSPWN005CITZ', 'SFSPWN006CITZ' },
-		-- log type priority: can be positive, zero, or negative
 		priority=3,
 	},
-    --raider enters your base
     ENEMY_JOINED={
-		lineCodes={ 'SFSPWN007RAID', 'SFSPWN008RAID', 'SFSPWN009RAID', 'SFSPWN010RAID', 'SFSPWN011RAID', 'SFSPWN012RAID' },		
+		lineCodes={ 'SFSPWN007RAID', 'SFSPWN008RAID', 'SFSPWN009RAID', 'SFSPWN010RAID', 'SFSPWN011RAID', 'SFSPWN012RAID' },
 		priority=3,
 	},
-	-- did some useful work
 	DUTY_GENERIC={},
-	-- assigned a new duty
 	DUTY_ASSIGNED={
 		lineCodes={
 			'SFDTAS006CITZ', 'SFDTAS007CITZ', 'SFDTAS008CITZ', 'SFDTAS009CITZ', 'SFDTAS010CITZ',
@@ -80,7 +63,6 @@ Log.tTypes = {
 	DUTY_UNEMPLOYED={
 		lineCodes={ 'SFDTAS001CITZ', 'SFDTAS002CITZ', 'SFDTAS003CITZ', 'SFDTAS004CITZ', 'SFDTAS005CITZ' },
 	},
-	-- duty-specific
 	DUTY_BUILD={
 		lineCodes={ 'SFDTBD001CITZ', 'SFDTBD002CITZ', 'SFDTBD003CITZ','SFDTBD004CITZ','SFDTBD005CITZ',
 					'SFDTBD006CITZ', 'SFDTBD007CITZ',
@@ -145,10 +127,9 @@ Log.tTypes = {
         lineCodes={ 'SFSECU001CITZ', 'SFSECU002CITZ', 'SFSECU003CITZ', 'SFSECU004CITZ', 'SFSECU005CITZ',
                     'SFSECU006CITZ', 'SFSECU007CITZ','SFSECU008CITZ','SFSECU009CITZ' },
     },
-	-- doctor duty
 	DUTY_DOCTOR_REFINE_CORPSE_FRIENDLY={
 		lineCodes={ 'SFDOCT005CITZ', 'SFDOCT006CITZ', 'SFDOCT008CITZ', 'SFDOCT017CITZ', 'SFDOCT018CITZ',
-					'SFDOCT019CITZ', 'SFDOCT020CITZ', 'SFDOCT064CITZ', 
+					'SFDOCT019CITZ', 'SFDOCT020CITZ', 'SFDOCT064CITZ',
 				},
 		priority=2,
 	},
@@ -179,7 +160,6 @@ Log.tTypes = {
 		lineCodes={ 'SFDOCT003CITZ', 'SFDOCT007CITZ', 'SFDOCT010CITZ', 'SFDOCT016CITZ', },
 		priority=2,
 	},
-	-- citizen illness/injury
 	HEALTH_CITIZEN_SCAN={
 		lineCodes={ 'SFDOCT021CITZ', 'SFDOCT036CITZ', 'SFDOCT037CITZ', 'SFDOCT038CITZ', 'SFDOCT039CITZ',
 					'SFDOCT040CITZ', 'SFDOCT041CITZ',
@@ -216,7 +196,6 @@ Log.tTypes = {
 				},
 		priority=2,
 	},
-	-- chatting
 	CHAT_INTRODUCE={
 		lineCodes={ 'SFCHAT001CITZ', 'SFCHAT002CITZ', 'SFCHAT003CITZ', 'SFCHAT004CITZ' },
 		priority=3,
@@ -233,7 +212,6 @@ Log.tTypes = {
 		lineCodes={ 'SFCHAT013CITZ', 'SFCHAT014CITZ', 'SFCHAT015CITZ', 'SFCHAT016CITZ', 'SFCHAT017CITZ', 'SFCHAT018CITZ' },
 		priority=2,
 	},
-	-- trading
 	CHAT_TRADE={
 		lineCodes={ 'SFCHAT019CITZ', 'SFTRAD007CITZ', 'SFTRAD008CITZ', 'SFTRAD009CITZ',
                     'SFTRAD010CITZ', 'SFTRAD011CITZ', 'SFTRAD012CITZ' },
@@ -243,28 +221,22 @@ Log.tTypes = {
 		lineCodes={ 'SFTRAD001CITZ' },
 		priority=2,
 	},
-	-- death-related
-	-- logging about a (non-self) citizen who died
 	DEATH_REACT_CITIZEN={
 		lineCodes={ 'SFDTHG002CITZ', 'SFDTHG003CITZ', 'SFDTHG004CITZ', 'SFDTHG018CITZ', },
 		priority=4,
 	},
-    -- reaction of enemy death
     DEATH_REACT_ENEMY={
 		lineCodes={ 'SFDTHG015CITZ', 'SFDTHG016CITZ', 'SFDTHG017CITZ', },
 		priority=4,
     },
-    -- friend who died :[
 	DEATH_REACT_FRIEND={
 		lineCodes={ 'SFDTHG005CITZ', 'SFDTHG006CITZ', 'SFDTHG007CITZ', 'SFDTHG019CITZ', },
 		priority=4,
 	},
-    --raider reaction to citizen death
     DEATH_REACT_RAIDER_TO_CITZ={
 		lineCodes={ 'SFDTHG008RAID','SFDTHG009RAID','SFDTHG010RAID', },
 		priority=4,
-    },    
-    -- raider reaction to raider death
+    },
     DEATH_REACT_RAIDER_TO_RAIDER={
 		lineCodes={ 'SFDTHG011RAID','SFDTHG012RAID','SFDTHG013RAID','SFDTHG014RAID', },
 		priority=4,
@@ -318,16 +290,15 @@ Log.tTypes = {
         lineCodes={ 'SFFIRE001CITZ', 'SFFIRE003CITZ','SFFIRE005CITZ','SFFIRE006CITZ','SFFIRE007CITZ',},
 		priority=3,
     },
-    CAUGHT_FIRE_MANY={ --caught fire more than once
+    CAUGHT_FIRE_MANY={
         lineCodes={ 'SFFIRE002CITZ', 'SFFIRE004CITZ', 'SFFIRE001CITZ', 'SFFIRE003CITZ', 'SFFIRE005CITZ',
                     'SFFIRE006CITZ', 'SFFIRE007CITZ', 'SFFIRE008CITZ', 'SFFIRE009CITZ'
                 },
 		priority=3,
     },
-	-- speaker is dying
 	DEATH_GENERIC={},
 	DEATH_FIRE={},
-    DEATH_CHESTBURST={ 
+    DEATH_CHESTBURST={
         lineCodes={ 'SFPARA010CITZ','SFPARA011CITZ','SFPARA012CITZ','SFPARA013CITZ','SFPARA014CITZ',
                     'SFPARA015CITZ','SFPARA016CITZ','SFPARA017CITZ','SFPARA018CITZ', },
         priority=4,
@@ -341,7 +312,6 @@ Log.tTypes = {
         lineCodes={'SFEATS039CITZ', 'SFEATS040CITZ', 'SFEATS041CITZ',},
         priority=4,
     },
-	-- witnessing / hearing about a disaster
 	DISASTER_FIRE={
 		lineCodes={'SFDISA012CITZ', 'SFDISA013CITZ', 'SFDISA014CITZ', 'SFDISA015CITZ', 'SFDISA016CITZ',
 				   'SFDISA017CITZ', 'SFDISA018CITZ', 'SFDISA019CITZ', 'SFDISA020CITZ',
@@ -356,7 +326,6 @@ Log.tTypes = {
 				 },
 		priority=3,
 	},
-    -- anger events
     RAMPAGE_START={
         lineCodes={'SFRAMP003CITZ', 'SFRAMP005CITZ', 'SFRAMP006CITZ', 'SFRAMP007CITZ', 'SFRAMP008CITZ',
 				 },
@@ -391,7 +360,6 @@ Log.tTypes = {
 		lineCodes={'SFRAMP022CITZ', 'SFRAMP023CITZ', 'SFRAMP024CITZ',},
 		priority=2,
 	},
-	-- slept on floor / in bed
 	SLEEP_FLOOR={
 		lineCodes={ 'SFSLEP009CITZ', 'SFSLEP010CITZ', 'SFSLEP011CITZ', 'SFSLEP013CITZ', 'SFSLEP012CITZ',
                     'SFSLEP014CITZ', 'SFSLEP015CITZ', 'SFSLEP016CITZ', 'SFSLEP018CITZ', 'SFSLEP022CITZ',
@@ -400,7 +368,6 @@ Log.tTypes = {
 		priority=3,
 	},
 	SLEEP_BED_OWNED={
-		-- includes "generic" slept in bed
 		lineCodes={ 'SFSLEP009CITZ','SFSLEP010CITZ','SFSLEP011CITZ','SFSLEP017CITZ','SFSLEP018CITZ',
                     'SFSLEP019CITZ','SFSLEP020CITZ','SFSLEP021CITZ',
 					'SFSLEP025CITZ','SFSLEP029CITZ','SFSLEP030CITZ',
@@ -408,7 +375,6 @@ Log.tTypes = {
 		priority=2,
 	},
 	SLEEP_BED_UNOWNED={
-		-- includes "generic" slept in bed
 		lineCodes={ 'SFSLEP009CITZ','SFSLEP010CITZ','SFSLEP011CITZ','SFSLEP017CITZ','SFSLEP018CITZ',
                     'SFSLEP019CITZ','SFSLEP020CITZ','SFSLEP021CITZ',
 					'SFSLEP026CITZ','SFSLEP027CITZ','SFSLEP028CITZ',
@@ -442,14 +408,12 @@ Log.tTypes = {
 		lineCodes={ 'SFEATS043CITZ' },
         priority=3,
     },
-	-- drinking
 	DRINK_GOOD_MORALE = {
 		lineCodes={'SFDRNK001CITZ', 'SFDRNK005CITZ', 'SFDRNK008CITZ', 'SFDRNK010CITZ', 'SFDRNK011CITZ', },
 	},
 	DRINK_BAD_MORALE = {
 		lineCodes={'SFDRNK003CITZ', 'SFDRNK006CITZ', 'SFDRNK007CITZ', 'SFDRNK012CITZ', 'SFDRNK013CITZ'},
 	},
-	-- general good/bad morale cases
 	MORALE_GENERIC_GOOD={},
 	MORALE_GENERIC_BAD={},
     MORALE_HIGH_OXYGEN={
@@ -458,7 +422,6 @@ Log.tTypes = {
                 },
         priority=3,
     },
-	-- morale lower due to basic needs not being met
 	MORALE_LOW_DUTY={
 		lineCodes={ 'SFNEED025CITZ', 'SFNEED026CITZ', 'SFNEED027CITZ', 'SFNEED055CITZ', 'SFNEED056CITZ',
                     'SFNEED057CITZ', 'SFNEED058CITZ', 'SFNEED059CITZ', 'SFNEED060CITZ', 'SFNEED061CITZ',
@@ -488,7 +451,6 @@ Log.tTypes = {
 	NEED_SHELVING={
 		lineCodes={ 'SFTRAD015CITZ', 'SFTRAD016CITZ', 'SFTRAD017CITZ', },
 	},
-	-- morale higher due to this need being satisfactorily high
 	MORALE_HIGH_DUTY={
 		lineCodes={ 'SFNEED037CITZ', 'SFNEED038CITZ', 'SFNEED039CITZ' },
 	},
@@ -510,7 +472,6 @@ Log.tTypes = {
                    'OXYGEN020CITZ','OXYGEN025CITZ'},
         priority=3,
     },
-	-- high room score
 	MORALE_COOL_PUB={
 		lineCodes={'SFWAND023CITZ','SFWAND024CITZ','SFWAND025CITZ','SFWAND026CITZ','SFWAND027CITZ',},
 	},
@@ -520,7 +481,6 @@ Log.tTypes = {
 	MORALE_COOL_ROOM_GENERIC={
 		lineCodes={'SFWAND033CITZ','SFWAND034CITZ','SFWAND035CITZ','SFWAND036CITZ','SFWAND037CITZ',},
 	},
-	-- activities
 	WORK_OUT = {
 		lineCodes={ 'SFWOUT001CITZ','SFWOUT002CITZ','SFWOUT003CITZ','SFWOUT004CITZ','SFWOUT005CITZ',
                     'SFWOUT006CITZ','SFWOUT007CITZ','SFWOUT008CITZ','SFWOUT009CITZ','SFWOUT010CITZ',
@@ -572,17 +532,8 @@ Log.tTypes = {
                    'SFMONS031KBOT',},
     },
 }
-
--- if priority isn't specified for a log type above, use this
 Log.DEFAULT_PRIORITY = 0
--- logs with this priority or higher will always post, even if more are queued
 Log.PRIORITY_ALWAYS_POST = 4
-
--- codes used in log texts that signify a replacement to be performed,
--- all caps and enclosed in slashes, eg /RANDOMBAND/
--- evalFn: refer to a function for replacement.
--- keyName: use a tData (passed to Log.add) key for replacement.
--- bLink: this should appear as a clickable link in the UI.
 Log.tReplaceCodes=
 {
 	MYNAME = { evalFn=function(rChar) return rChar.tStats.sName end },
@@ -601,10 +552,10 @@ Log.tReplaceCodes=
     THINGKILLED = { keyName='sThingKilled' },
     TIMESBURNED = { keyName='sTimesBurned' },
 	RANDOMDRINKNAME = { evalFn=function() return Topics.generateDrinkName() end },
-	CURRENTROOM = { bLink=true, evalFn=function(rChar) 
+	CURRENTROOM = { bLink=true, evalFn=function(rChar)
         local rRoom = rChar:getRoom()
         return (rRoom and rRoom ~= Room.getSpaceRoom() and rRoom.uniqueZoneName)
-    end 
+    end
     },
 	MYMEAL = { keyName='sMealName' },
 	RANDOMPROVENANCE = { evalFn=function() return Topics.getRandomProvenance() end },
@@ -630,10 +581,8 @@ Log.tReplaceCodes=
     RAMPAGER = { keyName='sRampager' },
 	BESTFRIEND = { evalFn=function(rChar) return Log.bestFriend(rChar) end },
 }
-
 Log.tTags=
 {
-    -- personality variables
 	brave = { scoreFn=function(rChar) return Log.normalizedScore(rChar.tStats.tPersonality.nBravery) end },
 	coward = { scoreFn=function(rChar) return -Log.normalizedScore(rChar.tStats.tPersonality.nBravery) end },
 	gregarious = { scoreFn=function(rChar) return Log.normalizedScore(rChar.tStats.tPersonality.nGregariousness) end },
@@ -647,31 +596,24 @@ Log.tTags=
     hardworking = { scoreFn=function(rChar) return Log.normalizedScore(rChar.tStats.tPersonality.nWorkEthic) end },
     lazy = { scoreFn=function(rChar) return -Log.normalizedScore(rChar.tStats.tPersonality.nWorkEthic) end },
     authoritarian = { scoreFn=function(rChar) return Log.normalizedScore(rChar.tStats.tPersonality.nAuthoritarian) end },
-    -- morale
     happy = { scoreFn=function(rChar) return Log.moraleScore(rChar) end },
     sad = { scoreFn=function(rChar) return -Log.moraleScore(rChar) end },
-    -- self-esteem (ie affinity for self)
     egoist = { scoreFn=function(rChar) return Log.selfEsteemScore(rChar) end },
     insecure = { scoreFn=function(rChar) return -Log.selfEsteemScore(rChar) end },
-    -- "quirks" (boolean personality flags)
     emoticon = { scoreFn=function(rChar) return Log.quirkScore(rChar.tStats.tPersonality.bEmoticon) end },
     gourmand = { scoreFn=function(rChar) return Log.quirkScore(rChar.tStats.tPersonality.bGourmand) end },
     joker = { scoreFn=function(rChar) return Log.quirkScore(rChar.tStats.tPersonality.bJoker) end },
     sentimental = { scoreFn=function(rChar) return Log.quirkScore(rChar.tStats.tPersonality.bSentimental) end },
     competitive = { scoreFn=function(rChar) return Log.quirkScore(rChar.tStats.tPersonality.bCompetitive) end },
     hipster = { scoreFn=function(rChar) return Log.quirkScore(rChar.tStats.tPersonality.bHipster) end },
-    -- needs
     hungry = { scoreFn=function(rChar) return -Log.needsScore(rChar, 'Hunger') end },
     bored = { scoreFn=function(rChar) return -(Log.needsScore(rChar, 'Amusement') + Log.needsScore(rChar, 'Duty')) / 2 end },
     lonely = { scoreFn=function(rChar) return -Log.needsScore(rChar, 'Social') end },
     tired = { scoreFn=function(rChar) return -Log.needsScore(rChar, 'Energy') end },
-    -- duties
     scientist = { scoreFn=function(rChar) return Log.dutyScore(rChar, Character.SCIENTIST) end },
     technician = { scoreFn=function(rChar) return Log.dutyScore(rChar, Character.TECHNICIAN) end },
-	-- duty affinity
 	lovesjob = { scoreFn=function(rChar) return Log.currentDutyAffScore(rChar) end },
 	hatesjob = { scoreFn=function(rChar) return -Log.currentDutyAffScore(rChar) end },
-    -- races
     human = { scoreFn=function(rChar) return Log.raceScore(rChar, Character.RACE_HUMAN) end },
     tobian = { scoreFn=function(rChar) return Log.raceScore(rChar, Character.RACE_TOBIAN) end },
     shamon = { scoreFn=function(rChar) return Log.raceScore(rChar, Character.RACE_SHAMON) end },
@@ -679,43 +621,32 @@ Log.tTags=
     cat = { scoreFn=function(rChar) return Log.raceScore(rChar, Character.RACE_CAT) end },
     chicken = { scoreFn=function(rChar) return Log.raceScore(rChar, Character.RACE_CHICKEN) end },
     birdshark = { scoreFn=function(rChar) return Log.raceScore(rChar, Character.RACE_BIRDSHARK) end },
-    -- activity affinities - these correspond with Topics.tActivities entries
     boozer = { scoreFn=function(rChar) return Log.activityScore(rChar, 'Drinking') end },
     jock = { scoreFn=function(rChar) return Log.activityScore(rChar, 'Exercise') end },
     gamer = { scoreFn=function(rChar) return Log.activityScore(rChar, 'Gaming') end },
 }
-
---
--- replacement helper functions
--- (usually very custom, one-off behavior)
---
 function Log.getDutyName(rChar)
 	local lc = Character.JOB_NAMES[rChar.tStats.nJob]
 	return g_LM.line(lc)
 end
-
 function Log.randomDuty(nExcept)
     local idx = DFUtil.arrayRandomExcept(Character.JOB_NAMES,nExcept)
 	return g_LM.line(idx)
 end
-
 function Log.randomFood()
 	local id = Topics.getRandomTopic('Foods')
 	return Topics.tTopics[id].name
 end
-
 function Log.randomBand()
 	local id = Topics.getRandomTopic('Bands')
 	return Topics.tTopics[id].name
 end
-
 function Log.getFavoriteFood(rChar)
     local faveFood = rChar:getFavorite('Foods')
     if faveFood then
         return Topics.tTopics[faveFood].name
     end
 end
-
 function Log.bestFriend(rChar)
 	local sFriendID = rChar:getFavorite('People')
 	if not sFriendID then
@@ -727,14 +658,10 @@ function Log.bestFriend(rChar)
 	end
 	return rFriend.tStats.sName
 end
-
 function Log.randomPersonInRoom(rChar)
-	-- returns ID of random person in the room (who isn't the specified character)
     local rRoom = rChar:getRoom()
     if not rRoom or rRoom == Room.getSpaceRoom() then return nil end
-
 	local tCharacters,nCharacters = rRoom:getCharactersInRoom()
-	-- if nobody else is in the room, use a generic "that guy"
 	if nCharacters <= 1 then
 		return g_LM.line('SFBART007CITZ')
 	end
@@ -744,45 +671,31 @@ function Log.randomPersonInRoom(rChar)
 	end
 	return rOther.tStats.sName
 end
-
 function Log.randomPub()
-	-- returns friendlyname of random pub on base
 	local tRooms = Room.getRoomsOfTeam(Character.TEAM_ID_PLAYER, false, 'PUB', true)
 	if #tRooms == 0 then
-		-- no pubs, generic "the pub"
 		return g_LM.line('SFBART008CITZ')
 	end
 	local rRoom = DFUtil.arrayRandom(tRooms)
 	return rRoom.uniqueZoneName
 end
-
---
--- core Log functionality
---
 function Log.add(tLogType, rChar, tData)
     assert(rChar.bInitialized)
-	-- handle empty tData
 	tData = tData or {}
-    --if monster, play ridiculous monster lines
-    if rChar.tStats.nRace == Character.RACE_MONSTER then 
+    if rChar.tStats.nRace == Character.RACE_MONSTER then
         tLogType = Log.tTypes.MONSTER_GENERIC
-    elseif rChar.tStats.nRace == Character.RACE_KILLBOT then 
+    elseif rChar.tStats.nRace == Character.RACE_KILLBOT then
         tLogType = Log.tTypes.KILLBOT_GENERIC
     end
 	if not tLogType.lineCodes or #tLogType.lineCodes == 0 then
 		Print(TT_Warning, 'LOG: linecode not found for log type '..tLogType)
 		return
 	end
-	-- sort group of linecodes based on tag scores, pick best
 	local nBestTagScore = 0
 	local sBestLine
-    -- randomize (in place) list of linecodes so if we have to grab one
-    -- at random, we won't always grab the first in the list
     DFUtil.arrayShuffle(tLogType.lineCodes)
 	for _,lc in pairs(tLogType.lineCodes) do
-		-- log repeating in the same screen never looks good
 		if not rChar:lineCodeUsedRecently(lc) then
-            -- if no valid tags for any of these lines, grab first in list
             if not sBestLine then
                 sBestLine = lc
             end
@@ -790,7 +703,6 @@ function Log.add(tLogType, rChar, tData)
             if tags then
                 local nTotalScore = 0
                 for _,tag in pairs(tags) do
-                    -- gated/negated tags give score of -1000
                     nTotalScore = nTotalScore + Log.getLogTagScore(tag, rChar)
                 end
                 if nTotalScore > nBestTagScore then
@@ -800,42 +712,33 @@ function Log.add(tLogType, rChar, tData)
             end
 		end
 	end
-    -- if all logs are recently used or low-scoring, just pick a random one
     if not sBestLine then
         sBestLine = DFUtil.arrayRandom(tLogType.lineCodes)
     end
     assert(sBestLine ~= nil)
-	-- do replacements for linecode's string based on context
 	local sLine, tLines = Log.getReplacements(sBestLine, rChar, tData)
 	if not sLine or not tLines then
 		Print(TT_Warning, "LOG: couldn't parse replacements for log with linecode "..sBestLine)
 		return
 	end
-    -- compile entry data
 	local tEntry = {}
 	tEntry.sLine = sLine
 	tEntry.tLines = tLines
 	tEntry.linecode = sBestLine
-	-- store tag score to help prioritize in Character:postLogFromQueue
 	tEntry.nTagScore = nBestTagScore
-    -- store log's type as a string
 	tEntry.logType = Log.getTypeString(tLogType)
-	-- sort code is cleaner when we can assume it has a priority
 	tEntry.priority = tLogType.priority or Log.DEFAULT_PRIORITY
 	tEntry.nTime = GameRules.elapsedTime
-    -- dump to file for data sciencen'
     if Log.bLog then
         local s = MiscUtil.padString(tEntry.logType, 40, true)
         s = s .. MiscUtil.padString(tEntry.linecode, 13, true)
         s = s .. ' @ ' .. tEntry.nTime
-        -- log each linecode's tags
         local tTags = g_LM.getTags(tEntry.linecode)
         if tTags and #tTags > 0 then
             s = s .. ' (tags: '
             for _,tag in pairs(tTags) do
                 s = s .. tag .. ', '
             end
-            -- snip last comma and close paren
             s = string.sub(s, 1, string.len(s) - 2)
             s = s .. ')'
         end
@@ -845,14 +748,12 @@ function Log.add(tLogType, rChar, tData)
         testlog:write(s .. "\n")
         testlog:close()
     end
-	-- add log to a queue, to be posted next "log tick" if high pri enough
 	if Log.bFilter then
 		rChar:queueLog(tEntry)
 	else
 		rChar:addLog(tEntry)
 	end
 end
-
 function Log.getTypeString(tType)
     for sType,tData in pairs(Log.tTypes) do
         if tData and tData == tType then
@@ -860,20 +761,15 @@ function Log.getTypeString(tType)
         end
     end
 end
-
 function Log.getLogTagScore(sTag, rChar)
-	-- tags starting with g_: "gated", ie only use log if tag is apropos
-	-- tags starting with n_: "negative gated", ie only use log if tag is NOT
     local bGated, bNegativeGated = false, false
     if string.find(sTag, 'g_') == 1 then
         bGated = true
-        -- snip g_ from tag name to get its "normal" form
         sTag = sTag:gsub('g_', '')
     elseif string.find(sTag, 'n_') == 1 then
         bNegativeGated = true
         sTag = sTag:gsub('n_', '')
     end
-    -- valid tag?
 	if not Log.tTags[sTag] then
 		return 0
 	end
@@ -886,113 +782,74 @@ function Log.getLogTagScore(sTag, rChar)
         return nScore
     end
 end
-
---
--- tag scoring functions
---
-
 function Log.normalizedScore(nValue)
-    -- score for things like personality should be negative if, for example,
-    -- tag is brave and someone is the opposite of brave
     return (nValue * 2) - 1
 end
-
 function Log.needsScore(rChar, sNeed)
-    -- map -100 to +100 needs values on to -1 to 1 tag score range
-    -- NOTE: following assumes min = -max; we'll probably never change that?
     local Needs = require('Utility.Needs')
     return rChar.tNeeds[sNeed] / Needs.MAX_VALUE
 end
-
 function Log.dutyScore(rChar, nDuty)
-    -- return 0 if citizen is not of specified duty, 1 if so
     if rChar.tStats.nJob == nDuty then
         return 1
     else
         return 0
     end
 end
-
 function Log.currentDutyAffScore(rChar)
-	-- map affinity to -1 to 1 tag score range
 	return rChar:getJobAffinity(rChar.tStats.nJob) / 10
 end
-
 function Log.raceScore(rChar, nRace)
-    -- return 0 if citizen is not of specified race, 1 if so
     if rChar.tStats.nRace == nRace then
         return 1
     else
         return 0
     end
 end
-
 function Log.angerScore(rChar)
 	return rChar.tStatus.nAnger / Character.ANGER_MAX
 end
-
 function Log.activityScore(rChar, sActivity)
-    -- return -1/1 affinity for specified activity
     return rChar:getAffinity(sActivity) / Character.STARTING_AFFINITY
 end
-
 function Log.selfEsteemScore(rChar)
-    -- "affinity for self"
 	return rChar:getAffinity(rChar.tStats.sUniqueID) / Character.STARTING_AFFINITY
 end
-
 function Log.moraleScore(rChar)
-    -- NOTE: following assumes min = -max; we'll probably never change that?
     return rChar.tStats.nMorale / Character.MORALE_MAX
 end
-
 function Log.quirkScore(bHasQuirk)
     if bHasQuirk then
-		-- vary score to create more variation in log choice
         return math.min(0.5, math.random())
     else
         return 0
     end
 end
-
 function Log.getReplacement(tSub, rChar, tData)
 	if tSub.evalFn then
-		-- use a function to get the replacement
 		return tSub.evalFn(rChar, tData) or ''
 	elseif tSub.keyName then
-		-- use a tData key for the replacementink
 		return tData[tSub.keyName]
 	else
 		print("LOG: no evalFn or keyName for replacement "..tSub)
 		return 'ERROR'
 	end
 end
-
 function Log.getReplacements(linecode, rChar, tData)
-	-- returns a concatenated string AND a table of lines, some of which are
-	-- strings and some of which are tables of link data.
-	-- (all strings, so that data is both savegame-friendly and UI-ready)
-	
 	local tLines = {}
 	local line = g_LM.line(linecode)
-	
-	-- break string into chunks, iteratively nibbling it down
 	local i = 0
 	while i < line:len() do
-		-- find next /
 		i = line:find('/', 0)
-		-- if no replacements, return the rest of the line
 		if not i then
 			i = line:len()
 			table.insert(tLines, line)
 			break
 		end
-		-- double slash (//) escapes a normal slash
 		local nextChar = line:sub(i, i+1)
 		if nextChar == '/' then
 			i = i + 2
 		else
-			-- snip string before / and find the closing /
 			local firsthalf = line:sub(0, i-1)
 			line = line:sub(i + 1, line:len())
 			local lastIndex = i
@@ -1004,54 +861,38 @@ function Log.getReplacements(linecode, rChar, tData)
 			else
 				secondhalf = line:sub(0, i-1)
 			end
-			-- is text between slashes a valid replacement code?
 			local tSub = Log.tReplaceCodes[secondhalf]
 			if not tSub then
-				-- can't parse, quote input up to this point
-				-- (re-add / in case we just passed an escape slash)
 				table.insert(tLines, firsthalf..secondhalf..'/')
 				line = line:sub(i + 1, line:len())
 			else
-				-- separate replacement even if it's not a link,
-				-- so we can color/highlight it
 				table.insert(tLines, firsthalf)
-				-- getReplacement returns an ID and type for links
 				local id,linkType
 				secondhalf,id,linkType = Log.getReplacement(tSub, rChar, tData)
 				if tSub.bLink then
-					-- compile table of link data, in place of string
 					local tLink = {}
-					-- link text = player-visible text
 					tLink.linkText = secondhalf
-					-- link ID = unique ID of the object linked to
 					tLink.linkID = tData.sLinkTarget
-					-- link type = type of linked object
 					tLink.linkType = tData.sLinkType
 					table.insert(tLines , tLink)
 				else
 					table.insert(tLines, secondhalf)
 				end
 				line = line:sub(i + 1, line:len())
-				-- update i for new string length
 				i = line:find('/', 0) or line:len() - 1
 			end
 		end
 	end
-	-- for possibly-temporary reasons, save out a plain ol concatenated string
-	-- version of the entire line
 	local sLine = ''
 	for _,line in pairs(tLines) do
 		if line.linkText then
-			--sLine = sLine .. '[' .. line.linkText .. ']' --removed until we add links for real
             sLine = sLine .. line.linkText
 		elseif type(line) == 'string' then
 			sLine = sLine .. line
 		end
 	end
-	-- return table only if it's got lines for easier nil check
 	if #tLines then
 		return sLine, tLines
 	end
 end
-
 return Log

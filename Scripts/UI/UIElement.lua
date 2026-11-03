@@ -8,46 +8,37 @@ local Gui = require('UI.Gui')
 local MiscUtil = require("MiscUtil")
 local SoundManager = require('SoundManager')
 local m = {}
-
 function m.create()
     local Ob = MOAITransform.new()
-
     Ob.sDefaultRenderLayerName = 'UI'
-
     function Ob:init(sRenderLayerName,sLayoutFileName)
         self.uiWidth,self.uiHeight = 0,0
         if sLayoutFileName then
             self:processUIInfo(sLayoutFileName)
         end
-
         self.isUIElement = true
         if self.spriteList then
             self:loadUISpriteSheets(self.spriteList, self.xAlign or "left", self.yAlign or "top")
         end
         if self.spriteSheet then
-            if not self.tUISpriteSheets then self.tUISpriteSheets = {} end 
-            if not self.tTextureToSpriteSheet then self.tTextureToSpriteSheet = {} end 
+            if not self.tUISpriteSheets then self.tUISpriteSheets = {} end
+            if not self.tTextureToSpriteSheet then self.tTextureToSpriteSheet = {} end
             self:_addSpriteSheet(self.spriteSheet)
         end
-        
         self.tAnimatingObjects = {}
         self.tTickElements = {}
         DFMoaiDebugger.dFileChanged:register(self.onFileChange,self)
     end
-
     function Ob:setRenderLayer(sName)
         self.sRenderLayerName = sName
     end
-    
     function Ob:getRenderLayerName()
         if self.sRenderLayerName then return self.sRenderLayerName end
         if self.rParentUIElement then return self.rParentUIElement:getRenderLayerName() end
         return self.sDefaultRenderLayerName
     end
-
     function Ob:_addSpriteSheet(path)
         if self.tUISpriteSheets[path] then return end
-
         local rSpriteSheet = DFGraphics.loadSpriteSheet(path)
         for sName, data in pairs(rSpriteSheet.names) do
             DFGraphics.alignSprite(rSpriteSheet, sName, self.xAlign or "left", self.yAlign or "top")
@@ -55,45 +46,32 @@ function m.create()
         end
         self.tUISpriteSheets[path] = rSpriteSheet
     end
-
     function Ob:isVisible()
         return self.elementsVisible
     end
-
     function Ob:show(basePri)
---        if self.elementsVisible == true then return end
-        
         self.elementsVisible = true
         self.currentBasePri = basePri or self.currentBasePri
-
         if not self.tElements then return basePri end
-
         local maxPri = basePri or 0
         for _, v in ipairs(self.tElements) do
             maxPri = self:_setElementVisible(v, true, maxPri + 1)
         end
-
         self.maxPri = maxPri
-
         g_GuiManager.setMaxPriOnLayer(self:getRenderLayerName(), self.maxPri)
         return maxPri
     end
-
     function Ob:hide(bKeepAlive)
---        if self.elementsVisible == false then return end
-        
         self.elementsVisible = false
         if self.tElements then
             for _, v in ipairs(self.tElements) do
                 self:_setElementVisible(v, false)
             end
         end
-
         if not bKeepAlive then
            self:unloadUISpriteSheets()
         end
     end
-    
     function Ob:onTick(dt)
         for k,v in pairs(self.tAnimatingObjects) do
             v.currentTime = math.min(v.currentTime + dt, (v.totalTime+v.delay))
@@ -115,15 +93,13 @@ function m.create()
             v:onTick(dt)
         end
     end
-
-    function Ob:loadUISpriteSheets(tSpriteSheetInfo, xAlign, yAlign)        
+    function Ob:loadUISpriteSheets(tSpriteSheetInfo, xAlign, yAlign)
         Ob.tUISpriteSheets = {}
         Ob.tTextureToSpriteSheet = {}
         for sTextureName, spriteSheetPath in pairs(tSpriteSheetInfo) do
             self:addToUISpriteSheets(sTextureName, spriteSheetPath, xAlign, yAlign)
         end
     end
-
     function Ob:addToUISpriteSheets(sTextureName, spriteSheetPath, xAlign, yAlign)
         if not self.tUISpriteSheets then
             self.tUISpriteSheets = {}
@@ -132,7 +108,7 @@ function m.create()
             self.tTextureToSpriteSheet = {}
         end
         if not self.tUISpriteSheets[spriteSheetPath] then
-            local rSpriteSheet = DFGraphics.loadSpriteSheet(spriteSheetPath)    
+            local rSpriteSheet = DFGraphics.loadSpriteSheet(spriteSheetPath)
             if xAlign ~= 'skip' then
                 for sName, data in pairs(rSpriteSheet.names) do
                     DFGraphics.alignSprite(rSpriteSheet, sName, xAlign or "left", yAlign or "top")
@@ -142,22 +118,19 @@ function m.create()
         end
         self.tTextureToSpriteSheet[sTextureName] = self.tUISpriteSheets[spriteSheetPath]
     end
-
     function Ob:unloadUISpriteSheets()
         if self.tUISpriteSheets then
-            for sPathName, rSpriteSheet in pairs(self.tUISpriteSheets) do            
+            for sPathName, rSpriteSheet in pairs(self.tUISpriteSheets) do
                 DFGraphics.unloadSpriteSheet(sPathName)
             end
             self.tUISpriteSheets = nil
         end
     end
-
     function Ob:getSpriteSheetForTexture(sTextureName)
         if sTextureName then
             return self.tTextureToSpriteSheet[sTextureName]
         end
     end
-    
     function Ob:_addDimsFuncs(rProp)
         rProp._inBounds = function(self,wx,wy)
             local w,h = self:getDims()
@@ -166,15 +139,12 @@ function m.create()
                 if h < 0 then
                     return wy < y and wy > y+h
                 else
---                    return wy < y+h and wy > y
                     return wy < y and wy > y-h
                 end
             end
             return false
         end
-        
     end
-
     function Ob:getUITextureProp(sTextureName, rProp)
         assert(sTextureName and self.tTextureToSpriteSheet[sTextureName])
         local rSpriteSheet = self.tTextureToSpriteSheet[sTextureName]
@@ -182,9 +152,7 @@ function m.create()
         if not rProp then
             rProp = MOAIProp.new()
         end
-        
         self:_addDimsFuncs(rProp)
-
         rProp:setDeck(rSpriteSheet)
         local idx = rSpriteSheet.names[sTextureName]
         rProp:setIndex(idx)
@@ -192,7 +160,6 @@ function m.create()
         rProp.index = idx
         return rProp
     end
-
     function Ob:setTemplateUITexture(sElementName, sTextureName, sSpritesheetPath)
         if sElementName and sTextureName and sSpritesheetPath then
             local rElement = self:getTemplateElement(sElementName)
@@ -210,16 +177,13 @@ function m.create()
         end
         return false
     end
-
     function Ob:addOnePixel(hAlign,vAlign)
         local prop = MOAIProp.new()
         prop.deck = Gui.rOnePixelDeck
-
         prop.getDims = function(self)
             local w,h = self:getScl()
             return w,-h
         end
-        
         self:_addDimsFuncs(prop)
         prop:setDeck(Gui.rOnePixelDeck)
         if hAlign or vAlign then
@@ -233,29 +197,12 @@ function m.create()
 	    self:addElement(prop)
         return prop
     end
-
     function Ob:addRect(w, h, r,g,b,a)
         local box = self:addOnePixel()
         box:setScl(w,h)
         box:setColor(r,g,b,a)
         return box
     end
-
-    --[[
-    function Ob:addOverlayElement(rElement)
-        if not self.tOverlayElements then 
-            self.rOverlayRenderLayer = Renderer.getRenderLayer('UIOverlay')
-            self.tOverlayElements = {} 
-        end
-        table.insert(self.tOverlayElements, rElement)
-        MiscUtil.setTransformVisParent(rElement,self.Parent)
-        if self.elementsVisible then
-            self.rOverlayRenderLayer:insertProp(rElement)
-            rElement:setPriority(self.currentBasePri+#self.tOverlayElements)
-        end
-    end
-    ]]--
-
     function Ob:addTextToTexture(str, textureProp, styleName, hAlign, vAlign, hMargin, vMargin)
         local sclX,sclY = textureProp:getScl()
         local tb = Gui.createTextBox(styleName, hAlign, vAlign)
@@ -278,18 +225,6 @@ function m.create()
 	    self:addElement(tb)
         return tb
     end
-
-    --[[
-    function Ob:addTextToProp(str, styleName, hAlign, vAlign)
-        local tb = Gui.createTextBox(styleName, hAlign, vAlign)
-        tb:setRect(x0,y0,x1,y1)
-        tb:setString(str)
-	    tb:setLoc(x,y)
-	    self:addElement(tb)
-        return tb
-    end
-    ]]--
-
     function Ob:addTextBox(str, styleName, x0,y0,x1,y1, x, y, hAlign, vAlign)
         local tb = Gui.createTextBox(styleName, hAlign, vAlign)
         if x0 and y0 and x1 and y1 then
@@ -300,19 +235,16 @@ function m.create()
 	    self:addElement(tb)
         return tb
     end
-
 	function Ob:addTexture(spriteName,x,y)
         local elem = self:getUITextureProp(spriteName)
         elem:setLoc(x,y)
         self:addElement(elem)
         return elem
     end
-
 	function Ob:addFullScreenTexture(spriteName, bPreserveAR)
         local elem = self:getUITextureProp(spriteName)
         elem:setLoc(0, 0)
         local w,h = DFGraphics.getFullSpriteDims(elem.deck,spriteName)
-
         local sw,sh = kVirtualScreenWidth/w, kVirtualScreenHeight/h
         if bPreserveAR then
             sw = math.min(sw,sh)
@@ -322,13 +254,11 @@ function m.create()
         self:addElement(elem)
         return elem
     end
-
 	function Ob:addElement(rElement, bKeepHidden)
-        if not self.tElements then 
-            self.tElements = {} 
-            self.tElementsR = {} 
+        if not self.tElements then
+            self.tElements = {}
+            self.tElementsR = {}
         end
-        
         table.insert(self.tElements, rElement)
         self.tElementsR[rElement] = #self.tElements
         rElement.rParentUIElement = self
@@ -337,7 +267,6 @@ function m.create()
             self:_setElementVisible(rElement, true, self.currentBasePri+#self.tElements)
         end
 	end
-
     function Ob:removeElement(rElement)
             for i, rExistingElement in ipairs(self.tElements) do
                 if rElement == rExistingElement then
@@ -349,7 +278,6 @@ function m.create()
                 end
             end
     end
-
     function Ob:setElementHidden(elem, bHidden)
         elem.hideOverride = bHidden
         if elem.isUIElement then
@@ -374,22 +302,19 @@ function m.create()
             end
         end
     end
-
 	function Ob:_setElementVisible(rElement, bVisible, basePri)
         basePri = basePri or 0
-        
         if not rElement then
             return basePri
         end
-
 		if bVisible then
             if rElement.isUIElement then
-                if rElement.hideOverride then 
+                if rElement.hideOverride then
                     return basePri
                 else
                     return rElement:show(basePri)+1
                 end
-            else       
+            else
                 local sRenderLayerName = self:getRenderLayerName()
                 if rElement.sElementLayerOverride then
                     sRenderLayerName = rElement.sElementLayerOverride
@@ -405,12 +330,11 @@ function m.create()
                 local sRenderLayerName = self:getRenderLayerName()
                 if rElement.sElementLayerOverride then
                     sRenderLayerName = rElement.sElementLayerOverride
-                end                
+                end
                 Renderer.getRenderLayer(sRenderLayerName):removeProp(rElement)
             end
 		end
 	end
-
     function Ob:_applyResizeChanges(rElement, tElementInfo)
         if tElementInfo then
             if tElementInfo.pos then
@@ -424,7 +348,6 @@ function m.create()
                         y = y + rElement.tPosInfo.offsetY
                     end
                 end
-
                 rElement:setLoc(x,y)
             end
             if tElementInfo.scale then
@@ -441,21 +364,17 @@ function m.create()
             end
         end
     end
-    
     function Ob:_applyTemplateInfo(rElement, tElementInfo)
         if tElementInfo then
-            -- save out the elementinfo
             if not rElement.tSavedElementInfo then
                 rElement.tSavedElementInfo = {}
             end
             for key, val in pairs(tElementInfo) do
                 rElement.tSavedElementInfo[key] = val
             end
-            
             if tElementInfo.clickWhileHidden ~= nil then
                 rElement.clickWhileHidden=tElementInfo.clickWhileHidden
             end
-            
             if tElementInfo.layerOverride then
                 if rElement.isUIElement then
                     rElement:setRenderLayer(tElementInfo.layerOverride)
@@ -482,13 +401,6 @@ function m.create()
             if rElement.setVisible then
                 if tElementInfo.hidden ~= nil then
                     self:setElementHidden(rElement,tElementInfo.hidden)
-                    --[[
-                    if tElementInfo.hidden then
-                        rElement:setVisible(false)
-                    else
-                        rElement:setVisible(true)
-                    end
-                    ]]--
                 end
             end
             if tElementInfo.sNestedInfo then
@@ -514,12 +426,10 @@ function m.create()
                 end
                 for s,t in pairs(rElement.tTemplateElements) do
                     self.tTemplateElements[tElementInfo.key..'_'..s] = t
---                    print('added ',tElementInfo.key..'_'..s)
                 end
             end
         end
     end
-
     function Ob:applyTemplateInfos(tInfos)
         if tInfos and self.tTemplateElements then
             for i, tElementInfo in ipairs(tInfos) do
@@ -530,7 +440,6 @@ function m.create()
             end
         end
     end
-
     function Ob:_addTemplateElement(sElementName, tElementInfo)
         if not self.tTemplateElements then
             self.tTemplateElements = {}
@@ -538,7 +447,7 @@ function m.create()
         if sElementName and tElementInfo and tElementInfo.type then
             local rElement = nil
             if tElementInfo.type == 'uiTexture' then
-                if tElementInfo.textureName and tElementInfo.sSpritesheetPath then    
+                if tElementInfo.textureName and tElementInfo.sSpritesheetPath then
                     self:addToUISpriteSheets(tElementInfo.textureName, tElementInfo.sSpritesheetPath,tElementInfo.hAlign,tElementInfo.vAlign)
                     rElement = self:addTexture(tElementInfo.textureName)
                     if rElement then
@@ -565,7 +474,7 @@ function m.create()
                 rElement = require('UI.TabbedPane').new()
                 rElement.bDoRolloverCheck = true
                 self:addElement(rElement)
-                self.tTemplateElements[sElementName] = rElement            
+                self.tTemplateElements[sElementName] = rElement
             elseif tElementInfo.type == 'onePixel' then
                 rElement = self:addOnePixel(tElementInfo.hAlign,tElementInfo.vAlign)
                 self.tTemplateElements[sElementName] = rElement
@@ -601,7 +510,7 @@ function m.create()
             elseif tElementInfo.type == 'textureButton' then
                 local rClass = g_GuiManager.getTemplateElementClass('TextureButton')
                 rElement = rClass.new()
-                rElement:setTextures(tElementInfo) --.textureName, tElementInfo.sSpritesheetPath)
+                rElement:setTextures(tElementInfo)
                 self:addElement(rElement)
                 self.tTemplateElements[sElementName] = rElement
                 rElement.bDoRolloverCheck = true
@@ -633,28 +542,19 @@ function m.create()
             end
         end
     end
-
     function Ob:getTemplateElement(sElementName)
         if sElementName and self.tTemplateElements then
             return self.tTemplateElements[sElementName]
         end
         return nil
     end
-
     function Ob:alignToPosInfo()
-    
-        if not self.tPosInfo then 
-            return 
+        if not self.tPosInfo then
+            return
         end
-        
         local tPosInfo = self.tPosInfo or {}
-        
-        
             local x = 0
             local y = 0
-            -- MTF: align right or center or bottom with anything with a parent is kind of bad.
-            -- It grabs the parent's current pos and dims, but probably doesn't update properly.
-            -- You probably shouldn't use it.
             if tPosInfo.alignX then
                 if tPosInfo.alignX == 'right' then
                     if self.rParentUIElement then
@@ -664,7 +564,7 @@ function m.create()
                     else
                         x = Renderer.getViewport().sizeX
                     end
-                elseif tPosInfo.alignX == 'left' then                        
+                elseif tPosInfo.alignX == 'left' then
                     x = 0
                 elseif tPosInfo.alignX == 'center' then
                     if self.rParentUIElement then
@@ -696,7 +596,7 @@ function m.create()
                         y = (0 - math.floor(Renderer.getViewport().sizeY / 2))
                     end
                 end
-            end      
+            end
             if tPosInfo.offsetX then
                 x = x + tPosInfo.offsetX
             end
@@ -708,61 +608,31 @@ function m.create()
             end
             self:setLoc(x, y)
     end
-
     function Ob:processUIInfo(sUILayoutFileName)
         local tInfo = self:_loadUIInfoFile(sUILayoutFileName)
-
         return self:_processUIInfoTable(tInfo)
     end
-    
     function Ob:_loadUIInfoFile(sUILayoutFileName)
         if not sUILayoutFileName then return end
-
         sUILayoutFileName = DFFile.getDataPath(sUILayoutFileName..'.lua')
         local tInfo = dofile(sUILayoutFileName)
-
-        if not tInfo then 
+        if not tInfo then
             Print(TT_Error, 'No layout data from file: '..sUILayoutFileName..'.lua')
             return
         end
-
         self.sUILayoutFileName = sUILayoutFileName
-        
         return tInfo
     end
-
     function Ob:setReplacements(sElemKey, tReplacements)
         if not self.tElementInfoReplacements then
             self.tElementInfoReplacements = {}
         end
         self.tElementInfoReplacements[sElemKey] = tReplacements
-        -- already processed. modify tElements directly.
-        --[[
-        if self.isUIElement and tInfo.tElements then
-            local tExisting = nil
-            for i, tElementInfo in ipairs(tInfo.tElements) do
-                if tElementInfo.key == sElemKey then
-                    tExisting = tElementInfo
-                end
-            end
-            if not tExisting then
-                tExisting = {}
-                table.insert(tInfo.tElements,tExisting)
-            end
-            for k,v in pairs(self.tElementInfoReplacements[sElemKey]) do
-                tExisting[k] = v
-            end
-            if self.refresh then 
-                self:refresh()
-            end
-        end
-        ]]--
     end
-
     function Ob:_processUIInfoTable(tInfo)
         if tInfo.posInfo then
             self.tPosInfo = tInfo.posInfo
-            self:alignToPosInfo()    
+            self:alignToPosInfo()
         end
         if tInfo.tElements then
             for i, tElementInfo in ipairs(tInfo.tElements) do
@@ -778,9 +648,6 @@ function m.create()
             self.tExtraTemplateInfo = tInfo.tExtraInfo
         end
     end
-
-    -- convert values into numbers
-    -- if the values are strings, they are assumed to be lua commands always eval to a number
     function Ob:_convertLayoutVal(val)
         local nRet = 0
         if type(val) == 'number' then
@@ -796,7 +663,6 @@ function m.create()
         end
         return nRet
     end
-
     function Ob:_calcDimsFromElements(tOptionalElementArray)
         local tElements = tOptionalElementArray or self.tElements or {}
         local w,h = 0,0
@@ -809,29 +675,22 @@ function m.create()
         self.uiWidth = w
         self.uiHeight = h
     end
-    
-    -- MTF TODO: height is negative because everything is terrible.
     function Ob:getDims()
         return self.uiWidth,self.uiHeight
     end
-    
     function Ob:getExtraTemplateInfo(sInfoKey)
         if self.tExtraTemplateInfo and sInfoKey then
             return self.tExtraTemplateInfo[sInfoKey]
         end
     end
-
     function Ob:setPosInfo(tPosInfo)
-        if not tPosInfo then 
-            return 
+        if not tPosInfo then
+            return
         end
-        
         self.tPosInfo = tPosInfo
         self:alignToPosInfo()
     end
-
-    function Ob:onFileChange(path)    
-        -- reprocess the template ui elements
+    function Ob:onFileChange(path)
         if self.sUILayoutFileName and path == self.sUILayoutFileName then
             print("RELOADING "..path)
             local tInfo = dofile(self.sUILayoutFileName)
@@ -841,12 +700,11 @@ function m.create()
             end
             if tInfo.posInfo then
                 self.tPosInfo = tInfo.posInfo
-                self:alignToPosInfo()                    
+                self:alignToPosInfo()
             end
-            if self.tTemplateElements then 
+            if self.tTemplateElements then
                 if tInfo.tElements then
                     for i, tElementInfo in ipairs(tInfo.tElements) do
-
                         local sElementName = tElementInfo.key
                         local rElement = self.tTemplateElements[sElementName]
                         if not rElement then
@@ -856,8 +714,6 @@ function m.create()
                             rElement:setRect(unpack(tElementInfo.tTemplateRect))
                         end
                         if tElementInfo.type then
-                            --if tElementInfo.type == 'uiTexture' then                            
-                                -- let's not hotreload textures.  doesn't seem necessary
                             if tElementInfo.type == 'textBox' then
                                 local sString = ''
                                 if tElementInfo.text then
@@ -869,7 +725,6 @@ function m.create()
                                 rElement:setAlignment(tElementInfo.hAlign or MOAITextBox.LEFT_JUSTIFY,tElementInfo.vAlign or MOAITextBox.LEFT_JUSTIFY)
                             end
                         end
-
                         self:_applyTemplateInfo(rElement, tElementInfo)
                     end
                 end
@@ -886,10 +741,6 @@ function m.create()
             end
         end
     end
-
-    -- MTF HACK/WEIRD
-    -- "inside" is saying that's where the pointer is, and triggers hover etc.
-    -- "_inBounds" is a simple query re: whether something's in your bounds.
     function Ob:_inBounds(wx,wy)
         local w,h = self:getDims()
         local x,y = self:modelToWorld(0,0)
@@ -902,16 +753,12 @@ function m.create()
             end
         return false
     end
-
     function Ob:inside(wx, wy, tElemListOverride)
         if not self.elementsVisible then return false end
-        
         local bInside = false
---        local tElems = tElemListOverride or self.tTemplateElements
         local tElems = tElemListOverride or self.tElements
         if tElems then
             for i, rElement in pairs(tElems) do
---                if rElement.bDoRolloverCheck and rElement.inside then
                 if rElement.inside and (not rElement.hideOverride or rElement.clickWhileHidden) then
                     if rElement:inside(wx, wy) then
                         bInside = true
@@ -921,28 +768,21 @@ function m.create()
         end
         return bInside
     end
-
     function Ob:onFinger(touch, x, y, props, tElemListOverride)
         if not self.elementsVisible then return false end
-
---        local tElems = tElemListOverride or self.tTemplateElements
         local tElems = tElemListOverride or self.tElements
-        
         local bHandled = false
         if tElems then
             for i, rElement in pairs(tElems) do
                 if (not rElement.hideOverride or rElement.clickWhileHidden) and rElement.onFinger and rElement:onFinger(touch, x, y, props) then
                     bHandled = true
                 end
-            end            
+            end
         end
         return bHandled
     end
-
     function Ob:onResize()
         self:alignToPosInfo()
-        -- reapply all the scale and positions for the elements
-        
         if self.tTemplateElements then
             for i, rElement in pairs(self.tTemplateElements) do
                 if rElement.alignToPosInfo then rElement:alignToPosInfo() end
@@ -951,9 +791,7 @@ function m.create()
                 end
             end
         end
-        
     end
-    
     function Ob:moveProp(rProp, x, y, t, delay, callback)
         x,y,t,delay = x or 0, y or 0, t or 1, delay or 0
         delay = math.max(delay, 0)
@@ -961,12 +799,7 @@ function m.create()
         tNew.endX,tNew.endY,tNew.totalTime = x,y,t
         tNew.startX,tNew.startY = rProp:getLoc()
         self.tAnimatingObjects[rProp] = tNew
-
---[[    if self.tMovingObjects[rProp] then
-        else
-        end ]]--
     end
-    
     function Ob:colorProp(rProp, tStartColor, tEndColor, t, delay, callback)
         tStartColor, tEndColor, t, delay = tStartColor or Gui.WHITE, tEndColor or Gui.WHITE, t or 1, delay or 0
         delay = math.max(delay, 0)
@@ -974,15 +807,11 @@ function m.create()
         tNew.tStartColor,tNew.tEndColor,tNew.totalTime = tStartColor,tEndColor,t
         self.tAnimatingObjects[rProp] = tNew
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

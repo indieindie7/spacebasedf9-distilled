@@ -15,9 +15,7 @@ local CommandObject=require('Utility.CommandObject')
 local GameRules=require('GameRules')
 local Character=require('Character')
 local AirlockDoor = require('EnvObjects.Airlock')
-
 local Airlock = Class.create(Zone)
-
 Airlock.STAGE_CLOSE_DOORS = 1
 Airlock.STAGE_VENT = 2
 Airlock.STAGE_OPEN_DOORS = 3
@@ -25,40 +23,30 @@ Airlock.STAGE_LEAVE = 4
 Airlock.STAGE_RECLOSE_DOORS = 5
 Airlock.STAGE_REPRESSURIZE = 6
 Airlock.STAGE_UNLOCK = 7
-
 Airlock.MAX_OPEN_WAIT_TIME = 4
-
--- fraction of max oxygen that can be vented in one second.
 Airlock.OXYGEN_INCREASE_RATE = .3
-
 function Airlock:init(rRoom)
     Zone.init(self,rRoom)
     self.tOwnedDoors = {}
     self.bDangerous = true
     self.tBuildOrders = {}
     self.bForceSim=true
-    
-    self.doorMonitorState = AirlockDoor.monitorStates.OXYNONE 
-    
+    self.doorMonitorState = AirlockDoor.monitorStates.OXYNONE
     self.activityOptionList = ActivityOptionList.new(self)
 end
-
 function Airlock:getEnemyActivityOptions(rChar, tObjects)
 	return self:getActivityOptions(rChar, tObjects)
 end
-
 function Airlock:getActivityOptions(rChar, tObjects)
     tObjects = tObjects or {}
     table.insert(tObjects, self.activityOptionList:getListAsUtilityOptions())
     return tObjects
 end
-
 function Airlock:remove()
     Zone.remove(self)
     self:endOpenSequence()
-
     for rDoor,_ in pairs(self.tOwnedDoors) do
-        if rDoor.bDestroyed then 
+        if rDoor.bDestroyed then
             self.tOwnedDoors[rDoor] = nil
         elseif rDoor.setOwnedByZone then
             rDoor:setOwnedByZone(self,false)
@@ -66,17 +54,14 @@ function Airlock:remove()
     end
     self.tOwnedDoors = {}
 end
-
 function Airlock:preTileUpdate()
     if self.bRunning then
         self:_claimDoors(false)
     end
 end
-
 function Airlock:disallowO2Propagation()
     return self.bRunning
 end
-
 function Airlock:postTileUpdate()
     if self.bRunning then
         if not self:_claimDoors(true) then
@@ -84,8 +69,6 @@ function Airlock:postTileUpdate()
         end
     end
 end
-
--- return true if it's unsafe to open. Please abort open sequence!
 function Airlock:_testSafetyInterrupt(bIncapacitatedOnly)
     local tChars,numChars = self.rRoom:getCharactersInRoom(true)
     for rChar,_ in pairs(tChars) do
@@ -102,14 +85,12 @@ function Airlock:_testSafetyInterrupt(bIncapacitatedOnly)
         end
     end
 end
-
 function Airlock:_testTimeout(dt,nMaxWait)
     self.nTimeoutTest = self.nTimeoutTest+dt
     if self.nTimeoutTest > nMaxWait then
         return true
     end
 end
-
 function Airlock:_tickOpenSequence(dt)
     if self.nStage == Airlock.STAGE_CLOSE_DOORS then
         if self:_attemptChangeDoors(dt,Door.operations.LOCKED,Door.doorStates.LOCKED) then
@@ -156,18 +137,13 @@ function Airlock:_tickOpenSequence(dt)
         self:endOpenSequence()
     end
 end
-
 function Airlock:isSafe(wx,wy)
     if self.nStage == Airlock.STAGE_UNLOCK or not self.bRunning then
         local tx,ty = self.rRoom:getCenterTile(true,true)
         local o2 = g_World.oxygenGrid:getOxygen(tx,ty)
         return o2 > Character.OXYGEN_LOW
-        -- we could check oxygen level in the room to be extra safe.
-        --local tx, ty = g_World._getTileFromWorld(wx,wy)
-        --g_World.oxygenGrid:setOxygen(newTileX,newTileY, saveData.oxygenGrid:getOxygen(x,y))
     end
 end
-
 function Airlock:beginOpenSequence()
     assert(not self.bRunning)
     self.bRunning = true
@@ -178,12 +154,10 @@ function Airlock:beginOpenSequence()
         self.bRunning = false
     end
 end
-
 function Airlock:endOpenSequence()
     self:_claimDoors(false)
     self.bRunning = false
 end
-
 function Airlock:_claimDoors(bClaim)
     local bSuccess = true
     if not self.rRoom then
@@ -192,11 +166,10 @@ function Airlock:_claimDoors(bClaim)
     end
     for addr,_ in pairs(self.rRoom.tDoors) do
         local rDoor = ObjectList.getDoorAtTile(g_World.pathGrid:cellAddrToCoord(addr))
-        if rDoor and rDoor.sName == 'Airlock' then 
+        if rDoor and rDoor.sName == 'Airlock' then
             local oldController = rDoor:getScriptController()
             if bClaim and oldController and oldController ~= self and oldController.bFunctional and oldController.bRunning then
                 bSuccess = false
-                -- whee, fighting for doors! For now, uh... give up. smh.
             elseif bClaim then
                 rDoor:setScriptController(self)
             elseif rDoor:getScriptController() == self then
@@ -209,7 +182,6 @@ function Airlock:_claimDoors(bClaim)
     self.bClaimed = bSuccess and bClaim
     return bSuccess
 end
-
 function Airlock:_incrementStage()
     self.nStage = (self.nStage and self.nStage+1) or 1
     self.nStartingOxygen = nil
@@ -217,22 +189,17 @@ function Airlock:_incrementStage()
     self.nTimeWaited = nil
     self.nTimeoutTest = 0
 end
-
 function Airlock:getLightingOverride()
     if not self.bFunctional then
         return Room.LIGHTING_SCHEME_VACUUM
     end
 end
-
 function Airlock:onTick(dt)
-
     self:_updateDoorMonitor()
-    
     if self.bRunning then
         self:_tickOpenSequence(dt)
         return
-    end    
-
+    end
     local bFunctional = true
     local sNonFunctionalReason = nil
     if self.rRoom:disallowO2Propagation() then
@@ -243,29 +210,25 @@ function Airlock:onTick(dt)
         bFunctional = false
         sNonFunctionalReason = 'INSPEC152TEXT'
     end
-    
     if self:_testSafetyInterrupt(true) then
         bFunctional = false
         sNonFunctionalReason = 'INSPEC169TEXT'
     end
-    
     local tProcessedDoors={}
-    self.rSpaceDoor=nil -- for hints
-    self.bBadDoor=false -- for hints
+    self.rSpaceDoor=nil
+    self.bBadDoor=false
     if bFunctional then
         local bSpaceAccess = false
         for addr,_ in pairs(self.rRoom.tDoors) do
             local rDoor = ObjectList.getDoorAtTile(g_World.pathGrid:cellAddrToCoord(addr))
-            
             if rDoor and not tProcessedDoors[rDoor] then
                 if rDoor.doorState == Door.doorStates.BROKEN_OPEN then
                     bFunctional = false
                     sNonFunctionalReason = 'INSPEC154TEXT'
                     break
                 end
-            
-                if rDoor.sName == 'Airlock' then 
-                    rDoor:testAirlock() 
+                if rDoor.sName == 'Airlock' then
+                    rDoor:testAirlock()
                     if rDoor.bValidAirlock then
                         bSpaceAccess = true
                         self.rSpaceDoor=rDoor
@@ -284,20 +247,16 @@ function Airlock:onTick(dt)
             sNonFunctionalReason = 'INSPEC156TEXT'
         end
     end
-    
-    --update airlock door oxygen vis
-
     for rDoor,_ in pairs(self.tOwnedDoors) do
-        if rDoor.bDestroyed then 
+        if rDoor.bDestroyed then
             self.tOwnedDoors[rDoor] = nil
         elseif not bFunctional or not tProcessedDoors[rDoor] then
-            if rDoor.setOwnedByZone then        
+            if rDoor.setOwnedByZone then
                 rDoor:setOwnedByZone(self,false)
             end
             self.tOwnedDoors[rDoor] = nil
-        end   
+        end
     end
-
     self.rLocker = nil
     for rProp,_ in pairs(self.rRoom.tProps) do
         if rProp.sName == 'AirlockLocker' and rProp:isFunctioning() then
@@ -310,62 +269,46 @@ function Airlock:onTick(dt)
         bFunctional = false
         sNonFunctionalReason = 'INSPEC157TEXT'
     end
-
     if bFunctional then
         for rDoor,_ in pairs(tProcessedDoors) do
             if not self.tOwnedDoors[rDoor] then
                 self.tOwnedDoors[rDoor] = 1
                 if rDoor.setOwnedByZone then
                     rDoor:setOwnedByZone(self,true)
-                    if not self.bRunning then 
-                        rDoor:setOperation(Door.operations.NORMAL) 
+                    if not self.bRunning then
+                        rDoor:setOperation(Door.operations.NORMAL)
                     end
                 end
             end
         end
     end
-
     self.bFunctional = bFunctional
     self.sNonFunctionalReason = sNonFunctionalReason
     assertdev(self.bFunctional or self.sNonFunctionalReason)
-    
- --   local _,_,o2 = rRoom:getOxygenScore()
-  --  self.relativeOxygen = math.abs(o2) / Oxygen.TILE_MAX
-    
     self:_updateJobList()
-    
 end
-
 function Airlock:getAlertString()
     if not self.bFunctional and self.sNonFunctionalReason then
         return g_LM.line(self.sNonFunctionalReason)
     end
 end
-
 function Airlock:requestOpen()
     if not self.bRunning and not self:_testSafetyInterrupt() then
         self:beginOpenSequence()
         return true
     end
 end
-
 function Airlock:canGoOutside()
     return self.nStage == Airlock.STAGE_LEAVE
 end
-
--- Returns a tile outside the airlock, in vacuum/space
 function Airlock:getExteriorTile(bAll)
     return self:_getTileOutsideAirlock(true,bAll)
 end
-
--- Returns a tile outside of the airlock zone, in the base.
-
 function Airlock:_getTileOutsideAirlock(bInSpace)
     for addr,_ in pairs(self.rRoom.tDoors) do
         local rDoor = ObjectList.getDoorAtTile(g_World.pathGrid:cellAddrToCoord(addr))
         if rDoor and (rDoor.bValidAirlock == bInSpace) then
             local wx,wy,tx,ty
-
             if bInSpace then
                 wx,wy,tx,ty = rDoor:getValidTileOnSide(false)
             else
@@ -378,40 +321,28 @@ function Airlock:_getTileOutsideAirlock(bInSpace)
 				    end
 			    end
             end
-
             return wx,wy,tx,ty
         end
     end
 end
-
 function Airlock:utilityOverride(rChar, rAO, nOldScore)
     local nMult = 1
     if self:_testSafetyInterrupt() then
         nMult = .9
     end
-	-- reduce score if this isn't a player-owned airlock
 	if self.rRoom.nTeam == Character.TEAM_ID_PLAYER then
-		-- nothing
 	else
 		nMult = nMult * 0.75
 	end
     return nOldScore * nMult
 end
-
 function Airlock:utilityGate(rChar, rAO)
     local tChars,numChars = self.rRoom:getCharactersInRoom(true)
-    
-    -- SPECIAL-CASE HACK for incapacitated characters in airlock.
-    -- We may down the line want to track safety interrupt time and make the airlock
-    -- off-limits if it's been too long, and interrupt the GoInside task to find another
-    -- airlock.
     for rChar,_ in pairs(tChars) do
         if not rChar:wearingSpacesuit() and Malady.isIncapacitated(rChar) then
             return false, 'Incapacitated character blocking airlock function.'
         end
     end
-
-	-- if not player owned, only use if we're suffocating
 	if self.rRoom.nTeam == Character.TEAM_ID_PLAYER then
 		return true
 	elseif rChar.tStatus.suffocationTime > 0 then
@@ -420,76 +351,36 @@ function Airlock:utilityGate(rChar, rAO)
 		return false, 'not player owned (and not suffocating)'
 	end
 end
-
 function Airlock:_updateJobList()
     local tData
     local tJobs = {}
-
     if self.bFunctional and self.rRoom and not self.rRoom.nOwnershipDuration and not self.bBreach and self.rLocker then
-        --[[
-        -- Add GoInsideStandalone
-        -- It's just a RunTo to somewhere inside the airlock.
-        tData = {}
-        local x, y = self.rLocker:getLoc()
-        tData.pathX,tData.pathY = x,y
-        tData.priorityOverrideFn = function(rChar,rAO,nUnmodifiedPri)
-            if rChar.tStatus.bLowOxygen then
-                return OptionData.tPriorities.SURVIVAL_NORMAL
-            end
-            return nUnmodifiedPri
-        end
-		tData.bInfinite = true
-		-- gate based on player ownership, etc
-		tData.utilityGateFn = function(rChar, rAO) 
-            local bOK, sReason = self:utilityGate(rChar, rAO) 
-            if not bOK then 
-                return bOK,sReason 
-            end
-            
-        end
-		tData.utilityOverrideFn = function(rChar, rAO, nScore) return self:utilityOverride(rChar, rAO, nScore) end
-                
-        table.insert(tJobs, g_ActivityOption.new('GoInsideStandalone',tData))
-        ]]--
-        
-        -- now GoOutsideStandalone
-        -- It's just a rare fallback case for people in an airlock with nothing else to do, so that they don't
-        -- sit around blocking the door.
         tData = {}
 		tData.bInfinite = true
         local tx,ty = self:_getTileOutsideAirlock(true)
         if tx then
             tData.pathX,tData.pathY = g_World._getWorldFromTile(tx,ty)
-            -- gate based on player ownership, etc
-            tData.utilityGateFn = function(rChar, rAO) 
+            tData.utilityGateFn = function(rChar, rAO)
                 if rChar:getRoom() ~= self.rRoom then
                     return false, 'not inhabiting airlock'
                 end
-                return self:utilityGate(rChar, rAO) 
+                return self:utilityGate(rChar, rAO)
             end
             table.insert(tJobs, g_ActivityOption.new('GoOutsideStandalone',tData))
         end
     end
-
     self.activityOptionList:set(tJobs)
 end
-
-
 function Airlock:_attemptChangeDoors(dt,operation,state,bSpaceOnly)
     local bSuccess = true
     for addr,_ in pairs(self.rRoom.tDoors) do
         local rDoor = ObjectList.getDoorAtTile(g_World.pathGrid:cellAddrToCoord(addr))
-        
         if not rDoor or (bSpaceOnly and not rDoor.bValidAirlock) then
-            --print('skipping door because not an airlock')
         else
             rDoor:setOperation(operation)
             rDoor:_updateDoorState(false, true)
-            
             rDoor.monitorState = self.doorMonitorState
-            
             if rDoor.doorState ~= state then
-                -- HACK: checking for very similar states
                 if state == Door.doorStates.LOCKED and rDoor.doorState == Door.doorStates.BROKEN_CLOSED then
                 else
                     bSuccess = false
@@ -499,31 +390,19 @@ function Airlock:_attemptChangeDoors(dt,operation,state,bSpaceOnly)
     end
     return bSuccess
 end
-
 function Airlock:_tickVenting(dt,bIncreasing)
     if not self.nStartingOxygen then
-        --[[
-        local o2 = 0
-        local n = 0
-        for addr,_ in pairs(self.rRoom.tTiles) do
-            n=n+1
-            local x, y = g_World.pathGrid:cellAddrToCoord(addr)
-            o2 = o2 + g_World.oxygenGrid:getOxygen(x,y)
-        end        
-        self.nStartingOxygen = o2/n
-        ]]--
-        self.bOxygenScoreOutOfDate = true -- forcing a recalc, since airlocks can change faster than o2 tick rate.
+        self.bOxygenScoreOutOfDate = true
         self.nStartingOxygen = self.rRoom:getOxygenScore()
-        if not bIncreasing then 
-            self.nInitialOxygen = self.nStartingOxygen 
+        if not bIncreasing then
+            self.nInitialOxygen = self.nStartingOxygen
         end
     else
         for addr,_ in pairs(self.rRoom.tTiles) do
             local x, y = g_World.pathGrid:cellAddrToCoord(addr)
             g_World.oxygenGrid:setOxygen(x,y,self.nStartingOxygen)
         end
-        
-        if bIncreasing and not self.nDesiredOxygen then 
+        if bIncreasing and not self.nDesiredOxygen then
             self.nDesiredOxygen = Oxygen.TILE_MAX
             if self.rRoom.tAdjoining then
                 self.nDesiredOxygen = 0
@@ -549,11 +428,10 @@ function Airlock:_tickVenting(dt,bIncreasing)
         end
     end
 end
-
 function Airlock:_updateDoorMonitor()
-    if not true then -- self.rRoom:disallowO2Propagation()
+    if not true then
         self.doorMonitorState = AirlockDoor.monitorStates.LOCKED
-    else    
+    else
         local relativeOxygen = (self:_getRelativeOxygen() or 0)
         if relativeOxygen > 0.8 then
             self.doorMonitorState = AirlockDoor.monitorStates.OXYFULL
@@ -563,65 +441,32 @@ function Airlock:_updateDoorMonitor()
             self.doorMonitorState = AirlockDoor.monitorStates.OXYLOW
         else
             self.doorMonitorState = AirlockDoor.monitorStates.OXYNONE
-        end    
+        end
     end
-    
     for rDoor,_ in pairs(self.tOwnedDoors) do
-        --if rDoor:locked() then
-        --    rDoor.monitorState = AirlockDoor.monitorStates.LOCKED
-        --else
             rDoor.monitorState = self.doorMonitorState
-        --end
     end
 end
-
 function Airlock:_getRelativeOxygen()
     local _,_,o2 = self.rRoom:getOxygenScore()
     return math.abs(o2) / Oxygen.TILE_MAX
 end
-
 function Airlock:_waitForDudesToLeave(dt)
     self.nTimeWaited = (self.nTimeWaited or 0)+dt
     if self.nTimeWaited > Airlock.MAX_OPEN_WAIT_TIME then
         return true
     end
-    --[[
-    -- UNSAFE: this function is actually used for both entering and leaving the airlock.
-    local tChars,numChars = self.rRoom:getCharactersInRoom(true)
-    if numChars == 0 then
-        return true
-    end
-    ]]--
 end
-
---[[
-function Airlock.interceptNextStep(currentTX,currentTY,nextTX,nextTY)
-    --local tNode = self.tPathNodes[self.tCurrentStepData.nCurrentStep]
-    --local tNextNode = self.tPathNodes[self.tCurrentStepData.nNextStep]
-    --local rDoor = ObjectList.getDoorAtTile(tNextNode.tx,tNextNode.ty)
-    local rDoor = ObjectList.getDoorAtTile(nextTX,nextTY)
-    if rDoor and rDoor.bValidAirlock and rDoor:functioningAsOuterAirlockDoor() then
-    end
-end
-]]--
-
---function Airlock.interceptStep(rChar, destTX,destTY)
 function Airlock.interceptSegment(rChar, destTX,destTY, nCurRoom,nNextRoom, bPathToNearest)
-    -- sort of hacky: bPathToNearest means we're just going next to the final position.
-    -- And since we're only checking the final position in this function, to see if it's on
-    -- an airlock door, then bPathToNearest means we're not going into the door.
     if bPathToNearest then return end
-
     local rDoor = ObjectList.getDoorAtTile(destTX,destTY)
     if rDoor and rDoor.bValidAirlock and rDoor:functioningAsOuterAirlockDoor() then
-
         if rChar.rCurrentTask then
             local rLeaf = rChar.rCurrentTask:getLeafTask()
             if rLeaf and rLeaf.rActivityOption and rLeaf.rActivityOption.tData and rLeaf.rActivityOption.tData.bAirlockActionNode then
                 return nil
             end
         end
-
         local bGoInside=nil
         if nCurRoom == 1 then
             bGoInside=true
@@ -653,11 +498,9 @@ function Airlock.interceptSegment(rChar, destTX,destTY, nCurRoom,nNextRoom, bPat
             Print(TT_Error,"Unable to determine if we're going inside or outside.")
             print(destTX,destTY,nCurRoom,nNextRoom)
         end
-        
         return Airlock.createActionNode(rChar, bGoInside, rDoor,destTX,destTY)
     end
 end
-
 function Airlock.createActionNode(rChar, bGoInside, rDoor, doorTX,doorTY)
     local rAirlockZone = rDoor:_getFunctionalAirlockZone()
     local rRoom = rAirlockZone and rAirlockZone.rRoom
@@ -669,11 +512,8 @@ function Airlock.createActionNode(rChar, bGoInside, rDoor, doorTX,doorTY)
         Print(TT_Error,"How does that even happen?",rAirlockZone,rRoom,rRoom.zoneObj)
         return
     end
-
     local insideTX,insideTY = g_World._getAdjacentTile(doorTX,doorTY, rDoor.airlockInsideDir)
     local outsideTX,outsideTY = g_World._getAdjacentTile(doorTX,doorTY, rDoor.airlockSpaceDir)
-    --local rRoom = Room.getRoomAtTile(insideTX,insideTY)
-
     local afterWX,afterWY,beforeWX,beforeWY
     if bGoInside then
         afterWX,afterWY = g_World._getWorldFromTile(insideTX,insideTY)
@@ -682,18 +522,13 @@ function Airlock.createActionNode(rChar, bGoInside, rDoor, doorTX,doorTY)
         afterWX,afterWY = g_World._getWorldFromTile(outsideTX,outsideTY)
         beforeWX,beforeWY = g_World._getWorldFromTile(insideTX,insideTY)
     end
-
-    -- Create the special path node for Pathfinder to use.
     local tTaskNode={
         sTaskName=(bGoInside and 'Utility.Tasks.GoInside') or 'Utility.Tasks.GoOutside',
     }
-
     local tTaskData = {
         pathToNearest=false,
         rAirlockZone=rRoom.zoneObj,
         rLocker = rRoom.zoneObj.rLocker,
-        -- A bunch of flags to keep this from getting shut down by the pathing system.
-        -- We should perhaps just simplify to something like a bForcePath flag?
         bAllowHostilePathing = true,
         bTestMemoryBreach=false,
         bTestMemoryCombat=false,
@@ -710,13 +545,9 @@ function Airlock.createActionNode(rChar, bGoInside, rDoor, doorTX,doorTY)
         tTaskData.pathX,tTaskData.pathY = rRoom.zoneObj.rLocker:getAccessWorldLoc()
     end
     tTaskData.bAirlockActionNode = true
-
-    
     tTaskNode.tTaskData = tTaskData
     tTaskNode.sNodeType='task'
     tTaskNode.tx,tTaskNode.ty = g_World._getTileFromWorld(beforeWX,beforeWY)
-
     return tTaskNode
 end
-
 return Airlock

@@ -1,15 +1,10 @@
 local Gui = require('UI.Gui')
-
 local nStatLabelMargin = 35
-
 local nInspectorWidth = 418
-
 local nIndentX = 30
 local nHeadingHeight = 34
 local nIconOffsetY = -4
 local nSameLineTextOffsetY = -6
-
--- section heading offsets
 local nJoinDateY = 10
 local nIllnessY = -30
 local nInjuryY = -90
@@ -20,7 +15,6 @@ local nFoodY = -340
 local nBandY = -375
 local nStuffY = -410
 local nInventoryY = -480
-
 return
 {
     posInfo =
@@ -198,7 +192,6 @@ return
     },
     tElements =
     {
-		-- alternating tinted backgrounds for every other item; some are "links"
         {
             key = 'IllnessButton',
             type = 'onePixelButton',
@@ -243,7 +236,6 @@ return
             scale = { nInspectorWidth, nHeadingHeight },
             color = Gui.AMBER_OPAQUE_DIM,
         },
-		-- join date
         {
             key = 'JoinDateIcon',
             type = 'uiTexture',
@@ -274,7 +266,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		-- health status - illness, injury
         {
             key = 'IllnessIcon',
             type = 'uiTexture',
@@ -335,7 +326,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- inventory
         {
             key = 'InventoryIcon',
             type = 'uiTexture',
@@ -366,7 +356,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- friends
         {
             key = 'FriendsIcon',
             type = 'uiTexture',
@@ -397,7 +386,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- enemies
         {
             key = 'EnemiesIcon',
             type = 'uiTexture',
@@ -428,7 +416,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- favorite hobby
         {
             key = 'HobbyIcon',
             type = 'uiTexture',
@@ -459,7 +446,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- favorite food
         {
             key = 'FoodIcon',
             type = 'uiTexture',
@@ -490,7 +476,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- favorite band
         {
             key = 'BandIcon',
             type = 'uiTexture',
@@ -521,7 +506,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- "likes", eg stuff tags
         {
             key = 'StuffIcon',
             type = 'uiTexture',
@@ -552,7 +536,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- Inspecting Raiders
         {
             key = 'HostileKillsIcon',
             type = 'uiTexture',
@@ -583,7 +566,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- personality
         {
             key = 'FlavorText1Icon',
             type = 'uiTexture',

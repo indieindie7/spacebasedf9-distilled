@@ -1,13 +1,9 @@
 local Gui = require('UI.Gui')
-
 local nBarWidth = 300
 local nBarHeight = 64
-
 local nBarX = 608
 local nBarTextY = -7
-
 local nShadeBoxHeight = 145
-
 return
 {
     posInfo =
@@ -31,7 +27,6 @@ return
             scale = { nBarWidth, nBarHeight },
             color = Gui.BLACK,
         },
-		-- progress bar dynamic elements
 		{
             key = 'ProgressBar',
             type = 'onePixel',
@@ -50,7 +45,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
 		},
-		-- shaded box beneath description
 		{
             key = 'DescShadeBox',
             type = 'onePixel',
@@ -72,7 +66,6 @@ return
             scale = { 32, 32 },
             color = Gui.AMBER_OPAQUE,
         },
-		-- bar with project name
 		{
             key = 'NameBubbleLeftEndFilled',
             type = 'uiTexture',
@@ -129,7 +122,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
 		},
-		-- frame around progress bar
         {
             key = 'BarLeftInnerFilled',
             type = 'uiTexture',

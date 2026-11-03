@@ -1,11 +1,9 @@
 local Gui = require('UI.Gui')
-
 local sBottomIconY = '-g_GuiManager.getUIViewportSizeY() + 40'
 local nZoomoutButtonX = 1072
 local nZoominButtonX = 1012
 local nWallButtonX = 912
 local nOxygenButtonX = 842
-
 local sFlipBorderX = '0'
 local sFlipBorderTopY = '-(g_GuiManager.getUIViewportSizeY() - 184)'
 local sFlipBorderBottomY = sFlipBorderTopY .. ' - 206'
@@ -19,8 +17,7 @@ local sFlipButtonY = sFlipBorderTopY .. ' - 1'
 local nFlipButtonW = 193
 local nFlipButtonH = 206
 local nAlertExpandedOffsetX = -480
-
-return 
+return
 {
     posInfo =
         {
@@ -73,7 +70,7 @@ return
             {
                 key = 'WallTexture',
                 pos = { nWallButtonX + nAlertExpandedOffsetX, sBottomIconY },
-            },       
+            },
             {
                 key = 'WallActiveTexture',
                 pos = { nWallButtonX + nAlertExpandedOffsetX, sBottomIconY },
@@ -140,7 +137,7 @@ return
             {
                 key = 'WallTexture',
                 pos = { nWallButtonX, sBottomIconY },
-            },            
+            },
             {
                 key = 'WallActiveTexture',
                 pos = { nWallButtonX, sBottomIconY },
@@ -165,7 +162,7 @@ return
                 key = 'OxygenHotkey',
                 pos = { nOxygenButtonX + 50, sBottomIconY..' - 30' },
             },
-        },        
+        },
     },
     tElements =
     {
@@ -199,14 +196,14 @@ return
             hAlign = MOAITextBox.LEFT_JUSTIFY,
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
-        }, 
+        },
         {
             key = 'CapacityIcon',
             type = 'uiTexture',
             textureName = 'ui_hud_iconPeople',
             sSpritesheetPath = 'UI/HUD',
             pos = { 900, -70 },
-            scale = { 1.4, 1.4 },          
+            scale = { 1.4, 1.4 },
             color = Gui.AMBER,
         },
         {
@@ -230,25 +227,14 @@ return
             hAlign = MOAITextBox.LEFT_JUSTIFY,
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
-        },   
+        },
         {
             key = 'DividerLine',
             type = 'onePixel',
             pos = { 620, -192 },
             scale = { 490, 4 },
-            color = Gui.AMBER,     
-        },
-        --[[ Commented out until we implement the feature
-        { 
-            key = 'HistoryButton',
-            type = 'textureButton',
-            sTextureName = 'ui_hud_buttonHistory',
-            sSpritesheetPath = 'UI/HUD',
-            pos = { 630, -274 },            
-            scale = { 2, 2 },
             color = Gui.AMBER,
-            hidden = true,
-        },]]--
+        },
         {
             key = 'StardateText',
             type = 'textBox',
@@ -259,7 +245,7 @@ return
             hAlign = MOAITextBox.LEFT_JUSTIFY,
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
-        },   
+        },
         {
             key = 'PauseButton',
             type = 'onePixelButton',
@@ -283,7 +269,7 @@ return
                 },
             },
             onHoverOff =
-            { 
+            {
                 {
                     key = 'PauseInactiveTexture',
                     hidden = false,
@@ -293,7 +279,7 @@ return
                     hidden = true,
                 },
             },
-        },            
+        },
         {
             key = 'PauseInactiveTexture',
             type = 'uiTexture',
@@ -336,7 +322,7 @@ return
                 },
             },
             onHoverOff =
-            { 
+            {
                 {
                     key = 'Speed1InactiveTexture',
                     hidden = false,
@@ -346,7 +332,7 @@ return
                     hidden = true,
                 },
             },
-        },            
+        },
         {
             key = 'Speed1InactiveTexture',
             type = 'uiTexture',
@@ -389,7 +375,7 @@ return
                 },
             },
             onHoverOff =
-            { 
+            {
                 {
                     key = 'Speed2InactiveTexture',
                     hidden = false,
@@ -399,7 +385,7 @@ return
                     hidden = true,
                 },
             },
-        },           
+        },
         {
             key = 'Speed2InactiveTexture',
             type = 'uiTexture',
@@ -442,7 +428,7 @@ return
                 },
             },
             onHoverOff =
-            { 
+            {
                 {
                     key = 'Speed3InactiveTexture',
                     hidden = false,
@@ -452,7 +438,7 @@ return
                     hidden = true,
                 },
             },
-        },           
+        },
         {
             key = 'Speed3InactiveTexture',
             type = 'uiTexture',
@@ -470,9 +456,8 @@ return
             pos = { 1068, -214 },
             scale = {1.4, 1.4},
             color = Gui.AMBER,
-            hidden = true,            
+            hidden = true,
         },
-        -- zoomout
         {
             key = 'ZoomoutButton',
             type = 'onePixelButton',
@@ -496,7 +481,7 @@ return
                 },
             },
             onHoverOff =
-            { 
+            {
                 {
                     key = 'ZoomoutTexture',
                     hidden = false,
@@ -506,7 +491,7 @@ return
                     hidden = true,
                 },
             },
-        },            
+        },
         {
             key = 'ZoomoutTexture',
             type = 'uiTexture',
@@ -526,7 +511,6 @@ return
             color = Gui.AMBER,
             hidden = true,
         },
-        -- zoomin
        {
             key = 'ZoominButton',
             type = 'onePixelButton',
@@ -550,7 +534,7 @@ return
                 },
             },
             onHoverOff =
-            { 
+            {
                 {
                     key = 'ZoominTexture',
                     hidden = false,
@@ -560,7 +544,7 @@ return
                     hidden = true,
                 },
             },
-        },            
+        },
         {
             key = 'ZoominTexture',
             type = 'uiTexture',
@@ -580,15 +564,13 @@ return
             color = Gui.AMBER,
             hidden = true,
         },
-        -- divider
         {
             key = 'BottomButtonDividerLine',
             type = 'onePixel',
             pos = { nZoomoutButtonX - 76, '-g_GuiManager.getUIViewportSizeY() + 40'  },
             scale = { 4, 54 },
-            color = Gui.AMBER,     
-        },        
-        -- wall button
+            color = Gui.AMBER,
+        },
        {
             key = 'WallButton',
             type = 'onePixelButton',
@@ -612,7 +594,7 @@ return
                 },
             },
             onHoverOff =
-            { 
+            {
                 {
                     key = 'WallTexture',
                     hidden = false,
@@ -622,7 +604,7 @@ return
                     hidden = true,
                 },
             },
-        },            
+        },
         {
             key = 'WallTexture',
             type = 'uiTexture',
@@ -653,7 +635,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        -- oxygen button
        {
             key = 'OxygenButton',
             type = 'onePixelButton',
@@ -677,7 +658,7 @@ return
                 },
             },
             onHoverOff =
-            { 
+            {
                 {
                     key = 'OxygenTexture',
                     hidden = false,
@@ -687,7 +668,7 @@ return
                     hidden = true,
                 },
             },
-        },            
+        },
         {
             key = 'OxygenTexture',
             type = 'uiTexture',

@@ -1,12 +1,9 @@
 local Gui = require('UI.Gui')
-
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
-
 local CONSTRUCT_CANCEL = Gui.RED
 local CONSTRUCT_CONFIRM = Gui.GREEN
-
 local nButtonWidth, nButtonHeight  = 330, 81
 local nTextHeight = nButtonHeight + 20
 local nButtonStartY = -204
@@ -19,8 +16,7 @@ local nCancelHotkeyY = -46
 local nIconScale = .6
 local numButtons = 7
 local nBGWidth = 160
-
-return 
+return
 {
     posInfo =
         {
@@ -76,11 +72,11 @@ return
             {
                 key = 'CostText',
                 hidden = true,
-            },            
+            },
         },
-    },    
+    },
     tElements =
-    {       
+    {
         {
             key = 'LargeBar',
             type = 'onePixel',
@@ -104,14 +100,14 @@ return
                 {
                     key = 'CancelIcon',
                     color = { 0, 0, 0 },
-                },   
+                },
                 {
                     key = 'CancelLabel',
                     color = { 0, 0, 0 },
-                },          
+                },
                 {
                     key = 'CancelHotkey',
-                    color = { 0, 0, 0 },                    
+                    color = { 0, 0, 0 },
                 },
                 {
                     playSfx = 'hilight',
@@ -126,7 +122,7 @@ return
                 {
                     key = 'CancelIcon',
                     color = CONSTRUCT_CANCEL,
-                },   
+                },
                 {
                     key = 'CancelLabel',
                     color = CONSTRUCT_CANCEL,
@@ -149,7 +145,7 @@ return
                 {
                     key = 'ConfirmButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
@@ -171,7 +167,7 @@ return
                 {
                     key = 'ConfirmIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'ConfirmHotkey',
                     color = { 0, 0, 0 },
@@ -213,7 +209,7 @@ return
                 {
                     key = 'ConfirmIcon',
                     color = CONSTRUCT_CONFIRM,
-                },  
+                },
                 {
                     key = 'ConfirmHotkey',
                     color = CONSTRUCT_CONFIRM,
@@ -251,14 +247,14 @@ return
                 {
                     key = 'AreaButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'AreaButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -273,7 +269,7 @@ return
                 {
                     key = 'AreaIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'AreaHotkey',
                     color = { 0, 0, 0 },
@@ -295,7 +291,7 @@ return
                 {
                     key = 'AreaIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'AreaHotkey',
                     color = Gui.AMBER,
@@ -313,14 +309,14 @@ return
                 {
                     key = 'WallButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'WallButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -335,7 +331,7 @@ return
                 {
                     key = 'WallIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'WallHotkey',
                     color = { 0, 0, 0 },
@@ -357,7 +353,7 @@ return
                 {
                     key = 'WallIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'WallHotkey',
                     color = Gui.AMBER,
@@ -376,14 +372,14 @@ return
                 {
                     key = 'FloorButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'FloorButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -398,7 +394,7 @@ return
                 {
                     key = 'FloorIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'FloorHotkey',
                     color = { 0, 0, 0 },
@@ -420,7 +416,7 @@ return
                 {
                     key = 'FloorIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'FloorHotkey',
                     color = Gui.AMBER,
@@ -439,14 +435,14 @@ return
                 {
                     key = 'ObjectButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'ObjectButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -461,10 +457,10 @@ return
                 {
                     key = 'ObjectIcon',
                     color = { 0, 0, 0 },
-                },       
+                },
                 {
                     playSfx = 'hilight',
-                },     
+                },
             },
             onHoverOff =
             {
@@ -479,7 +475,7 @@ return
                 {
                     key = 'ObjectIcon',
                     color = Gui.AMBER,
-                },  
+                },
             },
         },
         {
@@ -494,14 +490,14 @@ return
                 {
                     key = 'DemolishButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'DemolishButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -516,7 +512,7 @@ return
                 {
                     key = 'DemolishIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'DemolishHotkey',
                     color = { 0, 0, 0 },
@@ -538,7 +534,7 @@ return
                 {
                     key = 'DemolishIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'DemolishHotkey',
                     color = Gui.AMBER,
@@ -557,14 +553,14 @@ return
                 {
                     key = 'VaporizeButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'VaporizeButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -579,7 +575,7 @@ return
                 {
                     key = 'VaporizeIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'VaporizeHotkey',
                     color = { 0, 0, 0 },
@@ -601,7 +597,7 @@ return
                 {
                     key = 'VaporizeIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'VaporizeHotkey',
                     color = Gui.AMBER,
@@ -620,14 +616,14 @@ return
                 {
                     key = 'EraseButton',
                     color = BRIGHT_AMBER,
-                },            
+                },
             },
             onReleased =
             {
                 {
                     key = 'EraseButton',
                     color = AMBER,
-                },       
+                },
             },
             onHoverOn =
             {
@@ -642,7 +638,7 @@ return
                 {
                     key = 'EraseIcon',
                     color = { 0, 0, 0 },
-                },                
+                },
                 {
                     key = 'EraseHotkey',
                     color = { 0, 0, 0 },
@@ -664,13 +660,13 @@ return
                 {
                     key = 'EraseIcon',
                     color = Gui.AMBER,
-                },  
+                },
                 {
                     key = 'EraseHotkey',
                     color = Gui.AMBER,
                 },
             },
-        },		
+        },
         {
             key = 'CancelIcon',
             type = 'uiTexture',
@@ -897,7 +893,7 @@ return
             color = CONSTRUCT_CONFIRM
         },
         {
-            key = 'AreaHotkey', --now 'ROOM'
+            key = 'AreaHotkey',
             type = 'textBox',
             pos = { nHotkeyX, nHotkeyStartY },
             text = 'R',
@@ -980,14 +976,13 @@ return
             scale = { nButtonWidth, nButtonHeight },
             color = SELECTION_AMBER,
         },
-        -- cost submenu
         {
             key = 'CostBackground',
             type = 'onePixel',
             pos = { nButtonWidth, -nButtonHeight },
             scale = { nBGWidth, nButtonHeight },
             color = CONSTRUCT_CONFIRM,
-        },    
+        },
         {
             key = 'CostBackgroundEndCap',
             type = 'uiTexture',
@@ -995,7 +990,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth + nBGWidth - 1, -nButtonHeight },
             color = CONSTRUCT_CONFIRM,
-        },   
+        },
         {
             key = 'CostVerticalRule',
             type = 'uiTexture',
@@ -1003,7 +998,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth, -nButtonHeight - 4 },
             color = { 0, 0, 0 },
-        },     
+        },
         {
             key = 'CostIconMatter',
             type = 'uiTexture',
@@ -1011,7 +1006,7 @@ return
             sSpritesheetPath = 'UI/Shared',
             pos = { nButtonWidth + 10, -nButtonHeight - 10 },
             color = { 0, 0, 0 },
-        },   
+        },
         {
             key = 'CostText',
             type = 'textBox',
@@ -1029,7 +1024,7 @@ return
             textureName = 'ui_hud_anglebottom',
             sSpritesheetPath = 'UI/HUD',
             pos = { 0, nButtonStartY - (nButtonHeight * numButtons) },
-            scale = { 1.28, 1.28 },            
+            scale = { 1.28, 1.28 },
             color = Gui.SIDEBAR_BG,
         },
     },

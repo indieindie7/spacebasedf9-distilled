@@ -5,14 +5,9 @@ local Room=require('Room')
 local DFMath=require('DFCommon.Math')
 local ObjectList=require('ObjectList')
 local GameRules=require('GameRules')
-
 local Patrol = Class.create(Task)
-
---Patrol.emoticon = 'work'
---Patrol.DURATION = 200
 Patrol.DURATION = 6
 Patrol.HELMET_REQUIRED = false
-
 function Patrol:init(rChar, tPromisedNeeds, rActivityOption)
     Task.init(self, rChar, tPromisedNeeds, rActivityOption)
     self.duration = DFMath.randomFloat(self.DURATION*.9,self.DURATION*1.1)
@@ -26,19 +21,16 @@ function Patrol:init(rChar, tPromisedNeeds, rActivityOption)
         self:_startIdle()
     end
 end
-
 function Patrol:_startIdle()
     self.nIdleTime = DFMath.randomFloat(.5,1.5)
     self.rChar:playAnim('breathe')
 end
-
 function Patrol:_startWalk()
     self.nIdleTime = nil
     if not self:_setUpMoveToRoom() then
         self:_startIdle()
 	end
 end
-
 function Patrol:_setUpMoveToRoom()
     local rRoom, bLocked, rDoor = self:_pickDoor()
 	if rRoom then
@@ -59,7 +51,6 @@ function Patrol:_setUpMoveToRoom()
 		end
 	end
 end
-
 function Patrol:_pickDoor()
     local rRoom = self.rChar:getRoom()
     if rRoom and rRoom ~= Room.getSpaceRoom() then
@@ -87,13 +78,10 @@ function Patrol:_pickDoor()
         end
     end
 end
-
 function Patrol:_sortRooms(tCandidates)
     table.sort(tCandidates, function(a,b) return a.nRoomAge < b.nRoomAge end)
 end
-
 function Patrol:_attemptPathToRoom(rRoom)
---    local wx,wy = World._getWorldFromTile(rRoom:getCenterTile(true,true))
     local wx,wy = rRoom:randomLocInRoom(false,true)
     if wx then
         local cx,cy = self.rChar:getLoc()
@@ -102,22 +90,13 @@ function Patrol:_attemptPathToRoom(rRoom)
         end
     end
 end
-
 function Patrol:onUpdate(dt)
-    --[[
-    self.duration = self.duration - dt
-    if self.duration < 0 then
-        return true
-    end
-    ]]--
-
     if self.nIdleTime then
         self.nIdleTime = self.nIdleTime - dt
         if self.nIdleTime < 0 then
             self.nIdleTime = nil
             self.nIdles = self.nIdles+1
             self:_startWalk()
-            -- some patrols have no good rooms to patrol, so we just chill in place for a bit then bail.
             if self.nIdleTime and self.nIdleTime > 0 and self.nIdles > 3 then
                 return true
             end
@@ -131,5 +110,4 @@ function Patrol:onUpdate(dt)
         end
     end
 end
-
 return Patrol

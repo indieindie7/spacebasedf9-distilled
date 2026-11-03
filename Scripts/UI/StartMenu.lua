@@ -6,33 +6,20 @@ local UIElement = require('UI.UIElement')
 local Renderer = require('Renderer')
 local GameRules = require('GameRules')
 local SoundManager = require('SoundManager')
-
 local sUILayoutFileName = 'UILayouts/StartMenuLayout'
-
 local m = {}
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
-
     Ob.spriteSheet = "UI/StartMenu"
-    
     function Ob:init()
         Ob.Parent.init(self)
-        
         self:setRenderLayer("UIOverlay")
-
         self:processUIInfo(sUILayoutFileName)
-		
-		-- read a const from layout data so we don't have same # in many places
 		self.nMOTDX = self:getExtraTemplateInfo('nMOTDX')
         self:refreshMOTD()
-		
-        --self.logo = self:getTemplateElement('Logo')
         self.uiBG = self:getTemplateElement('Background')
         self.uiBG:setScl( Renderer.getViewport().sizeX * 2, Renderer.getViewport().sizeY * 2 )
         self.uiBG:setLoc( -Renderer.getViewport().sizeX * .5, Renderer.getViewport().sizeY * .5 )
-        
-        -- buttons
         self.rButtonWebsite = self:getTemplateElement('ButtonWebsite')
         self.rButtonWebsite:addPressedCallback(self.onWebsitePressed, self)
         self.rButtonResume = self:getTemplateElement('ButtonResume')
@@ -48,13 +35,11 @@ function m.create()
         self.rButtonQuit = self:getTemplateElement('ButtonQuit')
         self.rButtonQuit:addPressedCallback(self.quit, self)
     end
-
     function Ob:onTick(dt)
         Ob.Parent.onTick(self, dt)
         if self.credits then self.credits:onTick(dt) end
         if self.settings then self.settings:onTick(dt) end
     end
-
     function Ob:refreshMOTD()
         local sPath = DFFile.getDataPath("UILayouts/motd-client.json")
         local f = io.open(sPath, "r")
@@ -62,85 +47,61 @@ function m.create()
         f:close()
         self:setupMOTD(sJson)
     end
-
     function Ob:playWarbleEffect(bFullscreen)
         if bFullscreen then
-            local uiX,uiY,uiW,uiH = Renderer.getUIViewportRect()            
+            local uiX,uiY,uiW,uiH = Renderer.getUIViewportRect()
             g_GuiManager.createEffectMaskBox(0, 0, uiW, uiH, 0.3)
         else
             g_GuiManager.createEffectMaskBox(0, 0, 500, 1444, 0.3, 0.3)
         end
-    end    
-
-
+    end
     function Ob:onFinger(eventType, x, y, props)
         return Ob.Parent.onFinger(self, eventType, x, y, props)
     end
-
     function Ob:inside(wx, wy)
         return Ob.Parent.inside(self, wx, wy)
     end
-
     function Ob:onKeyboard(key, bDown)
-        -- capture all keyboard input
-        if bDown and key == 27 then -- esc
+        if bDown and key == 27 then
             g_GuiManager.startMenu:resume(false)
         end
         return true
     end
-
     function Ob:onFileChange(path)
         Ob.Parent.onFileChange(self, path)
-
         self:refreshMOTD()
-        
         self.uiBG:setScl( Renderer.getViewport().sizeX * 2, Renderer.getViewport().sizeY * 2 )
-        self.uiBG:setLoc( -Renderer.getViewport().sizeX * .5, Renderer.getViewport().sizeY * .5 )        
+        self.uiBG:setLoc( -Renderer.getViewport().sizeX * .5, Renderer.getViewport().sizeY * .5 )
     end
-
     function Ob:onWebsitePressed(rEnt, button, eventType)
         MOAIOpenInBrowser.openInBrowser('http://spacebasedf9.com/')
         g_GuiManager.updateHoverTarget()
     end
-    
     function Ob:onResumePressed(rEnt, button, eventType)
         SoundManager.playSfx('select')
         self:resume(false)
     end
-
     function Ob:resume(bInMenu)
         g_GuiManager.startMenuActive = false
         if not bInMenu then
             Gui.setActivePane(nil)
---[[
-            local nPri = g_GuiManager.basePri
-            nPri = g_GuiManager.statusBar:show(nPri)
-            nPri = g_GuiManager.newSideBar:show(nPri)
-            nPri = g_GuiManager.hintPane:show(nPri)
-            nPri = g_GuiManager.alertPane:show(nPri)
-            g_GuiManager.snapAlertPos()
-    ]]--
             if not self.bWasPaused then
                 GameRules.togglePause()
             end
         else
             self:hide(true)
         end
-        g_GuiManager.refresh()        
+        g_GuiManager.refresh()
     end
-    
     function Ob:setFirstTime()
         self.bFirstTime = true
     end
-
     function Ob:setupMOTD(sJson)
         local tData = MOAIJsonParser.decode(sJson)
         if not tData then
             assertdev(false)
             return
         end
-
-        -- set up paragraphs
         local tTextBoxTemplateInfo = {
             key = 'MOTDText',
             type = 'textBox',
@@ -167,8 +128,6 @@ function m.create()
                 self:_addTemplateElement(sElementName, tNewElementData)
             end
         end
-
-        -- set up the footer
         if tData.footer then
             local tFooterTextInfo = {
                 key = 'MOTDFooterText',
@@ -223,11 +182,9 @@ function m.create()
                 end
             end
             if tData.footer.url then
-
                 local callback = function()
                     MOAIOpenInBrowser.openInBrowser(tData.footer.url)
                 end
-
                 local sFooterButtonName = "MOTDFooterButton"
                 local rFooterButton = self:getTemplateElement(sFooterButtonName)
                 if rFooterButton then
@@ -243,60 +200,46 @@ function m.create()
                     tNewElementData.onHoverOn.key = sFooterTextName
                     tNewElementData.onHoverOff.key = sFooterTextName
                     self:_addTemplateElement(sFooterButtonName, tNewElementData)
-                    -- hook up callback to footer buton
                     local rFooterButton = self:getTemplateElement(sFooterButtonName)
                     rFooterButton:addPressedCallback(callback)
                 end
             end
         end
     end
-
     function Ob:startNew()
-        --GameRules.reset()
         SoundManager.playSfx('select')
         self:resume(true)
         g_GuiManager.showNewBaseScreen()
     end
-	
 	function Ob:startTutorial()
-		-- reset with no landing zone given + tutorial mode
 		GameRules.bTutorialMode = true
-		-- JPL TODO: show the loading screen?
-		--g_GuiManager:fadeInCentered('LegalScreen')
 		GameRules.reset()
 	end
-	
     function Ob:quit()
         SoundManager.playSfx('select')
         if g_GuiManager.newSideBar:isConstructMenuOpen() then
-            g_GameRules.cancelBuild(true) -- let's cancel out any pending UNPAID construction
-            g_GuiManager.newSideBar:closeConstructMenu()            
+            g_GameRules.cancelBuild(true)
+            g_GuiManager.newSideBar:closeConstructMenu()
         end
         GameRules.saveGame()
         MOAISim.exit()
     end
-    
     function Ob:openCredits()
         SoundManager.playSfx('select')
         if not self.credits then self.credits = require('UI.Credits').new() end
         Gui.setActivePane(self.credits)
-        --self.credits:show(self.maxPri)
     end
-    
     function Ob:openSettings()
         SoundManager.playSfx('select')
         if not self.settings then self.settings = require('UI.AudioVideoSettings').new() end
         Gui.setActivePane(self.settings)
-        --self.settings:show(self.maxPri)
     end
-    
     function Ob:onResize()
         Ob.Parent.onResize(self)
         self.uiBG:setScl(Renderer.getViewport().sizeX*2,Renderer.getViewport().sizeY*2)
         self.uiBG:setLoc(-Renderer.getViewport().sizeX*.5,Renderer.getViewport().sizeY*.5)
         self:refresh()
     end
-
     function Ob:show(basePri)
         local pri = Ob.Parent.show(self,basePri)
         g_GuiManager.startMenuActive = true
@@ -305,24 +248,18 @@ function m.create()
         Renderer.setShowUI(false)
         return pri
     end
-
     function Ob:hide(bKeepAlive)
         Ob.Parent.hide(self,bKeepAlive)
         g_GuiManager.removeVersionProp()
         Renderer.setShowUI(true)
     end
-
     function Ob:refresh()
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

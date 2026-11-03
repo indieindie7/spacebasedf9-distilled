@@ -1,30 +1,23 @@
 local DFGraphics = require('DFCommon.Graphics')
 local EnvironmentData = {}
-
 kBLEND_MULTIPLY = { MOAIProp.GL_DST_COLOR, MOAIProp.GL_ONE_MINUS_SRC_ALPHA }
 kBLEND_ADD = { MOAIProp.GL_ONE, MOAIProp.GL_ONE }
 kBLEND_ALPHA = { MOAIProp.GL_SRC_ALPHA, MOAIProp.GL_ONE_MINUS_SRC_ALPHA}
 kBLEND_PREMULTIPLIED = { MOAIProp.GL_ONE, MOAIProp.GL_ONE_MINUS_SRC_ALPHA}
-
-
 local kFARAWAYPLANE = -5500
-
 EnvironmentData.tPresets=
 {
     default =
     {
         sPostColorLUT = "neutral",
-        
         gradColorLeft = { 0.0, 0.0, 0.0, 0.0 },
         gradColorRight = { 0.00, 0.0, 0.014, 0.0 },
         gradColorTop = { 0.0, 0.0, 0.0, 0.0 },
         gradColorBottom = { 1.0, 1.0, 1.0, 0.0 },
-        
         ambientColor = {  0,0,0  },
-        
-        nebulaSprites = 
+        nebulaSprites =
         {
-            Sprite01 = 
+            Sprite01 =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "nebulaStreak",
@@ -33,17 +26,15 @@ EnvironmentData.tPresets=
                 offset = { -100.0, 100.0, -500.0 },
                 rotation = 0,
             },
-            
-            Blobber = 
+            Blobber =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "softCloud",
                 scale = { 1200, 1200 },
                 color = { 0.2, 0.352, 0.3, 0.7 },
                 offset = { 0.0, 0.0, 0.0 },
-
             },
-            nebnoise = 
+            nebnoise =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "noiseCloud01",
@@ -53,7 +44,7 @@ EnvironmentData.tPresets=
                 rotation = 30,
                 layerName = 'foreground'
             },
-            BlueStars = 
+            BlueStars =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starSpatter",
@@ -64,9 +55,8 @@ EnvironmentData.tPresets=
                 count = 5,
                 rotation = 360,
                 blendMode = kBLEND_ALPHA,
-                
             },
-            LightStars = 
+            LightStars =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starSpatter",
@@ -77,35 +67,32 @@ EnvironmentData.tPresets=
                 count = 1,
                 rotation = 360,
             },
-            BrightStars = 
+            BrightStars =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starYellow",
                 scale = { 40.0*5, 40.0*5 },
                 scaleRange = 0.7,
-                --color = { 2.0, 2.0, 0.6, 1.0 },
                 offset = { 200.0, 30.0, kFARAWAYPLANE },
                 distribution = { 150.0*5, 70.0*5, 500 },
                 count = 7,
                 rotation = 360,
             },
-
-              BrightStars2 = 
+              BrightStars2 =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starBlue",
                 scale = { 50.0*7, 50.0*7 },
                 scaleRange = 0.3,
-                --color = { 2.0, 2.0, 0.6, 1.0 },
                 offset = { 0.0, 0.0, kFARAWAYPLANE },
                 distribution = { 155.0*5, 170.0*5, 0 },
                 count = 5,
                 rotation = 360,
-            },                    
+            },
         },
         flares =
         {
-           Flare1 = 
+           Flare1 =
            {
                 color = { 0.15, 1.0, 0.0},
                 sSpritePath = 'Backgrounds/Backgrounds/Elements',
@@ -118,17 +105,14 @@ EnvironmentData.tPresets=
     magentaSpace =
     {
         sPostColorLUT = "neutral",
-        
         gradColorLeft = { 0.0, 0.0, 0.0, 0.0 },
         gradColorRight = { 0.06, 0.0, 0.01, 0.0 },
         gradColorTop = { 0.0, 0.0, 0.0, 0.0 },
         gradColorBottom = { 2.0, 2.0, 2.0, 0.0 },
-        
         ambientColor = { 0,0,0 },
-        
-        nebulaSprites = 
+        nebulaSprites =
         {
-            Sprite01 = 
+            Sprite01 =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "nebulaStreak",
@@ -137,17 +121,15 @@ EnvironmentData.tPresets=
                 offset = { 0.0, 0.0, -500.0 },
                 rotation = 5,
             },
-            
-            Blobber = 
+            Blobber =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "softCloud",
                 scale = { 1200, 1200 },
                 color = { 0.2, 0.2, 0.5, 0.7 },
                 offset = { 300.0, -100.0, 0.0 },
-                
             },
-            nebnoise = 
+            nebnoise =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "noiseCloud01",
@@ -157,7 +139,7 @@ EnvironmentData.tPresets=
                 rotation = 30,
                 layerName = 'foreground'
             },
-            BlueStars = 
+            BlueStars =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starSpatter",
@@ -168,9 +150,8 @@ EnvironmentData.tPresets=
                 count = 5,
                 rotation = 360,
                 blendMode = kBLEND_ALPHA,
-                
             },
-            LightStars = 
+            LightStars =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starSpatter",
@@ -181,45 +162,41 @@ EnvironmentData.tPresets=
                 count = 1,
                 rotation = 360,
             },
-            BrightStars = 
+            BrightStars =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starYellow",
                 scale = { 50.0*5, 50.0*5 },
                 scaleRange = 0.6,
-                --color = { 2.0, 2.0, 0.6, 1.0 },
                 offset = { 300.0*5, 30.0, kFARAWAYPLANE },
                 distribution = { 50.0*5, 70.0*5, 0.0 },
                 count = 5,
                 rotation = 360,
             },
-
-              BrightStars2 = 
+              BrightStars2 =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starBlue",
                 scale = { 50.0*5, 50.0*5 },
                 scaleRange = 0.3,
-                --color = { 2.0, 2.0, 0.6, 1.0 },
                 offset = { 0.0, 0.0, kFARAWAYPLANE },
                 distribution = { 600.0*5, 400.0*5, 0.0 },
                 count = 5,
                 rotation = 360,
-            },          
-            BrightNeb = 
+            },
+            BrightNeb =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "softCloud",
                 scale = { 400.0, 400.0 },
-
                 color = { 1.0, 0.4, 0.3, 0.4 },
                 offset = { 270.0, 30.0, 0.0 },
                 rotation = 0,
-            },            
+            },
         },
         flares =
         {
-           Flare1 = 
+           Flare1 =
            {
                 color = { 0.15, 1.0, 0.0},
                 sSpritePath = 'Backgrounds/Backgrounds/Elements',
@@ -228,55 +205,50 @@ EnvironmentData.tPresets=
                 size = { 0.2, 0.2 },
            }
         },
-    },    
+    },
     greenSpace =
     {
         sPostColorLUT = "neutral",
-        
         gradColorLeft = { 0.0, 0.0, 0.05, 0.0 },
         gradColorRight = { 0.1, 0.3, 0.03, 0.0 },
         gradColorTop = { 0.5, 0.5, 0.5, 1.0  },
         gradColorBottom = { 1.0, 1.0, 1.0, 0.0 },
-        
         ambientColor = { 0,0,0 },
-        
-        nebulaSprites = 
+        nebulaSprites =
         {
-            NebStreak = 
+            NebStreak =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "nebulaStreak",
                 scale = { 1400.0, 1000.0 },
                 color = { 1.0*0.5, 0.65*0.5, 0.31*0.5, 1.0 },
                 distribution = { 100.0, 100.0, 0.0 },
-                count = 2,                
+                count = 2,
                 offset = { 0.0, 0.0, 0.0 },
-                scaleRange = 0.3,                
+                scaleRange = 0.3,
                 rotation = 360,
             },
-            
-            Blobber = 
+            Blobber =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "softCloud",
                 scale = { 1200, 1200 },
                 color = { 0.2, 0.2, 0.5, 0.7 },
                 offset = { 500.0, -100.0, 0.0 },
-                
             },
-            nebnoise = 
+            nebnoise =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "noiseCloud01",
                 scale = { 1300.0, 900.0 },
                 color = { 1, 0.7, 0.5, 0.4 },
-                count = 3,                      
+                count = 3,
                 offset = { 300.0, 0.0, 0.0 },
-                scaleRange = 0.6,                  
+                scaleRange = 0.6,
                 rotation = 360,
                 layerName = 'foreground'
             },
-            BlueStars = 
+            BlueStars =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starSpatter",
@@ -287,7 +259,7 @@ EnvironmentData.tPresets=
                 count = 5,
                 rotation = 360,
             },
-            LightStars = 
+            LightStars =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starSpatter",
@@ -298,50 +270,46 @@ EnvironmentData.tPresets=
                 count = 1,
                 rotation = 360,
             },
-            FlareStar = 
+            FlareStar =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starGreen",
                 scale = { 500*5,500*5 },
                 color = { 1.0, 1.0, 1.0, 1.0 },
                 offset = { 400.0*5, -30.0*5, kFARAWAYPLANE },
-
             },
-            FlareStarStreak = 
+            FlareStarStreak =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starGreen",
                 scale = { 900*5,60*5 },
                 color = { 1.0,1.0,1.0,0.2 },
                 offset = { 400.0*5, -30.0*5, kFARAWAYPLANE },
-            },            
-
-              BrightStars2 = 
+            },
+              BrightStars2 =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "starBlue",
                 scale = { 50.0, 50.0 },
                 scaleRange = 0.3,
-                --color = { 2.0, 2.0, 0.6, 1.0 },
                 offset = { 200.0, 30.0, kFARAWAYPLANE },
                 distribution = { 150.0*5, 70.0*5, 500 },
                 count = 5,
                 rotation = 360,
-            },          
-            BrightNeb = 
+            },
+            BrightNeb =
             {
                 sSpritePath = 'Backgrounds/Elements',
                 sSpriteName = "softCloud",
                 scale = { 400.0, 400.0 },
-
                 color = { 1.0, 0.4, 0.3, 0.4 },
                 offset = { 270.0, 30.0, 0.0 },
                 rotation = 0,
-            },            
+            },
         },
         flares =
         {
-           Flare1 = 
+           Flare1 =
            {
                 color = { 0.15, 1.0, 0.0},
                 sSpritePath = 'Backgrounds/Backgrounds/Elements',
@@ -350,7 +318,6 @@ EnvironmentData.tPresets=
                 size = { 0.2, 0.2 },
            }
         },
-    },    
+    },
 }
-
 return EnvironmentData

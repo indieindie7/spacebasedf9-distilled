@@ -1,19 +1,14 @@
 local m = {}
-
 local DFUtil = require('DFCommon.Util')
 local DFInput = require('DFCommon.Input')
 local UIElement = require('UI.UIElement')
-
 local sUILayoutFileName = 'UILayouts/ObjectStatsTabLayout'
-
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.rObject = nil
-
     function Ob:init()
         self:processUIInfo(sUILayoutFileName)
         Ob.Parent.init(self)
-
         self.rPowerLabel = self:getTemplateElement('PowerLabel')
         self.rPowerText = self:getTemplateElement('PowerText')
         self.rBuildTimeText = self:getTemplateElement('BuildTimeText')
@@ -31,8 +26,6 @@ function m.create()
             table.insert(self.tContentsButton, self:getTemplateElement('ContentsButton'..i))
             self.tContentsButton[i]:addPressedCallback(function(rButton, eventType) self:onContentsButtonPressed(rButton,eventType,i) end)
         end
-		
-		-- handles for static elements we just need to show/hide
         self.rBuildTimeIcon = self:getTemplateElement('BuildTimeIcon')
         self.rBuildTimeLabel = self:getTemplateElement('BuildTimeLabel')
         self.rBuilderIcon = self:getTemplateElement('BuilderIcon')
@@ -41,22 +34,17 @@ function m.create()
         self.rMaintainTimeLabel = self:getTemplateElement('MaintainTimeLabel')
         self.rMaintainerIcon = self:getTemplateElement('MaintainerIcon')
         self.rMaintainerLabel = self:getTemplateElement('MaintainerLabel')
-		
-		-- clickable buttons
 		self.rBuilderButton = self:getTemplateElement('BuilderButton')
 		self.rMaintainerButton = self:getTemplateElement('MaintainerButton')
         self.rBuilderButton:addPressedCallback(self.onBuilderButtonPressed, self)
         self.rMaintainerButton:addPressedCallback(self.onMaintainerButtonPressed, self)
-		-- get #s from layout data (unused since creation of about tab)
 		self.nLineHeight = self:getExtraTemplateInfo('nLineSize')
     end
-	
     function Ob:setObject(rObject,tContainedItem)
         self.rObject = rObject
 		if not self.rObject then
 			return
 		end
-		-- for things like bodybags, don't show "builder/maintainer" data at all
 		if self.rObject.tData and self.rObject.tData.bDontShowBuilderData then
 			self.rBuildTimeText:setVisible(false)
 			self.rBuilderText:setVisible(false)
@@ -85,44 +73,37 @@ function m.create()
 			self.rMaintainerLabel:setVisible(true)
 		end
     end
-	
 	function Ob:onBuilderButtonPressed(rButton, eventType)
 		if eventType == DFInput.TOUCH_UP then
 			g_GuiManager.selectCharByID(self.rObject.sBuilderName)
 		end
 	end
-	
 	function Ob:onBuilderButtonPressed(rButton, eventType)
 		if eventType == DFInput.TOUCH_UP then
 			g_GuiManager.selectCharByID(self.rObject.sBuilderName)
 		end
 	end
-	
 	function Ob:onMaintainerButtonPressed(rButton, eventType)
 		if eventType == DFInput.TOUCH_UP then
 			g_GuiManager.selectCharByID(self.rObject.sLastMaintainer)
 		end
 	end
-    
 	function Ob:onContentsButtonPressed(rButton, eventType, idx)
 		if eventType == DFInput.TOUCH_UP and self.rObject then
             local tContents = self.rObject.getContentsTextTable and self.rObject:getContentsTextTable()
             local sKey = self.tContentsText[idx].sItemKey
-            local tItem = sKey and self.rObject.tInventory and self.rObject.tInventory[sKey] 
+            local tItem = sKey and self.rObject.tInventory and self.rObject.tInventory[sKey]
             if tItem then
                 g_GuiManager.newSideBar.rInspectMenu.rObjectInspector:setSelectedInventoryItem(tItem)
             end
 		end
 	end
-	
     function Ob:onTick(dt)
         if not self.rObject then
 			return
 		end
-		-- disable clickable buttons, re-enable later if applicable
 		self.rBuilderButton:setEnabled(false)
 		self.rMaintainerButton:setEnabled(false)
-		-- power draw/output
 		local sLabel = g_LM.line('INSPEC164TEXT')
         local sPower=''
         if self.rObject.tData then
@@ -134,7 +115,6 @@ function m.create()
         end
 		self.rPowerLabel:setString(sLabel)
 		self.rPowerText:setString(sPower..' '..g_LM.line('INSPEC166TEXT'))
-		-- builder/build time, maintainer/maintain time
 		local CharacterManager = require('CharacterManager')
 		if CharacterManager.getCharacterByUniqueID(self.rObject.sBuilderName) then
 			self.rBuilderButton:setEnabled(true)
@@ -167,7 +147,6 @@ function m.create()
                 i=i+1
             end
 		else
-			-- hide contents label, icon, etc
             for i=1,#self.tContentsText do
                 self:setElementHidden(self.tContentsText[i],true)
                 self:setElementHidden(self.tContentsButton[i],true)
@@ -176,15 +155,11 @@ function m.create()
             self:setElementHidden(self.rContentsLabel,true)
 		end
     end
-
     return Ob
 end
-
 function m.new(...)
     local Ob = m.create()
     Ob:init(...)
-
     return Ob
 end
-
 return m

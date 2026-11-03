@@ -1,5 +1,4 @@
 local galaxyData = { width=64, height=64}
-
 galaxyData["1,1"] = { hostility = 0.0, asteroids = 0.85, population = 0.01, derelict = 0.0,  }
 galaxyData["1,2"] = { hostility = 0.0, asteroids = 0.83, population = 0.05, derelict = 0.0,  }
 galaxyData["1,3"] = { hostility = 0.0, asteroids = 0.71, population = 0.04, derelict = 0.0,  }
@@ -4096,5 +4095,4 @@ galaxyData["64,61"] = { hostility = 0.0, asteroids = 0.02, population = 0.04, de
 galaxyData["64,62"] = { hostility = 0.0, asteroids = 0.02, population = 0.04, derelict = 0.0,  }
 galaxyData["64,63"] = { hostility = 0.0, asteroids = 0.02, population = 0.04, derelict = 0.0,  }
 galaxyData["64,64"] = { hostility = 0.0, asteroids = 0.02, population = 0.04, derelict = 0.0,  }
-
 return galaxyData

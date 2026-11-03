@@ -6,13 +6,9 @@ local Character=require('CharacterConstants')
 local ObjectList=require('ObjectList')
 local Base=require('Base')
 local MiscUtil=require('MiscUtil')
-
 local WorldObject = Class.create(nil, MOAIProp.new)
-
 WorldObject.spriteSheetPath='Environments/Objects'
 WorldObject.portraitSpriteSheetPath='UI/Portraits'
-
--- Little bit of duplication with EnvObject.lua. May make sense to move to the inspector UI?
 WorldObject.tConditions=
 {
     {nBelow=101, sSuffix='', linecode = "INSPEC051TEXT" },
@@ -27,7 +23,6 @@ WorldObject.tConditionColors=
 	{nBelow=25, tBarColor  = {0.6, 0.25, 0} },
 	{nBelow=1, tBarColor   = {0.7, 0,    0} },
 }
-
 function WorldObject.globalShutdown()
     local tTags = ObjectList.getTagsOfType(ObjectList.WORLDOBJECT)
     for _,objData in pairs(tTags) do
@@ -35,22 +30,9 @@ function WorldObject.globalShutdown()
     end
     WorldObject.tTickers = nil
 end
-
 function WorldObject.globalInit()
     WorldObject.tTickers = {}
 end
-
--- tSpec:
--- required:
---  sClass
--- optional:
---  sNameLinecode
---  sDescLinecode
---  sSpriteName
---  sSpriteSheetPath
---  sPortraitSpriteName
---  sPortraitSpriteSheetPath
---  bHasConditions
 function WorldObject:init(tSpec, sLayerName, wx, wy, tSaveData, nTeam)
     assert(tSpec)
     assert(sLayerName)
@@ -58,21 +40,16 @@ function WorldObject:init(tSpec, sLayerName, wx, wy, tSaveData, nTeam)
     self.sClass = tSpec.sClass
     self.tSpec = tSpec
     assert(self.sClass)
-    
     self.tag = ObjectList.addObject(ObjectList.WORLDOBJECT, self.sClass, self, tSaveData, false, false, nil, nil, false)
     self.nTeam = nTeam or Character.TEAM_ID_PLAYER
-
     self.sUniqueName = tSpec.sClass .. self.tag.objID
     self.sFriendlyName = (tSpec.sNameLinecode and g_LM.line(tSpec.sNameLinecode)) or 'Object'
     self.sDescription = (tSpec.sDescLinecode and g_LM.line(tSpec.sDescLinecode)) or ''
-
     self.rSpriteSheet = DFGraphics.loadSpriteSheet( self.tSpec.sSpriteSheetPath or self.spriteSheetPath )
     self:setDeck(self.rSpriteSheet)
     self.sSpriteName = self.tSpec.sSpriteName
-    
     self.sPortrait = self.tSpec.sPortraitSpriteName or 'portrait_generic'
     self.sPortraitPath = self.tSpec.sPortraitSpriteSheetPath or self.portraitSpriteSheetPath
-    
     if self.sSpriteName then
         if self.tSpec.bHasConditions then
             for i=1,#WorldObject.tConditions do
@@ -82,31 +59,23 @@ function WorldObject:init(tSpec, sLayerName, wx, wy, tSaveData, nTeam)
             DFGraphics.alignSprite(self.rSpriteSheet, self.sSpriteName, "center", "center")
         end
     end
-    
     self:setLoc(wx,wy)
-
     self.nCondition = 100
     self:_setCondition(100)
-	
     Renderer.getRenderLayer(self.sLayerName):insertProp(self)
 end
-
 function WorldObject:getEmergencyString()
 end
-
 function WorldObject:getContentsText()
     return nil
 end
-
 function WorldObject:getVaporizeCost()
     return 0
 end
-
 function WorldObject.setGhostCursor(tx,ty,objName,bFlipX)
     if WorldObject.rDebugCursor then
         WorldObject.rDebugCursor:setVisible(false)
     end
-
     local DBG_OBJECT_INFO = {
         BreachShip={
             sSpriteName='raider_spacebus',
@@ -132,31 +101,26 @@ function WorldObject.setGhostCursor(tx,ty,objName,bFlipX)
         WorldObject.rDebugCursor:setLoc(wx,wy,10000)
     end
 end
-
 function WorldObject.clearGhostCursor()
     if WorldObject.rDebugCursor then WorldObject.rDebugCursor:setVisible(false) end
 end
-
 function WorldObject:getVelocity()
     return 0,0,0
 end
-
 function WorldObject:_setCondition(c)
     self.nCondition = c
     if self.nCondition < 1 then
         self.nCondition = 0
     end
-
-    if not self.bHasConditions then 
+    if not self.bHasConditions then
         if self.sSpriteName then
             local index = self.rSpriteSheet.names[self.sSpriteName]
             if index then
                 self:setIndex(index)
             end
         end
-        return 
+        return
     end
-
     local suffix = self:_getCurConditionTextureSuffix()
     if self.sSpriteName then
         local spriteName = self.sSpriteName .. suffix
@@ -166,27 +130,21 @@ function WorldObject:_setCondition(c)
         end
     end
 end
-
 function WorldObject:remove()
     if self.bDestroyed then return end
-    
     WorldObject.tTickers[self] = nil
     self.bDestroyed = true
     ObjectList.removeObject(self.tag)
     self.tag=nil
     Renderer.getRenderLayer(self.sLayerName):removeProp(self)
 end
-
 function WorldObject:getTileCoords()
     return g_World._getTileFromWorld(self:getLoc())
 end
-
--- Assume all worldobjects are elevated for now.
 function WorldObject:getLoc()
     local x,y,z = self._UserData:getLoc()
     return x,y,z,2
 end
-
 function WorldObject:getSaveTable(xShift,yShift)
     local t = {}
     xShift = xShift or 0
@@ -199,16 +157,13 @@ function WorldObject:getSaveTable(xShift,yShift)
     t.nTeam = self.nTeam
     return t
 end
-
 function WorldObject:getTileLoc()
     local tx, ty = g_World._getTileFromWorld(self:getLoc())
     return tx,ty,2
 end
-
 function WorldObject:getTeam()
     return self.nTeam
 end
-
 function WorldObject.getHostileObjectsInRange(wx, wy, nRange, rAsking)
     local tObjs = {}
     nRange=nRange*nRange
@@ -226,39 +181,28 @@ function WorldObject.getHostileObjectsInRange(wx, wy, nRange, rAsking)
     end
     return tObjs
 end
-
--- BEGIN STUB ENVOBJECT INTERFACE IMPLEMENTATION
--- for use by ObjectInspector
 function WorldObject:getCustomInspectorName()
 end
-
 function WorldObject:getDescription()
     return self.sDescription
 end
-
 function WorldObject:canResearch()
     return false
 end
-
 function WorldObject:slatedForTeardown()
     return false
 end
-
 function WorldObject:canDeactivate()
     return false
 end
-
 function WorldObject:getUniqueID()
     return self.sUniqueName
 end
--- END STUB ENVOBJECT INTERFACE IMPLEMENTATION
-
 function WorldObject.staticTick(dt)
     for r,_ in pairs(WorldObject.tTickers) do
         r:onTick(dt)
     end
 end
-
 function WorldObject.fromSaveTable(t, xOff, yOff, nTeam)
     local rClass = require(t.tSpec.sClass)
     if rClass.fromSaveTable then
@@ -266,10 +210,7 @@ function WorldObject.fromSaveTable(t, xOff, yOff, nTeam)
     end
     xOff = xOff or 0
     yOff = yOff or 0
-
     local wo = rClass.new(t.tSpec, t.sLayerName, t.wx+xOff, t.wy+yOff, t, t.nTeam)
-    
     return wo
 end
-
 return WorldObject

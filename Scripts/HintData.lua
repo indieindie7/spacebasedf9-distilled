@@ -1,7 +1,5 @@
 local HintChecks = require('HintChecks')
-
 local HintData = {}
-
 HintData.tHints =
 {
     {
@@ -64,7 +62,6 @@ HintData.tHints =
         name='EveryoneDead',
         lineCode='HINTSX009TEXT',
         checkFn=HintChecks.everyoneDead,
-		-- pri 3 - trumps all others because GAME OVER MAN
 		nPriority=3,
     },
     {
@@ -76,7 +73,6 @@ HintData.tHints =
         name='RoomsButNoOxygen',
         lineCode='HINTSX017TEXT',
         checkFn=HintChecks.roomsButNoOxygen,
-		--nPriority=2,
     },
     {
         name='NoBuilding',
@@ -273,5 +269,4 @@ HintData.tHints =
 		nPriority=0,
 	},
 }
-
 return HintData

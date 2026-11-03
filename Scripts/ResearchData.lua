@@ -60,7 +60,6 @@ local t=
     },
     OxygenRecyclerLevel2=
     {
-		-- sItemForDesc corresponds with an EnvObjectData entry
         sItemForDesc='OxygenRecyclerLevel2',
         tPrereqs={'AirScrubber'},
         nResearchUnits=1000,
@@ -68,7 +67,6 @@ local t=
     },
     GeneratorLevel2=
     {
-		-- sItemForDesc corresponds with an EnvObjectData entry
         sItemForDesc='GeneratorLevel2',
         tPrereqs={},
         nResearchUnits=1000,
@@ -104,12 +102,10 @@ local t=
 	WallMountedTurret2=
     {
         sItemForDesc='WallMountedTurret2',
-        --tPrereqs={'WallMountedTurret','WallMountedTurretLevel2Discovered'},
 		tPrereqs={'WallMountedTurretLevel2Discovered'},
         nResearchUnits=2000,
 		sIcon = 'ui_jobs_iconJobResponse',
     },
-	-- "blueprints": unlock research, don't give you new tech by themselves
 	FridgeLevel2Discovered=
     {
         sName='PROPSX069TEXT',
@@ -143,5 +139,4 @@ local t=
 		bDiscoverOnly=true,
 	},
 }
-
 return t

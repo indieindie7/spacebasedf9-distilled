@@ -1,14 +1,9 @@
 local Delegate = require('DFMoai.Delegate')
-
 local Debugger = {}
-
--- Store the module into a global so that it's accessible by the remote debugger
 __debuggerHandler = Debugger
-
 function Debugger:initialize()
     self.dFileChanged = Delegate.new()
 end
-
 function Debugger:sendMessage(messageName, messageParam)
     local message = { source = 'dfmoai.debugger', name = messageName, param = messageParam }
     if DF2hb then
@@ -17,7 +12,6 @@ function Debugger:sendMessage(messageName, messageParam)
         MOAIHarness.sendMessage(message)
     end
 end
-
 function Debugger:_updateTable(tTarget, tInput, tVisited)
     if not tVisited then
         tVisited = {}
@@ -26,15 +20,10 @@ function Debugger:_updateTable(tTarget, tInput, tVisited)
         return
     end
     tVisited[tTarget] = true
-    
     if type(tTarget) == 'table' and type(tInput) == 'table' then
-        
-        -- Assign all functions in tInput to tTarget
         for key, value in pairs(tInput) do
             tTarget[key] = value
         end
-        
-        -- Recurse to child tables
         for key, value in pairs(tTarget) do
             if type(value) == 'table' then
                 tInputValue = tInput[key]
@@ -43,13 +32,7 @@ function Debugger:_updateTable(tTarget, tInput, tVisited)
                 end
             end
         end
-        
     end
 end
-
-
-
--- Initialize the debugger
 __debuggerHandler:initialize()
-
 return Debugger
