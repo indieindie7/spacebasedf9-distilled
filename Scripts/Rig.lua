@@ -799,13 +799,6 @@ function Rig:_getMaterial( sMaterial, rAssetSet, rDefaultMaterial )
     end
     return rMaterial
 end
-function Rig:_getSubsetIndex( tMeshData, sSubsetName )
-    if not tMeshData.tSubsetIndices[sSubsetName] then
-        tMeshData.tSubsetIndices[sSubsetName] = {}
-        tMeshData.tSubsetIndices[sSubsetName].idx = tMeshData.rMesh:getSubsetIndex(sSubsetName)
-    end
-    return tMeshData.tSubsetIndices[sSubsetName].idx
-end
 function Rig:_boolToFloat(value)
     if value == true then
         return 1

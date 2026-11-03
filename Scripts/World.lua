@@ -221,10 +221,6 @@ function World.getTileBounds(bNotSafe)
     if not bNotSafe then x0,y0,x1,y1 = x0+World.CHARACTER_SAFETY_TOLERANCE,y0+World.CHARACTER_SAFETY_TOLERANCE,x1-World.CHARACTER_SAFETY_TOLERANCE,y1-World.CHARACTER_SAFETY_TOLERANCE end
     return x0,y0,x1,y1
 end
-function World.isInTileBounds(tx,ty,bNotSafe)
-    local x0,y0,x1,y1 = World.getTileBounds(bNotSafe)
-    return tx>=x0 and tx<=x1 and ty>=y0 and ty<=y1
-end
 function World.clampTileToBounds(tx,ty,bNotSafe)
     local x0,y0,x1,y1 = World.getTileBounds(bNotSafe)
     return DFMath.clamp(tx, x0, x1), DFMath.clamp(ty, y0, y1)

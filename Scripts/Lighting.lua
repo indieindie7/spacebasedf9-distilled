@@ -454,18 +454,4 @@ function Lighting._addLightColorToTile(tileX, tileY, lightMap, lightPixelBuffer,
     local gridX, gridY = GridUtil.IsoToSquare(tileX, tileY)
     lightPixelBuffer:setRGBA(gridX, gridY, r, g, b, a)
 end
-function Lighting.getClosestLightToTileInRoom(tileX, tileY, rRoom)
-    local nShortestDistance = 9999
-    local tClosestLight = nil
-    for idx,tLight in ipairs(rRoom.tLights) do
-        local dx = tLight.tileX - tileX
-        local dy = tLight.tileY - tileY
-        local distance = math.sqrt((dx*dx)+(dy*dy))
-        if distance < nShortestDistance then
-            tClosestLight = tLight
-            nShortestDistance = distance
-        end
-    end
-    return tClosestLight
-end
 return Lighting

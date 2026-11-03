@@ -25,54 +25,12 @@ function DebugInfoManager.cycleInfoPage()
         DebugInfoManager.nDebugInfoPage = DebugInfoManager.kDEBUG_PAGE_FIRST
     end
 end
-function DebugInfoManager.cycleDebugMode()
-    DebugInfoManager.nDebugMode = DebugInfoManager.nDebugMode + 1
-    if DebugInfoManager.nDebugMode > kDEBUG_MODE_LAST then
-        DebugInfoManager.nDebugMode = kDEBUG_MODE_NONE
-    end
-    DebugInfoManager.updateDebugInfoBoxes()
-end
 function DebugInfoManager.init()
     ObjectList = require('ObjectList')
     DebugInfoManager.debugColorGrid = LuaGrid.new()
     DebugInfoManager.debugColorGrid:initDiamondGrid(g_World.width, g_World.height, g_World.tileWidth, g_World.tileHeight)
     DebugInfoManager.debugColorGrid:fill(0)
     DebugInfoManager.debugTexture = nil
-end
-function DebugInfoManager.updateDebugInfoBoxes()
-    DebugInfoManager.showTexture(nil)
-    for _,element in pairs(DebugInfoManager.tDebugInfoBoxes) do
-        element:hide()
-    end
-    DebugInfoManager.tDebugInfoBoxes = {}
-	if DebugInfoManager.nDebugMode == kDEBUG_MODE_CHAR then
-        local CharacterManager = require('CharacterManager')
-        local tChars = CharacterManager.getCharacters()
-        for _,char in pairs(tChars) do
-            local info = DebugInfoManager.createDebugInfoBox(char)
-            table.insert(DebugInfoManager.tDebugInfoBoxes, info)
-        end
-	elseif DebugInfoManager.nDebugMode == kDEBUG_MODE_ROOM then
-        local Room = require('Room')
-        for _,room in pairs(Room.tRooms) do
-            local info = DebugInfoManager.createDebugInfoBox(room)
-            table.insert(DebugInfoManager.tDebugInfoBoxes, info)
-        end
-    elseif DebugInfoManager.nDebugMode == kDEBUG_MODE_PROP then
-        for _,objData in pairs(ObjectList.getTagsOfType(ObjectList.ENVOBJECT)) do
-            local info = DebugInfoManager.createDebugInfoBox(objData.obj)
-            table.insert(DebugInfoManager.tDebugInfoBoxes, info)
-        end
-    elseif DebugInfoManager.nDebugMode == kDEBUG_MODE_LIGHT then
-        local Lighting = require('Lighting')
-        DebugInfoManager.showTexture(Lighting.LightTexture)
-    end
-end
-function DebugInfoManager.createDebugInfoBox(rObj)
-    local ObjectDebugInfo = require('UI.ObjectDebugInfo')
-    local rDebugLabel = ObjectDebugInfo.new('DebugWorld', rObj)
-    rDebugLabel:show(50)
-    return rDebugLabel
 end
 function DebugInfoManager.onTick( dt )
     if not #DebugInfoManager.tDebugInfoBoxes then
@@ -81,8 +39,5 @@ function DebugInfoManager.onTick( dt )
     for _,box in pairs(DebugInfoManager.tDebugInfoBoxes) do
         box:refresh()
     end
-end
-function DebugInfoManager.showTexture(rTexture)
-    DebugInfoManager.debugTexture = rTexture
 end
 return DebugInfoManager

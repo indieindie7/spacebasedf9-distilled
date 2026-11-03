@@ -478,9 +478,6 @@ function Character:addJobExperience(nJobID, nXP)
         Base.eventOccurred(Base.EVENTS.CitizenSkillUp, {rReporter=self, nJob=nJobID})
 	end
 end
-function Character:DBG_increaseCurrentJobLevel()
-	self:addJobExperience(self:getJob(), Character.EXPERIENCE_PER_LEVEL)
-end
 function Character:getJob()
 	return self.tStats.nJob
 end
@@ -676,27 +673,6 @@ function Character:playAnim(sAnimName, bPlayOnce)
 	else
 		Print(TT_Warning, "Failed to play animation",sAnimName,"on",self:getUniqueID())
 	end
-end
-function Character:playOverlayAnim(sAnimName, bPlayOnce)
-	local tAnimSetData = self.tAnimations[self.rCurrentRig]
-	local tAnimData = tAnimSetData[sAnimName]
-	if not tAnimData then return end
-	tAnimData.bPlayOnce = bPlayOnce
-	if tAnimData.tFilenames then
-		tAnimData.sFilename = DFUtil.arrayRandom(tAnimData.tFilenames)
-	end
-	if tAnimData.sFilename then
-		tAnimData.sAnimPath = tAnimSetData.sBasePath .. tAnimData.sFilename
-	end
-	if tAnimData.sAnimPath then
-		tAnimData.animPriority = DFAnimController.PRIORITY_OVERLAY
-		self.rCurrentRig:playAnimation(tAnimData)
-	else
-		Print(TT_Warning, "Failed to play OVERLAY animation",sAnimName,"on",self:getUniqueID())
-	end
-end
-function Character:clearOverlayAnim()
-	self.rCurrentRig:clearOverlayAnims()
 end
 function Character:isPlayingAnim( sAnimName )
 	local tData = self:getAnimData(sAnimName)
@@ -3514,14 +3490,6 @@ function Character:unHover()
 	if not self:isChatting() and self.rCurrentTask then
 		self.rCurrentTask:dismissEmoticon()
 	end
-end
-function Character:_setHighlightColor(r,g,b,a)
-	if not r then
-		self.tHighlightColor=nil
-	else
-		self.tHighlightColor={r,g,b,a}
-	end
-	self.rCurrentRig:setRigShaderValue('g_vHighlightColor', self.tHighlightColor or {0,0,0,0})
 end
 function Character:playVoiceCue(sCueType)
 	local x,y,z = self:getLoc()

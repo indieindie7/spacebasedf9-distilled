@@ -161,9 +161,6 @@ function Malady.diseaseEncountered(tMaladyData,rChar)
 		end
     end
 end
-function Malady.hasEncounteredDisease(sMaladyName)
-    return Malady.tS.tResearch[sMaladyName] and Malady.tS.tResearch[sMaladyName].bEncountered
-end
 function Malady.hasIdentifiedDisease(sMaladyName)
     return true
 end

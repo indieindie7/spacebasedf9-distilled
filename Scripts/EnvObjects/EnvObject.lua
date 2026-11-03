@@ -1321,24 +1321,6 @@ function EnvObject:getPowerOutput()
     if self:_isSabotaged() or not self.bActive or self.nCondition == 0 then return 0 end
     return self.tData.nPowerOutput or 0
 end
-function EnvObject:_generateStartingInventory()
-    local nCount=math.random(unpack(self.tData.GenerateStartingInventory.tRange))
-    local i=0
-    while i < nCount do
-        local tItem
-        if self.tData.GenerateStartingInventory.tWhitelist then
-            local sKey = self.tData.GenerateStartingInventory.tWhitelist[ math.random(1,#self.tData.GenerateStartingInventory.tWhitelist) ]
-            tItem = Inventory.createItem(sKey)
-            if Inventory.getMaxStacks(tItem) > 1 and self.tData.GenerateStartingInventory.tStackRange then
-                tItem.nCount = math.random( unpack(self.tData.GenerateStartingInventory.tStackRange) )
-            end
-        elseif self.tData.GenerateStartingInventory.bStuff then
-            tItem = Inventory.createRandomStartingStuff()
-        end
-        self:addItem(tItem)
-        i=i+1
-    end
-end
 function EnvObject.updateSavegame(nSavegameVersion, saveData)
 end
 function EnvObject.getConditionUIString(nCondition)

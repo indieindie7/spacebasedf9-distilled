@@ -23,13 +23,6 @@ function m.saveTable(saveTable, fileName, useSaveHeader)
     dataBuffer:deflate()
     dataBuffer:save( m.getSaveFilename( fileName ), false )
 end
-function m.loadTable(fileName)
-    local dataBuffer = MOAIDataBuffer.new()
-    dataBuffer:load( m.getSaveFilename( fileName ) )
-    dataBuffer:inflate()
-    local jsonTable = dataBuffer:getString()
-    return MOAIJsonParser.decode( jsonTable )
-end
 function m.saveString(saveStr, fileName, bPreservePath, bNoDeflate)
     local path = fileName
     if not bPreservePath then

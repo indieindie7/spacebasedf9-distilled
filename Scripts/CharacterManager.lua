@@ -347,29 +347,4 @@ function CharacterManager.onTick( dt )
     end
     Profile.leaveScope("CharacterCorpser")
 end
-function CharacterManager.DBG_spawnMonster()
-    local DFInput = require('DFCommon.Input')
-    local x,y = DFInput.m_x, DFInput.m_y
-    local worldLayer = g_World.getWorldRenderLayer()
-    local wx, wy = worldLayer:wndToWorld(x, y)
-    local tx, ty = g_World._getTileFromWorld(wx,wy)
-    local Malady = require('Malady')
-    local rChar = ObjectList.getObjAtTile(tx,ty,ObjectList.CHARACTER)
-    if rChar and not rChar:isDead() then
-        local tMalady = Malady.createNewMaladyInstance('Parasite')
-        tMalady.tTimeToSymptoms={0,0}
-        rChar:diseaseInteraction(nil,tMalady)
-    end
-end
-function CharacterManager.DBG_addExperience()
-    local DFInput = require('DFCommon.Input')
-    local x,y = DFInput.m_x, DFInput.m_y
-    local worldLayer = g_World.getWorldRenderLayer()
-    local wx, wy = worldLayer:wndToWorld(x, y)
-    local tx, ty = g_World._getTileFromWorld(wx,wy)
-    local rChar = ObjectList.getObjAtTile(tx,ty,ObjectList.CHARACTER)
-    if rChar and not rChar:isDead() then
-        rChar:DBG_increaseCurrentJobLevel()
-    end
-end
 return CharacterManager

@@ -839,9 +839,6 @@ function Pathfinder:start(rChar,sWalkOverride,sBreatheOverride)
     local tx,ty = g_World._getTileFromWorld(x,y)
     local addr = g_World.pathGrid:getCellAddr(tx,ty)
 end
-function Pathfinder:pathDist(rChar)
-    return self.tPathNodes[ #self.tPathNodes ].g * 100
-end
 function Pathfinder:_addSpecialNode(tSpecialNode)
     local nReplacementStart = math.max(tSpecialNode.nReplacementStart or 0,self.tCurrentStepData.nCurrentStep)
     local nReplacementEnd = tSpecialNode.nReplacementEnd or nReplacementStart

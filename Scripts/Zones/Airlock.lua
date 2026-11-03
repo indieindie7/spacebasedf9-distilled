@@ -325,17 +325,6 @@ function Airlock:_getTileOutsideAirlock(bInSpace)
         end
     end
 end
-function Airlock:utilityOverride(rChar, rAO, nOldScore)
-    local nMult = 1
-    if self:_testSafetyInterrupt() then
-        nMult = .9
-    end
-	if self.rRoom.nTeam == Character.TEAM_ID_PLAYER then
-	else
-		nMult = nMult * 0.75
-	end
-    return nOldScore * nMult
-end
 function Airlock:utilityGate(rChar, rAO)
     local tChars,numChars = self.rRoom:getCharactersInRoom(true)
     for rChar,_ in pairs(tChars) do

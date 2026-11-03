@@ -1044,30 +1044,6 @@ function Room:_o2shareSlowedAverage(dt)
     end
     self.nLastGive = totalRequest
 end
-function Room:_o2shareInstantAverage()
-    local o2score,totalO2,averageO2 = self:getOxygenScore()
-    local cumulativeO2,cumulativeTiles = totalO2,self.nTiles
-    for rAdjoiningRoom,nAdjoining in pairs(self.tAdjoining) do
-        if not rAdjoiningRoom:disallowO2Propagation() then
-            local adjo2score,adjtotalO2,adjaverageO2 = rAdjoiningRoom:getOxygenScore()
-            cumulativeO2 = cumulativeO2+adjtotalO2
-            cumulativeTiles = cumulativeTiles+rAdjoiningRoom.nTiles
-        end
-    end
-    local newAvg = cumulativeO2 / cumulativeTiles
-    for rAdjoiningRoom,nAdjoining in pairs(self.tAdjoining) do
-        if not rAdjoiningRoom:disallowO2Propagation() then
-            rAdjoiningRoom.bOxygenScoreOutOfDate = true
-            for addr,coord in pairs(rAdjoiningRoom.tTiles) do
-                World.oxygenGrid:setOxygen(coord.x,coord.y,newAvg)
-            end
-        end
-    end
-        for addr,coord in pairs(self.tTiles) do
-            World.oxygenGrid:setOxygen(coord.x,coord.y,newAvg)
-        end
-    self.bOxygenScoreOutOfDate = true
-end
 function Room:_getPathableNeighbor(tx,ty,bUnreserved)
     for i=2,9 do
         local newTX,newTY = World._getAdjacentTile(tx,ty,i)
@@ -1095,25 +1071,6 @@ function Room:getCenterTile(bPathableOnly,bRandomDefault)
 end
 function Room:disallowO2Propagation()
     return self.bBreach or self.bUserBlockOxygen or (self.zoneObj and self.zoneObj.disallowO2Propagation and self.zoneObj:disallowO2Propagation())
-end
-function Room:_sendO2(destRoom,fromAvg,toAvg,fromTotal,toTotal,dt)
-    if fromAvg < Room.MIN_O2_FOR_SHARING then return 0 end
-    if fromAvg - toAvg < Room.MIN_O2_DIFF*dt then return 0 end
-    if self:disallowO2Propagation() or destRoom:disallowO2Propagation() then return 0 end
-    local desiredGive = (destRoom.nTiles * fromTotal - self.nTiles * toTotal) / (self.nTiles+destRoom.nTiles)
-    desiredGive = desiredGive * dt
-    desiredGive = math.min(math.min(desiredGive, Room.MAX_O2_GIVE_PER_TILE * dt * self.nTiles), Room.MAX_O2_GIVE_PER_TILE * dt * destRoom.nTiles)
-    local avgGive = -desiredGive / self.nTiles
-    for addr,coord in pairs(self.tTiles) do
-        World.oxygenGrid:addOxygen(coord.x,coord.y,avgGive)
-    end
-    avgGive = -avgGive
-    for addr,coord in pairs(destRoom.tTiles) do
-        World.oxygenGrid:addOxygen(coord.x,coord.y,avgGive)
-    end
-    self.bOxygenScoreOutOfDate = true
-    destRoom.bOxygenScoreOutOfDate = true
-    return desiredGive
 end
 function Room:_clearAdjoiningRooms()
     for rRoom,_ in pairs(self.tAdjoining) do

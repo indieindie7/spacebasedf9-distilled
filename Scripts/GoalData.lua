@@ -123,9 +123,6 @@ end
 function GoalData.bodiesRefined()
 	return Base.tS.tStats.nCorpsesRecycled >= GoalData.TARGET_BODIES, Base.tS.tStats.nCorpsesRecycled
 end
-function GoalData.hostilesFedToMonster()
-	return Base.tS.tStats.nHostilesKilledByParasite >= GoalData.TARGET_HOSTILE_MONSTER_KILLS, Base.tS.tStats.nHostilesKilledByParasite
-end
 function GoalData.finalSiege()
 	if not EventController.tS.bRanMegaEvent then
 		return false, 0

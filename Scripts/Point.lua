@@ -6,16 +6,6 @@ void DFFFI_getLoc(void*, DFLuaPoint*);
 void DFFFI_modelToWorld(void*, DFLuaPoint*, double, double, double);
 ]]
 local Point = {}
-function Point.monkeyPatchGetLoc()
-    MOAITransform.getInterfaceTable()['getLoc'] = Point.getLoc
-    MOAIProp.getInterfaceTable()['getLoc'] = Point.getLoc
-    MOAITextBox.getInterfaceTable()['getLoc'] = Point.getLoc
-    MOAICamera.getInterfaceTable()['getLoc'] = Point.getLoc
-    MOAITransform.getInterfaceTable()['modelToWorld'] = Point.modelToWorld
-    MOAIProp.getInterfaceTable()['modelToWorld'] = Point.modelToWorld
-    MOAITextBox.getInterfaceTable()['modelToWorld'] = Point.modelToWorld
-    MOAICamera.getInterfaceTable()['modelToWorld'] = Point.modelToWorld
-end
 function Point.getLoc(obj)
     if type(obj) == 'table' then
         obj = obj['_UserData']

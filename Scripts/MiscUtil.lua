@@ -18,17 +18,6 @@ m._worldDirToCartesian={
 function m.isoDirToCartesian(dir)
     return unpack(m._worldDirToCartesian[dir])
 end
-function m.isoToSquare(tx,ty)
-    local ns, we
-    if ty % 2 == 0 then
-        ns = tx+ty*.5
-        we = g_World.width * .5 - ty*.5 + tx
-    else
-        ns = tx+ty*.5-.5
-        we = g_World.width * .5 - ty*.5 + tx - .5
-    end
-    return ns,we
-end
 function m.setTransformVisParent(child,parent)
     if parent then
         child:setAttrLink(MOAITransform.INHERIT_TRANSFORM, parent, MOAITransform.TRANSFORM_TRAIT)

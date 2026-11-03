@@ -94,16 +94,6 @@ function Post:BasicComp()
     Post:BlitSceneFilter(finalColorBuffer)
     Post.rScreen:setInBuffer(finalColorBuffer)
 end
-function Post:ShowRenderLayer(sLayerName)
-    if not sLayerName then
-        sLayerName = "WorldWall"
-    end
-    local rBuffer = Post.rRenderer.getLayerFrameBuffer(sLayerName)
-    Post.rScreen:setInBuffer(rBuffer)
-    local clearColor = MOAIColor.new ()
-	clearColor:setColor ( 0, 1, 0, 1 )
-    MOAIGfxDevice.setClearColor ( clearColor )
-end
 function Post.CreateScreenQuad()
     local Obj = {}
     function Obj:setInBuffer( rInputFrameBuffer )
@@ -383,9 +373,6 @@ function Post:GetUnusedBuffer(tBufferList)
         end
     end
     return out
-end
-function Post:GetUnusedEighthBuffer()
-    return Post:GetUnusedBuffer(Post.tEighthBuffers)
 end
 function Post:SetUpdateCallback(fnUpdate)
     Post.fnUpdate = fnUpdate
