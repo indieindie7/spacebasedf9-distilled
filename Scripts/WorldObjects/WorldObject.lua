@@ -145,18 +145,6 @@ function WorldObject:getLoc()
     local x,y,z = self._UserData:getLoc()
     return x,y,z,2
 end
-function WorldObject:getSaveTable(xShift,yShift)
-    local t = {}
-    xShift = xShift or 0
-    yShift = yShift or 0
-    t.wx,t.wy = self:getLoc()
-    t.wx,t.wy = t.wx+xShift,t.wy+yShift
-    t.nCondition = self.nCondition
-    t.tSpec = self.tSpec
-    t.sLayerName = self.sLayerName
-    t.nTeam = self.nTeam
-    return t
-end
 function WorldObject:getTileLoc()
     local tx, ty = g_World._getTileFromWorld(self:getLoc())
     return tx,ty,2

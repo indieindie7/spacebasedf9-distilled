@@ -25,9 +25,6 @@ ObjectList.tSaveTypes={ObjectList.ROOM, ObjectList.ENVOBJECT, ObjectList.CHARACT
 function ObjectList.isTag(tag)
     return tag and tag._ObjectList_TagMarker and not tag.bInvalid
 end
-function ObjectList.isValidObject(obj)
-    return obj and ObjectList.isTag(obj._ObjectList_ObjectMarker)
-end
 function ObjectList.getTag(rObject)
     if rObject and ObjectList.isTag(rObject._ObjectList_ObjectMarker) then
         return rObject._ObjectList_ObjectMarker
@@ -274,30 +271,6 @@ function ObjectList._generateNewObjectTagsForModuleLoad(tSaveData, nTagOffset, t
             end
         end
     end
-end
-function ObjectList.getSaveTable(objType,tag,xOff,yOff)
-    assertdev(not tag.bInvalid)
-    if tag.bInvalid then return nil end
-    local tData = nil
-    local objData = ObjectList.tObjList[tag.objID]
-    local obj = objData.obj
-    if objType == ObjectList.CHARACTER then
-        tData = obj:getSaveData(xOff,yOff)
-    elseif objType == ObjectList.ENVOBJECT then
-        tData = obj:getSaveTable(xOff, yOff)
-    elseif objType == ObjectList.ROOM then
-        tData = obj:getSaveTable(xOff, yOff)
-    elseif objType == ObjectList.RESERVATION then
-    elseif objType == ObjectList.WORLDOBJECT then
-        tData = obj:getSaveTable(xOff, yOff)
-    elseif objType == ObjectList.INVENTORYITEM then
-    else
-        assertdev(false)
-    end
-    if tData then
-        tData._ObjectList_ObjectMarker = tag
-    end
-    return tData
 end
 function ObjectList.init()
     World=require('World')

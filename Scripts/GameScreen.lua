@@ -208,19 +208,6 @@ function GameScreen:onKeyboard(key, bDown)
                     GameRules._centerCameraOnPoint(wx, wy)
                 end
             end
-        elseif key == string.byte('s') and bCtrl then
-            if not EventController.tCurrentEventPersistentState then
-                if g_GuiManager.newSideBar:isConstructMenuOpen() then
-                    g_GameRules.cancelBuild(true)
-                    g_GuiManager.newSideBar:closeConstructMenu()
-                end
-                GameRules.saveGame()
-            else
-                GameRules.bQueuedSave = true
-            end
-        elseif key == string.byte('l') and bCtrl then
-            GameRules.loadGame()
-            GameRules.startLoop()
         elseif key == 32 then
             GameRules.togglePause()
         elseif key == 264 then

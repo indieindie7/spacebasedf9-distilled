@@ -36,14 +36,6 @@ function Topics.getTopicForActivity(sActivityName)
 		end
 	end
 end
-function Topics.fromSaveData(tSaveData)
-    Topics.tTopics = tSaveData.tTopics or {}
-    Topics.tTopicsByCategory = {}
-    for sID,tData in pairs(Topics.tTopics) do
-        if not Topics.tTopicsByCategory[tData.category] then Topics.tTopicsByCategory[tData.category] = {} end
-        table.insert(Topics.tTopicsByCategory[tData.category], sID)
-    end
-end
 function Topics.generateActivityList()
 	for id,_ in pairs(Topics.tActivities) do
 		if not Topics.tTopics[id] then

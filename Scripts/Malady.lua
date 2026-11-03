@@ -43,10 +43,6 @@ function Malady.reset()
     }
     Malady._updateMaladySaveData()
 end
-function Malady.fromSaveData(tSaveData)
-    Malady.tS = tSaveData
-    Malady._updateMaladySaveData()
-end
 function Malady._updateMaladySaveData()
     if not Malady.tS.tResearch then Malady.tS.tResearch = {} end
     if not Malady.tS.tMaladyStrains then Malady.tS.tMaladyStrains = {} end
@@ -107,9 +103,6 @@ function Malady.getNewDiseaseName()
             nNumSuffixes = nNumSuffixes + 1
         end
     end
-end
-function Malady.getSaveData()
-    return Malady.tS
 end
 function Malady.updateSavedMaladies(tMaladies)
     if tMaladies then

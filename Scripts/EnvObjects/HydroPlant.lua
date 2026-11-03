@@ -242,16 +242,6 @@ function HydroPlant:_setPlantHealth(amt)
     self.nPlantHealth = amt
     self:_adjustVisuals()
 end
-function HydroPlant:getSaveTable(xShift,yShift)
-    local tSaved = EnvObject.getSaveTable(self,xShift,yShift)
-    tSaved.nPlantAge = self.nPlantAge
-    tSaved.sPlantType = self.sPlantType
-    tSaved.nPlantHealth = self.nPlantHealth
-    tSaved.bSeeded = self.bSeeded
-    tSaved.sPlantName = self.sPlantName
-    tSaved.nEatMeCooldown = self.nEatMeCooldown
-    return tSaved
-end
 function HydroPlant:setCanBeHarvested(bCanBeHarvested)
     self.bCanBeHarvested = bCanBeHarvested
 end

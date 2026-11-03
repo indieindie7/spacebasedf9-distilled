@@ -2207,26 +2207,6 @@ end
 function Character:updateAnimation(dt)
 	self.rCurrentRig:update(dt)
 end
-function Character:getSaveData(xOff,yOff)
-	local tData = {}
-	tData.tLog = self.tLog
-	tData.tLogQueue = self.tLogQueue
-	tData.tStats = self.tStats
-	tData.tNeeds = self.tNeeds
-	tData.tStatus = self.tStatus
-	tData.tMemory = self.tMemory
-	tData.tAffinity = self.tAffinity
-	tData.tFamiliarity = self.tFamiliarity
-    tData.tInventory = self.tInventory
-    if self.rCurrentTask and self.rCurrentTask.getSaveData and not xOff then
-        tData.tTaskSaveData = self.rCurrentTask:getSaveData()
-    end
-	tData.sSpriteBody = self.sSpriteBody
-	local x,y = self:getLoc()
-	tData.x = x+(xOff or 0)
-	tData.y = y+(yOff or 0)
-	return tData
-end
 local JELLY_PORTRAITS = {
 	[Character.BODY_JELLY_BLUE_FEMALE] = Portraits.JELLY_FEMALE_BLUE,
 	[Character.BODY_JELLY_PURPLE_FEMALE] = Portraits.JELLY_FEMALE_PURPLE,

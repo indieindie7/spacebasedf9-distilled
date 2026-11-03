@@ -130,9 +130,6 @@ function Inventory.portFromSave(sKey,tItem)
     end
     return tItem
 end
-function Inventory.getSaveTable(tItem)
-    if ObjectList.isValidObject(tItem) then return tItem end
-end
 function Inventory.getDesc(tItem)
     if tItem.sDesc then return tItem.sDesc end
     local tItemTemplate = InventoryData.tTemplates[tItem.sTemplate]

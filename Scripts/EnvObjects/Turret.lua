@@ -388,11 +388,6 @@ function Turret:remove()
 	Turret.removeTurret(self)
 	EnvObject.remove(self)
 end
-function Turret:getSaveTable(xShift,yShift)
-    local t = EnvObject.getSaveTable(self,xShift,yShift)
-	t.bFireOnEveryone = self.bFireOnEveryone
-    return t
-end
 function Turret:getThreatLevel()
     return Character.THREAT_LEVEL.Turret
 end

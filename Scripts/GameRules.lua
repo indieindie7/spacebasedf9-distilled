@@ -1,4 +1,3 @@
-local DFSaveLoad = require('DFCommon.SaveLoad')
 local MessagePack = require('DFTools.MessagePack')
 local DFFile = require('DFCommon.File')
 local DFInput = require('DFCommon.Input')
@@ -34,11 +33,8 @@ local Goal = nil
 local CommandObject = nil
 local Delegate = require('DFMoai.Delegate')
 local Topics = nil
-local AutoSave = require('AutoSave')
 local GameScreen = nil
-local SAVE_TYPES={ObjectList.ROOM, ObjectList.ENVOBJECT, ObjectList.CHARACTER, ObjectList.RESERVATION}
 local GameRules = {
-	SAVEGAME_VERSION = 7,
     nMatter = 0,
     simTime = 0,
     elapsedTime = 0,
@@ -71,7 +67,6 @@ local GameRules = {
     bHasStartedResearch = false,
     SPACEDATE_BASE = 9091,
 	SPACEDATE_BASE_RANDOM_OFFSET = 9,
-    sAutoSaveFile = 'SpacebaseDF9AutoSave',
     MODE_INSPECT = 0,
     MODE_VAPORIZE = 1,
     MODE_MAKE_CHARACTER = 2,
@@ -139,7 +134,6 @@ function GameRules.onFileChanged()
     GameScreen = require('GameScreen')
 end
 function GameRules.init()
-    GameRules.dGameLoaded = Delegate.new()
 	GameRules.cursorX, GameRules.cursorY = 0,0
     GameRules.prevDragX = {}
     GameRules.prevDragY = {}
@@ -165,7 +159,6 @@ function GameRules.init()
     require('Base').init()
     EventController.init()
     Lighting.init()
-    AutoSave.init()
     g_ERBeacon = require('Utility.EmergencyBeacon').new()
     Hint.init()
 	Goal.init()
@@ -264,7 +257,6 @@ function GameRules.onTick(dt)
 			end
 		end
 	end
-	AutoSave.onTick(dt)
 	if GameRules.zoomBuffer > 0 then
 		GameRules.zoomBuffer = GameRules.zoomBuffer - GameRules.ZOOM_RATE
 	elseif GameRules.zoomBuffer < 0 then
@@ -317,55 +309,6 @@ function GameRules.getLandingZone()
     if not GameRules.tLandingZone then GameRules.tLandingZone = {x=math.random(1,64),y=math.random(1,64)} end
     return GameRules.tLandingZone
 end
-function GameRules.saveGame()
-    local tSaveData = {}
-    tSaveData.nMatter = GameRules.nMatter
-    tSaveData.powerHolidayEndTime = GameRules.powerHolidayEndTime
-    tSaveData.simTime = GameRules.simTime
-    tSaveData.elapsedTime = GameRules.elapsedTime or 0
-	tSaveData.nLastDutyAccident = GameRules.nLastDutyAccident
-	tSaveData.nLastNewShip = GameRules.nLastNewShip
-    tSaveData.SPACEDATE_BASE = GameRules.SPACEDATE_BASE
-    tSaveData.sStarDate = GameRules.sStarDate
-    tSaveData.sStarTime = GameRules.sStarTime
-    tSaveData.tLandingZone = GameRules.getLandingZone()
-    tSaveData.tWorldSaveData = World.getSaveData()
-    tSaveData.tTopics = Topics.tTopics
-    tSaveData.tEventControllerState = EventController.getSaveData()
-    tSaveData.tBaseState = require('Base').getSaveData()
-	tSaveData.currentZoom = GameRules.currentZoom
-	tSaveData.bHasHadEnclosedRooms = GameRules.bHasHadEnclosedRooms
-	tSaveData.bHasZoned = GameRules.bHasZoned
-	tSaveData.nCameraX,tSaveData.nCameraY,tSaveData.nCameraZ = Renderer.getGameplayCamera():getLoc()
-	tSaveData.nSavegameVersion = GameRules.SAVEGAME_VERSION
-    ObjectList.removeStaleTags(tSaveData)
-    MOAISim.forceGarbageCollection()
-    local str = MessagePack.pack(tSaveData)
-    DFSaveLoad.saveString( str, GameRules.sAutoSaveFile )
-    local tProcessed={}
-    local tTags={}
-end
-function GameRules._dbgVerifySaveTable(tSaveData,tTags)
-    for k,v in pairs(tSaveData) do
-        if type(k) == 'table' and k._ObjectList_TagMarker then
-            if not tTags[k.objID] then
-                tTags[k.objID] = k
-            else
-                assertdev(tTags[k.objID].objType == k.objType)
-            end
-        end
-        if type(v) == 'table' then
-                if v._ObjectList_TagMarker then
-                    if not tTags[v.objID] then
-                        tTags[v.objID] = v
-                    else
-                        assertdev(tTags[v.objID].objType == v.objType)
-                    end
-                end
-            GameRules._dbgVerifySaveTable(v,tTags)
-        end
-    end
-end
 function GameRules.loadModule(setName,moduleName)
     local tModuleData = {}
     local tCreationData = ShipModules[setName][moduleName]
@@ -407,9 +350,6 @@ function GameRules.loadModule(setName,moduleName)
     return tModuleData
 end
 function GameRules._loadSavegameAndUpdate(sPath, bPreservePath, bSilenceErrors)
-    if not bPreservePath then
-        sPath = DFSaveLoad.getSaveFilename(sPath)
-    end
     local dataBuffer = MOAIDataBuffer.new()
     dataBuffer:load(sPath)
     if dataBuffer:testHeader('--MOAI') then
@@ -466,61 +406,6 @@ function GameRules.placeModule(tModuleData, tileXOff, tileYOff, bOnPlayerTeam)
     local tFakeEvent = {sEventType='initialSpawn',sSetName=tModuleData.sSetName,sModuleName=tModuleData.sModuleName,nDifficulty=0,bValidDockingData=true}
     Event._prerollModuleSpawns(g_EventController, tFakeEvent)
     EventController.spawnModuleEntities(tFakeEvent, tModuleData,{ nDefaultTeam=nNewTeam, nDefaultFactionBehavior=nDefaultFactionBehavior })
-end
-function GameRules.loadGame(sOverridePath, bOverridePreservePath)
-    local tSaveData
-    tSaveData = GameRules._loadSavegameAndUpdate(sOverridePath or GameRules.sAutoSaveFile, bOverridePreservePath, true)
-    if not tSaveData then
-        Trace(TT_Warning, "Could not load the save")
-        return
-    end
-    if GameRules.bInitialized then
-        GameRules.shutdown()
-    end
-    GameRules.init()
-	local bLoaded = false
-    GameRules.nMatter = tSaveData.nMatter or tSaveData.matter or GameRules.STARTING_MATTER
-    GameRules.tLandingZone = tSaveData.tLandingZone
-    GameRules.simTime = tSaveData.simTime
-    GameRules.elapsedTime = tSaveData.elapsedTime  or 0
-    GameRules.powerHolidayEndTime = tSaveData.powerHolidayEndTime
-    if GameRules.powerHolidayEndTime then
-        g_PowerHoliday = true
-    end
-    GameRules.sStarDate = tSaveData.sStarDate
-    GameRules.sStarTime = tSaveData.sStarTime
-    GameRules.nLastDutyAccident = tSaveData.nLastDutyAccident or 0
-    GameRules.nLastNewShip = tSaveData.nLastNewShip or 0
-    GameRules.SPACEDATE_BASE = tSaveData.SPACEDATE_BASE or GameRules.SPACEDATE_BASE
-    ObjectList.portOldSavegames(tSaveData,tSaveData.nSavegameVersion)
-    local tTags={}
-    GameRules._dbgVerifySaveTable(tSaveData,tTags)
-    Room.beginLoad(tSaveData, false)
-    ObjectList.beginLoad(tSaveData, false)
-    Room.hackLoadSpaceRoom(tSaveData)
-    require('Base').fromSaveData(tSaveData.tBaseState or {})
-    World.loadSaveData(tSaveData.nSavegameVersion, tSaveData.tWorldSaveData )
-    EventController.fromSaveData(tSaveData.tEventControllerState or {})
-    ObjectList.endLoad()
-    Room.endLoad()
-    local tBeaconSaveData = {}
-    if tSaveData and tSaveData.tBaseState and tSaveData.tBaseState.tBeacon then
-        tBeaconSaveData = tSaveData.tBaseState.tBeacon
-    end
-    g_ERBeacon:fromSaveTable(tBeaconSaveData)
-    Topics.fromSaveData(tSaveData)
-    Topics.generateActivityList()
-    Topics.generatePeopleList()
-    GameRules.bHasHadEnclosedRooms = tSaveData.bHasHadEnclosedRooms
-    GameRules.bHasZoned = tSaveData.bHasZoned
-    GameRules.currentZoom = tSaveData.currentZoom or GameRules.START_ZOOM
-    if tSaveData.nCameraX and tSaveData.nCameraY and tSaveData.nCameraZ then
-        GameRules._centerCameraOnPoint(tSaveData.nCameraX, tSaveData.nCameraY, tSaveData.nCameraZ)
-    end
-    bLoaded = true
-    GameRules.dGameLoaded:dispatch()
-    collectgarbage()
-	return bLoaded
 end
 function GameRules.getStardateMinuteString(nTime)
     local m = GameRules.getStardateMinute(nTime)

@@ -161,21 +161,4 @@ function SpaceRoom:_destroy()
     g_SpaceRoom = nil
     Room.rSpaceRoom = nil
 end
-function SpaceRoom:getSaveTable()
-	local tPropPlacements = {}
-    for addr,tData in pairs(self.tPropPlacements) do
-        tPropPlacements[addr] = {}
-        tPropPlacements[addr].sName=tData.sName
-        tPropPlacements[addr].bFlipX=tData.bFlipX or tData.bFlipped
-        tPropPlacements[addr].bFlipY=tData.bFlipY
-        tPropPlacements[addr].tx=tData.tx
-        tPropPlacements[addr].ty=tData.ty
-    end
-	return {
-		tTiles = {},
-		tPropPlacements = tPropPlacements,
-		bSpaceRoom = true,
-        tExtraGeneratorsForRoom = self.tExtraGeneratorsForRoom,
-	}
-end
 return SpaceRoom

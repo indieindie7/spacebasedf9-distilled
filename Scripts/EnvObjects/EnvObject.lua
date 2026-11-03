@@ -615,18 +615,6 @@ function EnvObject:_refreshDisplaySlots()
         self:_updateStuffDisplaySprite(idx)
     end
 end
-function EnvObject:getSaveTable(xShift,yShift)
-    local tInventory = self.tInventory
-    xShift = xShift or 0
-    yShift = yShift or 0
-    return {wx=self.wx+xShift,wy=self.wy+yShift, condition=self.nCondition, name=self.sName, bActive=self.bActive,
-        uniqueName=self.sUniqueName, bFlipX=self.bFlipX,  bFlipY=self.bFlipY, nStackCount=self.nStackCount,
-		sBuilderName=self.sBuilderName, sBuildTime=self.sBuildTime, nBrokenTimer=self.nBrokenTimer,
-		sLastMaintainer=self.sLastMaintainer, sLastMaintainTime=self.sLastMaintainTime, sFriendlyName=self.sFriendlyName,
-		tInventory=tInventory, sResearchData=self.sResearchData, bSlatedForResearchTeardown=self.bSlatedForResearchTeardown,
-        nDecayResume=self.nDecayResume, nDecayMult=self.nDecayMult,
-        tMaladies=self.tMaladies}
-end
 function EnvObject.fromSaveTable(t, xOff, yOff, nTeam)
     local tData,bPickup = EnvObject.getObjectData(t.name)
     if not tData then

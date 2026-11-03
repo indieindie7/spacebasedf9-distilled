@@ -29,9 +29,4 @@ end
 function Spawner:getSpawnType()
     return self.tParams.spawnerName
 end
-function Spawner:getSaveTable(xShift,yShift)
-    local tData = EnvObject.getSaveTable(self,xShift,yShift)
-    tData.tParams = self.tParams
-    return tData
-end
 return Spawner

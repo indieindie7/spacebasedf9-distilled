@@ -201,7 +201,6 @@ function m.create()
             g_GameRules.cancelBuild(true)
             g_GuiManager.newSideBar:closeConstructMenu()
         end
-        GameRules.saveGame()
         MOAISim.exit()
     end
     function Ob:onResize()

@@ -195,17 +195,6 @@ function m.createSubclass(parentClass)
     end
 	return klass
 end
-function m.findFileCase(dir, filename)
-    if not MOAIFileSystem.checkPathExists(dir) then
-        return
-    end
-    filename = string.lower(filename)
-    for _, f in ipairs(MOAIFileSystem.listFiles(dir)) do
-        if string.lower(f) == filename then
-            return f
-        end
-    end
-end
 local weakIndex = function(t, k)
     local ref = rawget(t, '_UserData')
     return ref[k]

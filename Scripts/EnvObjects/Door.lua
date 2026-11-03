@@ -151,11 +151,6 @@ function Door:cycle()
     end
     self:setOperation(operation)
 end
-function Door:getSaveTable(xShift,yShift)
-    local t = EnvObject.getSaveTable(self,xShift,yShift)
-    t.operation = self.operation
-    return t
-end
 function Door:setLoc(x,y)
     if self.bLocSet then
         Print(TT_Warning, "Don't move doors.")

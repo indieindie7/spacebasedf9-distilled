@@ -145,38 +145,6 @@ function Base._assign(rChar,rObj,tChar,tObj)
         tChar[rChar.tag] = rObj and rObj.tag
     end
 end
-function Base.fromSaveData(tSaveData)
-    Base.nNextTeamID = Character.TEAM_ID_FIRST_USABLE+1
-    Base.tS = tSaveData
-    Base.tS.tResearch = Base.tS.tResearch or {}
-    Base.tS.tTeamIDToFactionBehavior = tSaveData.tTeamIDToFactionBehavior or {}
-    for id,_ in pairs(Base.tS.tTeamIDToFactionBehavior) do
-        Base.nNextTeamID = math.max(id+1,Base.nNextTeamID)
-    end
-    Base.tS.tTeamIDToFactionBehavior[Character.TEAM_ID_PLAYER] = Character.FACTION_BEHAVIOR.Citizen
-    Malady.fromSaveData(tSaveData.tMalady or {})
-    Base.tBedToChar = Base.tS.tBedToChar or {}
-    Base.tCharToBed = Base.tS.tCharToBed or {}
-	Base.tS.tGoals = Base.tS.tGoals or {}
-	Base.tS.tStats = Base.tS.tStats or {}
-	for sStat,nInitialValue in pairs(tInitialStats) do
-		Base.tS.tStats[sStat] = Base.tS.tStats[sStat] or nInitialValue
-	end
-    for k,tResearchInfo in pairs(ResearchData) do
-        local tProgressData = Base.tS.tResearch[k]
-        if tProgressData and tProgressData.bComplete then
-            tProgressData.nResearchUnits = tResearchInfo.nResearchUnits
-        end
-    end
-end
-function Base.getSaveData()
-    if not Base.tS then Base.tS = {} end
-    Base.tS.tMalady = Malady.getSaveData()
-    Base.tS.tBedToChar = Base.tBedToChar
-    Base.tS.tCharToBed = Base.tCharToBed
-    Base.tS.tBeacon = g_ERBeacon:getSaveTable()
-    return Base.tS
-end
 function Base.incrementStat(sStatName)
 	Base.tS.tStats[sStatName] = Base.tS.tStats[sStatName] + 1
 end

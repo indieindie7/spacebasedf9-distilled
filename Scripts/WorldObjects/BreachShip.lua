@@ -128,12 +128,6 @@ function BreachShip:remove()
     Renderer.getRenderLayer(Character.BACKGROUND_RENDER_LAYER):removeProp(self.rOutlineCopy)
     WorldObject.remove(self)
 end
-function BreachShip:getSaveTable(xShift,yShift)
-    local t = WorldObject.getSaveTable(self,xShift,yShift)
-    if self.nRemainingFadeTime then
-        t.nRemainingFadeTime = self.nRemainingFadeTime
-    end
-end
 function BreachShip.fromSaveTable(t, xOff, yOff, nTeam)
     local bs = BreachShip.new(t.wx+xOff, t.wy+yOff, t, nTeam or t.nTeam)
     if t.nRemainingFadeTime then

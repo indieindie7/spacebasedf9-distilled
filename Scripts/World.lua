@@ -406,44 +406,6 @@ function World.shutdown()
     World.dirtyVisualTiles = {}
     World.bSuspendFixupVisuals = false
 end
-function World.saveOtherTypes(saveData, worldXOff,worldYOff)
-    for _,objType in ipairs(ObjectList.tSaveTypes) do
-        saveData[objType] = {}
-        local tTags = ObjectList.getTagsOfType(objType)
-        for _,objData in pairs(tTags) do
-            local tag = objData.tag
-            local tData = ObjectList.getSaveTable(objType,tag,worldXOff,worldYOff)
-            if tData then
-                assert(tData._ObjectList_ObjectMarker.objType == objType)
-                table.insert(saveData[objType], tData)
-            end
-        end
-    end
-    saveData.fire = require('Fire').getSaveTable(worldXOff,worldYOff)
-    saveData.commandObject = CommandObject.getSaveTable(worldXOff,worldYOff)
-    if not worldXOff then
-        saveData.environment = Environment.getSaveTable()
-    end
-    saveData.oxygenGrid = World.oxygenGrid:getSaveData()
-    for _,objType in ipairs(ObjectList.tSaveTypes) do
-        for i,v in ipairs(saveData[objType]) do
-            assert(not v._ObjectList_ObjectMarker or v._ObjectList_ObjectMarker.objType == objType)
-        end
-    end
-end
-function World.getSaveData()
-    local saveData = {
-		tilesToExplore={},
-    }
-    saveData.tileHealth = World.tileHealth
-    saveData.floorDecals = World.floorDecals
-    saveData.pathGrid = World.pathGrid:getSaveData()
-    World.saveOtherTypes(saveData)
-	for k,v in pairs(World.tilesToExplore) do
-		table.insert(saveData.tilesToExplore, {k=k,x=v.x,y=v.y})
-	end
-    return saveData
-end
 function World._updatePathGridDbgColor(tx,ty,bUnpathable)
     if not World.bPathGridVisualize then return end
     local addr = World.pathGrid:getCellAddr(tx,ty)
@@ -529,9 +491,6 @@ function World.loadOtherTypes(nSavegameVersion, saveData, worldXOff, worldYOff, 
             end
         end
     end
-    if not worldXOff then
-        Environment.fromSaveTable(saveData.environment)
-    end
     Fire.fromSaveTable(saveData.fire, worldXOff,worldYOff, nTeam)
     require('CharacterManager').updateOwnedCharacters()
 end
@@ -548,49 +507,6 @@ function World.setPathGridVisualize(bVis)
             end
         end
     end
-end
-function World.loadSaveData(nSavegameVersion, saveData)
-    World.bSuspendFixupVisuals = true
-    World.bLoadingGame=true
-    World.tileHealth = saveData.tileHealth or {}
-    print('a')
-    World.roomGrid:fill(0)
-    World.pathGrid = LuaGrid.fromSaveData(saveData.pathGrid, false, {nDefaultVal=World.logicalTiles.SPACE})
-    local tTiles = World.pathGrid.tTiles
-    for addr,_ in pairs(tTiles) do
-        if not World._isInBounds(World.pathGrid:cellAddrToCoord(addr)) then
-            tTiles[addr] = nil
-        end
-    end
-    World.oxygenGrid = LuaGrid.fromSaveData(saveData.oxygenGrid, false, {nDefaultVal=0,sGridClass='DFOxygenGrid'})
-    World.oxygenGrid:getMOAIGrid():setVisualizationColors(Oxygen.COLOR_LOW[1],Oxygen.COLOR_LOW[2],Oxygen.COLOR_LOW[3],Oxygen.COLOR_HIGH[1],Oxygen.COLOR_HIGH[2],Oxygen.COLOR_HIGH[3])
-    World.oxygenGrid:getMOAIGrid():clearGenerators()
-    Pathfinder.staticInit()
-    for x=1,World.width do
-        for y=1,World.height do
-            World._dirtyTile(x,y,true)
-        end
-    end
-    print('b')
-    World.loadOtherTypes(nSavegameVersion, saveData)
-    print('c')
-	World.tilesToExplore = {}
-	if saveData.tilesToExplore then
-		for _,v in ipairs(saveData.tilesToExplore) do
-			World.tilesToExplore[v.k] = {x=v.x,y=v.y}
-		end
-	end
-    print('d')
-    World.bSuspendFixupVisuals = false
-    World.bLoadingGame=false
-    World.fixupVisuals()
-        CommandObject.fromSaveTable(saveData.commandObject, nil,nil, true)
-    if saveData.floorDecals then
-        for addr,t in pairs(saveData.floorDecals) do
-            World.setFloorDecal(t.tx,t.ty,t.sDecal,t.tColor)
-        end
-    end
-    print('f')
 end
 function World.updateSavegame(nSavegameVersion, saveData)
     Character.updateSavegame(nSavegameVersion, saveData[ObjectList.CHARACTER])

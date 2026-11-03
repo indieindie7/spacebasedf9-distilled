@@ -48,14 +48,6 @@ function SleepInBed:init(rChar,tPromisedNeeds,rActivityOption,tSaveData)
 	    self.bSnoozing = false
     end
 end
-function SleepInBed:getSaveData()
-	if not self:interacting() then return end
-    local tData = self:_getGenericSaveData()
-    tData.sClass = 'Utility.Tasks.SleepInBed'
-    tData.duration = self.duration
-    tData.nSleepStartTime = self.nSleepStartTime
-    return tData
-end
 function SleepInBed:onUpdate(dt)
 	if self:interacting() then
 		if not self.rTargetObject or self.rTargetObject.bDestroyed then

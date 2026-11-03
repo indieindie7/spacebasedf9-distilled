@@ -9,7 +9,6 @@ local kDEFAULT_CONFIG =
     window_resolution_h = 720,
     show_blood = true,
     crash_reporting = true,
-    autosave = true,
     use_compressed_textures = false,
     launch_fullscreen = true,
     use_os_mouse = true,

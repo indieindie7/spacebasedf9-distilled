@@ -20,11 +20,6 @@ function ResearchZone:setActiveResearch(sKey)
     end
     self.sCurrentResearch = sKey
 end
-function ResearchZone:getSaveTable()
-    local t = {}
-    t.sCurrentResearch = self.sCurrentResearch
-    return t
-end
 function ResearchZone:initFromSaveTable(t)
     self:setActiveResearch(t.sCurrentResearch)
 end

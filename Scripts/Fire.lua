@@ -185,21 +185,6 @@ function Fire.startFire(wx,wy)
         Base.eventOccurred(Base.EVENTS.Fire, {wx=wx,wy=wy,rRoom=rRoom})
     end
 end
-function Fire.getSaveTable(worldXOff,worldYOff)
-    local tData = {tTiles={},tFlames={}}
-    worldXOff,worldYOff = worldXOff or 0, worldYOff or 0
-    for addr,nHeat in pairs(Fire.tTiles) do
-        addr = GridUtil.OffsetAddrByWorld(addr, worldXOff,worldYOff)
-        tData.tTiles[addr] = nHeat
-    end
-    for addr,rFlame in pairs(Fire.tFlames) do
-        if rFlame.nIntensity > 0 then
-            addr = GridUtil.OffsetAddrByWorld(addr, worldXOff,worldYOff)
-            tData.tFlames[addr] = rFlame.nIntensity
-        end
-    end
-    return tData
-end
 function Fire.fromSaveTable(tData, worldXOff,worldYOff,nTeam)
     if not tData or not tData.tTiles then return end
     worldXOff,worldYOff = worldXOff or 0, worldYOff or 0

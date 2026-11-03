@@ -243,23 +243,6 @@ function Room.beginLoad(tSaveData,bModule)
     if bModule then return end
     if g_SpaceRoom then g_SpaceRoom:_destroy() end
 end
-function Room.hackLoadSpaceRoom(tSaveData)
-    if g_SpaceRoom then g_SpaceRoom:_destroy() end
-    if tSaveData.tWorldSaveData[ObjectList.ROOM] then
-        for k,t in ipairs(tSaveData.tWorldSaveData[ObjectList.ROOM]) do
-            if t.bSpaceRoom then
-                Room.fromSaveTable(t, nil, nil, Character.TEAM_ID_PLAYER)
-                if g_SpaceRoom then
-                    table.remove(tSaveData.tWorldSaveData[ObjectList.ROOM], k)
-                end
-            end
-        end
-    end
-    if not g_SpaceRoom then
-        require('SpaceRoom').new()
-    end
-    assertdev(g_SpaceRoom)
-end
 function Room.endLoad()
     if not g_SpaceRoom then
         require('SpaceRoom').new()
@@ -2282,39 +2265,6 @@ function Room:_refreshPropJobList()
     table.insert(tOptions,self.rWalkHereOption)
     self.activityOptionList:set(tOptions)
     self.bJobsDirty=false
-end
-function Room:getSaveTable(xShift,yShift)
-    assert(not self.bDestroyed)
-    assert(Room.tRooms[self.id])
-    xShift = xShift or 0
-    yShift = yShift or 0
-    local tTiles = {}
-    for addr,coord in pairs(self.tTiles) do
-        local wx,wy = World._getWorldFromTile(coord.x,coord.y)
-        table.insert(tTiles, {x=wx+xShift,y=wy+yShift})
-    end
-    local tPropPlacements = {}
-    for addr,tData in pairs(self.tPropPlacements) do
-        tPropPlacements[addr] = {}
-        tPropPlacements[addr].sName=tData.sName
-        tPropPlacements[addr].bFlipX=tData.bFlipX or tData.bFlipped
-        tPropPlacements[addr].bFlipY=tData.bFlipY
-        tPropPlacements[addr].tx=tData.tx
-        tPropPlacements[addr].ty=tData.ty
-    end
-    local tZone = nil
-    if self.zoneObj and self.zoneObj.getSaveTable then
-        tZone = self.zoneObj:getSaveTable(xShift,yShift)
-    end
-    if next(tTiles) then
-        return { tTiles = tTiles, bFireUpgrade=self.bFireUpgrade, uniqueZoneName=self.uniqueZoneName, bUserBlockOxygen=self.bUserBlockOxygen,
-                    nTeam=self.nTeam, nOriginalTeam=self.nOriginalTeam,
-                    tPropPlacements=tPropPlacements, tZone=tZone,
-                    nLastSeen=self.nLastSeen, id=self.id,
-                    nLastCombatAlert=self.nLastCombatAlert,
-                    bEmergencyAlarmEnabled=self.bEmergencyAlarmEnabled,
-                }
-    end
 end
 function Room.fromSaveTable(t, xOff, yOff,nTeam)
     if g_World.bLoadingModule and t.bSpaceRoom then

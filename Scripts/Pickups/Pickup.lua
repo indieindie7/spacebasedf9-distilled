@@ -155,10 +155,6 @@ function Pickup:updateActivityOptionList()
     end
     self.activityOptionList:set(tActivities)
 end
-function Pickup:getSaveTable(xShift,yShift)
-    local tSaved = EnvObject.getSaveTable(self,xShift,yShift)
-    return tSaved
-end
 function Pickup:_removeItem(sObjectKey,nCount)
     local t = EnvObject._removeItem(self,sObjectKey,nCount)
     if self.bSlatedForResearchTeardown then

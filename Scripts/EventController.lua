@@ -13,7 +13,6 @@ local Gui = require('UI.Gui')
 local Delegate = require('DFMoai.Delegate')
 local ModuleData = require('ModuleData')
 local Malady = require('Malady')
-local AutoSave=require('AutoSave')
 local EventController= {}
 g_EventController = EventController
 EventController.nSaveVersion = 1.6
@@ -187,9 +186,6 @@ function EventController.fromSaveData(tSaveData)
         EventController.tS.tNextEventData.bAlertedNextEvent = false
     end
 end
-function EventController.getSaveData()
-    return EventController.tS
-end
 function EventController._forceNextEvent()
     if EventController.tS and EventController.tS.tNextEventData then
         local nDelta = 0
@@ -240,9 +236,6 @@ function EventController.attemptExecuteEvent(tNextEventData)
     local tTransientState = {}
     local bSuccess, sFailMsg = rEventClass.preExecuteSetup(EventController, tNextEventData, tTransientState)
     if bSuccess then
-        if GameRules.elapsedTime - AutoSave.nTimeSinceLastSave > 45 then
-            AutoSave.saveGame()
-        end
         EventController.fnOngoingEventTick = rEventClass.tick
         EventController.tCurrentEventPersistentState = tNextEventData
         EventController.tCurrentEventTransientState = tTransientState

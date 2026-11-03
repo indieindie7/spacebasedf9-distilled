@@ -24,17 +24,6 @@ function Task.fromSaveData(rChar, tData)
         return rClass.staticFromSaveData(rChar,tData)
     end
 end
-function Task:_getGenericSaveData()
-    local tData = {}
-    tData.tAOData = {}
-    tData.activityName = self.activityName
-    tData.tPromisedNeeds = self.tPromisedNeeds
-    tData.nPriority = self.nPriority
-    tData.tPath = self.tPath
-    tData.tTargetObject = self.rTargetObject and ObjectList.getTag(self.rTargetObject)
-    tData.nPromisedUtility = self.nPromisedUtility
-    return tData
-end
 function Task:init(rChar, tPromisedNeeds, rActivityOption,tSaveData)
     self.tPromisedNeeds = tPromisedNeeds
     self.rChar = rChar

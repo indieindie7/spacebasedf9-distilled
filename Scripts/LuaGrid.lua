@@ -91,23 +91,6 @@ function LuaGrid.fromSaveData(tData,bSaveLoadTileColor,tOldSaveDefaults)
     end
     return lg
 end
-function LuaGrid:getSaveData()
-    local t = {}
-    t.mWidth=self.mWidth
-    t.mHeight=self.mHeight
-    t.sGridClass = self.sGridClass
-    t.mCellWidth=self.mCellWidth
-    t.mCellHeight=self.mCellHeight
-    t.mShape = self.mShape
-    assert(self.rGrid)
-    t.moaiGridData = self.rGrid:serializeToTable()
-    t.tTiles = self.tTiles
-    t.tFlags = self.tFlags
-    t.tColors = (self.bSaveLoadTileColor and self.tColors) or {}
-    t.tDefaultColor = self.tDefaultColor
-    t.nDefaultVal = self.nDefaultVal
-    return t
-end
 function LuaGrid._createBackingGrid(sClass)
     if sClass == 'DFOxygenGrid' then
         return DFOxygenGrid.new()

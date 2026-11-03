@@ -62,13 +62,6 @@ function Bed:setOwner(rChar)
     if rChar and rChar:isDead() then rChar = nil end
     Base.assignBed(rChar,self)
 end
-function Bed:getSaveTable(xShift,yShift)
-    local t = EnvObject.getSaveTable(self,xShift,yShift)
-    if self.ownerTag then
-        t.ownerTag = ObjectList.getTagSaveData(self.ownerTag)
-    end
-    return t
-end
 function Bed:getAvailableActivities()
     local tActivities = EnvObject.getAvailableActivities(self)
     table.insert(tActivities, self.rSleepInBedOption)

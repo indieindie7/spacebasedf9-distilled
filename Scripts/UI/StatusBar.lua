@@ -60,7 +60,6 @@ function m.create()
         self.rZoominButton:addPressedCallback(self.onZoomButtonPressed, self)
         self.rFlipButton:addPressedCallback(self.onFlipButtonPressed, self)
         self:showFlipZone(false)
-        g_GameRules.dGameLoaded:register(function() self.nMatterCount = g_GameRules:getMatter() or 0 end)
     end
     function Ob:setDebugString(str)
         self.debugText:setString(str)

@@ -8,7 +8,7 @@ This repo holds only Lua source and text. No art, audio or binaries. You need yo
 | | files | lines |
 |---|---|---|
 | shipped (baseline 82b4704) | 465 | 132003 |
-| distilled | 379 | 70224 lines, 531988 Lua tokens (baseline 131942 lines, 776846 tokens by the lexer metric) |
+| distilled | 378 | 69434 lines, 526810 Lua tokens (baseline 131942 lines, 776846 tokens by the lexer metric) |
 
 ## What was cut (commits)
 1. 45f25fb: 70 files unreachable from `config.lua`/`main.lua` (editor/dev tools, analytics/IAP, jit disassemblers, duplicate string table, unused UI/tasks).

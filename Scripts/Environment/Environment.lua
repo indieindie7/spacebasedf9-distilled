@@ -125,22 +125,10 @@ function Environment._createSprite( tSpriteSpec, tPreset, layerName )
         g_Renderer.getRenderLayer(g_World.background.layer):insertProp(prop)
     end
 end
-function Environment.fromSaveTable(tEnv)
-    if tEnv then
-        Environment.tEnv = tEnv
-        Environment.loadEnvironment(Environment.tEnv)
-    else
-        Environment.randomSetup()
-    end
-end
 function Environment.randomSetup()
     Environment.tEnv = Environment.generateEnvironment()
 	Environment.tEnv.tPlanetData = Environment._generatePlanet()
     Environment.loadEnvironment(Environment.tEnv)
-end
-function Environment.getSaveTable()
-	Environment.tEnv.tPlanetData = Environment.tEnv.tPlanetData or Environment.tPlanetParams
-    return Environment.tEnv
 end
 function Environment.generateEnvironment( sPreset )
     local tEnv={}

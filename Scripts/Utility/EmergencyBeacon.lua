@@ -184,42 +184,6 @@ function EmergencyBeacon:charArrived(rChar)
     end
     self.nCharsAtBeacon = nArrived
 end
-function EmergencyBeacon:getSaveTable()
-    local t = {}
-    t.eViolence = self.eViolence
-    t.tx = self.tx
-    t.ty = self.ty
-    t.nCount = self.nCount
-    if self.tMode and self.tMode.spriteName then
-        t.spriteName = self.tMode.spriteName
-    end
-    if self.rTargetObject then
-        local tTag = ObjectList.getTag(self.rTargetObject)
-        if tTag then
-            t.tTargetObjTag = ObjectList.getTagSaveData(tTag)
-        end
-    end
-    return t
-end
-function EmergencyBeacon:fromSaveTable(t)
-    if t.eViolence ~= nil then
-        self.eViolence = t.eViolence
-    else
-        self.eViolence = EmergencyBeacon.VIOLENCE_DEFAULT
-    end
-    local bSet = false
-    if t.tTargetObjTag then
-        self.tTargetObjTag = t.tTargetObjTag
-        local rTargetObject = ObjectList.getObject(self.tTargetObjTag)
-        if rTargetObject then
-            self:attachTo(rTargetObject,t.ncount)
-            bSet = true
-        end
-    end
-    if not bSet and t.tx and t.ty then
-        self:placeAt(t.tx,t.ty,t.nCount)
-    end
-end
 function EmergencyBeacon:charWaiting(rChar,dt)
     self:_testChar(rChar,'waited')
     self.tChars[rChar].nWaitTime = self.tChars[rChar].nWaitTime + dt

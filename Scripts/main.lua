@@ -68,26 +68,16 @@ local function _initGame(windowWidth, windowHeight)
             print('StartThread b')
             coroutine.yield()
             coroutine.yield()
-            local bLoaded = false
             g_GuiManager.fadeOutFullScreen()
             g_GuiManager.fadeInCentered("LegalScreen", 1.5)
             DFUtil.sleep(0.1)
             g_GuiManager.setCursorVisible(true)
             g_GuiManager.setIsInStartupScreen(false)
-            bLoaded = GameRules.loadGame()
             print('StartThread c')
 			DFGraphics.blockOnAsyncTextureLoad()
             print('StartThread d')
-            if bLoaded then GameRules.startLoop() end
             g_GuiManager.fadeOutFullScreen()
-            if not bLoaded then
-                g_GuiManager.showNewBaseScreen()
-            else
-                g_GuiManager.showStartMenu(true)
-                if g_Config:getConfigValue('auto_start') then
-                    g_GuiManager.startMenu:resume()
-                end
-            end
+            g_GuiManager.showNewBaseScreen()
         end
         )
 end
