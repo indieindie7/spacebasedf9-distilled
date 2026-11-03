@@ -11,11 +11,6 @@ m.dOnClick = Delegate.new()
 local kYMARGIN = 16
 local kBOTTOM_MARGIN = 28
 local kTIME_OFFSET = 10
-local kSECOND_SINGULAR_LINE = "HUDHUD028TEXT"
-local kSECOND_PLURAL_LINE = "HUDHUD029TEXT"
-local kMINUTE_SINGULAR_LINE = "HUDHUD030TEXT"
-local kMINUTE_PLURAL_LINE = "HUDHUD031TEXT"
-local kSPACEDATE_LINE = "HUDHUD004TEXT"
 local kREALTIME_THRESH = 10
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())

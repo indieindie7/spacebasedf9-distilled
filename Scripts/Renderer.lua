@@ -84,7 +84,6 @@ local kVirtualScreenGameSafeHeight = 1152
 local kVirtualScreenOverscan = kVirtualScreenHeight - kVirtualScreenGameSafeHeight
 local kVirtualScreenOverscanHalf = kVirtualScreenOverscan / 2
 local tFlags = {
-    DebugDrawWorldSpace = true,
     DebugDrawScreenSpace = true,
     DebugDrawWindow = true,
     DebugDrawReferenceFrame = false,

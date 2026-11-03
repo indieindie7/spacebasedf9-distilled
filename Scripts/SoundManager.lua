@@ -38,7 +38,6 @@ local tSfx =
     disallow = "UI/NewUI/UI_Disallow",
     hilight = "UI/NewUI/UI_Hilight",
     sidebarexpand = "UI/NewUI/UI_Expand",
-    showgrid = "UI/NewUI/UI_GridShow",
     select = "UI/NewUI/UI_Select",
     confirm = "UI/NewUI/UI_Confirm",
     inspectorshow = "UI/NewUI/UI_InspectorShow",
@@ -70,14 +69,11 @@ local tSfx =
     placemonitor = 'UI/PlaceObject/PlaceMonitor',
     placeplant = 'UI/PlaceObject/PlacePlant',
     placereactor = 'UI/PlaceObject/PlaceReactor',
-    placereactorserver = 'UI/PlaceObject/PlaceReactorServer',
-    placereactortile = 'UI/PlaceObject/PlaceReactorTile',
     placerecycler = 'UI/PlaceObject/PlaceRecycler',
     placeoxygenfilter = 'UI/PlaceObject/PlaceOxygenFilter',
     placerefinery = 'UI/PlaceObject/PlaceRefinery',
     placerug = 'UI/PlaceObject/PlaceRug',
     placespacesuitlocker = 'UI/PlaceObject/PlaceSuitLocker',
-    placewall = "UI/Build/PlaceWall",
     placehydroplant = 'UI/PlaceObject/PlaceHydroPlant',
     placefoodreplicator = 'UI/PlaceObject/PlaceFoodReplicator',
     placetable = 'UI/PlaceObject/PlaceTable',
@@ -129,12 +125,8 @@ local tSfx =
     wallexplode = "SFX/SFX/WallExplode",
     spacetaxi = "SFX/SFX/SpaceTaxi",
     spacetaxienter = "SFX/SFX/SpaceTaxi_Enter",
-    spacetaxidropoff = "SFX/SFX/SpaceTaxi_DropOff",
-    spacetaxileave = "SFX/SFX/SpaceTaxi_Leave",
     fridgeopen = "SFX/SFX/FridgeOpen",
-    fridgeclose = "SFX/SFX/FrideClose",
     derelictdocking = "SFX/SFX/Derelict_Docking",
-    powerup = "SFX/SFX/PowerUp",
     powerdown = "SFX/SFX/PowerDown",
     raiderdocking = "SFX/SFX/Raider_Docking",
     raiderdrill = "SFX/SFX/Raider_Drill",
@@ -165,9 +157,6 @@ function SoundManager.initialize( tSoundProjects )
 	if not MOAIFmodEventMgr.isEnabled() then
 		local tInitParams =
 		{
-			voiceLRUMaxMB = 12,
-			voiceLRUBufferMB = 2,
-            enableAuditioning = true,
 		}
         MOAIFmodEventMgr.init( tInitParams )
 		if tSoundProjects.tFEV then

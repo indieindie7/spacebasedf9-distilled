@@ -45,7 +45,6 @@ local t=
         sFriendlyName='DISEAS003TEXT',
         sDesc='DISEAS023TEXT',
         nSeverity=1,
-        nAdditionalDeadliness=.2,
         nPerceivedSeverity=.2,
         sSpecial='parasite',
         nFieldTreatSkill=99999,

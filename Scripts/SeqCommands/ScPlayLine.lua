@@ -29,7 +29,6 @@ function ScPlayLine:onExecute()
         bCinematicDisplay = self.CinematicDisplay,
         bNoBabble = not self.UseBabbleAnimation,
         bNoGenericTalk = not self.UseGenericTalkAnimation,
-        bFromCutscene = true,
     }
     if self:_getDebugFlags().DebugExecution and not self.bSkip then
         local atTime = ""

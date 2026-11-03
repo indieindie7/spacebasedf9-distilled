@@ -3,7 +3,6 @@ local nButtonWidth, nButtonHeight  = 418, 98
 local nTabWidth, nTabHeight = 83, 47
 local nTabLineHeight = 3
 local nControlButtonX, nControlButtonY = 32, -370
-local nControlButtonSpacing = 36
 local nControlButtonWidth, nControlButtonHeight = 160, 37
 local labelX, labelY = -20, nControlButtonY - 5
 return

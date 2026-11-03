@@ -31,7 +31,6 @@ local kDEFAULT_CONFIG =
 }
 local kDEPRECATED_VALUES =
 {
-    enable_post_effects = true,
 }
 function m.init()
     local obj = {}

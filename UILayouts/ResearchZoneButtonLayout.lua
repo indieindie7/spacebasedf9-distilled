@@ -5,7 +5,6 @@ local nProjectNameX = 450
 local nTextY = 6
 local nZoneButtonWidth,nZoneButtonHeight = 370, 64
 local nProjectButtonWidth = 450
-local nBubbleThickness = 2
 return
 {
     posInfo =

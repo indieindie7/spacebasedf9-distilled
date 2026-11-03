@@ -6,7 +6,6 @@ local sUILayoutFileName = 'UILayouts/WorldToolTipLayout'
 local kHEIGHT_PER_LINE = 32
 local kMARGIN = 14
 local kYMARGIN = 10
-local kWIDTH_PER_CHAR = 14
 local kTEXTURE_MARGIN = 30
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())

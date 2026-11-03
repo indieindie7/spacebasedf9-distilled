@@ -1,5 +1,4 @@
 local m = {}
-local EPSILON = 0.001
 function m.distance( x1, y1, z1, x2, y2, z2 )
     if y2 then
         return math.sqrt( ( ( x2 - x1 ) ^ 2 ) + ( ( y2 - y1 ) ^ 2 ) + ( ( z2 - z1 ) ^ 2) )
@@ -67,8 +66,6 @@ end
 function m.randomFloat( lower, upper )
     return ( lower + ( ( upper - lower ) * math.random() ) )
 end
-local boxMullerRand1 = nil
-local boxMullerRand2 = nil
 function m.lerp( a, b, t )
     return a * (1 - t) + b * t
 end

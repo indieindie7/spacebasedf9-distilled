@@ -7,17 +7,10 @@ local ObjectList = require('ObjectList')
 local MiscUtil = require('MiscUtil')
 local Gui = require('UI.Gui')
 local sUILayoutFileName = 'UILayouts/NewBaseInspectorLayout'
-local regionLineCode = "NEWBAS007TEXT"
 local regionFormat = "%s %d-%d"
 local ageIntroLineCode = "NEWBAS008TEXT"
 local ageUnitsLineCode = "NEWBAS009TEXT"
 local ageFormat = "%s %d %s"
-local distanceIntroLineCode = "NEWBAS010TEXT"
-local distanceUnitsLineCode = "NEWBAS011TEXT"
-local distanceFormat = "%s %d %s"
-local threatLineCode = "NEWBAS015TEXT"
-local interferenceLineCode = "NEWBAS016TEXT"
-local densityLineCode = "NEWBAS020TEXT"
 local tRegionAdjectiveLineCodes = {
 	'NEWBAS023TEXT', 'NEWBAS024TEXT', 'NEWBAS025TEXT', 'NEWBAS026TEXT', 'NEWBAS027TEXT', 'NEWBAS028TEXT', 'NEWBAS029TEXT', 'NEWBAS030TEXT', 'NEWBAS031TEXT', 'NEWBAS032TEXT', 'NEWBAS033TEXT', 'NEWBAS034TEXT', 'NEWBAS041TEXT',
 }

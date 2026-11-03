@@ -740,7 +740,6 @@ EnvObjectData.tObjects=
         placeSound = 'placerug',
         sidebarIcon = 'icon_rug',
 		nMoraleScore=2,
-        bHelpsMorale=true,
         bSortBack=true,
 		sFlavorText = 'OBFLAV008TEXT',
     },
@@ -926,7 +925,6 @@ EnvObjectData.tObjects=
 }
 EnvObjectData.tAliases=
 {
-    Fridge_level2='FridgeLevel2',
     tvScreen1='TVScreen1',
     burgerSign='BurgerSign',
     pizzaSign='PizzaSign',

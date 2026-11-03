@@ -22,7 +22,6 @@ local tOwnedCharacters
 local tDeadCharacters
 local tDecisionNeededHash
 local tDecisionNeeded
-local UPDATES_PER_TICK = 10
 function CharacterManager.init()
     tCharacters = {}
     tOwnedCharacters = {}

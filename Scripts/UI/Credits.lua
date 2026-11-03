@@ -6,7 +6,6 @@ local Renderer = require('Renderer')
 local Gui = require('UI.Gui')
 local GameRules = require('GameRules')
 local sUILayoutFileName = 'UILayouts/CreditsLayout'
-local SCROLL_DELAY = 5
 local SCROLL_AMOUNT = -15000
 local SCROLL_START_Y = -900
 local SCROLL_TIME = -SCROLL_AMOUNT / 120

@@ -92,18 +92,6 @@ World.background = {
         spriteNames = { 'nebula01' },
         layer = 'Background',
 }
-local _DIR_SAME   = 1
-local _DIR_NW     = 2
-local _DIR_NE     = 3
-local _DIR_SW     = 4
-local _DIR_SE     = 5
-local _DIR_N      = 6
-local _DIR_E      = 7
-local _DIR_S      = 8
-local _DIR_W      = 9
-local _DIR_DIAG_START = 2
-local _DIR_DIAG_END = 5
-local _DIR_END = 9
 function World.getOppositeDirection(d)
     if d == World.directions.SAME then
         return World.directions.SAME

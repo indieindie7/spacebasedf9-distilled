@@ -42,7 +42,6 @@ g_tSoundProjects =
 	tFSB =
 	{
 	},
-	bStartMuted=false,
 }
 function print(...) return Print(TT_Info, ...) end
 assertdev = function() end

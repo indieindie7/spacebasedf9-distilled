@@ -339,7 +339,6 @@ Zone.AIRLOCK =
         },
     },
     sLightSpriteName = 'directionalcast',
-    nMaxProps=1,
     class='Zones.Airlock',
     clickSound = 'clickairlock',
     portrait = 'Zone_Airlock',

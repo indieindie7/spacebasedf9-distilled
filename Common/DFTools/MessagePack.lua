@@ -24,7 +24,6 @@ local frexp = require'math'.frexp
 local ldexp = require'math'.ldexp
 local huge = require'math'.huge
 local tconcat = require'table'.concat
-_ENV = nil
 local m = {}
 local function argerror (caller, narg, extramsg)
     error("bad argument #" .. tostring(narg) .. " to "

@@ -30,7 +30,6 @@ function Bar:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
             pathX=pathX, pathY=pathY,
             barTX=tx, barTY=ty,
             utilityGateFn=function() return self:_serveGate(i) end,
-            bOpening=true,
             rBar=self,
             nBarSlot=i,
         }
