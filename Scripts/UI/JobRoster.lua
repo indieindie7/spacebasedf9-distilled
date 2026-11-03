@@ -1,3 +1,4 @@
+local function _h1(a0,a1) return {sortDownFn=a0,sortUpFn=a1} end
 local m = {}
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
@@ -73,46 +74,16 @@ local function jobSortUpFn(eJob, rCitizen1, rCitizen2)
 end
 local tSortFnInfos =
 {
-    jobSort = {
-                  sortDownFn = jobCatSortDownFn,
-                  sortUpFn = jobCatSortUpFn,
-              },
-    nameSort = {
-                   sortDownFn = nameSortDownFn,
-                   sortUpFn = nameSortUpFn,
-               },
-    job1Sort = {
-        sortDownFn = function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job1'], rCitizen1, rCitizen2) end,
-        sortUpFn = function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job1'], rCitizen1, rCitizen2) end,
-               },
-    job2Sort = {
-        sortDownFn = function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job2'], rCitizen1, rCitizen2) end,
-        sortUpFn = function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job2'], rCitizen1, rCitizen2) end,
-               },
-    job3Sort = {
-        sortDownFn = function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job3'], rCitizen1, rCitizen2) end,
-        sortUpFn = function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job3'], rCitizen1, rCitizen2) end,
-               },
-    job4Sort = {
-        sortDownFn = function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job4'], rCitizen1, rCitizen2) end,
-        sortUpFn = function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job4'], rCitizen1, rCitizen2) end,
-               },
-    job5Sort = {
-        sortDownFn = function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job5'], rCitizen1, rCitizen2) end,
-        sortUpFn = function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job5'], rCitizen1, rCitizen2) end,
-               },
-    job6Sort = {
-        sortDownFn = function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job6'], rCitizen1, rCitizen2) end,
-        sortUpFn = function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job6'], rCitizen1, rCitizen2) end,
-               },
-	job7Sort = {
-        sortDownFn = function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job7'], rCitizen1, rCitizen2) end,
-        sortUpFn = function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job7'], rCitizen1, rCitizen2) end,
-               },
-	job8Sort = {
-        sortDownFn = function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job8'], rCitizen1, rCitizen2) end,
-        sortUpFn = function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job8'], rCitizen1, rCitizen2) end,
-               },
+    jobSort = _h1(jobCatSortDownFn, jobCatSortUpFn),
+    nameSort = _h1(nameSortDownFn, nameSortUpFn),
+    job1Sort = _h1(function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job1'], rCitizen1, rCitizen2) end, function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job1'], rCitizen1, rCitizen2) end),
+    job2Sort = _h1(function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job2'], rCitizen1, rCitizen2) end, function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job2'], rCitizen1, rCitizen2) end),
+    job3Sort = _h1(function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job3'], rCitizen1, rCitizen2) end, function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job3'], rCitizen1, rCitizen2) end),
+    job4Sort = _h1(function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job4'], rCitizen1, rCitizen2) end, function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job4'], rCitizen1, rCitizen2) end),
+    job5Sort = _h1(function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job5'], rCitizen1, rCitizen2) end, function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job5'], rCitizen1, rCitizen2) end),
+    job6Sort = _h1(function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job6'], rCitizen1, rCitizen2) end, function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job6'], rCitizen1, rCitizen2) end),
+	job7Sort = _h1(function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job7'], rCitizen1, rCitizen2) end, function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job7'], rCitizen1, rCitizen2) end),
+	job8Sort = _h1(function (rCitizen1, rCitizen2) return jobSortDownFn(tJobToEnum['job8'], rCitizen1, rCitizen2) end, function (rCitizen1, rCitizen2) return jobSortUpFn(tJobToEnum['job8'], rCitizen1, rCitizen2) end),
 }
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())

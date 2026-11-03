@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4,a5) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,color=a5} end
 local Gui = require('UI.Gui')
 local nInspectorWidth = 418
 local nStatLabelMargin = 35
@@ -70,14 +71,7 @@ return
             scale = { nInspectorWidth, nLineSize },
             color = Gui.AMBER_OPAQUE_DIM,
         },
-        {
-            key = 'SurfaceAreaIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nStatsStartY - 5 },
-            color = Gui.AMBER,
-        },
+        _h1('SurfaceAreaIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nStatsStartY - 5 }, Gui.AMBER),
         {
             key = 'SurfaceAreaLabel',
             type = 'textBox',
@@ -100,14 +94,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'OxygenIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nStatsStartY - nLineSize - 5 },
-            color = Gui.AMBER,
-        },
+        _h1('OxygenIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nStatsStartY - nLineSize - 5 }, Gui.AMBER),
 		{
             key = 'OxygenLabel',
             type = 'textBox',
@@ -130,14 +117,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'PowerDrawIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, (nStatsStartY - nLineSize * 2) - 5 },
-            color = Gui.AMBER,
-        },
+        _h1('PowerDrawIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, (nStatsStartY - nLineSize * 2) - 5 }, Gui.AMBER),
         {
             key = 'PowerDrawLabel',
             type = 'textBox',
@@ -160,14 +140,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'OccupantsIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, (nStatsStartY - nLineSize * 3) - 5 },
-            color = Gui.AMBER,
-        },
+        _h1('OccupantsIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, (nStatsStartY - nLineSize * 3) - 5 }, Gui.AMBER),
 		{
             key = 'OccupantsLabel',
             type = 'textBox',
@@ -190,14 +163,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'RoomContentsIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, (nStatsStartY - nLineSize * 4) - 5 },
-            color = Gui.AMBER,
-        },
+        _h1('RoomContentsIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, (nStatsStartY - nLineSize * 4) - 5 }, Gui.AMBER),
         {
             key = 'RoomContentsLabel',
             type = 'textBox',

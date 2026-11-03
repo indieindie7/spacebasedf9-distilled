@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4) return {key=a0,type=a1,pos=a2,scale=a3,color=a4} end
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 418, 98
 local nTabWidth, nTabHeight = 83, 47
@@ -20,13 +21,7 @@ return
 	},
     tElements =
     {
-        {
-            key = 'EmergencyStatusBG',
-            type = 'onePixel',
-            pos = { 140, -133 },
-            scale = { 278, 30 },
-            color = { 1, 0, 0 },
-        },
+        _h1('EmergencyStatusBG', 'onePixel', { 140, -133 }, { 278, 30 }, { 1, 0, 0 }),
         {
             key = 'EmergencyStatusText',
             type = 'textBox',
@@ -38,34 +33,10 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 1, 1, 1 },
         },
-        {
-            key = 'PictureLargeBG',
-            type = 'onePixel',
-            pos = { 0, -163 },
-            scale = { nButtonWidth, 106 },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'NameEditBG',
-            type = 'onePixelButton',
-            pos = { 0, -176 },
-            scale = { nButtonWidth, 35 },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'PictureBG',
-            type = 'onePixel',
-            pos = { 30, -144 },
-            scale = { 110, 20 },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ConditionBG',
-            type = 'onePixel',
-            pos = { 140, -218 },
-            scale = { 273, 30 },
-            color = { 0, 0, 0 },
-        },
+        _h1('PictureLargeBG', 'onePixel', { 0, -163 }, { nButtonWidth, 106 }, Gui.AMBER),
+        _h1('NameEditBG', 'onePixelButton', { 0, -176 }, { nButtonWidth, 35 }, Gui.AMBER),
+        _h1('PictureBG', 'onePixel', { 30, -144 }, { 110, 20 }, Gui.AMBER),
+        _h1('ConditionBG', 'onePixel', { 140, -218 }, { 273, 30 }, { 0, 0, 0 }),
         {
             key = 'Picture',
             type = 'uiTexture',
@@ -157,13 +128,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 0, 0, 0 },
         },
-        {
-            key = 'StatsBG',
-            type = 'onePixel',
-            pos = { 0, -268 },
-            scale = { nButtonWidth, 152 },
-            color = Gui.AMBER_OPAQUE,
-        },
+        _h1('StatsBG', 'onePixel', { 0, -268 }, { nButtonWidth, 152 }, Gui.AMBER_OPAQUE),
         {
             key = 'DescriptionText',
             type = 'textBox',
@@ -197,20 +162,8 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'TabBGSpacer',
-            type = 'onePixel',
-            pos = { nTabWidth * 1, -420 },
-            scale = { nTabWidth*4 + 3, nTabHeight },
-            color = Gui.AMBER_OPAQUE,
-        },
-        {
-            key = 'TabLineSpacer',
-            type = 'onePixel',
-            pos = { nTabWidth * 1, -420-nTabHeight },
-            scale = { nTabWidth*4 + 3, nTabLineHeight },
-            color = Gui.AMBER,
-        },
+        _h1('TabBGSpacer', 'onePixel', { nTabWidth * 1, -420 }, { nTabWidth*4 + 3, nTabHeight }, Gui.AMBER_OPAQUE),
+        _h1('TabLineSpacer', 'onePixel', { nTabWidth * 1, -420-nTabHeight }, { nTabWidth*4 + 3, nTabLineHeight }, Gui.AMBER),
         {
             key = 'TabbedPane',
             type = 'tabbedPane',

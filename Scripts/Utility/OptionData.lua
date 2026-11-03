@@ -1,3 +1,8 @@
+local function _h1(a0,a1,a2,a3) return {ScoreMods=a0,ClassPath=a1,Prerequisites=a2,UIText=a3} end
+local function _h2(a0,a1,a2,a3,a4) return {Needs=a0,ClassPath=a1,Tags=a2,Prerequisites=a3,UIText=a4} end
+local function _h3(a0,a1,a2,a3,a4) return {Needs=a0,Tags=a1,ClassPath=a2,Prerequisites=a3,UIText=a4} end
+local function _h4(a0,a1,a2,a3,a4) return {ScoreMods=a0,PersonalityMods=a1,ClassPath=a2,Prerequisites=a3,UIText=a4} end
+local function _h5(a0,a1,a2) return {ScoreMods=a0,ClassPath=a1,UIText=a2} end
 local Character=require('CharacterConstants')
 local tPriorities=
 {
@@ -16,12 +21,7 @@ local tAdvertisedActivities=
         UIText='UITASK001TEXT',
         Tags={ DestOwned=true, },
     },
-    WanderAroundSpace = {
-        ScoreMods={BaseScore=.002, } ,
-        ClassPath='Utility.Tasks.WanderAround',
-        Prerequisites={ Spacewalking=true, EmptyHands=true },
-        UIText='UITASK001TEXT',
-    },
+    WanderAroundSpace = _h1({BaseScore=.002, } , 'Utility.Tasks.WanderAround', { Spacewalking=true, EmptyHands=true }, 'UITASK001TEXT'),
     Explore = {
         Needs={ Duty=2, },
         ClassPath='Utility.Tasks.Patrol',
@@ -86,27 +86,9 @@ local tAdvertisedActivities=
         Prerequisites={ EmptyHands=true },
         UIText='UITASK009TEXT',
 	},
-    BuildEnvObject = {
-        Needs={ Duty=10, },
-        ClassPath='Utility.Tasks.BuildEnvObject',
-        Tags={WorkShift=true,Job=Character.BUILDER,},
-        Prerequisites={ EmptyHands=true },
-        UIText='UITASK010TEXT',
-    },
-    DestroyEnvObject = {
-        Needs={ Duty=10, },
-        ClassPath='Utility.Tasks.DestroyEnvObject',
-        Tags={WorkShift=true,Job=Character.BUILDER,},
-        Prerequisites={ EmptyHands=true },
-        UIText='UITASK011TEXT',
-    },
-    TearDownEnvObjectForResearch = {
-        Needs={ Duty=20, },
-        ClassPath='Utility.Tasks.DestroyEnvObject',
-        Tags={WorkShift=true,Job=Character.SCIENTIST,},
-        Prerequisites={ EmptyHands=true },
-        UIText='UITASK011TEXT',
-    },
+    BuildEnvObject = _h2({ Duty=10, }, 'Utility.Tasks.BuildEnvObject', {WorkShift=true,Job=Character.BUILDER,}, { EmptyHands=true }, 'UITASK010TEXT'),
+    DestroyEnvObject = _h2({ Duty=10, }, 'Utility.Tasks.DestroyEnvObject', {WorkShift=true,Job=Character.BUILDER,}, { EmptyHands=true }, 'UITASK011TEXT'),
+    TearDownEnvObjectForResearch = _h2({ Duty=20, }, 'Utility.Tasks.DestroyEnvObject', {WorkShift=true,Job=Character.SCIENTIST,}, { EmptyHands=true }, 'UITASK011TEXT'),
     MaintainEnvObject = {
         Needs={ Duty=8, },
         ClassPath='Utility.Tasks.MaintainEnvObject',
@@ -173,13 +155,7 @@ local tAdvertisedActivities=
         Prerequisites={ HeldItem='Rock', Spacewalking=false,},
         UIText='UITASK017TEXT',
     },
-    HarvestAndDeliverFood = {
-        Needs={ Duty=7, },
-        ClassPath='Utility.Tasks.HarvestAndDeliverFood',
-        Tags={WorkShift=true,DestOwned=true,DestSafe=true,Job=Character.BOTANIST,},
-        Prerequisites={ EmptyHands=true },
-        UIText='UITASK057TEXT',
-    },
+    HarvestAndDeliverFood = _h2({ Duty=7, }, 'Utility.Tasks.HarvestAndDeliverFood', {WorkShift=true,DestOwned=true,DestSafe=true,Job=Character.BOTANIST,}, { EmptyHands=true }, 'UITASK057TEXT'),
     MaintainPlants = {
         Needs={ Duty=5, },
         ClassPath='Utility.Tasks.MaintainPlants',
@@ -224,13 +200,7 @@ local tAdvertisedActivities=
         Prerequisites={ HeldItem='ResearchDatacube', Spacewalking=false, HeldItemInDanger='ResearchDatacube' },
         UIText='UITASK063TEXT',
     },
-    BedHeal = {
-        Needs={ Duty=16, },
-        Tags={WorkShift=true,DestOwned=true, DestSafe=true,Job=Character.DOCTOR, },
-        ClassPath='Utility.Tasks.BedHeal',
-        Prerequisites={ EmptyHands=true,},
-        UIText='UITASK066TEXT',
-    },
+    BedHeal = _h3({ Duty=16, }, {WorkShift=true,DestOwned=true, DestSafe=true,Job=Character.DOCTOR, }, 'Utility.Tasks.BedHeal', { EmptyHands=true,}, 'UITASK066TEXT'),
     GetFieldScanned = {
         Needs={ Duty=3, Social=3 },
         ScoreMods={BaseScore=10,},
@@ -239,20 +209,8 @@ local tAdvertisedActivities=
         Prerequisites={ },
         UIText='UITASK069TEXT',
     },
-    FieldScanAndHeal = {
-        Needs={ Duty=4, },
-        Tags={WorkShift=true,DestOwned=true, DestSafe=true,Job=Character.DOCTOR,},
-        ClassPath='Utility.Tasks.FieldScanAndHeal',
-        Prerequisites={ EmptyHands=true,},
-        UIText='UITASK067TEXT',
-    },
-    CheckInToHospital={
-        Needs={ },
-        Tags={DestOwned=true, DestSafe=true,},
-        ClassPath='Utility.Tasks.CheckInToHospital',
-        Prerequisites={ EmptyHands=true,},
-        UIText='UITASK068TEXT',
-    },
+    FieldScanAndHeal = _h3({ Duty=4, }, {WorkShift=true,DestOwned=true, DestSafe=true,Job=Character.DOCTOR,}, 'Utility.Tasks.FieldScanAndHeal', { EmptyHands=true,}, 'UITASK067TEXT'),
+    CheckInToHospital= _h3({ }, {DestOwned=true, DestSafe=true,}, 'Utility.Tasks.CheckInToHospital', { EmptyHands=true,}, 'UITASK068TEXT'),
     DropOffCorpse = {
         Needs={ Duty=6, },
         ScoreMods={},
@@ -261,33 +219,15 @@ local tAdvertisedActivities=
         Prerequisites={ HeldItem='Corpse' },
         UIText='UITASK071TEXT',
     },
-    Patrol = {
-        Needs={ Duty=2, },
-        ClassPath='Utility.Tasks.Patrol',
-        Tags={WorkShift=true,DestOwned=true,Job=Character.EMERGENCY,},
-        Prerequisites={ Spacewalking=false, EmptyHands=true },
-        UIText='UITASK003TEXT',
-    },
+    Patrol = _h2({ Duty=2, }, 'Utility.Tasks.Patrol', {WorkShift=true,DestOwned=true,Job=Character.EMERGENCY,}, { Spacewalking=false, EmptyHands=true }, 'UITASK003TEXT'),
     Cuff = {
         Needs={ Duty=10, },
         ClassPath='Utility.Tasks.Cuff',
         Tags={WorkShift=true,Job=Character.EMERGENCY,},
         Prerequisites={ EmptyHands=true },
     },
-    OpenPub = {
-		Needs={ Duty=8, },
-        Tags={WorkShift=true,DestOwned=true, DestSafe=true,Job=Character.BARTENDER,},
-        ClassPath='Utility.Tasks.MaintainPub',
-        Prerequisites={ EmptyHands=true,},
-        UIText='UITASK065TEXT',
-	},
-    MaintainPub = {
-		Needs={ Duty=1, },
-        Tags={WorkShift=true,DestOwned=true,DestSafe=true,Job=Character.BARTENDER,},
-        ClassPath='Utility.Tasks.MaintainPub',
-        Prerequisites={ EmptyHands=true },
-        UIText='UITASK064TEXT',
-	},
+    OpenPub = _h3({ Duty=8, }, {WorkShift=true,DestOwned=true, DestSafe=true,Job=Character.BARTENDER,}, 'Utility.Tasks.MaintainPub', { EmptyHands=true,}, 'UITASK065TEXT'),
+    MaintainPub = _h3({ Duty=1, }, {WorkShift=true,DestOwned=true,DestSafe=true,Job=Character.BARTENDER,}, 'Utility.Tasks.MaintainPub', { EmptyHands=true }, 'UITASK064TEXT'),
     ServeDrink = {
 		Needs={ Duty=4, Social=2, Amusement=1 },
         Tags={WorkShift=true,DestSafe=true,Job=Character.BARTENDER,},
@@ -397,18 +337,8 @@ local tAdvertisedActivities=
 		    DestSafe=true,
         },
     },
-    FleeEmergencyAlarm = {
-        ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=100 },
-        ClassPath='Utility.Tasks.RunTo',
-        Prerequisites={ },
-        UIText='UITASK026TEXT',
-    },
-    FleeTemperTantrum = {
-        ScoreMods={Priority=tPriorities.SURVIVAL_LOW, BaseScore=1 },
-        ClassPath='Utility.Tasks.RunTo',
-        Prerequisites={ },
-        UIText='UITASK026TEXT',
-    },
+    FleeEmergencyAlarm = _h1({Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=100 }, 'Utility.Tasks.RunTo', { }, 'UITASK026TEXT'),
+    FleeTemperTantrum = _h1({Priority=tPriorities.SURVIVAL_LOW, BaseScore=1 }, 'Utility.Tasks.RunTo', { }, 'UITASK026TEXT'),
     ExtinguishFireWithTool = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=8, } ,
         PersonalityMods={ nBravery={.05,1} },
@@ -429,26 +359,9 @@ local tAdvertisedActivities=
         JobForXP=Character.EMERGENCY,
         Tags={DestOwned=true,},
     },
-    FireFleeArea = {
-        ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=4, } ,
-        PersonalityMods={ nBravery={.2,1} },
-        ClassPath='Utility.Tasks.RunTo',
-        Prerequisites={ },
-        UIText='UITASK020TEXT',
-    },
-    PanicFire = {
-        ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=2, } ,
-        PersonalityMods={ nBravery={0,.4} },
-        ClassPath='Utility.Tasks.PanicFire',
-        Prerequisites={ },
-        UIText='UITASK021TEXT',
-    },
-    PanicOnFire = {
-        ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL,} ,
-        ClassPath='Utility.Tasks.PanicOnFire',
-        Prerequisites={ EmptyHands=true },
-        UIText='UITASK022TEXT',
-    },
+    FireFleeArea = _h4({Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=4, } , { nBravery={.2,1} }, 'Utility.Tasks.RunTo', { }, 'UITASK020TEXT'),
+    PanicFire = _h4({Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=2, } , { nBravery={0,.4} }, 'Utility.Tasks.PanicFire', { }, 'UITASK021TEXT'),
+    PanicOnFire = _h1({Priority=tPriorities.SURVIVAL_NORMAL,} , 'Utility.Tasks.PanicOnFire', { EmptyHands=true }, 'UITASK022TEXT'),
     RangedAttackThreat = {
         ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=120, } ,
         PersonalityMods={ nBravery={.1,1} },
@@ -478,38 +391,11 @@ local tAdvertisedActivities=
         UIText='UITASK024TEXT',
         bAllowHostilePathing=true,
     },
-    Brawl = {
-        ScoreMods={Priority=tPriorities.SURVIVAL_LOW, BaseScore=60, },
-        ClassPath='Utility.Tasks.AttackEnemy',
-        Prerequisites={ EmptyHands=true, },
-        UIText='UITASK076TEXT',
-    },
-    FleeThreat = {
-        ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=110, },
-        PersonalityMods={ nBravery={.4,1} },
-        ClassPath='Utility.Tasks.RunTo',
-        Prerequisites={ EmptyHandsOrCuffed=true, },
-        UIText='UITASK026TEXT',
-    },
-    PanicThreat = {
-        ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=110 },
-        PersonalityMods={ nBravery={0,.2} },
-        ClassPath='Utility.Tasks.PanicFire',
-        Prerequisites={ EmptyHands=true },
-        UIText='UITASK025TEXT',
-    },
-    OxygenFleeArea = {
-        ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=200} ,
-        ClassPath='Utility.Tasks.RunTo',
-        UIText='UITASK027TEXT',
-    },
-    PanicOxygen = {
-        ScoreMods={Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=1 } ,
-        PersonalityMods={ nBravery={0,.4} },
-        ClassPath='Utility.Tasks.PanicFire',
-        Prerequisites={ EmptyHands=true },
-        UIText='UITASK039TEXT',
-    },
+    Brawl = _h1({Priority=tPriorities.SURVIVAL_LOW, BaseScore=60, }, 'Utility.Tasks.AttackEnemy', { EmptyHands=true, }, 'UITASK076TEXT'),
+    FleeThreat = _h4({Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=110, }, { nBravery={.4,1} }, 'Utility.Tasks.RunTo', { EmptyHandsOrCuffed=true, }, 'UITASK026TEXT'),
+    PanicThreat = _h4({Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=110 }, { nBravery={0,.2} }, 'Utility.Tasks.PanicFire', { EmptyHands=true }, 'UITASK025TEXT'),
+    OxygenFleeArea = _h5({Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=200} , 'Utility.Tasks.RunTo', 'UITASK027TEXT'),
+    PanicOxygen = _h4({Priority=tPriorities.SURVIVAL_NORMAL, BaseScore=1 } , { nBravery={0,.4} }, 'Utility.Tasks.PanicFire', { EmptyHands=true }, 'UITASK039TEXT'),
     IncapacitatedOnFloor = {
         ClassPath='Utility.Tasks.Incapacitated',
         UIText='UITASK070TEXT',
@@ -535,16 +421,8 @@ local tAdvertisedActivities=
         ClassPath='Utility.Tasks.Sabotage',
         Prerequisites={ EmptyHands=true },
     },
-    Breathe = {
-        ScoreMods={BaseScore=0.001} ,
-        ClassPath='Utility.Tasks.Breathe',
-        UIText='UITASK029TEXT',
-    },
-    FallbackDropEverything = {
-        ScoreMods={BaseScore=0.002},
-        ClassPath='Utility.Tasks.DropEverything',
-        UIText='UITASK032TEXT',
-    },
+    Breathe = _h5({BaseScore=0.001} , 'Utility.Tasks.Breathe', 'UITASK029TEXT'),
+    FallbackDropEverything = _h5({BaseScore=0.002}, 'Utility.Tasks.DropEverything', 'UITASK032TEXT'),
     GoOutsideStandalone = {
         ClassPath='Utility.Tasks.RunTo',
         UIText='UITASK036TEXT',
@@ -578,17 +456,8 @@ local tAdvertisedActivities=
         UIText='UITASK001TEXT',
         bAllowHostilePathing=true,
     },
-    RaiderOxygenFleeArea = {
-        ScoreMods={ BaseScore=3 },
-        ClassPath='Utility.Tasks.RunTo',
-        UIText='UITASK027TEXT',
-    },
-    RaiderFleeThreat = {
-        ScoreMods={BaseScore=.2, },
-        ClassPath='Utility.Tasks.RunTo',
-        Prerequisites={  },
-        UIText='UITASK026TEXT',
-    },
+    RaiderOxygenFleeArea = _h5({ BaseScore=3 }, 'Utility.Tasks.RunTo', 'UITASK027TEXT'),
+    RaiderFleeThreat = _h1({BaseScore=.2, }, 'Utility.Tasks.RunTo', {  }, 'UITASK026TEXT'),
     DropEverything = {
         ClassPath='Utility.Tasks.DropEverything',
         Needs={ Duty=-10, },
@@ -647,16 +516,8 @@ local tAdvertisedActivities=
         UIText='UITASK030TEXT',
         bAllowHostilePathing=true,
     },
-    VacuumPull = {
-        ScoreMods={Priority=tPriorities.PUPPET,} ,
-        ClassPath='Utility.Tasks.VacuumPull',
-        UIText='UITASK037TEXT',
-    },
-    Puppet = {
-        ScoreMods={Priority=tPriorities.PUPPET,} ,
-        ClassPath='Utility.Tasks.Puppet',
-        UIText='UITASK038TEXT',
-    },
+    VacuumPull = _h5({Priority=tPriorities.PUPPET,} , 'Utility.Tasks.VacuumPull', 'UITASK037TEXT'),
+    Puppet = _h5({Priority=tPriorities.PUPPET,} , 'Utility.Tasks.Puppet', 'UITASK038TEXT'),
 }
 local OptionData=
 {

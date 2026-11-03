@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4,a5) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,color=a5} end
 local Gui = require('UI.Gui')
 local nStatLabelMargin, nStatTextMargin  = 35, 65
 local nInspectorWidth = 418
@@ -110,14 +111,7 @@ return
             scale = { nGraphLabelWidth-10, nInspectorWidth-25 },
             color = Gui.AMBER_OPAQUE_DIM,
         },
-		{
-            key = 'SelfEsteemIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_self_esteem',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - nIndentX, nSelfEsteemY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+		_h1('SelfEsteemIcon', 'uiTexture', 'ui_icon_self_esteem', 'UI/Inspector', { nStatLabelMargin - nIndentX, nSelfEsteemY + nIconOffsetY }, Gui.AMBER),
 		{
             key = 'SelfEsteemLabel',
             type = 'textBox',
@@ -140,14 +134,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		{
-            key = 'RoomSatisfactionIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_room_satisfaction',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - nIndentX, nRoomSatisfactionY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+		_h1('RoomSatisfactionIcon', 'uiTexture', 'ui_icon_room_satisfaction', 'UI/Inspector', { nStatLabelMargin - nIndentX, nRoomSatisfactionY + nIconOffsetY }, Gui.AMBER),
 		{
             key = 'RoomSatisfactionLabel',
             type = 'textBox',
@@ -170,14 +157,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-		{
-            key = 'JobSatisfactionIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_room_satisfaction',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - nIndentX, nJobSatisfactionY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+		_h1('JobSatisfactionIcon', 'uiTexture', 'ui_icon_room_satisfaction', 'UI/Inspector', { nStatLabelMargin - nIndentX, nJobSatisfactionY + nIconOffsetY }, Gui.AMBER),
 		{
             key = 'JobSatisfactionLabel',
             type = 'textBox',
@@ -200,14 +180,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'PersonalityIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_psych',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - nIndentX, nPersonalityY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('PersonalityIcon', 'uiTexture', 'ui_icon_psych', 'UI/Inspector', { nStatLabelMargin - nIndentX, nPersonalityY + nIconOffsetY }, Gui.AMBER),
 		{
             key = 'PersonalityLabel',
             type = 'textBox',
@@ -230,14 +203,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'GraphIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_needs',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - nIndentX, nGraphY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('GraphIcon', 'uiTexture', 'ui_icon_needs', 'UI/Inspector', { nStatLabelMargin - nIndentX, nGraphY + nIconOffsetY }, Gui.AMBER),
 		{
             key = 'GraphHeadLabel',
             type = 'textBox',

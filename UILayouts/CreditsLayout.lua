@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4,a5,a6,a7) return {key=a0,type=a1,pos=a2,text=a3,style=a4,rect=a5,hAlign=a6,color=a7} end
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -469,26 +470,8 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'SpaceTeamLeft',
-            type = 'textBox',
-            pos = { LEFT_BOX_X, SPACEBASE_Y - SPACEBASE_HEIGHT + 50},
-            text = SB_TEAM_LEFT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, TWO_BOX_WIDTH, SPACEBASE_HEIGHT },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            color = Gui.WHITE,
-        },
-        {
-            key = 'SpaceTeamRight',
-            type = 'textBox',
-            pos = { RIGHT_BOX_X, SPACEBASE_Y - SPACEBASE_HEIGHT + 50 },
-            text = SB_TEAM_RIGHT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, TWO_BOX_WIDTH, SPACEBASE_HEIGHT },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.WHITE,
-        },
+        _h1('SpaceTeamLeft', 'textBox', { LEFT_BOX_X, SPACEBASE_Y - SPACEBASE_HEIGHT + 50}, SB_TEAM_LEFT, 'dosissemibold30', { 0, 0, TWO_BOX_WIDTH, SPACEBASE_HEIGHT }, MOAITextBox.RIGHT_JUSTIFY, Gui.WHITE),
+        _h1('SpaceTeamRight', 'textBox', { RIGHT_BOX_X, SPACEBASE_Y - SPACEBASE_HEIGHT + 50 }, SB_TEAM_RIGHT, 'dosissemibold30', { 0, 0, TWO_BOX_WIDTH, SPACEBASE_HEIGHT }, MOAITextBox.LEFT_JUSTIFY, Gui.WHITE),
         {
             key = 'DoubleFineHeader',
             type = 'textBox',
@@ -500,26 +483,8 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'DoubleFineLeft',
-            type = 'textBox',
-            pos = { LEFT_BOX_X, DF_Y - DF_HEIGHT + 50 },
-            text = DF_TEAM_LEFT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, TWO_BOX_WIDTH, DF_HEIGHT },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            color = Gui.WHITE,
-        },
-        {
-            key = 'DoubleFineRight',
-            type = 'textBox',
-            pos = { RIGHT_BOX_X, DF_Y - DF_HEIGHT + 50 },
-            text = DF_TEAM_RIGHT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, TWO_BOX_WIDTH, DF_HEIGHT },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.WHITE,
-        },
+        _h1('DoubleFineLeft', 'textBox', { LEFT_BOX_X, DF_Y - DF_HEIGHT + 50 }, DF_TEAM_LEFT, 'dosissemibold30', { 0, 0, TWO_BOX_WIDTH, DF_HEIGHT }, MOAITextBox.RIGHT_JUSTIFY, Gui.WHITE),
+        _h1('DoubleFineRight', 'textBox', { RIGHT_BOX_X, DF_Y - DF_HEIGHT + 50 }, DF_TEAM_RIGHT, 'dosissemibold30', { 0, 0, TWO_BOX_WIDTH, DF_HEIGHT }, MOAITextBox.LEFT_JUSTIFY, Gui.WHITE),
         {
             key = 'IndiefundHeader',
             type = 'textBox',

@@ -1,3 +1,5 @@
+local function _h1(a0,a1) return {key=a0,hidden=a1} end
+local function _h2(a0,a1) return {key=a0,color=a1} end
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -29,49 +31,19 @@ return
     {
         onShowMatterCost =
         {
-            {
-                key = 'CostBackground',
-                hidden = false,
-            },
-            {
-                key = 'CostBackgroundEndCap',
-                hidden = false,
-            },
-            {
-                key = 'CostVerticalRule',
-                hidden = false,
-            },
-            {
-                key = 'CostIconMatter',
-                hidden = false,
-            },
-            {
-                key = 'CostText',
-                hidden = false,
-            },
+            _h1('CostBackground', false),
+            _h1('CostBackgroundEndCap', false),
+            _h1('CostVerticalRule', false),
+            _h1('CostIconMatter', false),
+            _h1('CostText', false),
         },
         onHideMatterCost =
         {
-            {
-                key = 'CostBackground',
-                hidden = true,
-            },
-            {
-                key = 'CostBackgroundEndCap',
-                hidden = true,
-            },
-            {
-                key = 'CostVerticalRule',
-                hidden = true,
-            },
-            {
-                key = 'CostIconMatter',
-                hidden = true,
-            },
-            {
-                key = 'CostText',
-                hidden = true,
-            },
+            _h1('CostBackground', true),
+            _h1('CostBackgroundEndCap', true),
+            _h1('CostVerticalRule', true),
+            _h1('CostIconMatter', true),
+            _h1('CostText', true),
         },
     },
     tElements =
@@ -91,50 +63,26 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'BackButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('BackButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'BackButton',
-                    color = AMBER,
-                },
+                _h2('BackButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'BackButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'BackLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'BackHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('BackButton', Gui.AMBER),
+                _h2('BackLabel', { 0, 0, 0 }),
+                _h2('BackHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'BackButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'BackLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'BackHotkey',
-                    color = Gui.AMBER,
-                },
+                _h2('BackButton', Gui.BLACK),
+                _h2('BackLabel', Gui.AMBER),
+                _h2('BackHotkey', Gui.AMBER),
             },
         },
         {
@@ -178,44 +126,20 @@ return
             color = Gui.BLACK,
             onHoverOn =
             {
-                {
-                    key = 'CancelButton',
-                    color = CONSTRUCT_CANCEL,
-                },
-                {
-                    key = 'CancelIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CancelLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CancelHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('CancelButton', CONSTRUCT_CANCEL),
+                _h2('CancelIcon', { 0, 0, 0 }),
+                _h2('CancelLabel', { 0, 0, 0 }),
+                _h2('CancelHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'CancelButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'CancelIcon',
-                    color = CONSTRUCT_CANCEL,
-                },
-                {
-                    key = 'CancelLabel',
-                    color = CONSTRUCT_CANCEL,
-                },
-                {
-                    key = 'CancelHotkey',
-                    color = CONSTRUCT_CANCEL,
-                },
+                _h2('CancelButton', Gui.BLACK),
+                _h2('CancelIcon', CONSTRUCT_CANCEL),
+                _h2('CancelLabel', CONSTRUCT_CANCEL),
+                _h2('CancelHotkey', CONSTRUCT_CANCEL),
             },
         },
         {
@@ -226,98 +150,38 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'ConfirmButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('ConfirmButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'ConfirmButton',
-                    color = AMBER,
-                },
+                _h2('ConfirmButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'ConfirmButton',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'ConfirmLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'ConfirmIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'ConfirmHotkey',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostBackground',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostBackgroundEndCap',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostVerticalRule',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostIconMatter',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostText',
-                    color = { 0, 0, 0 },
-                },
+                _h2('ConfirmButton', CONSTRUCT_CONFIRM),
+                _h2('ConfirmLabel', { 0, 0, 0 }),
+                _h2('ConfirmIcon', { 0, 0, 0 }),
+                _h2('ConfirmHotkey', { 0, 0, 0 }),
+                _h2('CostBackground', CONSTRUCT_CONFIRM),
+                _h2('CostBackgroundEndCap', CONSTRUCT_CONFIRM),
+                _h2('CostVerticalRule', { 0, 0, 0 }),
+                _h2('CostIconMatter', { 0, 0, 0 }),
+                _h2('CostText', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'ConfirmButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'ConfirmLabel',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'ConfirmIcon',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'ConfirmHotkey',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostBackground',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostBackgroundEndCap',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostVerticalRule',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostIconMatter',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostText',
-                    color = CONSTRUCT_CONFIRM,
-                },
+                _h2('ConfirmButton', Gui.BLACK),
+                _h2('ConfirmLabel', CONSTRUCT_CONFIRM),
+                _h2('ConfirmIcon', CONSTRUCT_CONFIRM),
+                _h2('ConfirmHotkey', CONSTRUCT_CONFIRM),
+                _h2('CostBackground', { 0, 0, 0 }),
+                _h2('CostBackgroundEndCap', { 0, 0, 0 }),
+                _h2('CostVerticalRule', CONSTRUCT_CONFIRM),
+                _h2('CostIconMatter', CONSTRUCT_CONFIRM),
+                _h2('CostText', CONSTRUCT_CONFIRM),
             },
         },
         {

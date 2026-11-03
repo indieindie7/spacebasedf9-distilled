@@ -1,3 +1,5 @@
+local function _h1(a0,a1,a2,a3,a4) return {key=a0,type=a1,pos=a2,scale=a3,color=a4} end
+local function _h2(a0,a1,a2,a3,a4,a5) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,color=a5} end
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -53,27 +55,9 @@ return
     },
     tElements =
     {
-        {
-            key = 'PictureLargeBG',
-            type = 'onePixel',
-            pos = { 0, -163 },
-            scale = { nButtonWidth, 106 },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'NameEditBG',
-            type = 'onePixelButton',
-            pos = { 0, -176 },
-            scale = { nButtonWidth, 35 },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'PictureBG',
-            type = 'onePixel',
-            pos = { 30, -144 },
-            scale = { 110, 20 },
-            color = Gui.AMBER,
-        },
+        _h1('PictureLargeBG', 'onePixel', { 0, -163 }, { nButtonWidth, 106 }, Gui.AMBER),
+        _h1('NameEditBG', 'onePixelButton', { 0, -176 }, { nButtonWidth, 35 }, Gui.AMBER),
+        _h1('PictureBG', 'onePixel', { 30, -144 }, { 110, 20 }, Gui.AMBER),
         {
             key = 'PictureBGImage',
             type = 'uiTexture',
@@ -179,13 +163,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = { 0, 0, 0 },
         },
-        {
-            key = 'StatsBG',
-            type = 'onePixel',
-            pos = { 0, -268 },
-            scale = { nButtonWidth, 152 },
-            color = Gui.AMBER_OPAQUE,
-        },
+        _h1('StatsBG', 'onePixel', { 0, -268 }, { nButtonWidth, 152 }, Gui.AMBER_OPAQUE),
         {
             key = 'HealthStatButton',
             type = 'onePixelButton',
@@ -246,14 +224,7 @@ return
                 { key = 'ActivityButton', color = Gui.AMBER_OPAQUE }
             },
         },
-        {
-            key = 'HealthIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nLabelX - 30, nTextStartY - 4 },
-            color = Gui.AMBER,
-        },
+        _h2('HealthIcon', 'uiTexture', 'ui_icon_health', 'UI/Inspector', { nLabelX - 30, nTextStartY - 4 }, Gui.AMBER),
         {
             key = 'HealthLabel',
             type = 'textBox',
@@ -277,14 +248,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'MoraleIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_morale',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nLabelX - 30, nTextStartY - nLineHeight - 4 },
-            color = Gui.AMBER,
-        },
+        _h2('MoraleIcon', 'uiTexture', 'ui_icon_morale', 'UI/Inspector', { nLabelX - 30, nTextStartY - nLineHeight - 4 }, Gui.AMBER),
         {
             key = 'MoraleLabel',
             type = 'textBox',
@@ -308,14 +272,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'DeathIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_enemy',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nLabelX - 30, nTextStartY - nLineHeight - 4 },
-            color = Gui.RED,
-        },
+        _h2('DeathIcon', 'uiTexture', 'ui_icon_enemy', 'UI/Inspector', { nLabelX - 30, nTextStartY - nLineHeight - 4 }, Gui.RED),
         {
             key = 'DeathLabel',
             type = 'textBox',
@@ -339,14 +296,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'LocationIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_location',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nLabelX - 30, nTextStartY - (nLineHeight*2) - 4 },
-            color = Gui.AMBER,
-        },
+        _h2('LocationIcon', 'uiTexture', 'ui_icon_location', 'UI/Inspector', { nLabelX - 30, nTextStartY - (nLineHeight*2) - 4 }, Gui.AMBER),
         {
             key = 'LocationLabel',
             type = 'textBox',
@@ -370,14 +320,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'ActivityIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nLabelX - 30, nTextStartY - (nLineHeight*3) - 4 },
-            color = Gui.AMBER,
-        },
+        _h2('ActivityIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nLabelX - 30, nTextStartY - (nLineHeight*3) - 4 }, Gui.AMBER),
         {
             key = 'ActivityLabel',
             type = 'textBox',
@@ -401,20 +344,8 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'TabBGSpacer',
-            type = 'onePixel',
-            pos = { nTabWidth * 3, -420 },
-            scale = { nTabWidth*2 + 3, nTabHeight },
-            color = Gui.AMBER_OPAQUE,
-        },
-        {
-            key = 'TabLineSpacer',
-            type = 'onePixel',
-            pos = { nTabWidth * 3, -420-nTabHeight },
-            scale = { nTabWidth*2 + 3, nTabLineHeight },
-            color = Gui.AMBER,
-        },
+        _h1('TabBGSpacer', 'onePixel', { nTabWidth * 3, -420 }, { nTabWidth*2 + 3, nTabHeight }, Gui.AMBER_OPAQUE),
+        _h1('TabLineSpacer', 'onePixel', { nTabWidth * 3, -420-nTabHeight }, { nTabWidth*2 + 3, nTabLineHeight }, Gui.AMBER),
         {
             key = 'TabbedPane',
             type = 'tabbedPane',

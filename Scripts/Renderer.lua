@@ -1,3 +1,4 @@
+local function _h1(a0) return {RenderToBuffer=a0} end
 local Delegate = require('DFMoai.Delegate')
 local DFGraphics = require('DFCommon.Graphics')
 local DFFile = require('DFCommon.File')
@@ -12,58 +13,24 @@ local rBackgroundCamera = nil
 local tLayers = {
     DebugScreenSpace = {},
     DebugWindow = {},
-    Background = {
-        RenderToBuffer = true,
-    },
-    BuildGrid = {
-        RenderToBuffer = true,
-    },
-    WorldOutlines = {
-        RenderToBuffer = true,
-    },
-    WorldBackground = {
-        RenderToBuffer = true,
-    },
-    WorldFloor = {
-        RenderToBuffer = true,
-    },
-    Character = {
-        RenderToBuffer = true,
-    },
-    WorldWall = {
-        RenderToBuffer = true,
-    },
-    WorldCeiling = {
-        RenderToBuffer = "SceneForeground",
-    },
-    Cursor = {
-        RenderToBuffer = "SceneForeground",
-    },
-    Light = {
-        RenderToBuffer = "SceneForeground",
-    },
-    WorldAnalysis = {
-        RenderToBuffer = "SceneForeground",
-    },
+    Background = _h1(true),
+    BuildGrid = _h1(true),
+    WorldOutlines = _h1(true),
+    WorldBackground = _h1(true),
+    WorldFloor = _h1(true),
+    Character = _h1(true),
+    WorldWall = _h1(true),
+    WorldCeiling = _h1("SceneForeground"),
+    Cursor = _h1("SceneForeground"),
+    Light = _h1("SceneForeground"),
+    WorldAnalysis = _h1("SceneForeground"),
     Post = {},
-    UIBackground = {
-        RenderToBuffer = true,
-    },
-    UI = {
-        RenderToBuffer = "UI",
-    },
-    UIScrollLayerLeft = {
-        RenderToBuffer = "UI",
-    },
-    UIScrollLayerRight = {
-        RenderToBuffer = "UI",
-    },
-    UIForeground = {
-        RenderToBuffer = "UI",
-    },
-    UIEffectMask = {
-        RenderToBuffer = true,
-    },
+    UIBackground = _h1(true),
+    UI = _h1("UI"),
+    UIScrollLayerLeft = _h1("UI"),
+    UIScrollLayerRight = _h1("UI"),
+    UIForeground = _h1("UI"),
+    UIEffectMask = _h1(true),
     UIOverlay = {},
 }
 local tVertexFormats = {

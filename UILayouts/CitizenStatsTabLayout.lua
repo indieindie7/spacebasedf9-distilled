@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4,a5) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,color=a5} end
 local Gui = require('UI.Gui')
 local nStatLabelMargin = 35
 local nInspectorWidth = 418
@@ -236,14 +237,7 @@ return
             scale = { nInspectorWidth, nHeadingHeight },
             color = Gui.AMBER_OPAQUE_DIM,
         },
-        {
-            key = 'JoinDateIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nJoinDateY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('JoinDateIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nJoinDateY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'JoinDateLabel',
             type = 'textBox',
@@ -266,14 +260,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'IllnessIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nIllnessY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('IllnessIcon', 'uiTexture', 'ui_icon_health', 'UI/Inspector', { nStatLabelMargin - 30, nIllnessY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'IllnessLabel',
             type = 'textBox',
@@ -296,14 +283,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'InjuryIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nInjuryY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('InjuryIcon', 'uiTexture', 'ui_icon_health', 'UI/Inspector', { nStatLabelMargin - 30, nInjuryY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'InjuryLabel',
             type = 'textBox',
@@ -326,14 +306,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'InventoryIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nInventoryY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('InventoryIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nInventoryY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'InventoryLabel',
             type = 'textBox',
@@ -356,14 +329,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'FriendsIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_friend',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nFriendsY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('FriendsIcon', 'uiTexture', 'ui_icon_friend', 'UI/Inspector', { nStatLabelMargin - 30, nFriendsY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'FriendsLabel',
             type = 'textBox',
@@ -386,14 +352,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'EnemiesIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_enemy',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nEnemiesY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('EnemiesIcon', 'uiTexture', 'ui_icon_enemy', 'UI/Inspector', { nStatLabelMargin - 30, nEnemiesY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'EnemiesLabel',
             type = 'textBox',
@@ -416,14 +375,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'HobbyIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nHobbyY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('HobbyIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nHobbyY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'HobbyLabel',
             type = 'textBox',
@@ -446,14 +398,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'FoodIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_food',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nFoodY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('FoodIcon', 'uiTexture', 'ui_icon_food', 'UI/Inspector', { nStatLabelMargin - 30, nFoodY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'FoodLabel',
             type = 'textBox',
@@ -476,14 +421,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'BandIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_band',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nBandY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('BandIcon', 'uiTexture', 'ui_icon_band', 'UI/Inspector', { nStatLabelMargin - 30, nBandY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'BandLabel',
             type = 'textBox',
@@ -506,14 +444,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'StuffIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nStuffY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('StuffIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nStuffY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'StuffLabel',
             type = 'textBox',
@@ -536,14 +467,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'HostileKillsIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nJoinDateY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('HostileKillsIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nJoinDateY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'HostileKillsLabel',
             type = 'textBox',
@@ -566,14 +490,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'FlavorText1Icon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nIllnessY + nIconOffsetY },
-            color = Gui.AMBER,
-        },
+        _h1('FlavorText1Icon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nIllnessY + nIconOffsetY }, Gui.AMBER),
         {
             key = 'FlavorText1Label',
             type = 'textBox',

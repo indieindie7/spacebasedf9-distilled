@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4,a5,a6) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,color=a5,scale=a6} end
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -273,51 +274,11 @@ return
                 { key = 'HeavyDoorHotkey', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'CancelIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_decline',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nCancelIconStartY },
-            color = CONSTRUCT_CANCEL,
-            scale = { nIconScale, nIconScale }
-        },
-        {
-            key = 'ConfirmIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_confirm',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nCancelIconStartY - nButtonHeight },
-            color = CONSTRUCT_CONFIRM,
-            scale = { nIconScale, nIconScale }
-        },
-        {
-            key = 'DoorIcon',
-            type = 'uiTexture',
-            textureName = 'icon_door',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY },
-            color = Gui.AMBER,
-            scale = { nIconScale, nIconScale }
-        },
-        {
-            key = 'AirlockIcon',
-            type = 'uiTexture',
-            textureName = 'icon_airlock_door',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - nButtonHeight },
-            color = Gui.AMBER,
-            scale = { nIconScale, nIconScale }
-        },
-        {
-            key = 'HeavyDoorIcon',
-            type = 'uiTexture',
-            textureName = 'icon_heavydoor',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - nButtonHeight*2 },
-            color = Gui.AMBER,
-            scale = { nIconScale, nIconScale }
-        },
+        _h1('CancelIcon', 'uiTexture', 'ui_iconIso_decline', 'UI/Shared', { nIconX, nCancelIconStartY }, CONSTRUCT_CANCEL, { nIconScale, nIconScale }),
+        _h1('ConfirmIcon', 'uiTexture', 'ui_iconIso_confirm', 'UI/Shared', { nIconX, nCancelIconStartY - nButtonHeight }, CONSTRUCT_CONFIRM, { nIconScale, nIconScale }),
+        _h1('DoorIcon', 'uiTexture', 'icon_door', 'UI/Shared', { nIconX, nIconStartY }, Gui.AMBER, { nIconScale, nIconScale }),
+        _h1('AirlockIcon', 'uiTexture', 'icon_airlock_door', 'UI/Shared', { nIconX, nIconStartY - nButtonHeight }, Gui.AMBER, { nIconScale, nIconScale }),
+        _h1('HeavyDoorIcon', 'uiTexture', 'icon_heavydoor', 'UI/Shared', { nIconX, nIconStartY - nButtonHeight*2 }, Gui.AMBER, { nIconScale, nIconScale }),
         {
             key = 'CancelLabel',
             type = 'textBox',

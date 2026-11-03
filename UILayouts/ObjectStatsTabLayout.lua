@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4,a5) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,color=a5} end
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 418, 98
 local nStatLabelMargin, nStatTextMargin  = 35, 210
@@ -56,14 +57,7 @@ return
 				{ key = 'MaintainerButton', color = Gui.AMBER_OPAQUE_DIM, },
 			},
 		},
-        {
-            key = 'PowerIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nStatsStartY - 4 },
-            color = Gui.AMBER,
-        },
+        _h1('PowerIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nStatsStartY - 4 }, Gui.AMBER),
         {
             key = 'PowerLabel',
             type = 'textBox',
@@ -86,14 +80,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'BuildTimeIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nStatsStartY - nLineSize - 4 },
-            color = Gui.AMBER,
-        },
+        _h1('BuildTimeIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nStatsStartY - nLineSize - 4 }, Gui.AMBER),
         {
             key = 'BuildTimeLabel',
             type = 'textBox',
@@ -116,14 +103,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'BuilderIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_friend',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nStatsStartY - (nLineSize * 2) - 2 },
-            color = Gui.AMBER,
-        },
+        _h1('BuilderIcon', 'uiTexture', 'ui_icon_friend', 'UI/Inspector', { nStatLabelMargin - 30, nStatsStartY - (nLineSize * 2) - 2 }, Gui.AMBER),
         {
             key = 'BuilderLabel',
             type = 'textBox',
@@ -146,14 +126,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'MaintainTimeIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nStatsStartY - (nLineSize * 3) - 4 },
-            color = Gui.AMBER,
-        },
+        _h1('MaintainTimeIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nStatsStartY - (nLineSize * 3) - 4 }, Gui.AMBER),
         {
             key = 'MaintainTimeLabel',
             type = 'textBox',
@@ -176,14 +149,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'MaintainerIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_friend',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nStatsStartY - (nLineSize * 4) - 2 },
-            color = Gui.AMBER,
-        },
+        _h1('MaintainerIcon', 'uiTexture', 'ui_icon_friend', 'UI/Inspector', { nStatLabelMargin - 30, nStatsStartY - (nLineSize * 4) - 2 }, Gui.AMBER),
         {
             key = 'MaintainerLabel',
             type = 'textBox',
@@ -206,14 +172,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'ContentsIcon',
-            type = 'uiTexture',
-            textureName = 'ui_icon_bulletpoint',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { nStatLabelMargin - 30, nStatsStartY - nLineSize * 5 - 6 },
-            color = Gui.AMBER,
-        },
+        _h1('ContentsIcon', 'uiTexture', 'ui_icon_bulletpoint', 'UI/Inspector', { nStatLabelMargin - 30, nStatsStartY - nLineSize * 5 - 6 }, Gui.AMBER),
         {
             key = 'ContentsLabel',
             type = 'textBox',

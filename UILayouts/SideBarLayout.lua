@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4,a5,a6) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,scale=a5,color=a6} end
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -73,15 +74,7 @@ return
                 { key = 'InspectHotkeyExpanded', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'InspectIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_inspect',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY },
-            scale = {nIconScale, nIconScale},
-            color = Gui.AMBER,
-        },
+        _h1('InspectIcon', 'uiTexture', 'ui_iconIso_inspect', 'UI/Shared', { nIconX, nIconStartY }, {nIconScale, nIconScale}, Gui.AMBER),
         {
             key = 'AssignButton',
             type = 'onePixelButton',
@@ -112,15 +105,7 @@ return
                 { key = 'AssignHotkeyExpanded', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'AssignIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_assign',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - nButtonHeight },
-            scale = {nIconScale, nIconScale},
-            color = Gui.AMBER,
-        },
+        _h1('AssignIcon', 'uiTexture', 'ui_iconIso_assign', 'UI/Shared', { nIconX, nIconStartY - nButtonHeight }, {nIconScale, nIconScale}, Gui.AMBER),
         {
             key = 'ResearchButton',
             type = 'onePixelButton',
@@ -151,15 +136,7 @@ return
                 { key = 'ResearchHotkeyExpanded', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'ResearchIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_research',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - nButtonHeight*2 },
-            scale = {nIconScale, nIconScale},
-            color = Gui.AMBER,
-        },
+        _h1('ResearchIcon', 'uiTexture', 'ui_iconIso_research', 'UI/Shared', { nIconX, nIconStartY - nButtonHeight*2 }, {nIconScale, nIconScale}, Gui.AMBER),
         {
             key = 'GoalButton',
             type = 'onePixelButton',
@@ -192,15 +169,7 @@ return
                 { key = 'GoalHotkeyExpanded', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'GoalIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_confirm',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - (nButtonHeight * 3) },
-            scale = {nIconScale, nIconScale},
-            color = Gui.AMBER,
-        },
+        _h1('GoalIcon', 'uiTexture', 'ui_iconIso_confirm', 'UI/Shared', { nIconX, nIconStartY - (nButtonHeight * 3) }, {nIconScale, nIconScale}, Gui.AMBER),
         {
             key = 'ConstructButton',
             type = 'onePixelButton',
@@ -233,15 +202,7 @@ return
                 { key = 'ConstructHotkeyExpanded', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'ConstructIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_construct',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - (nButtonHeight * 4) },
-            scale = {nIconScale, nIconScale},
-            color = Gui.AMBER,
-        },
+        _h1('ConstructIcon', 'uiTexture', 'ui_iconIso_construct', 'UI/Shared', { nIconX, nIconStartY - (nButtonHeight * 4) }, {nIconScale, nIconScale}, Gui.AMBER),
         {
             key = 'MineButton',
             type = 'onePixelButton',
@@ -272,15 +233,7 @@ return
                 { key = 'MineHotkeyExpanded', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'MineIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_mine',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - (nButtonHeight * 5) },
-            scale = {nIconScale, nIconScale},
-            color = Gui.AMBER,
-        },
+        _h1('MineIcon', 'uiTexture', 'ui_iconIso_mine', 'UI/Shared', { nIconX, nIconStartY - (nButtonHeight * 5) }, {nIconScale, nIconScale}, Gui.AMBER),
         {
             key = 'BeaconButton',
             type = 'onePixelButton',
@@ -311,15 +264,7 @@ return
                 { key = 'BeaconHotkeyExpanded', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'BeaconIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_beacon',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - (nButtonHeight * 6) },
-            scale = {nIconScale, nIconScale},
-            color = Gui.AMBER,
-        },
+        _h1('BeaconIcon', 'uiTexture', 'ui_iconIso_beacon', 'UI/Shared', { nIconX, nIconStartY - (nButtonHeight * 6) }, {nIconScale, nIconScale}, Gui.AMBER),
         {
             key = 'DisasterButton',
             type = 'onePixelButton',
@@ -350,15 +295,7 @@ return
                 { key = 'DisasterHotkeyExpanded', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'DisasterIcon',
-            type = 'uiTexture',
-            textureName = 'icon_wall_neon_pizza',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - (nButtonHeight * 7) },
-            scale = {nIconScale, nIconScale},
-            color = Gui.AMBER,
-        },
+        _h1('DisasterIcon', 'uiTexture', 'icon_wall_neon_pizza', 'UI/Shared', { nIconX, nIconStartY - (nButtonHeight * 7) }, {nIconScale, nIconScale}, Gui.AMBER),
         {
             key = 'InspectLabel',
             type = 'textBox',
@@ -623,23 +560,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'SidebarBottomEndcap',
-            type = 'uiTexture',
-            textureName = 'ui_hud_anglebottom',
-            sSpritesheetPath = 'UI/HUD',
-            pos = { -152, -(nButtonHeight * nNumButtons) },
-            scale = { 1, 1 },
-            color = Gui.SIDEBAR_BG,
-        },
-        {
-            key = 'SidebarBottomEndcapExpanded',
-            type = 'uiTexture',
-            textureName = 'ui_hud_anglebottom',
-            sSpritesheetPath = 'UI/HUD',
-            pos = { 0, -(nButtonHeight * nNumButtons) },
-            scale = { 1.12, 1.12 },
-            color = Gui.SIDEBAR_BG,
-        },
+        _h1('SidebarBottomEndcap', 'uiTexture', 'ui_hud_anglebottom', 'UI/HUD', { -152, -(nButtonHeight * nNumButtons) }, { 1, 1 }, Gui.SIDEBAR_BG),
+        _h1('SidebarBottomEndcapExpanded', 'uiTexture', 'ui_hud_anglebottom', 'UI/HUD', { 0, -(nButtonHeight * nNumButtons) }, { 1.12, 1.12 }, Gui.SIDEBAR_BG),
     },
 }

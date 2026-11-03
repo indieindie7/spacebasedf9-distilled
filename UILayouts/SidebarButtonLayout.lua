@@ -1,3 +1,4 @@
+local function _h1(a0,a1) return {key=a0,color=a1} end
 local Gui = require('UI.Gui')
 local nIconX, nIconStartY = 10, -12
 local nLabelX, nLabelStartY = 94, -10
@@ -24,44 +25,20 @@ return
             color = Gui.BLACK,
             onHoverOn =
             {
-                {
-                    key = 'SidebarButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'SidebarLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'SidebarIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'SidebarHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h1('SidebarButton', Gui.AMBER),
+                _h1('SidebarLabel', { 0, 0, 0 }),
+                _h1('SidebarIcon', { 0, 0, 0 }),
+                _h1('SidebarHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'SidebarButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'SidebarLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'SidebarIcon',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'SidebarHotkey',
-                    color = Gui.AMBER,
-                },
+                _h1('SidebarButton', Gui.BLACK),
+                _h1('SidebarLabel', Gui.AMBER),
+                _h1('SidebarIcon', Gui.AMBER),
+                _h1('SidebarHotkey', Gui.AMBER),
             },
         },
         {

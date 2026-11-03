@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3) return {key=a0,type=a1,pos=a2,configKey=a3} end
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -31,12 +32,7 @@ return
             color = Gui.WHITE,
             hidden = false,
         },
-        {
-            key = 'SliderMusic',
-            type = 'slider',
-            pos = { 25, 100 },
-            configKey = "music_volume",
-        },
+        _h1('SliderMusic', 'slider', { 25, 100 }, "music_volume"),
         {
             key = 'MusicText',
             type = 'textBox',
@@ -48,12 +44,7 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.White,
         },
-        {
-            key = 'SliderSFX',
-            type = 'slider',
-            pos = { 25, 30 },
-            configKey = "sfx_volume",
-        },
+        _h1('SliderSFX', 'slider', { 25, 30 }, "sfx_volume"),
         {
             key = 'SFXText',
             type = 'textBox',
@@ -65,12 +56,7 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.White,
         },
-        {
-            key = 'CheckboxAutoSave',
-            type = 'checkbox',
-            pos = { 15, -108 },
-            configKey = "autosave",
-        },
+        _h1('CheckboxAutoSave', 'checkbox', { 15, -108 }, "autosave"),
         {
             key = 'AutoSaveText',
             type = 'textBox',
@@ -82,12 +68,7 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.White,
         },
-        {
-            key = 'HardwareMouseCheckbox',
-            type = 'checkbox',
-            pos = { 15, -180 },
-            configKey = "use_os_mouse",
-        },
+        _h1('HardwareMouseCheckbox', 'checkbox', { 15, -180 }, "use_os_mouse"),
         {
             key = 'HardwareMouseText',
             type = 'textBox',
@@ -99,12 +80,7 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.White,
         },
-        {
-            key = 'FullscreenCheckbox',
-            type = 'checkbox',
-            pos = { 15, -252 },
-            configKey = "launch_fullscreen",
-        },
+        _h1('FullscreenCheckbox', 'checkbox', { 15, -252 }, "launch_fullscreen"),
         {
             key = 'FullscreenText',
             type = 'textBox',
@@ -116,12 +92,7 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.White,
         },
-        {
-            key = 'ColorblindCheckbox',
-            type = 'checkbox',
-            pos = { 15, -324 },
-            configKey = "colorblind",
-        },
+        _h1('ColorblindCheckbox', 'checkbox', { 15, -324 }, "colorblind"),
         {
             key = 'ColorblindText',
             type = 'textBox',

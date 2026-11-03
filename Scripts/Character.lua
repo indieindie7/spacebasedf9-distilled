@@ -1,3 +1,4 @@
+local function _h1(a0) return {gatherFn=a0} end
 local DFGraphics = require('DFCommon.Graphics')
 local DFMath = require('DFCommon.Math')
 local DFUtil = require('DFCommon.Util')
@@ -4013,82 +4014,28 @@ function Character:_updateGatherers()
     local nTeam = self:getTeam()
     local nBehavior = Base.getTeamFactionBehavior(nTeam)
     if self.tStatus.tImprisonedIn then
-        self.tActivityOptionGatherers.Characters=
-        {
-            gatherFn=UtilityAI.getNearbyCharacters,
-        }
-        self.tActivityOptionGatherers.RoomJobs=
-        {
-            gatherFn=Room.getRoomJobs,
-        }
-        self.tActivityOptionGatherers.EnvObjJobs=
-        {
-            gatherFn=EnvObject.getEnvObjectJobs,
-        }
-        self.tActivityOptionGatherers.GlobalObjects=
-        {
-            gatherFn=GlobalObjects.getGlobalUtilityObjects,
-        }
+        self.tActivityOptionGatherers.Characters= _h1(UtilityAI.getNearbyCharacters)
+        self.tActivityOptionGatherers.RoomJobs= _h1(Room.getRoomJobs)
+        self.tActivityOptionGatherers.EnvObjJobs= _h1(EnvObject.getEnvObjectJobs)
+        self.tActivityOptionGatherers.GlobalObjects= _h1(GlobalObjects.getGlobalUtilityObjects)
     elseif self.tStats.nRace == Character.RACE_MONSTER then
-        self.tActivityOptionGatherers.Characters=
-        {
-            gatherFn=UtilityAI.getNearbyCharacters,
-        }
-        self.tActivityOptionGatherers.GlobalMonsterActivities=
-        {
-            gatherFn=MonsterUtility.getGlobalMonsterUtilityObjects,
-        }
+        self.tActivityOptionGatherers.Characters= _h1(UtilityAI.getNearbyCharacters)
+        self.tActivityOptionGatherers.GlobalMonsterActivities= _h1(MonsterUtility.getGlobalMonsterUtilityObjects)
     elseif nBehavior == Character.FACTION_BEHAVIOR.Citizen then
-        self.tActivityOptionGatherers.Characters=
-        {
-            gatherFn=UtilityAI.getNearbyCharacters,
-        }
-        self.tActivityOptionGatherers.RoomJobs=
-        {
-            gatherFn=Room.getRoomJobs,
-        }
-        self.tActivityOptionGatherers.EnvObjJobs=
-        {
-            gatherFn=EnvObject.getEnvObjectJobs,
-        }
-        self.tActivityOptionGatherers.GlobalObjects=
-        {
-            gatherFn=GlobalObjects.getGlobalUtilityObjects,
-        }
-        self.tActivityOptionGatherers.CommandObject=
-        {
-            gatherFn=CommandObject.getActivityOptions,
-        }
+        self.tActivityOptionGatherers.Characters= _h1(UtilityAI.getNearbyCharacters)
+        self.tActivityOptionGatherers.RoomJobs= _h1(Room.getRoomJobs)
+        self.tActivityOptionGatherers.EnvObjJobs= _h1(EnvObject.getEnvObjectJobs)
+        self.tActivityOptionGatherers.GlobalObjects= _h1(GlobalObjects.getGlobalUtilityObjects)
+        self.tActivityOptionGatherers.CommandObject= _h1(CommandObject.getActivityOptions)
     elseif nBehavior == Character.FACTION_BEHAVIOR.EnemyGroup then
-        self.tActivityOptionGatherers.RoomJobs=
-        {
-            gatherFn=Room.getRoomJobs,
-        }
-        self.tActivityOptionGatherers.Characters=
-        {
-            gatherFn=UtilityAI.getNearbyCharacters,
-        }
-        self.tActivityOptionGatherers.EnvObjJobs=
-        {
-            gatherFn=EnvObject.getEnemyEnvObjectJobs,
-        }
-        self.tActivityOptionGatherers.GlobalRaiderActivities=
-        {
-            gatherFn=MonsterUtility.getGlobalRaiderUtilityObjects,
-        }
-        self.tActivityOptionGatherers.GlobalObjects=
-        {
-            gatherFn=GlobalObjects.getGlobalUtilityObjects,
-        }
+        self.tActivityOptionGatherers.RoomJobs= _h1(Room.getRoomJobs)
+        self.tActivityOptionGatherers.Characters= _h1(UtilityAI.getNearbyCharacters)
+        self.tActivityOptionGatherers.EnvObjJobs= _h1(EnvObject.getEnemyEnvObjectJobs)
+        self.tActivityOptionGatherers.GlobalRaiderActivities= _h1(MonsterUtility.getGlobalRaiderUtilityObjects)
+        self.tActivityOptionGatherers.GlobalObjects= _h1(GlobalObjects.getGlobalUtilityObjects)
     elseif nBehavior == Character.FACTION_BEHAVIOR.Friendly then
-        self.tActivityOptionGatherers.GlobalMonsterActivities=
-        {
-            gatherFn=MonsterUtility.getGlobalFriendlyUtilityObjects,
-        }
-        self.tActivityOptionGatherers.GlobalObjects=
-        {
-            gatherFn=GlobalObjects.getGlobalUtilityObjects,
-        }
+        self.tActivityOptionGatherers.GlobalMonsterActivities= _h1(MonsterUtility.getGlobalFriendlyUtilityObjects)
+        self.tActivityOptionGatherers.GlobalObjects= _h1(GlobalObjects.getGlobalUtilityObjects)
     end
 end
 function Character:_factionSetup(bLoading)

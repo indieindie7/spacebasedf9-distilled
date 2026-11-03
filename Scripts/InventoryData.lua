@@ -1,3 +1,6 @@
+local function _h1(a0,a1,a2,a3,a4,a5) return {sName=a0,sDesc=a1,bStuff=a2,Job=a3,tPossibleTags=a4,bJobTool=a5} end
+local function _h2(a0,a1,a2,a3,a4,a5,a6) return {bStuff=a0,bDisplayable=a1,sPortraitSprite=a2,sSuffix=a3,sDesc=a4,tPossibleTags=a5,tForcedTags=a6} end
+local function _h3(a0,a1,a2,a3,a4,a5,a6) return {bStuff=a0,bDisplayable=a1,sPortraitSprite=a2,sTintSprite=a3,sSuffix=a4,sDesc=a5,tPossibleTags=a6} end
 local Character=require('CharacterConstants')
 local InventoryData = {}
 InventoryData.MINE_PICKUP_NAME = 'Rock'
@@ -269,131 +272,19 @@ InventoryData.tTemplates=
         nRange=18,
         nDamageType = Character.DAMAGE_TYPE.Laser,
 	},
-    SuperMaintainer=
-    {
-        sName='INVOBJ031TEXT',
-        sDesc='INVOBJ057TEXT',
-        bStuff=true,
-        Job=Character.TECHNICIAN,
-        tPossibleTags={'Color','Style','Texture','Shape'},
-        bJobTool=true,
-    },
-    SuperBuilder=
-    {
-        sName='INVOBJ032TEXT',
-        sDesc='INVOBJ058TEXT',
-        bStuff=true,
-        Job=Character.BUILDER,
-        tPossibleTags={'Color','Style','Texture','Shape'},
-        bJobTool=true,
-    },
-    EfficientMiner=
-    {
-        sName='INVOBJ033TEXT',
-        sDesc='INVOBJ059TEXT',
-        bStuff=true,
-        Job=Character.MINER,
-        tPossibleTags={'Color','Style','Texture','Shape'},
-        bJobTool=true,
-    },
-    SuperGreenThumb=
-    {
-        sName='INVOBJ034TEXT',
-        sDesc='INVOBJ060TEXT',
-        bStuff=true,
-        Job=Character.BOTANIST,
-        tPossibleTags={'Color','Style','Texture','Shape'},
-        bJobTool=true,
-    },
-    SuperDoctorTool=
-    {
-        sName='INVOBJ035TEXT',
-        sDesc='INVOBJ061TEXT',
-        bStuff=true,
-        Job=Character.DOCTOR,
-        tPossibleTags={'Color','Style','Texture','Shape'},
-        bJobTool=true,
-    },
-    AlarmClock=
-    {
-        bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffAlarmClock',
-        sSuffix='INVOBJ041TEXT',
-        sDesc='INVOBJ062TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Red',Shape='Square'},
-    },
-    Baseball=
-    {
-        bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffBaseball',
-        sSuffix='INVOBJ042TEXT',
-        sDesc='INVOBJ063TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='White',Shape='Round'},
-    },
-    Basketball=
-    {
-        bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffBasketball',
-        sSuffix='INVOBJ043TEXT',
-        sDesc='INVOBJ064TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Orange',Shape='Round'},
-    },
-    CandyBucket=
-    {
-        bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffCandyBucket',
-        sSuffix='INVOBJ044TEXT',
-        sDesc='INVOBJ065TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Orange',Shape='Round'},
-    },
-	CowSkull=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffCowSkull',
-        sSuffix='INVOBJ012TEXT',
-        sDesc='INVOBJ066TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='White'},
-	},
-	DeadGlobe=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffDeadEarthGlobe',
-        sSuffix='INVOBJ037TEXT',
-        sDesc='INVOBJ067TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Brown',Shape='Round'},
-	},
-	Ducky=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffDucky',
-        sSuffix='INVOBJ009TEXT',
-        sDesc='INVOBJ069TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Yellow'},
-	},
-	Globe=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffEarthGlobe',
-        sSuffix='INVOBJ046TEXT',
-        sDesc='INVOBJ068TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Green',Shape='Round'},
-	},
+    SuperMaintainer= _h1('INVOBJ031TEXT', 'INVOBJ057TEXT', true, Character.TECHNICIAN, {'Color','Style','Texture','Shape'}, true),
+    SuperBuilder= _h1('INVOBJ032TEXT', 'INVOBJ058TEXT', true, Character.BUILDER, {'Color','Style','Texture','Shape'}, true),
+    EfficientMiner= _h1('INVOBJ033TEXT', 'INVOBJ059TEXT', true, Character.MINER, {'Color','Style','Texture','Shape'}, true),
+    SuperGreenThumb= _h1('INVOBJ034TEXT', 'INVOBJ060TEXT', true, Character.BOTANIST, {'Color','Style','Texture','Shape'}, true),
+    SuperDoctorTool= _h1('INVOBJ035TEXT', 'INVOBJ061TEXT', true, Character.DOCTOR, {'Color','Style','Texture','Shape'}, true),
+    AlarmClock= _h2(true, true, 'StuffAlarmClock', 'INVOBJ041TEXT', 'INVOBJ062TEXT', {'Style','Texture','Material'}, {Color='Red',Shape='Square'}),
+    Baseball= _h2(true, true, 'StuffBaseball', 'INVOBJ042TEXT', 'INVOBJ063TEXT', {'Style','Texture','Material'}, {Color='White',Shape='Round'}),
+    Basketball= _h2(true, true, 'StuffBasketball', 'INVOBJ043TEXT', 'INVOBJ064TEXT', {'Style','Texture','Material'}, {Color='Orange',Shape='Round'}),
+    CandyBucket= _h2(true, true, 'StuffCandyBucket', 'INVOBJ044TEXT', 'INVOBJ065TEXT', {'Style','Texture','Material'}, {Color='Orange',Shape='Round'}),
+	CowSkull= _h2(true, true, 'StuffCowSkull', 'INVOBJ012TEXT', 'INVOBJ066TEXT', {'Style','Texture','Material'}, {Color='White'}),
+	DeadGlobe= _h2(true, true, 'StuffDeadEarthGlobe', 'INVOBJ037TEXT', 'INVOBJ067TEXT', {'Style','Texture','Material'}, {Color='Brown',Shape='Round'}),
+	Ducky= _h2(true, true, 'StuffDucky', 'INVOBJ009TEXT', 'INVOBJ069TEXT', {'Style','Texture','Material'}, {Color='Yellow'}),
+	Globe= _h2(true, true, 'StuffEarthGlobe', 'INVOBJ046TEXT', 'INVOBJ068TEXT', {'Style','Texture','Material'}, {Color='Green',Shape='Round'}),
 	GardenGnome=
 	{
 		bStuff=true,
@@ -405,76 +296,13 @@ InventoryData.tTemplates=
         tPossibleTags={'Color','Style','Texture','Material'},
 		tForcedTags={Shape='Conical'},
 	},
-	HumanSkull=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffHumanSkull',
-        sSuffix='INVOBJ012TEXT',
-        sDesc='INVOBJ071TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Beige'},
-	},
-	Kitty=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffKitty',
-        sTintSprite='StuffKitty_tint',
-        sSuffix='INVOBJ003TEXT',
-        sDesc='INVOBJ072TEXT',
-        tPossibleTags={'Color','Style','Texture','Material'},
-	},
-	LavaLamp=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffLavalamp',
-        sSuffix='INVOBJ039TEXT',
-        sDesc='INVOBJ073TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Magenta',},
-	},
-	Cactus=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffLittleCactus',
-        sSuffix='INVOBJ040TEXT',
-        sDesc='INVOBJ074TEXT',
-        tPossibleTags={'Style','Material'},
-		tForcedTags={Color='Green',Texture='Spiky'},
-	},
-	MoaiHead=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffMoaiHead',
-        sSuffix='INVOBJ047TEXT',
-        sDesc='INVOBJ075TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Grey',},
-	},
-	ToySpacebus=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffModelSpacebus',
-        sSuffix='INVOBJ048TEXT',
-        sDesc='INVOBJ076TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Grey',},
-	},
-    Mug=
-    {
-        bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffMug',
-        sTintSprite='StuffMug_tint',
-        sSuffix='INVOBJ002TEXT',
-        sDesc='INVOBJ077TEXT',
-        tPossibleTags={'Color','Style','Texture','Material'},
-    },
+	HumanSkull= _h2(true, true, 'StuffHumanSkull', 'INVOBJ012TEXT', 'INVOBJ071TEXT', {'Style','Texture','Material'}, {Color='Beige'}),
+	Kitty= _h3(true, true, 'StuffKitty', 'StuffKitty_tint', 'INVOBJ003TEXT', 'INVOBJ072TEXT', {'Color','Style','Texture','Material'}),
+	LavaLamp= _h2(true, true, 'StuffLavalamp', 'INVOBJ039TEXT', 'INVOBJ073TEXT', {'Style','Texture','Material'}, {Color='Magenta',}),
+	Cactus= _h2(true, true, 'StuffLittleCactus', 'INVOBJ040TEXT', 'INVOBJ074TEXT', {'Style','Material'}, {Color='Green',Texture='Spiky'}),
+	MoaiHead= _h2(true, true, 'StuffMoaiHead', 'INVOBJ047TEXT', 'INVOBJ075TEXT', {'Style','Texture','Material'}, {Color='Grey',}),
+	ToySpacebus= _h2(true, true, 'StuffModelSpacebus', 'INVOBJ048TEXT', 'INVOBJ076TEXT', {'Style','Texture','Material'}, {Color='Grey',}),
+    Mug= _h3(true, true, 'StuffMug', 'StuffMug_tint', 'INVOBJ002TEXT', 'INVOBJ077TEXT', {'Color','Style','Texture','Material'}),
 	MusicBox=
 	{
 		bStuff=true,
@@ -484,16 +312,7 @@ InventoryData.tTemplates=
         sDesc='INVOBJ078TEXT',
         tPossibleTags={'Style','Texture','Material'},
 	},
-	OldComputer=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffOldComputer',
-        sSuffix='INVOBJ010TEXT',
-        sDesc='INVOBJ079TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Beige',},
-	},
+	OldComputer= _h2(true, true, 'StuffOldComputer', 'INVOBJ010TEXT', 'INVOBJ079TEXT', {'Style','Texture','Material'}, {Color='Beige',}),
 	PictureFrame=
 	{
 		bStuff=true,
@@ -504,66 +323,12 @@ InventoryData.tTemplates=
         tPossibleTags={'Style','Material'},
 		tForcedTags={Shape='Flat',},
 	},
-	PocketWatch=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffPocketWatch',
-        sSuffix='INVOBJ011TEXT',
-        sDesc='INVOBJ081TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Gold',Shape='Round',},
-	},
-	PuzzleCube=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffPuzzleCube',
-        sSuffix='INVOBJ007TEXT',
-        sDesc='INVOBJ082TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Gold',Shape='Square',},
-	},
-	Radio=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffRadio',
-        sSuffix='INVOBJ004TEXT',
-        sDesc='INVOBJ083TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Brown'},
-	},
-	TeddyBear=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffTeddyBear',
-        sTintSprite='StuffTeddyBear_tint',
-        sSuffix='INVOBJ005TEXT',
-        sDesc='INVOBJ084TEXT',
-        tPossibleTags={'Color','Style','Texture','Material'},
-	},
-	TentacleMonster=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffTentacleMonster',
-        sSuffix='INVOBJ006TEXT',
-        sDesc='INVOBJ085TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Blue'},
-	},
-    ToyBall=
-    {
-        bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffToyBall',
-        sTintSprite='StuffToyBall_tint',
-        sSuffix='INVOBJ001TEXT',
-        sDesc='INVOBJ086TEXT',
-        tPossibleTags={'Color','Style','Texture','Material'},
-    },
+	PocketWatch= _h2(true, true, 'StuffPocketWatch', 'INVOBJ011TEXT', 'INVOBJ081TEXT', {'Style','Texture','Material'}, {Color='Gold',Shape='Round',}),
+	PuzzleCube= _h2(true, true, 'StuffPuzzleCube', 'INVOBJ007TEXT', 'INVOBJ082TEXT', {'Style','Texture','Material'}, {Color='Gold',Shape='Square',}),
+	Radio= _h2(true, true, 'StuffRadio', 'INVOBJ004TEXT', 'INVOBJ083TEXT', {'Style','Texture','Material'}, {Color='Brown'}),
+	TeddyBear= _h3(true, true, 'StuffTeddyBear', 'StuffTeddyBear_tint', 'INVOBJ005TEXT', 'INVOBJ084TEXT', {'Color','Style','Texture','Material'}),
+	TentacleMonster= _h2(true, true, 'StuffTentacleMonster', 'INVOBJ006TEXT', 'INVOBJ085TEXT', {'Style','Texture','Material'}, {Color='Blue'}),
+    ToyBall= _h3(true, true, 'StuffToyBall', 'StuffToyBall_tint', 'INVOBJ001TEXT', 'INVOBJ086TEXT', {'Color','Style','Texture','Material'}),
     ParasiteActionFigure=
     {
         bStuff=true,
@@ -573,16 +338,7 @@ InventoryData.tTemplates=
         sDesc='INVOBJ087TEXT',
         tPossibleTags={'Style','Texture','Material'},
     },
-    LadyActionFigure=
-    {
-        bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffToySpacelady',
-        sSuffix='INVOBJ052TEXT',
-        sDesc='INVOBJ088TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Purple'},
-    },
+    LadyActionFigure= _h2(true, true, 'StuffToySpacelady', 'INVOBJ052TEXT', 'INVOBJ088TEXT', {'Style','Texture','Material'}, {Color='Purple'}),
     GuyActionFigure=
     {
         bStuff=true,
@@ -592,26 +348,8 @@ InventoryData.tTemplates=
         sDesc='INVOBJ089TEXT',
         tPossibleTags={'Style','Texture','Material'},
     },
-    WizardActionFigure=
-    {
-        bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffToyWizard',
-        sSuffix='INVOBJ053TEXT',
-        sDesc='INVOBJ091TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Grey'},
-    },
-	Fossil=
-	{
-		bStuff=true,
-        bDisplayable=true,
-        sPortraitSprite='StuffTrilobiteFossil',
-        sSuffix='INVOBJ013TEXT',
-        sDesc='INVOBJ090TEXT',
-        tPossibleTags={'Style','Texture','Material'},
-		tForcedTags={Color='Beige'},
-	},
+    WizardActionFigure= _h2(true, true, 'StuffToyWizard', 'INVOBJ053TEXT', 'INVOBJ091TEXT', {'Style','Texture','Material'}, {Color='Grey'}),
+	Fossil= _h2(true, true, 'StuffTrilobiteFossil', 'INVOBJ013TEXT', 'INVOBJ090TEXT', {'Style','Texture','Material'}, {Color='Beige'}),
 }
 function InventoryData.recalcStuffNames()
     InventoryData.tStuffNames = {}

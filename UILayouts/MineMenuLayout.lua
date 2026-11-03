@@ -1,3 +1,5 @@
+local function _h1(a0,a1) return {key=a0,hidden=a1} end
+local function _h2(a0,a1) return {key=a0,color=a1} end
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -26,49 +28,19 @@ return
     {
         onShowMatterCost =
         {
-            {
-                key = 'CostBackground',
-                hidden = false,
-            },
-            {
-                key = 'CostBackgroundEndCap',
-                hidden = false,
-            },
-            {
-                key = 'CostVerticalRule',
-                hidden = false,
-            },
-            {
-                key = 'CostIconMatter',
-                hidden = false,
-            },
-            {
-                key = 'CostText',
-                hidden = false,
-            },
+            _h1('CostBackground', false),
+            _h1('CostBackgroundEndCap', false),
+            _h1('CostVerticalRule', false),
+            _h1('CostIconMatter', false),
+            _h1('CostText', false),
         },
         onHideMatterCost =
         {
-            {
-                key = 'CostBackground',
-                hidden = true,
-            },
-            {
-                key = 'CostBackgroundEndCap',
-                hidden = true,
-            },
-            {
-                key = 'CostVerticalRule',
-                hidden = true,
-            },
-            {
-                key = 'CostIconMatter',
-                hidden = true,
-            },
-            {
-                key = 'CostText',
-                hidden = true,
-            },
+            _h1('CostBackground', true),
+            _h1('CostBackgroundEndCap', true),
+            _h1('CostVerticalRule', true),
+            _h1('CostIconMatter', true),
+            _h1('CostText', true),
         },
     },
     tElements =
@@ -88,90 +60,36 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'DoneButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('DoneButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'DoneButton',
-                    color = AMBER,
-                },
+                _h2('DoneButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'DoneButton',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'DoneLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'DoneHotkey',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostBackground',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostBackgroundEndCap',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostVerticalRule',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostIconMatter',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostText',
-                    color = { 0, 0, 0 },
-                },
+                _h2('DoneButton', CONSTRUCT_CONFIRM),
+                _h2('DoneLabel', { 0, 0, 0 }),
+                _h2('DoneHotkey', { 0, 0, 0 }),
+                _h2('CostBackground', CONSTRUCT_CONFIRM),
+                _h2('CostBackgroundEndCap', CONSTRUCT_CONFIRM),
+                _h2('CostVerticalRule', { 0, 0, 0 }),
+                _h2('CostIconMatter', { 0, 0, 0 }),
+                _h2('CostText', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'DoneButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'DoneLabel',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'DoneHotkey',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostBackground',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostBackgroundEndCap',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostVerticalRule',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostIconMatter',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostText',
-                    color = CONSTRUCT_CONFIRM,
-                },
+                _h2('DoneButton', Gui.BLACK),
+                _h2('DoneLabel', CONSTRUCT_CONFIRM),
+                _h2('DoneHotkey', CONSTRUCT_CONFIRM),
+                _h2('CostBackground', { 0, 0, 0 }),
+                _h2('CostBackgroundEndCap', { 0, 0, 0 }),
+                _h2('CostVerticalRule', CONSTRUCT_CONFIRM),
+                _h2('CostIconMatter', CONSTRUCT_CONFIRM),
+                _h2('CostText', CONSTRUCT_CONFIRM),
             },
         },
         {
@@ -182,58 +100,28 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'MineButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('MineButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'MineButton',
-                    color = AMBER,
-                },
+                _h2('MineButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'MineButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'MineLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'MineIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'MineHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('MineButton', Gui.AMBER),
+                _h2('MineLabel', { 0, 0, 0 }),
+                _h2('MineIcon', { 0, 0, 0 }),
+                _h2('MineHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'MineButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'MineLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'MineIcon',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'MineHotkey',
-                    color = Gui.AMBER,
-                },
+                _h2('MineButton', Gui.BLACK),
+                _h2('MineLabel', Gui.AMBER),
+                _h2('MineIcon', Gui.AMBER),
+                _h2('MineHotkey', Gui.AMBER),
             },
         },
         {
@@ -244,58 +132,28 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'EraseButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('EraseButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'EraseButton',
-                    color = AMBER,
-                },
+                _h2('EraseButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'EraseButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'EraseLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'EraseIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'EraseHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('EraseButton', Gui.AMBER),
+                _h2('EraseLabel', { 0, 0, 0 }),
+                _h2('EraseIcon', { 0, 0, 0 }),
+                _h2('EraseHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'EraseButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'EraseLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'EraseIcon',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'EraseHotkey',
-                    color = Gui.AMBER,
-                },
+                _h2('EraseButton', Gui.BLACK),
+                _h2('EraseLabel', Gui.AMBER),
+                _h2('EraseIcon', Gui.AMBER),
+                _h2('EraseHotkey', Gui.AMBER),
             },
         },
         {

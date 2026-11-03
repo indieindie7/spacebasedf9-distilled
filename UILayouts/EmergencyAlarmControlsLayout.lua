@@ -1,3 +1,4 @@
+local function _h1(a0,a1) return {key=a0,hidden=a1} end
 local Gui = require('UI.Gui')
 local buttonX, buttonY = 18, -225
 local buttonWidth, buttonHeight, buttonSpacing = 190, 37, 0
@@ -25,14 +26,8 @@ return
                     key = 'OnLabel',
                     color = Gui.BLACK,
                 },
-				{
-					key = 'OnButtonTexture',
-					hidden = true,
-				},
-				{
-					key = 'OnButtonTexturePressed',
-					hidden = false,
-				},
+				_h1('OnButtonTexture', true),
+				_h1('OnButtonTexturePressed', false),
             },
             onHoverOff =
             {
@@ -40,14 +35,8 @@ return
                     key = 'OnLabel',
                     color = Gui.AMBER,
                 },
-				{
-					key = 'OnButtonTexture',
-					hidden = false,
-				},
-				{
-					key = 'OnButtonTexturePressed',
-					hidden = true,
-				},
+				_h1('OnButtonTexture', false),
+				_h1('OnButtonTexturePressed', true),
             },
         },
 		{
@@ -92,14 +81,8 @@ return
                     key = 'OffLabel',
                     color = Gui.BLACK,
                 },
-				{
-					key = 'OffButtonTexture',
-					hidden = true,
-				},
-				{
-					key = 'OffButtonTexturePressed',
-					hidden = false,
-				},
+				_h1('OffButtonTexture', true),
+				_h1('OffButtonTexturePressed', false),
             },
             onHoverOff =
             {
@@ -107,14 +90,8 @@ return
                     key = 'OffLabel',
                     color = Gui.AMBER,
                 },
-				{
-					key = 'OffButtonTexture',
-					hidden = false,
-				},
-				{
-					key = 'OffButtonTexturePressed',
-					hidden = true,
-				},
+				_h1('OffButtonTexture', false),
+				_h1('OffButtonTexturePressed', true),
             },
         },
  		{

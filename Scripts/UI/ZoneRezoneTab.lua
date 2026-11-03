@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3) return {name=a0,desc=a1,propdesc=a2,zoneName=a3} end
 local m = {}
 local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
@@ -7,72 +8,17 @@ local ZoneRezoneButton = require('UI.ZoneRezoneButton')
 local sUILayoutFileName = 'UILayouts/ZoneRezoneTabLayout'
 local tZoneOptions =
 {
-    {
-        name = "ZONEUI036TEXT",
-        desc = "INSPEC034TEXT",
-        propdesc = "INSPEC041TEXT",
-        zoneName = 'AIRLOCK',
-    },
-    {
-        name = "ZONEUI001TEXT",
-        desc = "INSPEC035TEXT",
-        propdesc = "INSPEC042TEXT",
-        zoneName= 'LIFESUPPORT',
-    },
-    {
-        name = "ZONEUI003TEXT",
-        desc = "INSPEC036TEXT",
-        propdesc = "INSPEC043TEXT",
-        zoneName = 'POWER',
-    },
-    {
-        name = "ZONEUI037TEXT",
-        desc = "INSPEC037TEXT",
-        propdesc = "INSPEC044TEXT",
-        zoneName = 'REFINERY',
-    },
-    {
-        name = "ZONEUI042TEXT",
-        desc = "INSPEC038TEXT",
-        propdesc = "INSPEC045TEXT",
-        zoneName = 'RESIDENCE',
-    },
-    {
-        name = "ZONEUI046TEXT",
-        desc = "INSPEC039TEXT",
-        propdesc = "INSPEC046TEXT",
-        zoneName = 'PUB',
-    },
-    {
-        name = "ZONEUI069TEXT",
-        desc = "INSPEC083TEXT",
-        propdesc = "INSPEC084TEXT",
-        zoneName = 'GARDEN',
-    },
-    {
-        name = "ZONEUI109TEXT",
-        desc = "INSPEC116TEXT",
-        propdesc = "INSPEC115TEXT",
-        zoneName = 'FITNESS',
-    },
-    {
-        name = "ZONEUI126TEXT",
-        desc = "INSPEC119TEXT",
-        propdesc = "INSPEC120TEXT",
-        zoneName = 'RESEARCH',
-    },
-    {
-        name = "ZONEUI049TEXT",
-        desc = "INSPEC138TEXT",
-        propdesc = "INSPEC139TEXT",
-        zoneName = 'INFIRMARY',
-    },
-    {
-        name = "ZONEUI142TEXT",
-        desc = "ZONEUI143TEXT",
-        propdesc = "ZONEUI144TEXT",
-        zoneName = 'BRIG',
-    },
+    _h1("ZONEUI036TEXT", "INSPEC034TEXT", "INSPEC041TEXT", 'AIRLOCK'),
+    _h1("ZONEUI001TEXT", "INSPEC035TEXT", "INSPEC042TEXT", 'LIFESUPPORT'),
+    _h1("ZONEUI003TEXT", "INSPEC036TEXT", "INSPEC043TEXT", 'POWER'),
+    _h1("ZONEUI037TEXT", "INSPEC037TEXT", "INSPEC044TEXT", 'REFINERY'),
+    _h1("ZONEUI042TEXT", "INSPEC038TEXT", "INSPEC045TEXT", 'RESIDENCE'),
+    _h1("ZONEUI046TEXT", "INSPEC039TEXT", "INSPEC046TEXT", 'PUB'),
+    _h1("ZONEUI069TEXT", "INSPEC083TEXT", "INSPEC084TEXT", 'GARDEN'),
+    _h1("ZONEUI109TEXT", "INSPEC116TEXT", "INSPEC115TEXT", 'FITNESS'),
+    _h1("ZONEUI126TEXT", "INSPEC119TEXT", "INSPEC120TEXT", 'RESEARCH'),
+    _h1("ZONEUI049TEXT", "INSPEC138TEXT", "INSPEC139TEXT", 'INFIRMARY'),
+    _h1("ZONEUI142TEXT", "ZONEUI143TEXT", "ZONEUI144TEXT", 'BRIG'),
     {
         name = "ZONEUI005TEXT",
         desc = "INSPEC040TEXT",

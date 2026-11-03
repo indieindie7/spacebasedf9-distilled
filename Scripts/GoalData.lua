@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4) return {sName=a0,sNameLC=a1,sDescLC=a2,checkFn=a3,nTarget=a4} end
 local GameRules = require('GameRules')
 local Base = require('Base')
 local EnvObject = require('EnvObjects.EnvObject')
@@ -155,117 +156,21 @@ function GoalData.finalSiege()
 end
 GoalData.tGoals =
 {
-    {
-		sName = 'Citizens',
-        sNameLC = 'GOALSS001TEXT',
-        sDescLC = 'GOALSS002TEXT',
-		checkFn = GoalData.citizens,
-		nTarget = GoalData.TARGET_CITIZENS,
-    },
-	{
-		sName = 'Matter',
-		sNameLC = 'GOALSS003TEXT',
-        sDescLC = 'GOALSS004TEXT',
-		checkFn = GoalData.matter,
-		nTarget = GoalData.TARGET_MATTER,
-    },
-	{
-		sName = 'BuiltEverything',
-		sNameLC = 'GOALSS005TEXT',
-        sDescLC = 'GOALSS006TEXT',
-		checkFn = GoalData.builtEverything,
-		nTarget = GoalData.TARGET_ENVOBJECT_TYPES,
-    },
-	{
-		sName = 'HostilesKilled',
-		sNameLC = 'GOALSS007TEXT',
-        sDescLC = 'GOALSS008TEXT',
-		checkFn = GoalData.hostilesKilled,
-		nTarget = GoalData.TARGET_HOSTILES_KILLED,
-	},
-	{
-		sName = 'BaseTiles',
-		sNameLC = 'GOALSS010TEXT',
-        sDescLC = 'GOALSS011TEXT',
-		checkFn = GoalData.baseTiles,
-		nTarget = GoalData.TARGET_BASE_TILES,
-	},
-	{
-		sName = 'MealsServed',
-		sNameLC = 'GOALSS017TEXT',
-        sDescLC = 'GOALSS018TEXT',
-		checkFn = GoalData.mealsServed,
-		nTarget = GoalData.TARGET_MEALS,
-	},
-	{
-		sName = 'CuresResearched',
-		sNameLC = 'GOALSS015TEXT',
-        sDescLC = 'GOALSS016TEXT',
-		checkFn = GoalData.curesResearched,
-		nTarget = GoalData.TARGET_CURES,
-	},
-	{
-		sName = 'AllTechs',
-		sNameLC = 'GOALSS019TEXT',
-        sDescLC = 'GOALSS020TEXT',
-		checkFn = GoalData.allTechs,
-		nTarget = GoalData.TARGET_TECHS,
-	},
-	{
-		sName = 'HappyCitizens',
-		sNameLC = 'GOALSS021TEXT',
-        sDescLC = 'GOALSS022TEXT',
-		checkFn = GoalData.happyCitizens,
-		nTarget = GoalData.TARGET_HAPPY_CITIZENS,
-	},
-	{
-		sName = 'BreachShipsDestroyed',
-		sNameLC = 'GOALSS023TEXT',
-        sDescLC = 'GOALSS024TEXT',
-		checkFn = GoalData.breachShipsDestroyed,
-		nTarget = GoalData.TARGET_BREACH_SHIPS,
-	},
-	{
-		sName = 'AllPossessions',
-		sNameLC = 'GOALSS025TEXT',
-        sDescLC = 'GOALSS026TEXT',
-		checkFn = GoalData.allPossessions,
-		nTarget = GoalData.TARGET_POSSESSIONS,
-	},
-	{
-		sName = 'RaidersConverted',
-		sNameLC = 'GOALSS027TEXT',
-        sDescLC = 'GOALSS028TEXT',
-		checkFn = GoalData.raidersConverted,
-		nTarget = GoalData.TARGET_RAIDERS_CONVERTED,
-	},
-	{
-		sName = 'HostilesAsphyxiated',
-		sNameLC = 'GOALSS029TEXT',
-        sDescLC = 'GOALSS030TEXT',
-		checkFn = GoalData.hostilesAsphyxiated,
-		nTarget = GoalData.TARGET_HOSTILES_ASPHYXIATED,
-	},
-	{
-		sName = 'HostilesKilledByTurrets',
-		sNameLC = 'GOALSS035TEXT',
-        sDescLC = 'GOALSS036TEXT',
-		checkFn = GoalData.hostilesKilledByTurrets,
-		nTarget = GoalData.TARGET_HOSTILE_TURRET_KILLS,
-	},
-	{
-		sName = 'BodiesRefined',
-		sNameLC = 'GOALSS031TEXT',
-        sDescLC = 'GOALSS032TEXT',
-		checkFn = GoalData.bodiesRefined,
-		nTarget = GoalData.TARGET_BODIES,
-	},
-	{
-		sName = 'FinalSiege',
-		sNameLC = 'GOALSS037TEXT',
-        sDescLC = 'GOALSS038TEXT',
-		checkFn = GoalData.finalSiege,
-		nTarget = 1,
-	},
+    _h1('Citizens', 'GOALSS001TEXT', 'GOALSS002TEXT', GoalData.citizens, GoalData.TARGET_CITIZENS),
+	_h1('Matter', 'GOALSS003TEXT', 'GOALSS004TEXT', GoalData.matter, GoalData.TARGET_MATTER),
+	_h1('BuiltEverything', 'GOALSS005TEXT', 'GOALSS006TEXT', GoalData.builtEverything, GoalData.TARGET_ENVOBJECT_TYPES),
+	_h1('HostilesKilled', 'GOALSS007TEXT', 'GOALSS008TEXT', GoalData.hostilesKilled, GoalData.TARGET_HOSTILES_KILLED),
+	_h1('BaseTiles', 'GOALSS010TEXT', 'GOALSS011TEXT', GoalData.baseTiles, GoalData.TARGET_BASE_TILES),
+	_h1('MealsServed', 'GOALSS017TEXT', 'GOALSS018TEXT', GoalData.mealsServed, GoalData.TARGET_MEALS),
+	_h1('CuresResearched', 'GOALSS015TEXT', 'GOALSS016TEXT', GoalData.curesResearched, GoalData.TARGET_CURES),
+	_h1('AllTechs', 'GOALSS019TEXT', 'GOALSS020TEXT', GoalData.allTechs, GoalData.TARGET_TECHS),
+	_h1('HappyCitizens', 'GOALSS021TEXT', 'GOALSS022TEXT', GoalData.happyCitizens, GoalData.TARGET_HAPPY_CITIZENS),
+	_h1('BreachShipsDestroyed', 'GOALSS023TEXT', 'GOALSS024TEXT', GoalData.breachShipsDestroyed, GoalData.TARGET_BREACH_SHIPS),
+	_h1('AllPossessions', 'GOALSS025TEXT', 'GOALSS026TEXT', GoalData.allPossessions, GoalData.TARGET_POSSESSIONS),
+	_h1('RaidersConverted', 'GOALSS027TEXT', 'GOALSS028TEXT', GoalData.raidersConverted, GoalData.TARGET_RAIDERS_CONVERTED),
+	_h1('HostilesAsphyxiated', 'GOALSS029TEXT', 'GOALSS030TEXT', GoalData.hostilesAsphyxiated, GoalData.TARGET_HOSTILES_ASPHYXIATED),
+	_h1('HostilesKilledByTurrets', 'GOALSS035TEXT', 'GOALSS036TEXT', GoalData.hostilesKilledByTurrets, GoalData.TARGET_HOSTILE_TURRET_KILLS),
+	_h1('BodiesRefined', 'GOALSS031TEXT', 'GOALSS032TEXT', GoalData.bodiesRefined, GoalData.TARGET_BODIES),
+	_h1('FinalSiege', 'GOALSS037TEXT', 'GOALSS038TEXT', GoalData.finalSiege, 1),
 }
 return GoalData

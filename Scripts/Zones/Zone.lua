@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3) return {tLightColor=a0,nLightTileGapX=a1,nLightTileGapY=a2,nLightRadius=a3} end
 local DFGraphics = require('DFCommon.Graphics')
 local DFMath = require('DFCommon.Math')
 local DFUtil = require('DFCommon.Util')
@@ -36,12 +37,7 @@ Zone.PLAIN =
     tAmbientLightColor = { 0.6*0.6, 0.55*0.6, 0.45*0.6 },
     tRoomLights =
     {
-        {
-            tLightColor = {1.0 * 0.5, 0.6 * 0.5, 0.3 * 0.5},
-            nLightTileGapX = 4,
-            nLightTileGapY = 4,
-            nLightRadius = 2,
-        },
+        _h1({1.0 * 0.5, 0.6 * 0.5, 0.3 * 0.5}, 4, 4, 2),
     },
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickunzoned',
@@ -78,12 +74,7 @@ Zone.GARDEN =
     tAmbientLightColor = {0.5, 0.5, 0.5 },
     tRoomLights =
     {
-        {
-            tLightColor = {0.5, 1, 0.8},
-            nLightTileGapX = 3,
-            nLightTileGapY = 3,
-            nLightRadius = 3,
-        },
+        _h1({0.5, 1, 0.8}, 3, 3, 3),
     },
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickbar',
@@ -120,12 +111,7 @@ Zone.INFIRMARY =
     tAmbientLightColor = { 0.65, 0.65, 0.65 },
     tRoomLights =
     {
-        {
-            tLightColor = {0.25, 0.25, 0.25 },
-            nLightTileGapX = 5,
-            nLightTileGapY = 5,
-            nLightRadius = 4,
-        },
+        _h1({0.25, 0.25, 0.25 }, 5, 5, 4),
     },
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickbar',
@@ -163,12 +149,7 @@ Zone.LIFESUPPORT =
     tAmbientLightColor = {0.2, 0.3, 0.6 },
     tRoomLights =
     {
-        {
-            tLightColor = {0.5, 0.5, 0.8},
-            nLightTileGapX = 4,
-            nLightTileGapY = 4,
-            nLightRadius = 4,
-        },
+        _h1({0.5, 0.5, 0.8}, 4, 4, 4),
     },
     sLightSpriteName = 'directionalcast',
     clickSound = 'clicklifesupport',
@@ -204,12 +185,7 @@ Zone.RESIDENCE =
     tAmbientLightColor = { 0.52, 0.485, 0.41 },
     tRoomLights =
     {
-        {
-            tLightColor = {1.0, 0.6, 0.3},
-            nLightTileGapX = 4,
-            nLightTileGapY = 5,
-            nLightRadius = 3,
-        },
+        _h1({1.0, 0.6, 0.3}, 4, 5, 3),
     },
     class = 'Zones.BedZone',
     sLightSpriteName = 'directionalcast',
@@ -247,12 +223,7 @@ Zone.PUB =
     tAmbientLightColor = { 0.8, 0.5, 1.0  },
     tRoomLights =
     {
-        {
-            tLightColor = {0.4, 0.0, 1.0 },
-            nLightTileGapX = 4,
-            nLightTileGapY = 4,
-            nLightRadius = 2,
-        },
+        _h1({0.4, 0.0, 1.0 }, 4, 4, 2),
     },
     sLightSpriteName = 'directionalcast',
     class='Zones.Pub',
@@ -290,12 +261,7 @@ Zone.POWER =
     tAmbientLightColor = { 0.5, 0.2, 0.2 },
     tRoomLights =
     {
-        {
-            tLightColor = {1.0, 0.0, 0.0},
-            nLightTileGapX = 4,
-            nLightTileGapY = 4,
-            nLightRadius = 2.5,
-        },
+        _h1({1.0, 0.0, 0.0}, 4, 4, 2.5),
     },
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickreactor',
@@ -331,12 +297,7 @@ Zone.AIRLOCK =
     tAmbientLightColor = { 0.3, 0.5, 0.6 },
     tRoomLights =
     {
-        {
-            tLightColor = {0.1, 0.5, 0.2},
-            nLightTileGapX = 4,
-            nLightTileGapY = 4,
-            nLightRadius = 2,
-        },
+        _h1({0.1, 0.5, 0.2}, 4, 4, 2),
     },
     sLightSpriteName = 'directionalcast',
     class='Zones.Airlock',
@@ -374,12 +335,7 @@ Zone.REFINERY =
     tAmbientLightColor = { .47/2, .44/2, .53/2 },
     tRoomLights =
     {
-        {
-            tLightColor = { 1.0, 0.7, 0.4},
-            nLightTileGapX = 5,
-            nLightTileGapY = 5,
-            nLightRadius = 3,
-        },
+        _h1({ 1.0, 0.7, 0.4}, 5, 5, 3),
 	},
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickrefinery',
@@ -413,12 +369,7 @@ Zone.EXTERIOR =
 	wallColumnBottom = {Exterior_Corner_cross_bottom=1},
     tRoomLights =
     {
-        {
-            tLightColor = {0.8, 1.0, 0.2},
-            nLightTileGapX = 3,
-            nLightTileGapY = 3,
-            nLightRadius = 3,
-        },
+        _h1({0.8, 1.0, 0.2}, 3, 3, 3),
     },
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickunzoned',
@@ -451,12 +402,7 @@ Zone.CONSTRUCTION =
 	wallColumnBottom = {Wireframe_Corner_cross_bottom=1},
     tRoomLights =
     {
-        {
-            tLightColor = {0.8, 1.0, 0.2},
-            nLightTileGapX = 3,
-            nLightTileGapY = 3,
-            nLightRadius = 3,
-        },
+        _h1({0.8, 1.0, 0.2}, 3, 3, 3),
     },
 }
 Zone.FITNESS =
@@ -489,12 +435,7 @@ Zone.FITNESS =
     tAmbientLightColor = { 0.6, 0.6, 0.6 },
     tRoomLights =
     {
-        {
-            tLightColor = {1.0, 1.0, 1.0},
-            nLightTileGapX = 4,
-            nLightTileGapY = 4,
-            nLightRadius = 2,
-        },
+        _h1({1.0, 1.0, 1.0}, 4, 4, 2),
     },
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickbar',
@@ -532,12 +473,7 @@ Zone.RESEARCH =
     tAmbientLightColor = { 0.3, 0.5, 0.6 },
     tRoomLights =
     {
-        {
-            tLightColor = {0.1*2, 0.5*2, 0.2*2},
-            nLightTileGapX = 4,
-            nLightTileGapY = 4,
-            nLightRadius = 3,
-        },
+        _h1({0.1*2, 0.5*2, 0.2*2}, 4, 4, 3),
     },
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickbar',
@@ -574,12 +510,7 @@ Zone.BRIG =
     tAmbientLightColor = { 0.4, 0.45, 0.5 },
     tRoomLights =
     {
-        {
-            tLightColor = {0.7, 0.5, 0.5},
-            nLightTileGapX = 4,
-            nLightTileGapY = 4,
-            nLightRadius = 1,
-        },
+        _h1({0.7, 0.5, 0.5}, 4, 4, 1),
     },
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickbar',

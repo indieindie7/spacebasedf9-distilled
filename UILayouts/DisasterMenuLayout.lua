@@ -1,3 +1,5 @@
+local function _h1(a0,a1) return {SidebarLabel=a0,SidebarIcon=a1} end
+local function _h2(a0,a1,a2,a3,a4,a5) return {key=a0,type=a1,layoutFile=a2,replacements=a3,buttonName=a4,pos=a5} end
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 330, 81
 local nTextHeight = nButtonHeight + 20
@@ -84,94 +86,14 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.GREY,
         },
-        {
-            key = 'FireButton',
-            type = 'templateButton',
-            layoutFile = 'UILayouts/SidebarButtonLayout',
-            replacements = {
-                SidebarLabel={linecode='HUDHUD054TEXT', pos={nLabelNoIconX, nLabelButtonStartY}},
-                SidebarIcon={hidden=true, },
-            },
-            buttonName='SidebarButton',
-            pos = { 0, nButtonStartY },
-        },
-        {
-            key = 'MeteorButton',
-            type = 'templateButton',
-            layoutFile = 'UILayouts/SidebarButtonLayout',
-            replacements = {
-                SidebarLabel={linecode='HUDHUD055TEXT', pos={nLabelNoIconX, nLabelButtonStartY}},
-                SidebarIcon={hidden=true, },
-            },
-            buttonName='SidebarButton',
-            pos = { 0, nButtonStartY-nButtonHeight },
-        },
-        {
-            key = 'KillbotButton',
-            type = 'templateButton',
-            layoutFile = 'UILayouts/SidebarButtonLayout',
-            replacements = {
-                SidebarLabel={linecode='HUDHUD056TEXT', pos={nLabelNoIconX, nLabelButtonStartY}},
-                SidebarIcon={hidden=true, },
-            },
-            buttonName='SidebarButton',
-            pos = { 0, nButtonStartY-nButtonHeight*2 },
-        },
-        {
-            key = 'RaiderButton',
-            type = 'templateButton',
-            layoutFile = 'UILayouts/SidebarButtonLayout',
-            replacements = {
-                SidebarLabel={linecode='HUDHUD057TEXT', pos={nLabelNoIconX, nLabelButtonStartY}},
-                SidebarIcon={hidden=true, },
-            },
-            buttonName='SidebarButton',
-            pos = { 0, nButtonStartY-nButtonHeight*3 },
-        },
-        {
-            key = 'BreachButton',
-            type = 'templateButton',
-            layoutFile = 'UILayouts/SidebarButtonLayout',
-            replacements = {
-                SidebarLabel={linecode='HUDHUD058TEXT', pos={nLabelNoIconX, nLabelButtonStartY}},
-                SidebarIcon={hidden=true, },
-            },
-            buttonName='SidebarButton',
-            pos = { 0, nButtonStartY-nButtonHeight*4 },
-        },
-        {
-            key = 'ParasiteButton',
-            type = 'templateButton',
-            layoutFile = 'UILayouts/SidebarButtonLayout',
-            replacements = {
-                SidebarLabel={linecode='HUDHUD059TEXT', pos={nLabelNoIconX, nLabelButtonStartY}},
-                SidebarIcon={hidden=true, },
-            },
-            buttonName='SidebarButton',
-            pos = { 0, nButtonStartY-nButtonHeight*5 },
-        },
-        {
-            key = 'DerelictButton',
-            type = 'templateButton',
-            layoutFile = 'UILayouts/SidebarButtonLayout',
-            replacements = {
-                SidebarLabel={linecode='HUDHUD060TEXT', pos={nLabelNoIconX, nLabelButtonStartY}},
-                SidebarIcon={hidden=true, },
-            },
-            buttonName='SidebarButton',
-            pos = { 0, nButtonStartY-nButtonHeight*6 },
-        },
-        {
-            key = 'DockButton',
-            type = 'templateButton',
-            layoutFile = 'UILayouts/SidebarButtonLayout',
-            replacements = {
-                SidebarLabel={linecode='HUDHUD061TEXT', pos={nLabelNoIconX, nLabelButtonStartY}},
-                SidebarIcon={hidden=true, },
-            },
-            buttonName='SidebarButton',
-            pos = { 0, nButtonStartY-nButtonHeight*7 },
-        },
+        _h2('FireButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD054TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY }),
+        _h2('MeteorButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD055TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight }),
+        _h2('KillbotButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD056TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight*2 }),
+        _h2('RaiderButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD057TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight*3 }),
+        _h2('BreachButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD058TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight*4 }),
+        _h2('ParasiteButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD059TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight*5 }),
+        _h2('DerelictButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD060TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight*6 }),
+        _h2('DockButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD061TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight*7 }),
         {
             key = 'SidebarBottomEndcapExpanded',
             type = 'uiTexture',

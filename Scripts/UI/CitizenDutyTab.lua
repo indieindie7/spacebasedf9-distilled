@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2) return {enum=a0,name=a1,desc=a2} end
 local m = {}
 local DFUtil = require("DFCommon.Util")
 local Character = require('Character')
@@ -6,51 +7,15 @@ local UIElement = require('UI.UIElement')
 local sUILayoutFileName = 'UILayouts/CitizenDutyTabLayout'
 local tJobOptions =
 {
-    {
-        enum = Character.UNEMPLOYED,
-        name = "DUTIES001TEXT",
-        desc = "DUTIES002TEXT",
-    },
-    {
-        enum = Character.BUILDER,
-        name = "DUTIES003TEXT",
-        desc = "DUTIES004TEXT",
-    },
-    {
-        enum = Character.TECHNICIAN,
-        name = "DUTIES005TEXT",
-        desc = "DUTIES006TEXT",
-    },
-    {
-        enum = Character.MINER,
-        name = "DUTIES007TEXT",
-        desc = "DUTIES008TEXT",
-    },
-    {
-        enum = Character.EMERGENCY,
-        name = "DUTIES009TEXT",
-        desc = "DUTIES010TEXT",
-    },
-    {
-        enum = Character.BARTENDER,
-        name = "DUTIES013TEXT",
-        desc = "DUTIES014TEXT",
-    },
-    {
-        enum = Character.BOTANIST,
-        name = "DUTIES016TEXT",
-        desc = "DUTIES017TEXT",
-    },
-    {
-        enum = Character.SCIENTIST,
-        name = "DUTIES018TEXT",
-        desc = "DUTIES019TEXT",
-    },
-    {
-        enum = Character.DOCTOR,
-        name = "DUTIES020TEXT",
-        desc = "DUTIES021TEXT",
-    },
+    _h1(Character.UNEMPLOYED, "DUTIES001TEXT", "DUTIES002TEXT"),
+    _h1(Character.BUILDER, "DUTIES003TEXT", "DUTIES004TEXT"),
+    _h1(Character.TECHNICIAN, "DUTIES005TEXT", "DUTIES006TEXT"),
+    _h1(Character.MINER, "DUTIES007TEXT", "DUTIES008TEXT"),
+    _h1(Character.EMERGENCY, "DUTIES009TEXT", "DUTIES010TEXT"),
+    _h1(Character.BARTENDER, "DUTIES013TEXT", "DUTIES014TEXT"),
+    _h1(Character.BOTANIST, "DUTIES016TEXT", "DUTIES017TEXT"),
+    _h1(Character.SCIENTIST, "DUTIES018TEXT", "DUTIES019TEXT"),
+    _h1(Character.DOCTOR, "DUTIES020TEXT", "DUTIES021TEXT"),
 }
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())

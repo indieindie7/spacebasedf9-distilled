@@ -1,3 +1,4 @@
+local function _h1(a0,a1) return {key=a0,color=a1} end
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -33,50 +34,26 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'BackButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h1('BackButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'BackButton',
-                    color = AMBER,
-                },
+                _h1('BackButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'BackButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'BackLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'BackHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h1('BackButton', Gui.AMBER),
+                _h1('BackLabel', { 0, 0, 0 }),
+                _h1('BackHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'BackButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'BackLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'BackHotkey',
-                    color = Gui.AMBER,
-                },
+                _h1('BackButton', Gui.BLACK),
+                _h1('BackLabel', Gui.AMBER),
+                _h1('BackHotkey', Gui.AMBER),
             },
         },
         {

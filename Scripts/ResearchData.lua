@@ -1,13 +1,8 @@
+local function _h1(a0,a1,a2,a3,a4) return {sName=a0,sDesc=a1,tPrereqs=a2,nResearchUnits=a3,sIcon=a4} end
+local function _h2(a0,a1,a2,a3) return {sItemForDesc=a0,tPrereqs=a1,nResearchUnits=a2,sIcon=a3} end
 local t=
 {
-    VaporizeLevel2=
-    {
-        sName='RESRCH001TEXT',
-        sDesc='RESRCH002TEXT',
-        tPrereqs={},
-        nResearchUnits=1200,
-		sIcon = 'ui_jobs_iconJobBuilder',
-    },
+    VaporizeLevel2= _h1('RESRCH001TEXT', 'RESRCH002TEXT', {}, 1200, 'ui_jobs_iconJobBuilder'),
     MaintenanceLevel2=
     {
         sName='RESRCH009TEXT',
@@ -17,14 +12,7 @@ local t=
         nConditionMultiplier=1.5,
 		sIcon = 'ui_jobs_iconJobTechnician',
     },
-    BuildLevel2=
-    {
-        sName='RESRCH011TEXT',
-        sDesc='RESRCH012TEXT',
-        tPrereqs={},
-        nResearchUnits=1000,
-		sIcon = 'ui_jobs_iconJobBuilder',
-    },
+    BuildLevel2= _h1('RESRCH011TEXT', 'RESRCH012TEXT', {}, 1000, 'ui_jobs_iconJobBuilder'),
     PlantLevel2=
     {
         sName='RESRCH013TEXT',
@@ -34,78 +22,21 @@ local t=
         nConditionMultiplier=2,
 		sIcon = 'ui_jobs_iconJobBotanist',
     },
-    LaserRifles=
-    {
-        sName='RESRCH003TEXT',
-        sDesc='RESRCH004TEXT',
-        tPrereqs={},
-        nResearchUnits=1100,
-		sIcon = 'ui_jobs_iconJobResponse',
-    },
-    ArmorLevel2=
-    {
-        sName='RESRCH005TEXT',
-        sDesc='RESRCH006TEXT',
-        tPrereqs={},
-        nResearchUnits=900,
-		sIcon = 'ui_jobs_iconJobResponse',
-    },
-    TeamTactics=
-    {
-        sName='RESRCH017TEXT',
-        sDesc='RESRCH018TEXT',
-        tPrereqs={'TeamTacticsDiscovered'},
-        nResearchUnits=2000,
-		sIcon = 'ui_jobs_iconJobResponse',
-    },
-    OxygenRecyclerLevel2=
-    {
-        sItemForDesc='OxygenRecyclerLevel2',
-        tPrereqs={'AirScrubber'},
-        nResearchUnits=1000,
-		sIcon = 'ui_jobs_iconJobUnemployed',
-    },
-    GeneratorLevel2=
-    {
-        sItemForDesc='GeneratorLevel2',
-        tPrereqs={},
-        nResearchUnits=1000,
-		sIcon = 'ui_jobs_iconJobUnemployed',
-    },
-    AirScrubber=
-    {
-        sItemForDesc='AirScrubber',
-        tPrereqs={},
-        nResearchUnits=750,
-		sIcon = 'ui_jobs_iconJobDoctor',
-    },
+    LaserRifles= _h1('RESRCH003TEXT', 'RESRCH004TEXT', {}, 1100, 'ui_jobs_iconJobResponse'),
+    ArmorLevel2= _h1('RESRCH005TEXT', 'RESRCH006TEXT', {}, 900, 'ui_jobs_iconJobResponse'),
+    TeamTactics= _h1('RESRCH017TEXT', 'RESRCH018TEXT', {'TeamTacticsDiscovered'}, 2000, 'ui_jobs_iconJobResponse'),
+    OxygenRecyclerLevel2= _h2('OxygenRecyclerLevel2', {'AirScrubber'}, 1000, 'ui_jobs_iconJobUnemployed'),
+    GeneratorLevel2= _h2('GeneratorLevel2', {}, 1000, 'ui_jobs_iconJobUnemployed'),
+    AirScrubber= _h2('AirScrubber', {}, 750, 'ui_jobs_iconJobDoctor'),
     DoorLevel2=
     {
         sItemForDesc='HeavyDoor',
         tPrereqs={},
         nResearchUnits=1200,
     },
-    FridgeLevel2=
-    {
-        sItemForDesc='FridgeLevel2',
-        tPrereqs={'FridgeLevel2Discovered'},
-        nResearchUnits=800,
-		sIcon = 'ui_jobs_iconJobBarkeep',
-    },
-    RefineryDropoffLevel2=
-    {
-        sItemForDesc='RefineryDropoffLevel2',
-        tPrereqs={},
-        nResearchUnits=1200,
-		sIcon = 'ui_jobs_iconJobMiner',
-    },
-	WallMountedTurret2=
-    {
-        sItemForDesc='WallMountedTurret2',
-		tPrereqs={'WallMountedTurretLevel2Discovered'},
-        nResearchUnits=2000,
-		sIcon = 'ui_jobs_iconJobResponse',
-    },
+    FridgeLevel2= _h2('FridgeLevel2', {'FridgeLevel2Discovered'}, 800, 'ui_jobs_iconJobBarkeep'),
+    RefineryDropoffLevel2= _h2('RefineryDropoffLevel2', {}, 1200, 'ui_jobs_iconJobMiner'),
+	WallMountedTurret2= _h2('WallMountedTurret2', {'WallMountedTurretLevel2Discovered'}, 2000, 'ui_jobs_iconJobResponse'),
 	FridgeLevel2Discovered=
     {
         sName='PROPSX069TEXT',

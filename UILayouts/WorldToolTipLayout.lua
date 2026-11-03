@@ -1,3 +1,7 @@
+local function _h1(a0,a1) return {key=a0,pos=a1} end
+local function _h2(a0,a1) return {key=a0,hidden=a1} end
+local function _h3(a0,a1,a2,a3,a4) return {key=a0,type=a1,pos=a2,scale=a3,color=a4} end
+local function _h4(a0,a1,a2,a3,a4,a5,a6) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,color=a4,hidden=a5,pos=a6} end
 local Gui = require('UI.Gui')
 local nWidth, nHeight = 200, 120
 local nBorderThickness = 4
@@ -22,152 +26,62 @@ return
     {
         texture1ShowOverride =
         {
-            {
-                key = 'TipText1',
-                pos = { nTextWithTextureMargin, nTextStartY + 3 },
-            },
-            {
-                key = 'TipTexture1',
-                hidden = false,
-            },
+            _h1('TipText1', { nTextWithTextureMargin, nTextStartY + 3 }),
+            _h2('TipTexture1', false),
         },
         texture1HideOverride =
         {
-            {
-                key = 'TipText1',
-                pos = { nTextMargin, nTextStartY + 3 },
-            },
-            {
-                key = 'TipTexture1',
-                hidden = true,
-            },
+            _h1('TipText1', { nTextMargin, nTextStartY + 3 }),
+            _h2('TipTexture1', true),
         },
         texture2ShowOverride =
         {
-            {
-                key = 'TipText2',
-                pos = { nTextWithTextureMargin, nTextStartY - nTextHeight },
-            },
-            {
-                key = 'TipTexture2',
-                hidden = false,
-            },
+            _h1('TipText2', { nTextWithTextureMargin, nTextStartY - nTextHeight }),
+            _h2('TipTexture2', false),
         },
         texture2HideOverride =
         {
-            {
-                key = 'TipText2',
-                pos = { nTextMargin, nTextStartY - nTextHeight },
-            },
-            {
-                key = 'TipTexture2',
-                hidden = true,
-            },
+            _h1('TipText2', { nTextMargin, nTextStartY - nTextHeight }),
+            _h2('TipTexture2', true),
         },
         texture3ShowOverride =
         {
-            {
-                key = 'TipText3',
-                pos = { nTextWithTextureMargin, nTextStartY - (nTextHeight * 2) },
-            },
-            {
-                key = 'TipTexture3',
-                hidden = false,
-            },
+            _h1('TipText3', { nTextWithTextureMargin, nTextStartY - (nTextHeight * 2) }),
+            _h2('TipTexture3', false),
         },
         texture3HideOverride =
         {
-            {
-                key = 'TipText3',
-                pos = { nTextMargin, nTextStartY - (nTextHeight * 2) },
-            },
-            {
-                key = 'TipTexture3',
-                hidden = true,
-            },
+            _h1('TipText3', { nTextMargin, nTextStartY - (nTextHeight * 2) }),
+            _h2('TipTexture3', true),
         },
         texture4ShowOverride =
         {
-            {
-                key = 'TipText4',
-                pos = { nTextWithTextureMargin, nTextStartY - (nTextHeight * 3) },
-            },
-            {
-                key = 'TipTexture4',
-                hidden = false,
-            },
+            _h1('TipText4', { nTextWithTextureMargin, nTextStartY - (nTextHeight * 3) }),
+            _h2('TipTexture4', false),
         },
         texture4HideOverride =
         {
-            {
-                key = 'TipText4',
-                pos = { nTextMargin, nTextStartY - (nTextHeight * 3) },
-            },
-            {
-                key = 'TipTexture4',
-                hidden = true,
-            },
+            _h1('TipText4', { nTextMargin, nTextStartY - (nTextHeight * 3) }),
+            _h2('TipTexture4', true),
         },
         texture5ShowOverride =
         {
-            {
-                key = 'TipText5',
-                pos = { nTextWithTextureMargin, nTextStartY - (nTextHeight * 4) },
-            },
-            {
-                key = 'TipTexture5',
-                hidden = false,
-            },
+            _h1('TipText5', { nTextWithTextureMargin, nTextStartY - (nTextHeight * 4) }),
+            _h2('TipTexture5', false),
         },
         texture5HideOverride =
         {
-            {
-                key = 'TipText5',
-                pos = { nTextMargin, nTextStartY - (nTextHeight * 4) },
-            },
-            {
-                key = 'TipTexture5',
-                hidden = true,
-            },
+            _h1('TipText5', { nTextMargin, nTextStartY - (nTextHeight * 4) }),
+            _h2('TipTexture5', true),
         },
     },
     tElements =
     {
-        {
-            key = 'Background',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { nWidth, nHeight },
-            color = { 0, 0, 0 },
-        },
-        {
-            key = 'TopBorder',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { nWidth, nBorderThickness },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'BottomBorder',
-            type = 'onePixel',
-            pos = { 0, -(nHeight - nBorderThickness) },
-            scale = { nWidth, nBorderThickness },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'LeftBorder',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { nBorderThickness, nHeight },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'RightBorder',
-            type = 'onePixel',
-            pos = { nWidth, 0 },
-            scale = { nBorderThickness, nHeight },
-            color = Gui.AMBER,
-        },
+        _h3('Background', 'onePixel', { 0, 0 }, { nWidth, nHeight }, { 0, 0, 0 }),
+        _h3('TopBorder', 'onePixel', { 0, 0 }, { nWidth, nBorderThickness }, Gui.AMBER),
+        _h3('BottomBorder', 'onePixel', { 0, -(nHeight - nBorderThickness) }, { nWidth, nBorderThickness }, Gui.AMBER),
+        _h3('LeftBorder', 'onePixel', { 0, 0 }, { nBorderThickness, nHeight }, Gui.AMBER),
+        _h3('RightBorder', 'onePixel', { nWidth, 0 }, { nBorderThickness, nHeight }, Gui.AMBER),
         {
             key = 'TipText1',
             type = 'textBox',
@@ -179,15 +93,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'TipTexture1',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            color = Gui.AMBER,
-            hidden = true,
-            pos = { nTextureMargin - 7, nTextureStartY + 4 },
-        },
+        _h4('TipTexture1', 'uiTexture', 'ui_icon_health', 'UI/Inspector', Gui.AMBER, true, { nTextureMargin - 7, nTextureStartY + 4 }),
         {
             key = 'TipText2',
             type = 'textBox',
@@ -199,15 +105,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'TipTexture2',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            color = Gui.AMBER,
-            hidden = true,
-            pos = { nTextureMargin, nTextureStartY - nTextureHeight },
-        },
+        _h4('TipTexture2', 'uiTexture', 'ui_icon_health', 'UI/Inspector', Gui.AMBER, true, { nTextureMargin, nTextureStartY - nTextureHeight }),
         {
             key = 'TipText3',
             type = 'textBox',
@@ -219,15 +117,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'TipTexture3',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            color = Gui.AMBER,
-            hidden = true,
-            pos = { nTextureMargin, nTextureStartY - (nTextureHeight * 2) },
-        },
+        _h4('TipTexture3', 'uiTexture', 'ui_icon_health', 'UI/Inspector', Gui.AMBER, true, { nTextureMargin, nTextureStartY - (nTextureHeight * 2) }),
         {
             key = 'TipText4',
             type = 'textBox',
@@ -239,15 +129,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'TipTexture4',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            color = Gui.AMBER,
-            hidden = true,
-            pos = { nTextureMargin, nTextureStartY - (nTextureHeight * 3) },
-        },
+        _h4('TipTexture4', 'uiTexture', 'ui_icon_health', 'UI/Inspector', Gui.AMBER, true, { nTextureMargin, nTextureStartY - (nTextureHeight * 3) }),
         {
             key = 'TipText5',
             type = 'textBox',
@@ -259,15 +141,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'TipTexture5',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            color = Gui.AMBER,
-            hidden = true,
-            pos = { nTextureMargin, nTextureStartY - (nTextureHeight * 4) },
-        },
+        _h4('TipTexture5', 'uiTexture', 'ui_icon_health', 'UI/Inspector', Gui.AMBER, true, { nTextureMargin, nTextureStartY - (nTextureHeight * 4) }),
        {
             key = 'TipText6',
             type = 'textBox',
@@ -279,15 +153,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'TipTexture6',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            color = Gui.AMBER,
-            hidden = true,
-            pos = { nTextureMargin, nTextureStartY - (nTextureHeight * 5) },
-        },
+        _h4('TipTexture6', 'uiTexture', 'ui_icon_health', 'UI/Inspector', Gui.AMBER, true, { nTextureMargin, nTextureStartY - (nTextureHeight * 5) }),
         {
             key = 'TipText7',
             type = 'textBox',
@@ -299,15 +165,7 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'TipTexture7',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            color = Gui.AMBER,
-            hidden = true,
-            pos = { nTextureMargin, nTextureStartY - (nTextureHeight * 6) },
-        },
+        _h4('TipTexture7', 'uiTexture', 'ui_icon_health', 'UI/Inspector', Gui.AMBER, true, { nTextureMargin, nTextureStartY - (nTextureHeight * 6) }),
         {
             key = 'TipText8',
             type = 'textBox',
@@ -319,14 +177,6 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'TipTexture8',
-            type = 'uiTexture',
-            textureName = 'ui_icon_health',
-            sSpritesheetPath = 'UI/Inspector',
-            color = Gui.AMBER,
-            hidden = true,
-            pos = { nTextureMargin, nTextureStartY - (nTextureHeight * 7) },
-        },
+        _h4('TipTexture8', 'uiTexture', 'ui_icon_health', 'UI/Inspector', Gui.AMBER, true, { nTextureMargin, nTextureStartY - (nTextureHeight * 7) }),
     },
 }

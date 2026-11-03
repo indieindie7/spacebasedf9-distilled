@@ -1,3 +1,4 @@
+local function _h1(a0,a1) return {key=a0,color=a1} end
 local m = {}
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
@@ -129,66 +130,30 @@ function m.create()
                 color = BLACK,
                 onPressed =
                 {
-                    {
-                        key = buttonKey,
-                        color = BRIGHT_AMBER,
-                    },
+                    _h1(buttonKey, BRIGHT_AMBER),
                 },
                 onReleased =
                 {
-                    {
-                        key = buttonKey,
-                        color = AMBER,
-                    },
+                    _h1(buttonKey, AMBER),
                 },
                 onHoverOn =
                 {
-                    {
-                        key = buttonKey,
-                        color = Gui.AMBER,
-                    },
-                    {
-                        key = buttonKey .. 'Label',
-                        color = { 0, 0, 0 },
-                    },
-                    {
-                        key = buttonKey .. 'CostLabel',
-                        color = { 0, 0, 0 },
-                    },
-                    {
-                        key = buttonKey .. 'Icon',
-                        color = { Gui.AMBER[1],Gui.AMBER[2],Gui.AMBER[3],  1.0},
-                    },
-                    {
-                        key = buttonKey .. 'Hotkey',
-                        color = { 0, 0, 0 },
-                    },
+                    _h1(buttonKey, Gui.AMBER),
+                    _h1(buttonKey .. 'Label', { 0, 0, 0 }),
+                    _h1(buttonKey .. 'CostLabel', { 0, 0, 0 }),
+                    _h1(buttonKey .. 'Icon', { Gui.AMBER[1],Gui.AMBER[2],Gui.AMBER[3],  1.0}),
+                    _h1(buttonKey .. 'Hotkey', { 0, 0, 0 }),
                     {
                         playSfx = 'hilight',
                     },
                 },
                 onHoverOff =
                 {
-                    {
-                        key = buttonKey,
-                        color = Gui.BLACK,
-                    },
-                    {
-                        key = buttonKey .. 'Label',
-                        color = Gui.AMBER,
-                    },
-                    {
-                        key = buttonKey .. 'CostLabel',
-                        color = Gui.AMBER,
-                    },
-                    {
-                        key = buttonKey .. 'Icon',
-                        color = Gui.AMBER,
-                    },
-                    {
-                        key = buttonKey .. 'Hotkey',
-                        color = Gui.AMBER,
-                    },
+                    _h1(buttonKey, Gui.BLACK),
+                    _h1(buttonKey .. 'Label', Gui.AMBER),
+                    _h1(buttonKey .. 'CostLabel', Gui.AMBER),
+                    _h1(buttonKey .. 'Icon', Gui.AMBER),
+                    _h1(buttonKey .. 'Hotkey', Gui.AMBER),
                 },
             }
             local labelData =

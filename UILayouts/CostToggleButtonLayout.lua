@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4,a5,a6) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,scale=a5,color=a6} end
 local Gui = require('UI.Gui')
 local nButtonX, nButtonY = 0, 0
 local nButtonWidth, nButtonHeight  = 160, 37
@@ -91,15 +92,7 @@ return
 				{ key = 'CostText', color = Gui.AMBER, },
 			},
         },
-		{
-			key = 'ButtonTexture',
-			type = 'uiTexture',
-            textureName = 'button_medium',
-            sSpritesheetPath = 'UI/Shared',
-			pos = { nButtonX, nButtonY },
-			scale = { 1, 1 },
-			color = Gui.AMBER,
-		},
+		_h1('ButtonTexture', 'uiTexture', 'button_medium', 'UI/Shared', { nButtonX, nButtonY }, { 1, 1 }, Gui.AMBER),
 		{
 			key = 'ButtonTexturePressed',
 			type = 'uiTexture',
@@ -110,15 +103,7 @@ return
 			color = Gui.AMBER,
 			hidden = true,
 		},
-		{
-			key = 'CheckBoxTexture',
-			type = 'uiTexture',
-            textureName = 'checkbox_empty',
-            sSpritesheetPath = 'UI/Shared',
-			pos = { nButtonX + 5, nButtonY - 5 },
-			scale = { 0.85, 0.85 },
-			color = Gui.AMBER,
-		},
+		_h1('CheckBoxTexture', 'uiTexture', 'checkbox_empty', 'UI/Shared', { nButtonX + 5, nButtonY - 5 }, { 0.85, 0.85 }, Gui.AMBER),
 		{
 			key = 'CheckBoxTexturePressed',
 			type = 'uiTexture',
@@ -147,15 +132,7 @@ return
             scale = { nCostWidth, nCostHeight },
             color = Gui.BLACK,
 		},
-		{
-			key = 'CostBoxEndTexture',
-			type = 'uiTexture',
-            textureName = 'button_cost_flag',
-            sSpritesheetPath = 'UI/Shared',
-			pos = { nButtonX + nButtonWidth + nCostWidth - 1, nButtonY - 2 },
-			scale = { 1, 1 },
-			color = Gui.BLACK,
-		},
+		_h1('CostBoxEndTexture', 'uiTexture', 'button_cost_flag', 'UI/Shared', { nButtonX + nButtonWidth + nCostWidth - 1, nButtonY - 2 }, { 1, 1 }, Gui.BLACK),
         {
             key = 'CostLabel',
             type = 'textBox',
@@ -167,15 +144,7 @@ return
             vAlign = MOAITextBox.CENTER_JUSTIFY,
             color = Gui.AMBER,
         },
-		{
-			key = 'CostIcon',
-			type = 'uiTexture',
-            textureName = 'ui_confirm_iconmatter',
-            sSpritesheetPath = 'UI/Shared',
-			pos = { nButtonX + nButtonWidth + 112, nButtonY - 10 },
-			scale = { 1, 1 },
-			color = Gui.AMBER,
-		},
+		_h1('CostIcon', 'uiTexture', 'ui_confirm_iconmatter', 'UI/Shared', { nButtonX + nButtonWidth + 112, nButtonY - 10 }, { 1, 1 }, Gui.AMBER),
 		{
             key = 'CostText',
             type = 'textBox',

@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4) return {key=a0,type=a1,pos=a2,scale=a3,color=a4} end
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 286, 98
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 110, -68
@@ -23,13 +24,7 @@ return
     },
     tElements =
     {
-        {
-            key = 'LargeBar',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { 'g_GuiManager.getUIViewportSizeX()', 'g_GuiManager.getUIViewportSizeY()' },
-            color = Gui.SIDEBAR_BG,
-        },
+        _h1('LargeBar', 'onePixel', { 0, 0 }, { 'g_GuiManager.getUIViewportSizeX()', 'g_GuiManager.getUIViewportSizeY()' }, Gui.SIDEBAR_BG),
         {
             key = 'ProjectScrollPane',
             type = 'scrollPane',
@@ -105,20 +100,8 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'ZoneHeadingShade',
-            type = 'onePixel',
-            pos = { nZoneButtonX, -nHeadingY },
-            scale = { nZoneHeadingWidth, nHeadingHeight },
-            color = Gui.AMBER_OPAQUE,
-        },
-        {
-            key = 'ZoneHeadingDiv',
-            type = 'onePixel',
-            pos = { nZoneButtonX, -(nHeadingY + nHeadingHeight) },
-            scale = { nZoneHeadingWidth, nHeadingLineWidth },
-            color = Gui.AMBER,
-        },
+        _h1('ZoneHeadingShade', 'onePixel', { nZoneButtonX, -nHeadingY }, { nZoneHeadingWidth, nHeadingHeight }, Gui.AMBER_OPAQUE),
+        _h1('ZoneHeadingDiv', 'onePixel', { nZoneButtonX, -(nHeadingY + nHeadingHeight) }, { nZoneHeadingWidth, nHeadingLineWidth }, Gui.AMBER),
         {
             key = 'ZoneHeadingText',
             type = 'textBox',
@@ -130,20 +113,8 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.AMBER,
         },
-        {
-            key = 'ProjectHeadingShade',
-            type = 'onePixel',
-            pos = { nProjectHeadingX, -nHeadingY },
-            scale = { nProjectHeadingWidth, nHeadingHeight },
-            color = Gui.AMBER_OPAQUE,
-        },
-        {
-            key = 'ProjectHeadingDiv',
-            type = 'onePixel',
-            pos = { nProjectHeadingX, -(nHeadingY + nHeadingHeight) },
-            scale = { nProjectHeadingWidth, nHeadingLineWidth },
-            color = Gui.AMBER,
-        },
+        _h1('ProjectHeadingShade', 'onePixel', { nProjectHeadingX, -nHeadingY }, { nProjectHeadingWidth, nHeadingHeight }, Gui.AMBER_OPAQUE),
+        _h1('ProjectHeadingDiv', 'onePixel', { nProjectHeadingX, -(nHeadingY + nHeadingHeight) }, { nProjectHeadingWidth, nHeadingLineWidth }, Gui.AMBER),
         {
             key = 'ProjectHeadingText',
             type = 'textBox',
@@ -179,12 +150,6 @@ return
             buttonName='ActiveTabTexture',
             pos = { 1000 + 172 * nProjectTabScale - 5, -nProjectTabY },
         },
-		{
-            key = 'TabLine',
-            type = 'onePixel',
-            pos = { 1000 + (172 * nProjectTabScale * 2) - 5, -nProjectTabY - (42 * nProjectTabScale) + 3},
-            scale = { 515, 4 },
-            color = Gui.AMBER,
-        },
+		_h1('TabLine', 'onePixel', { 1000 + (172 * nProjectTabScale * 2) - 5, -nProjectTabY - (42 * nProjectTabScale) + 3}, { 515, 4 }, Gui.AMBER),
     },
 }

@@ -1,3 +1,4 @@
+local function _h1(a0,a1) return {names=a0,layer=a1} end
 local World = require('WorldConstants')
 local DFGraphics = require('DFCommon.Graphics')
 local Delegate = require('DFMoai.Delegate')
@@ -174,46 +175,16 @@ local tSpaceNames = {
     "Darkness",
 }
 World.visualTiles = {
-    wall_error = {
-        names = { 'wall_block_temp' },
-        layer = World.layers.worldWall,
-    },
-    space = {
-        names = { 'stars_test', },
-        layer = World.layers.space,
-    },
-    cursor = {
-        names = { 'ISO_build_YES', },
-        layer = World.layers.cursor,
-    },
-    cursor_dragbox = {
-        names = { 'ISO_build_YES', },
-        layer = World.layers.cursor,
-    },
-    cursor_dragbox_invalid = {
-        names = { 'ISO_build_NO', },
-        layer = World.layers.cursor,
-    },
-    cursor_door = {
-        names = { 'build_door', },
-        layer = World.layers.cursor,
-    },
-    build_grid_square = {
-        names = { 'ISO_build_grid', },
-        layer = World.layers.buildGrid,
-    },
-    build_grid_square_bright = {
-        names = { 'ISO_build_grid_bright', },
-        layer = World.layers.buildGrid,
-    },
-    build_grid_square_bright_xaxis = {
-        names = { 'ISO_build_grid_bright_xaxis', },
-        layer = World.layers.buildGrid,
-    },
-    build_grid_square_bright_yaxis = {
-        names = { 'ISO_build_grid_bright_yaxis', },
-        layer = World.layers.buildGrid,
-    },
+    wall_error = _h1({ 'wall_block_temp' }, World.layers.worldWall),
+    space = _h1({ 'stars_test', }, World.layers.space),
+    cursor = _h1({ 'ISO_build_YES', }, World.layers.cursor),
+    cursor_dragbox = _h1({ 'ISO_build_YES', }, World.layers.cursor),
+    cursor_dragbox_invalid = _h1({ 'ISO_build_NO', }, World.layers.cursor),
+    cursor_door = _h1({ 'build_door', }, World.layers.cursor),
+    build_grid_square = _h1({ 'ISO_build_grid', }, World.layers.buildGrid),
+    build_grid_square_bright = _h1({ 'ISO_build_grid_bright', }, World.layers.buildGrid),
+    build_grid_square_bright_xaxis = _h1({ 'ISO_build_grid_bright_xaxis', }, World.layers.buildGrid),
+    build_grid_square_bright_yaxis = _h1({ 'ISO_build_grid_bright_yaxis', }, World.layers.buildGrid),
 }
 local _X_OFFSET   = { 0,    0, 1, 0, 1, 0, 1, 0,-1 }
 local _Y_OFFSET   = { 0,    1, 1,-1,-1, 2, 0,-2, 0 }

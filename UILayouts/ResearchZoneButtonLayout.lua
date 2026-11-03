@@ -1,3 +1,4 @@
+local function _h1(a0,a1,a2,a3,a4,a5,a6) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,scale=a5,color=a6} end
 local Gui = require('UI.Gui')
 local nButtonX = 16
 local nZoneNameX = 48
@@ -16,42 +17,10 @@ return
     },
     tElements =
     {
-        {
-            key = 'ZoneNameBubbleLeft',
-            type = 'uiTexture',
-            textureName = 'ui_circlefilled',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nButtonX, 0 },
-            scale = {1, 1},
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ZoneNameBubbleMid',
-            type = 'uiTexture',
-            textureName = 'ui_circlestraightfilled',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nButtonX + 32, 0 },
-            scale = {(nZoneButtonWidth / 32), 1},
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ProjectNameBubbleLeft',
-            type = 'uiTexture',
-            textureName = 'ui_circleinverse_inset_inv',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nButtonX + 32 + nZoneButtonWidth, 0 },
-            scale = {1, 1},
-            color = Gui.BLACK,
-        },
-        {
-            key = 'ZoneNameBubbleRight',
-            type = 'uiTexture',
-            textureName = 'ui_circleinverse_inset',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nButtonX + 32 + nZoneButtonWidth, 0 },
-            scale = {1, 1},
-            color = Gui.AMBER,
-        },
+        _h1('ZoneNameBubbleLeft', 'uiTexture', 'ui_circlefilled', 'UI/Shared', { nButtonX, 0 }, {1, 1}, Gui.AMBER),
+        _h1('ZoneNameBubbleMid', 'uiTexture', 'ui_circlestraightfilled', 'UI/Shared', { nButtonX + 32, 0 }, {(nZoneButtonWidth / 32), 1}, Gui.AMBER),
+        _h1('ProjectNameBubbleLeft', 'uiTexture', 'ui_circleinverse_inset_inv', 'UI/Shared', { nButtonX + 32 + nZoneButtonWidth, 0 }, {1, 1}, Gui.BLACK),
+        _h1('ZoneNameBubbleRight', 'uiTexture', 'ui_circleinverse_inset', 'UI/Shared', { nButtonX + 32 + nZoneButtonWidth, 0 }, {1, 1}, Gui.AMBER),
     	{
             key = 'ZoneName',
             type = 'textBox',
@@ -63,42 +32,10 @@ return
             vAlign = MOAITextBox.LEFT_JUSTIFY,
             color = Gui.BLACK,
 		},
-        {
-            key = 'ProjectNameBubbleMid',
-            type = 'uiTexture',
-            textureName = 'ui_circlestraight',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nProjectButtonWidth, 0 },
-            scale = {(nProjectButtonWidth - 32) / 32, 1},
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ProjectNameBubbleMidHole',
-            type = 'uiTexture',
-            textureName = 'ui_circlestraight_inv',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nButtonX + nZoneButtonWidth + 64, 0 },
-            scale = {(nProjectButtonWidth - 32) / 32, 1},
-            color = Gui.BLACK,
-        },
-        {
-            key = 'ProjectNameBubbleRightHole',
-            type = 'uiTexture',
-            textureName = 'ui_circlefilled',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nButtonX + nZoneButtonWidth + 64 + nProjectButtonWidth, 0 },
-            scale = {-1, 1},
-            color = Gui.BLACK,
-        },
-        {
-            key = 'ProjectNameBubbleRight',
-            type = 'uiTexture',
-            textureName = 'ui_circleempty',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nButtonX + nZoneButtonWidth + 64 + nProjectButtonWidth, 0 },
-            scale = {-1, 1},
-            color = Gui.AMBER,
-        },
+        _h1('ProjectNameBubbleMid', 'uiTexture', 'ui_circlestraight', 'UI/Shared', { nProjectButtonWidth, 0 }, {(nProjectButtonWidth - 32) / 32, 1}, Gui.AMBER),
+        _h1('ProjectNameBubbleMidHole', 'uiTexture', 'ui_circlestraight_inv', 'UI/Shared', { nButtonX + nZoneButtonWidth + 64, 0 }, {(nProjectButtonWidth - 32) / 32, 1}, Gui.BLACK),
+        _h1('ProjectNameBubbleRightHole', 'uiTexture', 'ui_circlefilled', 'UI/Shared', { nButtonX + nZoneButtonWidth + 64 + nProjectButtonWidth, 0 }, {-1, 1}, Gui.BLACK),
+        _h1('ProjectNameBubbleRight', 'uiTexture', 'ui_circleempty', 'UI/Shared', { nButtonX + nZoneButtonWidth + 64 + nProjectButtonWidth, 0 }, {-1, 1}, Gui.AMBER),
 		{
             key = 'ProjectName',
             type = 'textBox',

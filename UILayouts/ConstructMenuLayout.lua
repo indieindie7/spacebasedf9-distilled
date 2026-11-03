@@ -1,3 +1,6 @@
+local function _h1(a0,a1) return {key=a0,hidden=a1} end
+local function _h2(a0,a1) return {key=a0,color=a1} end
+local function _h3(a0,a1,a2,a3,a4,a5,a6) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,color=a5,scale=a6} end
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -30,49 +33,19 @@ return
     {
         onShowMatterCost =
         {
-            {
-                key = 'CostBackground',
-                hidden = false,
-            },
-            {
-                key = 'CostBackgroundEndCap',
-                hidden = false,
-            },
-            {
-                key = 'CostVerticalRule',
-                hidden = false,
-            },
-            {
-                key = 'CostIconMatter',
-                hidden = false,
-            },
-            {
-                key = 'CostText',
-                hidden = false,
-            },
+            _h1('CostBackground', false),
+            _h1('CostBackgroundEndCap', false),
+            _h1('CostVerticalRule', false),
+            _h1('CostIconMatter', false),
+            _h1('CostText', false),
         },
         onHideMatterCost =
         {
-            {
-                key = 'CostBackground',
-                hidden = true,
-            },
-            {
-                key = 'CostBackgroundEndCap',
-                hidden = true,
-            },
-            {
-                key = 'CostVerticalRule',
-                hidden = true,
-            },
-            {
-                key = 'CostIconMatter',
-                hidden = true,
-            },
-            {
-                key = 'CostText',
-                hidden = true,
-            },
+            _h1('CostBackground', true),
+            _h1('CostBackgroundEndCap', true),
+            _h1('CostVerticalRule', true),
+            _h1('CostIconMatter', true),
+            _h1('CostText', true),
         },
     },
     tElements =
@@ -93,44 +66,20 @@ return
             color = Gui.BLACK,
             onHoverOn =
             {
-                {
-                    key = 'CancelButton',
-                    color = CONSTRUCT_CANCEL,
-                },
-                {
-                    key = 'CancelIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CancelLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CancelHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('CancelButton', CONSTRUCT_CANCEL),
+                _h2('CancelIcon', { 0, 0, 0 }),
+                _h2('CancelLabel', { 0, 0, 0 }),
+                _h2('CancelHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'CancelButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'CancelIcon',
-                    color = CONSTRUCT_CANCEL,
-                },
-                {
-                    key = 'CancelLabel',
-                    color = CONSTRUCT_CANCEL,
-                },
-                {
-                    key = 'CancelHotkey',
-                    color = CONSTRUCT_CANCEL,
-                },
+                _h2('CancelButton', Gui.BLACK),
+                _h2('CancelIcon', CONSTRUCT_CANCEL),
+                _h2('CancelLabel', CONSTRUCT_CANCEL),
+                _h2('CancelHotkey', CONSTRUCT_CANCEL),
             },
         },
         {
@@ -142,98 +91,38 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'ConfirmButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('ConfirmButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'ConfirmButton',
-                    color = AMBER,
-                },
+                _h2('ConfirmButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'ConfirmButton',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'ConfirmLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'ConfirmIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'ConfirmHotkey',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostBackground',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostBackgroundEndCap',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostVerticalRule',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostIconMatter',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostText',
-                    color = { 0, 0, 0 },
-                },
+                _h2('ConfirmButton', CONSTRUCT_CONFIRM),
+                _h2('ConfirmLabel', { 0, 0, 0 }),
+                _h2('ConfirmIcon', { 0, 0, 0 }),
+                _h2('ConfirmHotkey', { 0, 0, 0 }),
+                _h2('CostBackground', CONSTRUCT_CONFIRM),
+                _h2('CostBackgroundEndCap', CONSTRUCT_CONFIRM),
+                _h2('CostVerticalRule', { 0, 0, 0 }),
+                _h2('CostIconMatter', { 0, 0, 0 }),
+                _h2('CostText', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'ConfirmButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'ConfirmLabel',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'ConfirmIcon',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'ConfirmHotkey',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostBackground',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostBackgroundEndCap',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'CostVerticalRule',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostIconMatter',
-                    color = CONSTRUCT_CONFIRM,
-                },
-                {
-                    key = 'CostText',
-                    color = CONSTRUCT_CONFIRM,
-                },
+                _h2('ConfirmButton', Gui.BLACK),
+                _h2('ConfirmLabel', CONSTRUCT_CONFIRM),
+                _h2('ConfirmIcon', CONSTRUCT_CONFIRM),
+                _h2('ConfirmHotkey', CONSTRUCT_CONFIRM),
+                _h2('CostBackground', { 0, 0, 0 }),
+                _h2('CostBackgroundEndCap', { 0, 0, 0 }),
+                _h2('CostVerticalRule', CONSTRUCT_CONFIRM),
+                _h2('CostIconMatter', CONSTRUCT_CONFIRM),
+                _h2('CostText', CONSTRUCT_CONFIRM),
             },
         },
         {
@@ -244,58 +133,28 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'AreaButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('AreaButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'AreaButton',
-                    color = AMBER,
-                },
+                _h2('AreaButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'AreaButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'AreaLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'AreaIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'AreaHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('AreaButton', Gui.AMBER),
+                _h2('AreaLabel', { 0, 0, 0 }),
+                _h2('AreaIcon', { 0, 0, 0 }),
+                _h2('AreaHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'AreaButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'AreaLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'AreaIcon',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'AreaHotkey',
-                    color = Gui.AMBER,
-                },
+                _h2('AreaButton', Gui.BLACK),
+                _h2('AreaLabel', Gui.AMBER),
+                _h2('AreaIcon', Gui.AMBER),
+                _h2('AreaHotkey', Gui.AMBER),
             },
         },
         {
@@ -306,58 +165,28 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'WallButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('WallButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'WallButton',
-                    color = AMBER,
-                },
+                _h2('WallButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'WallButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'WallLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'WallIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'WallHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('WallButton', Gui.AMBER),
+                _h2('WallLabel', { 0, 0, 0 }),
+                _h2('WallIcon', { 0, 0, 0 }),
+                _h2('WallHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'WallButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'WallLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'WallIcon',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'WallHotkey',
-                    color = Gui.AMBER,
-                },
+                _h2('WallButton', Gui.BLACK),
+                _h2('WallLabel', Gui.AMBER),
+                _h2('WallIcon', Gui.AMBER),
+                _h2('WallHotkey', Gui.AMBER),
             },
         },
         {
@@ -369,58 +198,28 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'FloorButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('FloorButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'FloorButton',
-                    color = AMBER,
-                },
+                _h2('FloorButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'FloorButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'FloorLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'FloorIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'FloorHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('FloorButton', Gui.AMBER),
+                _h2('FloorLabel', { 0, 0, 0 }),
+                _h2('FloorIcon', { 0, 0, 0 }),
+                _h2('FloorHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'FloorButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'FloorLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'FloorIcon',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'FloorHotkey',
-                    color = Gui.AMBER,
-                },
+                _h2('FloorButton', Gui.BLACK),
+                _h2('FloorLabel', Gui.AMBER),
+                _h2('FloorIcon', Gui.AMBER),
+                _h2('FloorHotkey', Gui.AMBER),
             },
         },
         {
@@ -432,50 +231,26 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'ObjectButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('ObjectButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'ObjectButton',
-                    color = AMBER,
-                },
+                _h2('ObjectButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'ObjectButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'ObjectLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'ObjectIcon',
-                    color = { 0, 0, 0 },
-                },
+                _h2('ObjectButton', Gui.AMBER),
+                _h2('ObjectLabel', { 0, 0, 0 }),
+                _h2('ObjectIcon', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'ObjectButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'ObjectLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'ObjectIcon',
-                    color = Gui.AMBER,
-                },
+                _h2('ObjectButton', Gui.BLACK),
+                _h2('ObjectLabel', Gui.AMBER),
+                _h2('ObjectIcon', Gui.AMBER),
             },
         },
         {
@@ -487,58 +262,28 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'DemolishButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('DemolishButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'DemolishButton',
-                    color = AMBER,
-                },
+                _h2('DemolishButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'DemolishButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'DemolishLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'DemolishIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'DemolishHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('DemolishButton', Gui.AMBER),
+                _h2('DemolishLabel', { 0, 0, 0 }),
+                _h2('DemolishIcon', { 0, 0, 0 }),
+                _h2('DemolishHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'DemolishButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'DemolishLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'DemolishIcon',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'DemolishHotkey',
-                    color = Gui.AMBER,
-                },
+                _h2('DemolishButton', Gui.BLACK),
+                _h2('DemolishLabel', Gui.AMBER),
+                _h2('DemolishIcon', Gui.AMBER),
+                _h2('DemolishHotkey', Gui.AMBER),
             },
         },
         {
@@ -550,58 +295,28 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'VaporizeButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('VaporizeButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'VaporizeButton',
-                    color = AMBER,
-                },
+                _h2('VaporizeButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'VaporizeButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'VaporizeLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'VaporizeIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'VaporizeHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('VaporizeButton', Gui.AMBER),
+                _h2('VaporizeLabel', { 0, 0, 0 }),
+                _h2('VaporizeIcon', { 0, 0, 0 }),
+                _h2('VaporizeHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'VaporizeButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'VaporizeLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'VaporizeIcon',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'VaporizeHotkey',
-                    color = Gui.AMBER,
-                },
+                _h2('VaporizeButton', Gui.BLACK),
+                _h2('VaporizeLabel', Gui.AMBER),
+                _h2('VaporizeIcon', Gui.AMBER),
+                _h2('VaporizeHotkey', Gui.AMBER),
             },
         },
         {
@@ -613,105 +328,35 @@ return
             color = Gui.BLACK,
             onPressed =
             {
-                {
-                    key = 'EraseButton',
-                    color = BRIGHT_AMBER,
-                },
+                _h2('EraseButton', BRIGHT_AMBER),
             },
             onReleased =
             {
-                {
-                    key = 'EraseButton',
-                    color = AMBER,
-                },
+                _h2('EraseButton', AMBER),
             },
             onHoverOn =
             {
-                {
-                    key = 'EraseButton',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'EraseLabel',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'EraseIcon',
-                    color = { 0, 0, 0 },
-                },
-                {
-                    key = 'EraseHotkey',
-                    color = { 0, 0, 0 },
-                },
+                _h2('EraseButton', Gui.AMBER),
+                _h2('EraseLabel', { 0, 0, 0 }),
+                _h2('EraseIcon', { 0, 0, 0 }),
+                _h2('EraseHotkey', { 0, 0, 0 }),
                 {
                     playSfx = 'hilight',
                 },
             },
             onHoverOff =
             {
-                {
-                    key = 'EraseButton',
-                    color = Gui.BLACK,
-                },
-                {
-                    key = 'EraseLabel',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'EraseIcon',
-                    color = Gui.AMBER,
-                },
-                {
-                    key = 'EraseHotkey',
-                    color = Gui.AMBER,
-                },
+                _h2('EraseButton', Gui.BLACK),
+                _h2('EraseLabel', Gui.AMBER),
+                _h2('EraseIcon', Gui.AMBER),
+                _h2('EraseHotkey', Gui.AMBER),
             },
         },
-        {
-            key = 'CancelIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_decline',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nCancelIconStartY },
-            color = CONSTRUCT_CANCEL,
-            scale = { nIconScale, nIconScale }
-        },
-        {
-            key = 'ConfirmIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_confirm',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nCancelIconStartY - nButtonHeight },
-            color = CONSTRUCT_CONFIRM,
-            scale = { nIconScale, nIconScale }
-        },
-        {
-            key = 'AreaIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_room',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY },
-            color = Gui.AMBER,
-            scale = { nIconScale, nIconScale }
-        },
-        {
-            key = 'WallIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_Wall',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - nButtonHeight },
-            color = Gui.AMBER,
-            scale = { nIconScale, nIconScale }
-        },
-        {
-            key = 'FloorIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_floor',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - (nButtonHeight * 2) },
-            color = Gui.AMBER,
-            scale = { nIconScale, nIconScale }
-        },
+        _h3('CancelIcon', 'uiTexture', 'ui_iconIso_decline', 'UI/Shared', { nIconX, nCancelIconStartY }, CONSTRUCT_CANCEL, { nIconScale, nIconScale }),
+        _h3('ConfirmIcon', 'uiTexture', 'ui_iconIso_confirm', 'UI/Shared', { nIconX, nCancelIconStartY - nButtonHeight }, CONSTRUCT_CONFIRM, { nIconScale, nIconScale }),
+        _h3('AreaIcon', 'uiTexture', 'ui_iconIso_room', 'UI/Shared', { nIconX, nIconStartY }, Gui.AMBER, { nIconScale, nIconScale }),
+        _h3('WallIcon', 'uiTexture', 'ui_iconIso_Wall', 'UI/Shared', { nIconX, nIconStartY - nButtonHeight }, Gui.AMBER, { nIconScale, nIconScale }),
+        _h3('FloorIcon', 'uiTexture', 'ui_iconIso_floor', 'UI/Shared', { nIconX, nIconStartY - (nButtonHeight * 2) }, Gui.AMBER, { nIconScale, nIconScale }),
         {
             key = 'ObjectIcon',
             type = 'uiTexture',
@@ -721,33 +366,9 @@ return
             scale = {nIconScale, nIconScale},
             color = Gui.AMBER,
         },
-        {
-            key = 'DemolishIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_demolish',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - (nButtonHeight * 4) },
-            color = Gui.AMBER,
-            scale = { nIconScale, nIconScale }
-        },
-        {
-            key = 'VaporizeIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_demolish',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - (nButtonHeight * 5) },
-            color = Gui.AMBER,
-            scale = { nIconScale, nIconScale }
-        },
-        {
-            key = 'EraseIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_erase',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY - (nButtonHeight * 6) },
-            color = Gui.AMBER,
-            scale = { nIconScale, nIconScale }
-        },
+        _h3('DemolishIcon', 'uiTexture', 'ui_iconIso_demolish', 'UI/Shared', { nIconX, nIconStartY - (nButtonHeight * 4) }, Gui.AMBER, { nIconScale, nIconScale }),
+        _h3('VaporizeIcon', 'uiTexture', 'ui_iconIso_demolish', 'UI/Shared', { nIconX, nIconStartY - (nButtonHeight * 5) }, Gui.AMBER, { nIconScale, nIconScale }),
+        _h3('EraseIcon', 'uiTexture', 'ui_iconIso_erase', 'UI/Shared', { nIconX, nIconStartY - (nButtonHeight * 6) }, Gui.AMBER, { nIconScale, nIconScale }),
         {
             key = 'MenuSublabel',
             type = 'textBox',
