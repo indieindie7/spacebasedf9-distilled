@@ -1,5 +1,1 @@
-local EditMode = {
-}
-function EditMode.init()
-end
-return EditMode
+local EditMode = { } function EditMode.init() end return EditMode

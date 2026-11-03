@@ -1,11 +1,6 @@
-local Util = require('DFCommon.Util')
-local Class = require('Class')
-local SeqCommand = require('SeqCommand')
-local ScPlayAnimation = Class.create(SeqCommand)
-local EntityManager = require('EntityManager')
-ScPlayAnimation.ActorName = ""
-ScPlayAnimation.UseAsFinalPosition = false
-local DFSchema = require('DFCommon.DFSchema')
+local Util = require('DFCommon.Util') local Class = require('Class') local SeqCommand = require('SeqCommand')
+local ScPlayAnimation = Class.create(SeqCommand) local EntityManager = require('EntityManager') ScPlayAnimation.ActorName = ""
+ScPlayAnimation.UseAsFinalPosition = false local DFSchema = require('DFCommon.DFSchema')
 local tFields = Util.deepCopy(SeqCommand.rSchema.tFieldSchemas)
 tFields['ActorName'] = DFSchema.entityName(nil, "Name of the actor", "ControllingActor")
 tFields['Animation'] = DFSchema.resource(nil, 'Unmunged', '.anim', "The path to the animation")
@@ -15,90 +10,28 @@ tFields['ScriptedAnimationState'] = DFSchema.string(nil, "(optional) The state t
 tFields['ScriptedAnimationCategory'] = DFSchema.string(nil, "(optional) Lets you play a scripted animation at a category other than Cutscene, which is the default")
 tFields['UseEntityScaling'] = DFSchema.bool(false, "Ignore the delta-trans scaling of the animation and use the entity scaling instead?")
 tFields['UseAsFinalPosition'] = DFSchema.bool(false, "Should the animation's final position be used for the character's final position?")
-tFields['Looping'] = DFSchema.bool(false, "Does the animation loop?")
-ScPlayAnimation.rSchema = DFSchema.object(
-    tFields,
-    "Plays the specified animation on the actor."
-)
-SeqCommand.addEditorSchema('ScPlayAnimation', ScPlayAnimation.rSchema)
-function ScPlayAnimation:onExecute()
-    local rActor = EntityManager.getEntityNamed( self.ActorName )
-    local coAnimation = rActor and rActor.CoAnimation
-    if self.bSkip then
-        if self.ScriptedAnimationState and coAnimation then
-            coAnimation:setAnimationState( self.ScriptedAnimationState, true )
-        end
-        if self.ScriptedAnimation and coAnimation then
-            local sCategory = self.ScriptedAnimationCategory or "Cutscene"
-            coAnimation:playAnimationOfType( self.ScriptedAnimation, sCategory, self.Blocking or not self.Looping )
-        end
-        return
-    end
-    if self:_getDebugFlags().DebugExecution then
-        local sAnimation = self.Animation or self.ScriptedAnimation or self.ScriptedAnimationState
-        Trace("Playing animation " .. sAnimation .. " on entity " .. self.ActorName)
-    end
-    if rActor then
-        local coNavigator = rActor.CoNavigator
-        if coNavigator then
-            coNavigator:cancelNavigation()
-        end
-        if coAnimation then
-            if self.Animation then
-                local tAnimation = {}
-                tAnimation.sAnimName = self.Animation
-                tAnimation.sFilename = self.Animation
-                tAnimation.bFlipX = self.FlipSides
-                tAnimation.bUseEntityScaling = self.UseEntityScaling
-                tAnimation.bApplyFinalTrackerLocation = self.UseAsFinalPosition
-                if self.rSequence.bLoop then
-                    coAnimation:clearCategory( "Cutscene" )
-                end
-                coAnimation:playAnimation(tAnimation, "Cutscene", not self.Looping)
-                if self.Blocking then
-                    coroutine.yield()
-                    while coAnimation:isPlayingAnimOfType( self.Animation, "Cutscene" ) and not self.bSkip do
-                        coroutine.yield()
-                    end
-                end
-            else
-                if self.ScriptedAnimationState then
-                    local tTransitionAnim = coAnimation:setAnimationState( self.ScriptedAnimationState, true )
-                    if tTransitionAnim then
-                        coAnimation:playAnimation( tTransitionAnim, "Immediate", true )
-                        if self.Blocking then
-                            coroutine.yield()
-                            while coAnimation:isPlayingAnimOfType( tTransitionAnim.sAnimName, "Cutscene" ) and not self.bSkip do
-                                coroutine.yield()
-                            end
-                        end
-                    end
-                end
-                if self.ScriptedAnimation then
-                    local sCategory = self.ScriptedAnimationCategory or "Cutscene"
-                    coAnimation:playAnimationOfType( self.ScriptedAnimation, sCategory, self.Blocking or not self.Looping )
-                    if self.Blocking then
-                        coroutine.yield()
-                        while coAnimation:isPlayingAnimOfType( self.ScriptedAnimation, "Cutscene" ) and not self.bSkip do
-                            coroutine.yield()
-                        end
-                    end
-                end
-            end
-        else
-            Trace(TT_Error, "Entity " .. self.ActorName .. " has no CoAnimation")
-        end
-    else
-        Trace(TT_Error, "Couldn't find entity: " .. self.ActorName)
-    end
-end
-function ScPlayAnimation:onCleanup()
-    local rActor = EntityManager.getEntityNamed( self.ActorName )
-    if rActor then
-        local coAnimation = rActor.CoAnimation
-        if coAnimation then
-            coAnimation:clearCategory( "Cutscene" )
-        end
-    end
-end
-return ScPlayAnimation
+tFields['Looping'] = DFSchema.bool(false, "Does the animation loop?") ScPlayAnimation.rSchema = DFSchema.object( tFields,
+"Plays the specified animation on the actor." ) SeqCommand.addEditorSchema('ScPlayAnimation', ScPlayAnimation.rSchema)
+function ScPlayAnimation:onExecute() local rActor = EntityManager.getEntityNamed( self.ActorName )
+local coAnimation = rActor and rActor.CoAnimation if self.bSkip then if self.ScriptedAnimationState and coAnimation then
+coAnimation:setAnimationState( self.ScriptedAnimationState, true ) end if self.ScriptedAnimation and coAnimation then
+local sCategory = self.ScriptedAnimationCategory or "Cutscene"
+coAnimation:playAnimationOfType( self.ScriptedAnimation, sCategory, self.Blocking or not self.Looping ) end return end
+if self:_getDebugFlags().DebugExecution then local sAnimation = self.Animation or self.ScriptedAnimation or self.ScriptedAnimationState
+Trace("Playing animation " .. sAnimation .. " on entity " .. self.ActorName) end if rActor then local coNavigator = rActor.CoNavigator
+if coNavigator then coNavigator:cancelNavigation() end if coAnimation then if self.Animation then local tAnimation = {}
+tAnimation.sAnimName = self.Animation tAnimation.sFilename = self.Animation tAnimation.bFlipX = self.FlipSides
+tAnimation.bUseEntityScaling = self.UseEntityScaling tAnimation.bApplyFinalTrackerLocation = self.UseAsFinalPosition
+if self.rSequence.bLoop then coAnimation:clearCategory( "Cutscene" ) end coAnimation:playAnimation(tAnimation, "Cutscene", not self.Looping)
+if self.Blocking then coroutine.yield() while coAnimation:isPlayingAnimOfType( self.Animation, "Cutscene" ) and not self.bSkip do
+coroutine.yield() end end else if self.ScriptedAnimationState then
+local tTransitionAnim = coAnimation:setAnimationState( self.ScriptedAnimationState, true ) if tTransitionAnim then
+coAnimation:playAnimation( tTransitionAnim, "Immediate", true ) if self.Blocking then coroutine.yield()
+while coAnimation:isPlayingAnimOfType( tTransitionAnim.sAnimName, "Cutscene" ) and not self.bSkip do coroutine.yield() end end end end
+if self.ScriptedAnimation then local sCategory = self.ScriptedAnimationCategory or "Cutscene"
+coAnimation:playAnimationOfType( self.ScriptedAnimation, sCategory, self.Blocking or not self.Looping ) if self.Blocking then
+coroutine.yield() while coAnimation:isPlayingAnimOfType( self.ScriptedAnimation, "Cutscene" ) and not self.bSkip do coroutine.yield() end
+end end end else Trace(TT_Error, "Entity " .. self.ActorName .. " has no CoAnimation") end else
+Trace(TT_Error, "Couldn't find entity: " .. self.ActorName) end end function ScPlayAnimation:onCleanup()
+local rActor = EntityManager.getEntityNamed( self.ActorName ) if rActor then local coAnimation = rActor.CoAnimation if coAnimation then
+coAnimation:clearCategory( "Cutscene" ) end end end return ScPlayAnimation

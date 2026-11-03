@@ -1,12 +1,6 @@
-local Gui = require('UI.Gui')
-local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
-local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
-local LEFT_BOX_X = -425
-local RIGHT_BOX_X = 25
-local TWO_BOX_WIDTH = 400
-local SPACER = 150
-local LINE_HEIGHT = 40
-local SPACEBASE_Y, SPACEBASE_HEIGHT = 50, 0
+local Gui = require('UI.Gui') local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
+local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 } local LEFT_BOX_X = -425 local RIGHT_BOX_X = 25
+local TWO_BOX_WIDTH = 400 local SPACER = 150 local LINE_HEIGHT = 40 local SPACEBASE_Y, SPACEBASE_HEIGHT = 50, 0
 local SB_TEAM_LEFT, SB_TEAM_RIGHT, SPACEBASE_HEIGHT = 'Project Lead\n', 'JP LeBreton\n', SPACEBASE_HEIGHT + LINE_HEIGHT
 SB_TEAM_LEFT, SB_TEAM_RIGHT, SPACEBASE_HEIGHT = SB_TEAM_LEFT..'Senior Producer\n', SB_TEAM_RIGHT..'Gabe Miller\n', SPACEBASE_HEIGHT + LINE_HEIGHT
 SB_TEAM_LEFT, SB_TEAM_RIGHT, SPACEBASE_HEIGHT = SB_TEAM_LEFT..'Lead Programmer\n', SB_TEAM_RIGHT..'Matt Franklin\n', SPACEBASE_HEIGHT + LINE_HEIGHT
@@ -427,208 +421,40 @@ AFTHANKS_TEXT, AFTHANKS_HEIGHT = AFTHANKS_TEXT..'Nathan Martz\n', AFTHANKS_HEIGH
 AFTHANKS_TEXT, AFTHANKS_HEIGHT = AFTHANKS_TEXT..'Jeremy Mitchell\n', AFTHANKS_HEIGHT + LINE_HEIGHT
 AFTHANKS_TEXT, AFTHANKS_HEIGHT = AFTHANKS_TEXT..'Say Oh\n', AFTHANKS_HEIGHT + LINE_HEIGHT
 AFTHANKS_TEXT, AFTHANKS_HEIGHT = AFTHANKS_TEXT..'Chris Remo\n', AFTHANKS_HEIGHT + LINE_HEIGHT
-AFTHANKS_TEXT, AFTHANKS_HEIGHT = AFTHANKS_TEXT..'Nathan Stapley\n', AFTHANKS_HEIGHT + LINE_HEIGHT
-return
-{
-    posInfo =
-        {
-        alignX = 'center',
-        alignY = 'center',
-        offsetX = 0,
-        offsetY = 0,
-        scale = { 1, 1 },
-    },
-    tElements =
-    {
-        {
-            key = 'Background',
-            type = 'onePixel',
-            pos = { -0, 0 },
-            scale = { 2568, 1444 },
-            color = { 0, 0, 0, 0.83 },
-            hidden = false,
-        },
-        {
-            key = 'Logo',
-            type = 'uiTexture',
-            textureName = 'logo',
-            sSpritesheetPath = 'UI/StartMenu',
-            pos = { -1920/2, 1152/2 + 50 },
-            scale = { 1.5, 1.5 },
-            color = Gui.WHITE,
-            hidden = false,
-        },
-        {
-            key = 'SpaceTeamHeader',
-            type = 'textBox',
-            pos = { -200, SPACEBASE_Y },
-            text = "Spacebase Team",
-            style = 'dosissemibold48',
-            rect = { 0, 0, 400, 200 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'SpaceTeamLeft',
-            type = 'textBox',
-            pos = { LEFT_BOX_X, SPACEBASE_Y - SPACEBASE_HEIGHT + 50},
-            text = SB_TEAM_LEFT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, TWO_BOX_WIDTH, SPACEBASE_HEIGHT },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            color = Gui.WHITE,
-        },
-        {
-            key = 'SpaceTeamRight',
-            type = 'textBox',
-            pos = { RIGHT_BOX_X, SPACEBASE_Y - SPACEBASE_HEIGHT + 50 },
-            text = SB_TEAM_RIGHT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, TWO_BOX_WIDTH, SPACEBASE_HEIGHT },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.WHITE,
-        },
-        {
-            key = 'DoubleFineHeader',
-            type = 'textBox',
-            pos = { -150, DF_Y },
-            text = "Double Fine",
-            style = 'dosissemibold48',
-            rect = { 0, 0, 300, 200 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'DoubleFineLeft',
-            type = 'textBox',
-            pos = { LEFT_BOX_X, DF_Y - DF_HEIGHT + 50 },
-            text = DF_TEAM_LEFT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, TWO_BOX_WIDTH, DF_HEIGHT },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            color = Gui.WHITE,
-        },
-        {
-            key = 'DoubleFineRight',
-            type = 'textBox',
-            pos = { RIGHT_BOX_X, DF_Y - DF_HEIGHT + 50 },
-            text = DF_TEAM_RIGHT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, TWO_BOX_WIDTH, DF_HEIGHT },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.WHITE,
-        },
-        {
-            key = 'IndiefundHeader',
-            type = 'textBox',
-            pos = { -500, INDIEFUND_Y },
-            text = "Spacebase Was Made Possible By",
-            style = 'dosissemibold48',
-            rect = { 0, 0, 1000, 200 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'Indiefund',
-            type = 'textBox',
-            pos = { -250, INDIEFUND_Y - INDIEFUND_HEIGHT + 50 },
-            text = INDIEFUND_TEXT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, 500, INDIEFUND_HEIGHT },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.WHITE,
-        },
-        {
-            key = 'SpecialThanksHeader',
-            type = 'textBox',
-            pos = { -150, SPECIALTHANKS_Y },
-            text = "Special Thanks",
-            style = 'dosissemibold48',
-            rect = { 0, 0, 300, 200 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'SpecialThanks',
-            type = 'textBox',
-            pos = { -350, SPECIALTHANKS_Y - SPECIALTHANKS_HEIGHT + 50 },
-            text = SPECIALTHANKS_TEXT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, 700, SPECIALTHANKS_HEIGHT },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.WHITE,
-        },
-		{
-            key = 'FamousCitizensHeader',
-            type = 'textBox',
-            pos = { -500, CITIZENS_Y },
-            text = "Famous Citizens",
-            style = 'dosissemibold48',
-            rect = { 0, 0, 1000, 200 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'FamousCitizens',
-            type = 'textBox',
-            pos = { -350, CITIZENS_Y - CITIZENS_HEIGHT + 50 },
-            text = CITIZENS_TEXT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, 700, CITIZENS_HEIGHT },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.WHITE,
-        },
-        {
-            key = 'DFThanksHeader',
-            type = 'textBox',
-            pos = { -500, DFTHANKS_Y },
-            text = "Double Fine Would Also Like To Thank",
-            style = 'dosissemibold48',
-            rect = { 0, 0, 1000, 200 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'DFThanks',
-            type = 'textBox',
-            pos = { -350, DFTHANKS_Y - DFTHANKS_HEIGHT + 50 },
-            text = DFTHANKS_TEXT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, 700, DFTHANKS_HEIGHT },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.WHITE,
-        },
-                {
-            key = 'AFThanksHeader',
-            type = 'textBox',
-            pos = { -500, AFTHANKS_Y },
-            text = "Original Amnesia Fortnight Spacebase Team",
-            style = 'dosissemibold48',
-            rect = { 0, 0, 1000, 200 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'AFThanks',
-            type = 'textBox',
-            pos = { -350, AFTHANKS_Y - AFTHANKS_HEIGHT + 50 },
-            text = AFTHANKS_TEXT,
-            style = 'dosissemibold30',
-            rect = { 0, 0, 700, AFTHANKS_HEIGHT },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.WHITE,
-        },
-    },
-}
+AFTHANKS_TEXT, AFTHANKS_HEIGHT = AFTHANKS_TEXT..'Nathan Stapley\n', AFTHANKS_HEIGHT + LINE_HEIGHT return { posInfo = { alignX = 'center',
+alignY = 'center', offsetX = 0, offsetY = 0, scale = { 1, 1 }, }, tElements = { { key = 'Background', type = 'onePixel', pos = { -0, 0 },
+scale = { 2568, 1444 }, color = { 0, 0, 0, 0.83 }, hidden = false, }, { key = 'Logo', type = 'uiTexture', textureName = 'logo',
+sSpritesheetPath = 'UI/StartMenu', pos = { -1920/2, 1152/2 + 50 }, scale = { 1.5, 1.5 }, color = Gui.WHITE, hidden = false, }, {
+key = 'SpaceTeamHeader', type = 'textBox', pos = { -200, SPACEBASE_Y }, text = "Spacebase Team", style = 'dosissemibold48',
+rect = { 0, 0, 400, 200 }, hAlign = MOAITextBox.CENTER_JUSTIFY, vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.AMBER, }, {
+key = 'SpaceTeamLeft', type = 'textBox', pos = { LEFT_BOX_X, SPACEBASE_Y - SPACEBASE_HEIGHT + 50}, text = SB_TEAM_LEFT,
+style = 'dosissemibold30', rect = { 0, 0, TWO_BOX_WIDTH, SPACEBASE_HEIGHT }, hAlign = MOAITextBox.RIGHT_JUSTIFY, color = Gui.WHITE, }, {
+key = 'SpaceTeamRight', type = 'textBox', pos = { RIGHT_BOX_X, SPACEBASE_Y - SPACEBASE_HEIGHT + 50 }, text = SB_TEAM_RIGHT,
+style = 'dosissemibold30', rect = { 0, 0, TWO_BOX_WIDTH, SPACEBASE_HEIGHT }, hAlign = MOAITextBox.LEFT_JUSTIFY, color = Gui.WHITE, }, {
+key = 'DoubleFineHeader', type = 'textBox', pos = { -150, DF_Y }, text = "Double Fine", style = 'dosissemibold48',
+rect = { 0, 0, 300, 200 }, hAlign = MOAITextBox.CENTER_JUSTIFY, vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.AMBER, }, {
+key = 'DoubleFineLeft', type = 'textBox', pos = { LEFT_BOX_X, DF_Y - DF_HEIGHT + 50 }, text = DF_TEAM_LEFT, style = 'dosissemibold30',
+rect = { 0, 0, TWO_BOX_WIDTH, DF_HEIGHT }, hAlign = MOAITextBox.RIGHT_JUSTIFY, color = Gui.WHITE, }, { key = 'DoubleFineRight',
+type = 'textBox', pos = { RIGHT_BOX_X, DF_Y - DF_HEIGHT + 50 }, text = DF_TEAM_RIGHT, style = 'dosissemibold30',
+rect = { 0, 0, TWO_BOX_WIDTH, DF_HEIGHT }, hAlign = MOAITextBox.LEFT_JUSTIFY, color = Gui.WHITE, }, { key = 'IndiefundHeader',
+type = 'textBox', pos = { -500, INDIEFUND_Y }, text = "Spacebase Was Made Possible By", style = 'dosissemibold48',
+rect = { 0, 0, 1000, 200 }, hAlign = MOAITextBox.CENTER_JUSTIFY, vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.AMBER, }, {
+key = 'Indiefund', type = 'textBox', pos = { -250, INDIEFUND_Y - INDIEFUND_HEIGHT + 50 }, text = INDIEFUND_TEXT, style = 'dosissemibold30',
+rect = { 0, 0, 500, INDIEFUND_HEIGHT }, hAlign = MOAITextBox.CENTER_JUSTIFY, vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.WHITE, }, {
+key = 'SpecialThanksHeader', type = 'textBox', pos = { -150, SPECIALTHANKS_Y }, text = "Special Thanks", style = 'dosissemibold48',
+rect = { 0, 0, 300, 200 }, hAlign = MOAITextBox.CENTER_JUSTIFY, vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.AMBER, }, {
+key = 'SpecialThanks', type = 'textBox', pos = { -350, SPECIALTHANKS_Y - SPECIALTHANKS_HEIGHT + 50 }, text = SPECIALTHANKS_TEXT,
+style = 'dosissemibold30', rect = { 0, 0, 700, SPECIALTHANKS_HEIGHT }, hAlign = MOAITextBox.CENTER_JUSTIFY,
+vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.WHITE, }, { key = 'FamousCitizensHeader', type = 'textBox', pos = { -500, CITIZENS_Y },
+text = "Famous Citizens", style = 'dosissemibold48', rect = { 0, 0, 1000, 200 }, hAlign = MOAITextBox.CENTER_JUSTIFY,
+vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.AMBER, }, { key = 'FamousCitizens', type = 'textBox',
+pos = { -350, CITIZENS_Y - CITIZENS_HEIGHT + 50 }, text = CITIZENS_TEXT, style = 'dosissemibold30', rect = { 0, 0, 700, CITIZENS_HEIGHT },
+hAlign = MOAITextBox.CENTER_JUSTIFY, vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.WHITE, }, { key = 'DFThanksHeader', type = 'textBox',
+pos = { -500, DFTHANKS_Y }, text = "Double Fine Would Also Like To Thank", style = 'dosissemibold48', rect = { 0, 0, 1000, 200 },
+hAlign = MOAITextBox.CENTER_JUSTIFY, vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.AMBER, }, { key = 'DFThanks', type = 'textBox',
+pos = { -350, DFTHANKS_Y - DFTHANKS_HEIGHT + 50 }, text = DFTHANKS_TEXT, style = 'dosissemibold30', rect = { 0, 0, 700, DFTHANKS_HEIGHT },
+hAlign = MOAITextBox.CENTER_JUSTIFY, vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.WHITE, }, { key = 'AFThanksHeader', type = 'textBox',
+pos = { -500, AFTHANKS_Y }, text = "Original Amnesia Fortnight Spacebase Team", style = 'dosissemibold48', rect = { 0, 0, 1000, 200 },
+hAlign = MOAITextBox.CENTER_JUSTIFY, vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.AMBER, }, { key = 'AFThanks', type = 'textBox',
+pos = { -350, AFTHANKS_Y - AFTHANKS_HEIGHT + 50 }, text = AFTHANKS_TEXT, style = 'dosissemibold30', rect = { 0, 0, 700, AFTHANKS_HEIGHT },
+hAlign = MOAITextBox.CENTER_JUSTIFY, vAlign = MOAITextBox.CENTER_JUSTIFY, color = Gui.WHITE, }, }, }
