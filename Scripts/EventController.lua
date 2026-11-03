@@ -606,27 +606,4 @@ function EventController.spawnModuleEntities(tEventData, tModuleData, tTeams)
         rLoc:remove()
     end
 end
-function EventController.getForecastDebugText()
-    local s = ""
-    if EventController.tS and EventController.tS.tEventForecast then
-        local tNextEvent = EventController.tS.tNextEventData
-        s = s .. "Next Event"
-        s = s .. " | CurTime: " .. MiscUtil.formatTime(GameRules.elapsedTime)
-        s = s .. " | Use ^ to force event\n"
-        s = s ..  "-------------------------------------------------\n"
-        if tNextEvent then
-            s = s .. string.format(" 0) %s\n\n", EventController.tEventClasses[tNextEvent.sEventType].getDebugString(EventController, tNextEvent))
-        else
-            s = s .. "None\n"
-        end
-        s = s .. string.format("Event Forecast", #EventController.tS.tEventForecast)
-        s = s .. " | Use ! to regen forecast\n"
-        s = s ..  "-------------------------------------------------\n"
-        for idx, tEventState in ipairs(EventController.tS.tEventForecast) do
-            local sLine = EventController.tEventClasses[tEventState.sEventType].getDebugString(EventController, tEventState)
-            s = s .. string.format("%2d) %s\n", idx, sLine)
-        end
-    end
-    return s
-end
 return EventController

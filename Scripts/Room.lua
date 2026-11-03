@@ -81,87 +81,6 @@ end
 function Room.powerVisEnabled()
     return Room.sbPowerVisEnabled
 end
-function Room.getPowerDebugText()
-    local tProcessedRooms = {}
-    local nUniversalDraw = 0
-    local nUniversalGen = 0
-    local nUniversalMetDraw = 0
-    for id,rRoom in pairs(Room.tRooms) do
-        if not tProcessedRooms[id] then
-            local tBlobInfo = {}
-            local nTotalRooms=0
-            local nTotalDraw=0
-            local nMetDraw=0
-            local nTotalOutput=0
-            local tContig = rRoom.tContiguousRooms
-            if tContig then
-                for contigID,rContigRoom in pairs(rRoom.tContiguousRooms) do
-                    tProcessedRooms[contigID] = tBlobInfo
-                    local nPowerOutput = rContigRoom.zoneObj:getPowerOutput()
-                    nTotalOutput = nTotalOutput+nPowerOutput
-                    nTotalDraw = nTotalDraw+rContigRoom.nPowerDraw
-                    nMetDraw = nMetDraw+rContigRoom.nPowerSupplied
-                    if rContigRoom.nPowerSupplied ~= rContigRoom.nPowerDraw then
-                        local what='what'
-                    end
-                    nUniversalDraw = nUniversalDraw + rContigRoom.nPowerDraw
-                    nUniversalMetDraw = nUniversalMetDraw + rContigRoom.nPowerSupplied
-                    nUniversalGen = nUniversalGen+nPowerOutput
-                    nTotalRooms = nTotalRooms+1
-                end
-            end
-            tBlobInfo.nTotalOutput = nTotalOutput
-            tBlobInfo.nTotalDraw = nTotalDraw
-            tBlobInfo.nTotalRooms = nTotalRooms
-            tBlobInfo.nSpaceDraw = 0
-            tBlobInfo.nMetDraw = nMetDraw
-        end
-    end
-    local nSpaceDraw = 0
-    local nBlobErrors = 0
-    local nUnpoweredSpaceProps = 0
-    local nMissingSpacePower = 0
-    for rProp,_ in pairs(g_SpaceRoom.tProps) do
-        local nDraw = rProp:getPowerDraw()
-        nSpaceDraw = nSpaceDraw+nDraw
-        nUniversalDraw = nUniversalDraw+nDraw
-        if rProp:hasPower() then
-            nUniversalMetDraw = nUniversalMetDraw+nDraw
-        end
-        if rProp.rPowerRoom or rProp.rLeechingFromRoom then
-            local rPowerRoom = rProp.rPowerRoom or rProp.rLeechingFromRoom
-            local tBlob = tProcessedRooms[rPowerRoom.id]
-            if tBlob then
-                tBlob.nSpaceDraw = tBlob.nSpaceDraw + nDraw
-                tBlob.nTotalDraw = tBlob.nTotalDraw + nDraw
-                if rProp:hasPower() then
-                    tBlob.nMetDraw = tBlob.nMetDraw + nDraw
-                end
-                tBlob.nTotalOutput = tBlob.nTotalOutput + rProp:getPowerOutput()
-            else
-                nBlobErrors = nBlobErrors+1
-            end
-        elseif nDraw > 0 then
-            nUnpoweredSpaceProps = nUnpoweredSpaceProps+1
-            nMissingSpacePower = nMissingSpacePower + nDraw
-        end
-    end
-    local s = 'POWER DRAW\n'
-    s = s.. ' Total Draw: '..nUniversalDraw..'\n'
-    s = s.. ' Met Draw: '..nUniversalMetDraw..'\n'
-    s = s.. ' Total Gen: '..nUniversalGen..'\n'
-    s = s.. ' Space Draw: '..nSpaceDraw..'( '..nUnpoweredSpaceProps..' unpowered props for '..nMissingSpacePower..' PUs)\n'
-    for id,tBlob in pairs(tProcessedRooms) do
-        if not tBlob.bProcessed then
-            tBlob.bProcessed = true
-            s = s.. ' - Blob '..id..': '..tBlob.nMetDraw..' / '..tBlob.nTotalDraw..' / '..tBlob.nTotalOutput..' (Met/Desired/Power), # Rooms '..tBlob.nTotalRooms..', Space draw '..tBlob.nSpaceDraw..'\n'
-        end
-    end
-    if nBlobErrors > 0 then
-        s = s..'BLOB ERRORS GO GET MATT: '..nBlobErrors..'\n'
-    end
-    return s
-end
 function Room.cycleDebugDraw()
     if Room.debugDrawMode == Room.DEBUG_DRAW_PROPS then
         World.setPathGridVisualize(false)
@@ -216,11 +135,6 @@ end
 function Room.DBG_globalSetTeam(nTeam)
     for id,rRoom in pairs(Room.tRooms) do
         rRoom:_setTeam(nTeam)
-    end
-end
-function Room.debugDrawRooms()
-    for idx,room in pairs(Room.tRooms) do
-        room:debugDraw()
     end
 end
 function Room.visibilityBlip(tx,ty,nLevel,bFloorOnly)

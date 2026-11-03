@@ -22,14 +22,6 @@ if MOAIEnvironment.osBrand == "Windows" or MOAIEnvironment.osBrand == "OSX" then
 elseif MOAIEnvironment.osBrand == "Linux" then
     MOAIEnvironment.documentDirectory = MOAIEnvironment.documentDirectory.."/doublefine/spacebasedf9"
 end
-g_tTraceOutput =
-{
-    TT_Error = true,
-    TT_Warning = true,
-    TT_System = true,
-    TT_Gameplay = true,
-    TT_Info = true,
-}
 g_tSoundProjects =
 {
 	tFEV =

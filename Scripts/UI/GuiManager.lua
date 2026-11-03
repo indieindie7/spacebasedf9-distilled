@@ -16,8 +16,6 @@ local GameRules = require('GameRules')
 local World = require('World')
 local Room = require('Room')
 local Character = require('Character')
-local DebugInfoManager = require('DebugInfoManager')
-local DebugInfoPane = require('UI.DebugInfoPane')
 local HintPane = require('UI.HintPane')
 local AlertPane = require('UI.AlertPane')
 local ObjectList = require('ObjectList')
@@ -75,7 +73,6 @@ function GuiManager.init()
     GuiManager.statusBar = StatusBar.new()
     GuiManager.tPopupQueue = {}
     GuiManager.globalJobs = GlobalJobs.new()
-	GuiManager.debugInfoPane = DebugInfoPane.new()
 	GuiManager.buildHelper = BuildHelper.new()
 	GuiManager.hintPane = HintPane.new()
     GuiManager.alertPane = AlertPane.new()
@@ -87,9 +84,6 @@ function GuiManager.init()
     GuiManager.basePri = pri
     pri = GuiManager.newSideBar:show(pri)
     pri = GuiManager.statusBar:show(pri)
-	if DebugInfoManager.drawSelectedDebug then
-		pri = GuiManager.debugInfoPane:show(pri)
-	end
 	pri = GuiManager.buildHelper:show(pri)
 	pri = GuiManager.hintPane:show(pri)
     pri = GuiManager.alertPane:show(pri)
@@ -352,11 +346,6 @@ function GuiManager.onTick(dt)
     GuiManager.globalJobs:onTick(dt)
     if DBG_moreProfiling then
         Profile.leaveScope("GlobalJobs")
-        Profile.enterScope("DebugInfoPane")
-    end
-	GuiManager.debugInfoPane:onTick(dt)
-    if DBG_moreProfiling then
-        Profile.leaveScope("DebugInfoPane")
         Profile.enterScope("BuildHelper")
     end
 	GuiManager.buildHelper:onTick(dt)

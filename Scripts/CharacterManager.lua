@@ -59,13 +59,6 @@ function CharacterManager.debugDrawRigs()
         end
     end
 end
-function CharacterManager.debugDrawPathing()
-	local rChar = g_GuiManager.getSelectedCharacter()
-	if not rChar then
-		return
-	end
-	rChar:drawDebugPath()
-end
 function CharacterManager.addNewCharacter(x,y,tData,nTeam)
     local bGenerateStartingStuff = not tData or not tData.tInventory or (next(tData.tInventory) == nil)
     if bGenerateStartingStuff and tData and tData.bNoStuff then bGenerateStartingStuff = false end

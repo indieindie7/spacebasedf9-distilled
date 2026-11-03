@@ -668,38 +668,6 @@ Renderer.tDebugDrawModes = {
     [MOAIGfxDevice.DBG_SHOW_OVERDRAW] = "Overdraw",
     [MOAIGfxDevice.DBG_DISABLED] = "Disabled",
 }
-function Renderer.debugDrawModeOptions()
-    return Renderer.tDebugDrawModes
-end
-function Renderer.debugDrawModeGet()
-    return Renderer.tDebugDrawModes[tFlags.DebugDrawMode]
-end
-function Renderer.debugDrawModeSet(debugDrawMode)
-    for modeId, modeName in pairs(Renderer.tDebugDrawModes) do
-        if modeName == debugDrawMode then
-            tFlags.DebugDrawMode = modeId
-        end
-    end
-end
-function Renderer.cycleDebugDrawRooms()
-    local Room=require('Room')
-    Room.cycleDebugDraw()
-    if Room.debugDrawMode == Room.DEBUG_DRAW_NONE then
-        Renderer.dDebugRenderWindow:unregister(Room.debugDrawRooms)
-    else
-        Renderer.dDebugRenderWindow:register(Room.debugDrawRooms)
-    end
-end
-function Renderer.toggleDebugDrawPathing()
-	local CharacterManager = require('CharacterManager')
-	if Renderer.bDrawingPathing then
-        Renderer.bDrawingPathing = false
-        Renderer.dDebugRenderWindow:unregister(CharacterManager.debugDrawPathing)
-	else
-		Renderer.bDrawingPathing = true
-        Renderer.dDebugRenderWindow:register(CharacterManager.debugDrawPathing)
-	end
-end
 function Renderer.toggleDebugDrawRigs()
     local CharacterManager=require('CharacterManager')
     if Renderer.bDrawingRigs then
@@ -709,9 +677,6 @@ function Renderer.toggleDebugDrawRigs()
         Renderer.bDrawingRigs = true
         Renderer.dDebugRenderWindow:register(CharacterManager.debugDrawRigs)
     end
-end
-function Renderer.toggleDebugDrawStats()
-    Renderer._debugShowStats(not tFlags.DebugDrawStats)
 end
 function Renderer._debugShowStats(show)
     if show then
@@ -723,9 +688,6 @@ function Renderer._debugShowStats(show)
     end
     tFlags.DebugDrawStats = show
 end
-function Renderer.toggleDebugDrawProfileReport()
-    Renderer._debugShowProfileReport(not tFlags.DebugDrawProfileReport)
-end
 function Renderer._debugShowProfileReport(show)
     if not tLayers.DebugWindow.RenderLayer or not Renderer.rDebugProfileReportProp then return end
     if show then
@@ -736,9 +698,6 @@ function Renderer._debugShowProfileReport(show)
         Renderer.rDebugProfileReportProp:disableProfiling()
     end
     tFlags.DebugDrawProfileReport = show
-end
-function Renderer.toggleDebugDrawGpuProfileReport()
-    Renderer._debugShowGpuProfileReport(not tFlags.DebugDrawGpuProfileReport)
 end
 function Renderer._debugShowGpuProfileReport(show)
     if show then

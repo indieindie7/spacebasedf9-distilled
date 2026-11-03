@@ -3277,18 +3277,6 @@ function Character:getFavorite(category)
 	end
 	return favorite
 end
-function Character:getSortedAffinityList(category)
-	local Topics = require('Topics')
-	local tAff = {}
-	for topic,tData in pairs(Topics.tTopics) do
-		if tData.category == category and self:getAffinity(topic) then
-			table.insert(tAff, {topic=topic, name=tData.name, aff=self:getAffinity(topic), id=topic})
-		end
-	end
-	local f = function(x,y) return self:getAffinity(x.topic) > self:getAffinity(y.topic) end
-	table.sort(tAff, f)
-	return tAff
-end
 function Character:getFamiliarity(sID)
 	if not self.tFamiliarity[sID] then
 		self:setFamiliarity(sID, 0)
@@ -5006,26 +4994,6 @@ function Character:getToolTipTextInfos()
     end
     _fillTooltipInfo(tInfos[nIndex + 2], self:getToolTipOxygenText(), tOxygenColor, 'ui_icon_bulletpoint')
     return tInfos
-end
-function Character:drawDebugPath()
-	if not self.rCurrentTask or not self.rCurrentTask.tPath or not self.rCurrentTask.tPath.tPathNodes then
-		return
-	end
-	local tPathNodes = self.rCurrentTask.tPath.tPathNodes
-	local rRenderLayer = g_World.getWorldRenderLayer()
-	MOAIGfxDevice.setPenColor(1, 0, 1, 1)
-	local cx,cy,cz = self:getLoc()
-	local x0,y0 = 0,0
-	local x1,y1 = rRenderLayer:worldToWnd(tPathNodes[1].wx, tPathNodes[1].wy, cz)
-	for i,node in pairs(tPathNodes) do
-		local wx,wy = node.wx, node.wy
-		if not wx then
-			wx,wy = g_World._getWorldFromTile(node.tx, node.ty)
-		end
-		x0,y0 = rRenderLayer:worldToWnd(wx, wy, cz)
-		MOAIDraw.drawLine( x0, y0, x1, y1 )
-		x1,y1 = x0,y0
-	end
 end
 function Character.updateSavegame(nSavegameVersion, saveData)
     if saveData and nSavegameVersion <= 3 then

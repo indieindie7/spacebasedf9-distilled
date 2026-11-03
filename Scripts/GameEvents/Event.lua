@@ -354,23 +354,6 @@ function Event.getMaladyDebugString(tPersistentState, n)
     end
     return s2
 end
-function Event.getDebugString(rController, tPersistentState, tTransientState)
-    local s = ""
-    if tPersistentState then
-        local n = tPersistentState.nStartTime - GameRules.elapsedTime
-        local name = string.gsub(tPersistentState.sEventType, "Events", "")
-        name = string.sub(name, 1, math.min(#name, 11))
-        name = MiscUtil.padString(name, 11, true)
-        local sModuleInfo1, sModuleInfo2 = rController.tEventClasses[tPersistentState.sEventType].getModuleContentsDebugString(rController, tPersistentState)
-        s = string.format("%s [%1.2f] %s", name, tPersistentState.nDifficulty, sModuleInfo1)
-		s = MiscUtil.padString(s, Event.nDebugLineLength, true)
-		s = s .. MiscUtil.formatTime(n)
-        if sModuleInfo2 then
-            s = s .. string.format("\n    %s", sModuleInfo2)
-        end
-    end
-    return s
-end
 function Event.pauseGame()
     GameRules.timePause()
 end

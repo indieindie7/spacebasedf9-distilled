@@ -545,13 +545,6 @@ function m.unloadShader(shaderPath)
         end
     end
 end
-function m.reloadAllShaders()
-    Trace("Reloading all shaders!")
-    DFDataCache.clear( "shader" )
-    for shaderPath, shader in pairs(m.shaderLibrary) do
-        m.reloadShaderData(shaderPath)
-    end
-end
 function m.reloadMaterial(material, clearCache)
     local tMaterialData = m.loadMaterialData(material.path, clearCache)
     if material.shader ~= nil and material.shader.path ~= tMaterialData.sShader then

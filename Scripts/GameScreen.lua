@@ -1,12 +1,9 @@
 local Screen = require('UI.Screen')
 local Class = require('Class')
 local GameRules=require('GameRules')
-local DebugManager=require('DebugManager')
 local Renderer=require('Renderer')
 local Character=require('CharacterConstants')
 local SoundManager=require('SoundManager')
-local ExampleSaveCycler=require('ExampleSaveCycler')
-local DebugInfoManager = require('DebugInfoManager')
 local EventController = require('EventController')
 local Room = require('Room')
 local Profile = require('Profile')
@@ -256,29 +253,6 @@ function GameScreen:onKeyboard(key, bDown)
             GameRules.togglePause()
         elseif key == 264 then
             Renderer.toggleUI()
-        elseif DFSpace.isDev() or g_bAllowDebugInRelease then
-            if key == string.byte('?') then
-				DebugInfoManager.cycleInfoPage()
-            elseif key == 262 then
-                DebugInfoManager.drawSelectedDebug = not DebugInfoManager.drawSelectedDebug
-                if DebugInfoManager.drawSelectedDebug then
-                    g_GuiManager.debugInfoPane:show()
-                else
-                    g_GuiManager.debugInfoPane:hide()
-                end
-			elseif key == string.byte('1') then
-				DebugInfoManager.nDebugInfoPage = 0
-			elseif key == string.byte('2') then
-				DebugInfoManager.nDebugInfoPage = 1
-			elseif key == string.byte('3') then
-				DebugInfoManager.nDebugInfoPage = 2
-			elseif key == string.byte('4') then
-				DebugInfoManager.nDebugInfoPage = 3
-			elseif key == string.byte('5') then
-				DebugInfoManager.nDebugInfoPage = 4
-            else
-                DebugManager:onKeyboard(key, bDown)
-            end
         end
         g_GuiManager.refresh()
     end
@@ -347,15 +321,10 @@ function GameScreen:onKeyboard(key, bDown)
                 EventController.DBG_forceNextEvent()
             elseif key == 268 then
                 Profile.shinyStart()
-            elseif key == 269 then
-                ExampleSaveCycler.nextSave('Demo')
-            elseif key == 270 then
-                ExampleSaveCycler.nextSave('Perf')
             end
             g_GuiManager.refresh()
         else
             GameRules.bZooming = false
-            DebugManager:onKeyboard(key, bDown)
         end
     end
 end

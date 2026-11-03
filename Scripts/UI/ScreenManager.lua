@@ -213,14 +213,4 @@ function ScreenManager:removeScreen(rScreen)
 		Trace(TT_Error, "Couldn't find screen")
 	end
 end
-function ScreenManager:getScreen(sScreenName)
-    local numScreens = #ScreenManager.tScreens
-    for i=1,numScreens do
-        local rScreen = ScreenManager.tScreens[i]
-        if rScreen.sName == sScreenName then
-            return rScreen
-        end
-    end
-    return nil
-end
 return ScreenManager

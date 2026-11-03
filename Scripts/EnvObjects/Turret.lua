@@ -28,7 +28,6 @@ Turret.ATTACK_TYPE = Character.ATTACK_TYPE.Ranged
 Turret.DAMAGE_TYPE = Character.DAMAGE_TYPE.Laser
 Turret.VISUAL_TICK_RATE = 0.025
 Turret.bDebugFollowMouse = false
-Turret.bDebugInfo = false
 Turret.tFrames = {
 	{ nMin = 0-180, sSprite = 'turret_frames0005' },
 	{ nMin = 45-90, sSprite = 'turret_frames0004' },
@@ -117,11 +116,6 @@ function Turret:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
     tData.rTargetObject = self
 	self.rAttackOption = g_ActivityOption.new('RangedAttackThreat',tData)
 	Turret.addTurret(self)
-	if Turret.bDebugInfo then
-		local ObjectDebugInfo = require('UI.ObjectDebugInfo')
-		self.rDebugLabel = ObjectDebugInfo.new('Cursor', self)
-		self.rDebugLabel:show(50)
-	end
 end
 function Turret:getAngleFromTarget(targetX, targetY, bSquareIn)
 	if not bSquareIn then
@@ -352,9 +346,6 @@ function Turret:updateVisuals()
 end
 function Turret:onTick(dt)
     EnvObject.onTick(self, dt)
-	if Turret.bDebugInfo then
-		self.rDebugLabel:refresh()
-	end
 	if self:isDead() or not self:isFunctioning() then
 		return
 	end
