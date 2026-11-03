@@ -22,19 +22,6 @@ if MOAIEnvironment.osBrand == "Windows" or MOAIEnvironment.osBrand == "OSX" then
 elseif MOAIEnvironment.osBrand == "Linux" then
     MOAIEnvironment.documentDirectory = MOAIEnvironment.documentDirectory.."/doublefine/spacebasedf9"
 end
-g_tSoundProjects =
-{
-	tFEV =
-	{
-		"SFX/SFX.fev",
-		"Music/Music.fev",
-        "UI/UI.fev",
-		"Voice/Voice.fev",
-	},
-	tFSB =
-	{
-	},
-}
 function print(...) return Print(TT_Info, ...) end
 assertdev = function() end
 MOAILogMgr.openFile(string.format('moai_log_%s.txt', MOAIEnvironment.appDisplayName))

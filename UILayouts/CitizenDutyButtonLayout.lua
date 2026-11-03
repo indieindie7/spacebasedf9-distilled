@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local c,hl,px,tex=LH.c,LH.hl,LH.px,LH.tex
+local c,px,tex=LH.c,LH.px,LH.tex
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.1 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -37,7 +37,6 @@ return
                 c('DutyButtonLabelBG',Gui.AMBER),
                 c('ButtonLabel',{0,0,0}),
                 c('ButtonDescription',{0,0,0}),
-                hl(),
             },
             onHoverOff =
             {

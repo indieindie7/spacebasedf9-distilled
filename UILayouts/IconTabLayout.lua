@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,tex=LH.hl,LH.tex
+local tex=LH.tex
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -47,7 +47,6 @@ return
                 { key = 'TabActive', color = Gui.GREY, hidden = false, },
                 { key = 'Tab', hidden = true, },
                 { key = 'Icon', color = Gui.BLACK, },
-                hl(),
             },
             onHoverOff =
             {

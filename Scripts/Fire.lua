@@ -5,7 +5,6 @@ local ObjectList=require('ObjectList')
 local GameRules=require('GameRules')
 local GridUtil=require('GridUtil')
 local DFUtil = require('DFCommon.Util')
-local SoundManager = require('SoundManager')
 local Fire = {}
 Fire.DISABLED = false
 Fire.TIME_BETWEEN_UPDATES = 1
@@ -28,7 +27,6 @@ Fire.INTENSITY_THRESHOLD_HIGH = 15
 Fire.tTiles = {}
 Fire.tFlames = {}
 Fire.timeUntilNextUpdate = Fire.TIME_BETWEEN_UPDATES
-Fire.wasOnFire = false
 function Fire.reset()
     for addr,rFlame in pairs(Fire.tFlames) do
         rFlame:remove()
@@ -101,18 +99,11 @@ function Fire.onTick( dt )
     else
         Fire.timeUntilNextUpdate = Fire.TIME_BETWEEN_UPDATES
     end
-    local isOnFire = false
-    local numX, numY, sumX, sumY = 0, 0, 0, 0
     for addr,_ in pairs(Fire.tTiles) do
         local rFlame = Fire.tFlames[addr]
         if rFlame then
-            isOnFire = true
             local bExtinguished = false
             local tileX, tileY = g_World.pathGrid:cellAddrToCoord(addr)
-            numX = numX + 1
-            numY = numY + 1
-            sumX = sumX + tileX
-            sumY = sumY + tileY
             local oxygen = g_World.oxygenGrid:getOxygen(tileX,tileY)
             if oxygen < Fire.NO_OXYGEN_THRESHOLD then bExtinguished = Fire.douseTile(tileX, tileY, Fire.NO_OXYGEN_DOUSE_RATE*dt)
             elseif oxygen < Fire.LOW_OXYGEN_THRESHOLD then bExtinguished = Fire.douseTile(tileX, tileY, Fire.LOW_OXYGEN_DOUSE_RATE*dt) end
@@ -148,19 +139,6 @@ function Fire.onTick( dt )
             end
         end
     end
-    if Fire.wasOnFire ~= isOnFire then
-        if isOnFire then
-            Fire.fireSound = SoundManager.playSfx3D("fireloop")
-        else
-            Fire.fireSound:stop()
-            Fire.fireSound = nil
-        end
-        Fire.wasOnFire = isOnFire
-    end
-    if Fire.fireSound then
-        local avgX, avgY = sumX/numX, sumY/numY
-        Fire.fireSound:setLoc( avgX, avgY )
-    end
 end
 function Fire._attemptFireTile(tx,ty)
     local addr = g_World.pathGrid:getCellAddr(tx, ty)
@@ -193,12 +171,10 @@ function Fire._addToTile(tx,ty,bLoading,nIntensity)
     local prop = ObjectList.getObjAtTile(tx,ty)
     if prop then
         prop:onFire()
-        if not bLoading then SoundManager.playSfx3D("firestart", wx, wy) end
     end
     local rRoom = Room.getRoomAtTile(tx,ty,1)
     if rRoom then
         rRoom:onFire()
-        if not bLoading then SoundManager.playSfx3D("firestart", wx, wy) end
     end
 end
 function Fire.startFire(wx,wy)

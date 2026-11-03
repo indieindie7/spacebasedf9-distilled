@@ -4,7 +4,6 @@ local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local CommandObject = require('Utility.CommandObject')
-local SoundManager = require('SoundManager')
 local sUILayoutFileName = 'UILayouts/MineMenuLayout'
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
@@ -32,20 +31,17 @@ function m.create()
     function Ob:onMineButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             self:setModeSelected(self.rMineButton)
-            SoundManager.playSfx('select')
         end
     end
     function Ob:onEraseButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             self:setModeSelected(self.rEraseButton)
-            SoundManager.playSfx('select')
         end
     end
     function Ob:onDoneButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             g_GameRules.confirmBuild(true)
             g_GuiManager.newSideBar:closeSubmenu()
-            SoundManager.playSfx('confirm')
         end
     end
     function Ob:setModeSelected(rModeButton)

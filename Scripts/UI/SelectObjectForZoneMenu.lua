@@ -5,7 +5,6 @@ local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local CommandObject = require('Utility.CommandObject')
-local SoundManager = require('SoundManager')
 local Room = require('Room')
 local Base = require('Base')
 local EnvObject = nil
@@ -115,7 +114,6 @@ function m.create()
                     _h1(buttonKey .. 'Icon', { Gui.AMBER[1],Gui.AMBER[2],Gui.AMBER[3],  1.0}),
                     _h1(buttonKey .. 'Hotkey', { 0, 0, 0 }),
                     {
-                        playSfx = 'hilight',
                     },
                 },
                 onHoverOff =
@@ -220,7 +218,6 @@ function m.create()
         if eventType == DFInput.TOUCH_UP then
             if g_GameRules.confirmBuild() then
                 g_GuiManager.newSideBar:closeConstructMenu()
-                SoundManager.playSfx('confirm')
             end
         end
     end

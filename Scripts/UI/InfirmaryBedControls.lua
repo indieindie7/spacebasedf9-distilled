@@ -4,7 +4,6 @@ local DFInput = require('DFCommon.Input')
 local UIElement = require('UI.UIElement')
 local TemplateButton = require('UI.TemplateButton')
 local Room = require('Room')
-local SoundManager = require('SoundManager')
 local sUILayoutFileName = 'UILayouts/InfirmaryBedControlsLayout'
 local tEjectBehaviorData = {
 	sLayoutFile = 'UILayouts/ActionButtonLayout',

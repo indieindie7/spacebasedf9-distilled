@@ -3,7 +3,6 @@ local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local ScrollableUI = require('UI.ScrollableUI')
-local SoundManager = require('SoundManager')
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.tTabInfos = {}
@@ -137,7 +136,6 @@ function m.create()
             for i, tTabInfo in ipairs(self.tTabInfos) do
                 if tTabInfo.rUI == rTabUI then
                     self:setTabSelected(i)
-                    SoundManager.playSfx('inspectortab')
                     break
                 end
             end

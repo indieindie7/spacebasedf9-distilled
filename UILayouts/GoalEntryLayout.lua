@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,px,tex,tx=LH.hl,LH.px,LH.tex,LH.tx
+local px,tex,tx=LH.px,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local nBarWidth = 300
 local nBarHeight = 64
@@ -66,7 +66,6 @@ return
 				{ key = 'BarRightInner', hidden = true },
 				{ key = 'NameBubbleRightEndFilled', color = Gui.AMBER },
 				{ key = 'NameBubbleRightEnd', hidden = true },
-                hl(),
             },
             onHoverOff =
             {

@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,lc,px,tex=LH.hl,LH.lc,LH.px,LH.tex
+local lc,px,tex=LH.lc,LH.px,LH.tex
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.BRIGHT_AMBER[1], Gui.BRIGHT_AMBER[2], Gui.BRIGHT_AMBER[3], 1 }
@@ -42,7 +42,6 @@ return
             onHoverOn =
             {
                 { key = 'WebsiteText', color = Gui.BRIGHT_AMBER, },
-                hl(),
             },
             onHoverOff =
             {
@@ -60,7 +59,6 @@ return
             onHoverOn =
             {
                 { key = 'ButtonResumeText', color = Gui.BRIGHT_AMBER, },
-                hl(),
             },
             onHoverOff =
             {
@@ -78,7 +76,6 @@ return
             onHoverOn =
             {
                 { key = 'ButtonNewGameText', color = Gui.BRIGHT_AMBER, },
-                hl(),
             },
             onHoverOff =
             {
@@ -96,7 +93,6 @@ return
             onHoverOn =
             {
                 { key = 'ButtonQuitText', color = Gui.BRIGHT_AMBER, },
-                hl(),
             },
             onHoverOff =
             {

@@ -4,7 +4,6 @@ local WorldObject=require('WorldObjects.WorldObject')
 local Character=require('CharacterConstants')
 local Renderer=require('Renderer')
 local MiscUtil=require('MiscUtil')
-local SoundManager = require('SoundManager')
 local BreachShip = Class.create(WorldObject, MOAIProp.new)
 BreachShip.FADE_TIME = 20
 BreachShip.INV_FADE_TIME = 1/BreachShip.FADE_TIME
@@ -24,8 +23,6 @@ function BreachShip:init(wx,wy,tSaveData,nTeam)
     self.nFlipX,self.nFlipY = 1,1
     self.vx,self.vy=0,0
     self:setLoc(wx,wy,BreachShip.WORLD_Z)
-    SoundManager.playSfx('spacetaxi', wx, wy, 0)
-    self.rLoopingSound = SoundManager.playSfx3D('raiderengineloop', wx, wy, 0)
     self.rOutlineCopy = DFGraphics.newSprite(tSpec.sSpriteName, Renderer.getRenderLayer(Character.BACKGROUND_RENDER_LAYER), tSpec.sSpriteSheetPath, 0,0, 0)
     MiscUtil.setTransformVisParent(self.rOutlineCopy,self)
     WorldObject.tTickers[self] = 1
@@ -68,10 +65,6 @@ function BreachShip:onTick(dt)
         self.rOutlineCopy:setVisible(false)
     else
         self.rOutlineCopy:setVisible(true)
-    end
-    if self.rLoopingSound then
-        local wx,wy = self:getLoc()
-        self.rLoopingSound:setLoc(wx,wy,BreachShip.WORLD_Z)
     end
     if self.nRemainingFadeTime then
         self.nRemainingFadeTime = self.nRemainingFadeTime - dt
@@ -133,10 +126,6 @@ function BreachShip:explode()
 end
 function BreachShip:remove()
     Renderer.getRenderLayer(Character.BACKGROUND_RENDER_LAYER):removeProp(self.rOutlineCopy)
-    if self.rLoopingSound then
-        self.rLoopingSound:stop()
-        self.rLoopingSound = nil
-    end
     WorldObject.remove(self)
 end
 function BreachShip:getSaveTable(xShift,yShift)

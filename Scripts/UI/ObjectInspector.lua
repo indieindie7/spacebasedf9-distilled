@@ -8,7 +8,6 @@ local ObjectAboutTab = require('UI.ObjectAboutTab')
 local ObjectList = require('ObjectList')
 local GameScreen = require('GameScreen')
 local EnvObject = require('EnvObjects.EnvObject')
-local SoundManager = require('SoundManager')
 local Gui = require('UI.Gui')
 local Inventory = require('Inventory')
 local TemplateButton = require('UI.TemplateButton')
@@ -88,7 +87,6 @@ function m.create()
 			if g_GuiManager.newSideBar then
 				g_GuiManager.newSideBar:closeSubmenu()
 				g_GuiManager.setSelected(nil)
-				SoundManager.playSfx('degauss')
 			end
 			return
 		end

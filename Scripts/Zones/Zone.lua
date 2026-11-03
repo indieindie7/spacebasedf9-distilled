@@ -28,7 +28,6 @@ fill('Base','cross',
         _h1({1.0 * 0.5, 0.6 * 0.5, 0.3 * 0.5}, 4, 4, 2),
     },
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clickunzoned',
     portrait = 'Zone_Unzoned'
 })
 Zone.GARDEN =
@@ -46,7 +45,6 @@ fill('Garden','outer01',
         _h1({0.5, 1, 0.8}, 3, 3, 3),
     },
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clickbar',
     portrait = 'Zone_Garden',
 })
 Zone.INFIRMARY =
@@ -64,7 +62,6 @@ fill('Infirmary','outer01',
         _h1({0.25, 0.25, 0.25 }, 5, 5, 4),
     },
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clickbar',
     class='Zones.HospitalZone',
     portrait = 'Zone_Infirmary',
 })
@@ -85,7 +82,6 @@ fill('LifeSupport','cross',
         _h1({0.5, 0.5, 0.8}, 4, 4, 4),
     },
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clicklifesupport',
     portrait = 'Zone_LifeSupport',
 })
 Zone.RESIDENCE =
@@ -103,7 +99,6 @@ fill('Residence','cross',
     },
     class = 'Zones.BedZone',
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clickresidence',
     portrait = 'Zone_Residence',
 })
 Zone.PUB =
@@ -122,7 +117,6 @@ fill('Pub','outer01',
     },
     sLightSpriteName = 'directionalcast',
     class='Zones.Pub',
-    clickSound = 'clickbar',
     portrait = 'Zone_Pub',
 })
 Zone.POWER =
@@ -140,7 +134,6 @@ fill('Reactor','cross',
         _h1({1.0, 0.0, 0.0}, 4, 4, 2.5),
     },
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clickreactor',
     portrait = 'Zone_Power',
 })
 Zone.AIRLOCK =
@@ -158,7 +151,6 @@ fill('Airlock','cross',
     },
     sLightSpriteName = 'directionalcast',
     class='Zones.Airlock',
-    clickSound = 'clickairlock',
     portrait = 'Zone_Airlock',
 })
 Zone.REFINERY =
@@ -176,7 +168,6 @@ fill('Refinery','cross',
         _h1({ 1.0, 0.7, 0.4}, 5, 5, 3),
 	},
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clickrefinery',
     portrait = 'Zone_Refinery',
 })
 Zone.EXTERIOR =
@@ -191,7 +182,6 @@ fill('Exterior','cross',
         _h1({0.8, 1.0, 0.2}, 3, 3, 3),
     },
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clickunzoned',
 })
 Zone.CONSTRUCTION =
 fill('Wireframe','cross',
@@ -219,7 +209,6 @@ fill('Fitness','outer01',
         _h1({1.0, 1.0, 1.0}, 4, 4, 2),
     },
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clickbar',
     class='Zones.FitnessZone',
     portrait = 'Zone_Fitness',
 })
@@ -238,7 +227,6 @@ fill('Research','outer01',
         _h1({0.1*2, 0.5*2, 0.2*2}, 4, 4, 3),
     },
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clickbar',
     class='Zones.ResearchZone',
     portrait = 'Zone_Research',
 })
@@ -258,7 +246,6 @@ fill('Brig','outer01',
         _h1({0.7, 0.5, 0.5}, 4, 4, 1),
     },
     sLightSpriteName = 'directionalcast',
-    clickSound = 'clickbar',
     portrait = 'Zone_Unzoned',
     class='Zones.BrigZone',
 })

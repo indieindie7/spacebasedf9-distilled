@@ -12,7 +12,6 @@ local ResearchMenu = require('UI.ResearchAssignment')
 local GoalsList = require('UI.GoalsList')
 local BeaconMenu = require('UI.BeaconMenu')
 local Renderer = require('Renderer')
-local SoundManager = require('SoundManager')
 local CommandObject = require('Utility.CommandObject')
 local Gui = require('UI.Gui')
 local sUILayoutFileName = 'UILayouts/SideBarLayout'
@@ -186,7 +185,6 @@ function m.create()
     function Ob:onSmallbarHovered(rButton, bHovered)
         if bHovered then
             if not self.bIsExpanded then
-                SoundManager.playSfx('sidebarexpand')
             end
             self:setExpanded(true, 0.4)
         end
@@ -194,7 +192,6 @@ function m.create()
     function Ob:onLargebarHovered(rButton, bHovered)
         if not bHovered then
             if self.bIsExpanded then
-                SoundManager.playSfx('degauss')
             end
             self:setExpanded(false, 0.75)
         end
@@ -229,7 +226,6 @@ function m.create()
             self:hide(true)
             self.rSubmenu = rMenu
             rMenu:show()
-            SoundManager.playSfx('selectdegauss')
         end
     end
     function Ob:closeSubmenu()

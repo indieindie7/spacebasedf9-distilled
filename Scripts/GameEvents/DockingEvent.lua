@@ -7,7 +7,6 @@ local Docking = require('Docking')
 local DFUtil = require('DFCommon.Util')
 local GenericDialog = require('UI.GenericDialog')
 local DialogSets = require('DialogSets')
-local SoundManager = require('SoundManager')
 local Portraits = require('UI.Portraits')
 local AlertEntry = require('UI.AlertEntry')
 local CharacterManager = require('CharacterManager')
@@ -78,7 +77,6 @@ function DockingEvent.tick(rController, dT, tCurrentEventPersistentState, tCurre
         end
         if rController.tickCamera(MOAISim.getStep(), tTransientState.tCutscene) then
             local wx,wy = g_World._getWorldFromTile(tPersistentState.tDockingTile.x, tPersistentState.tDockingTile.y,1)
-            SoundManager.playSfx3D('derelictdocking',wx,wy,0)
             Docking.spawnModule(tPersistentState)
             tTransientState.bSpawned = true
         end

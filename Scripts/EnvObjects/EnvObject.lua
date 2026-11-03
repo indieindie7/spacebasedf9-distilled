@@ -12,7 +12,6 @@ local GameRules=require('GameRules')
 local OptionData=require('Utility.OptionData')
 local ObjectList=require('ObjectList')
 local Room=require('Room')
-local SoundManager = require('SoundManager')
 local DFMath = require("DFCommon.Math")
 local DFUtil = require("DFCommon.Util")
 local MiscUtil = require("MiscUtil")
@@ -381,7 +380,6 @@ function EnvObject:init(sName, wx, wy, bFlipX, bFlipY, bForce, tSaveData, nTeam)
     if self.tData.bUsePortraitOffsetHack ~= nil then
         self.bUsePortraitOffsetHack = self.tData.bUsePortraitOffsetHack
     end
-    if self.tData.ambientSound then self.ambientSound = SoundManager.playSfx3D(self.tData.ambientSound, wx, wy, 0) end
     if bFlipX then
         if not self.tData.bManualFlip then
             self:setScl(-1,1)
@@ -1062,14 +1060,7 @@ function EnvObject:damageCondition(amt, bMaintainFailure)
             self:_dieInAFire()
             return true
         end
-        if self.ambientSound and self.ambientSound:isValid() then
-            self.ambientSound:stop()
-            self.ambientSound = nil
-        end
     else
-        if not self.ambientSound and self.tData.ambientSound then
-            self.ambientSound = SoundManager.playSfx3D(self.tData.ambientSound, self.wx, self.wy, 0)
-        end
         if bMaintainFailure then
             if self.nCondition <= EnvObject.DANGER_ZONE and self.tData.explodeOnFailure then
                 if math.random() < EnvObject.PROBABILITY_FIRE_ON_DANGER_ZONE_MAINTAIN_FAILURE then
@@ -1115,10 +1106,6 @@ function EnvObject:vaporize()
 end
 function EnvObject:remove()
     if self.bDestroyed then return end
-    if self.ambientSound then
-        self.ambientSound:stop()
-        self.ambientSound = nil
-    end
     self.bDestroyed = true
     self.nCondition = 0
     if self.tInventory then

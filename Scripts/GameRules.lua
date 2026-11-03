@@ -5,9 +5,7 @@ local DFInput = require('DFCommon.Input')
 local DFMath = require('DFCommon.Math')
 local DFUtil = require('DFCommon.Util')
 local AssetSet = require('DFCommon.AssetSet')
-local SoundManager = require('SoundManager')
 local ParticleSystemManager = require('ParticleSystemManager')
-local SoundManager = require('SoundManager')
 local MiscUtil = require('MiscUtil')
 local LuaGrid = require('LuaGrid')
 local Environment = require('Environment.Environment')
@@ -163,7 +161,6 @@ function GameRules.init()
     ParticleSystemManager.init()
     World.init(256, 256, 128, 64)
     CharacterManager.init()
-    SoundManager.initialize( g_tSoundProjects )
     Topics.initializeTopicList()
     require('Base').init()
     EventController.init()
@@ -302,7 +299,6 @@ function GameRules.shutdown()
         g_ERBeacon = nil
     end
     World.shutdown()
-    SoundManager.shutdown()
     if g_GuiManager then
         g_GuiManager.shutdown()
         g_GuiManager = nil
@@ -333,7 +329,6 @@ function GameRules.saveGame()
     tSaveData.sStarDate = GameRules.sStarDate
     tSaveData.sStarTime = GameRules.sStarTime
     tSaveData.tLandingZone = GameRules.getLandingZone()
-    tSaveData.tSoundSaveData = SoundManager.getSaveData()
     tSaveData.tWorldSaveData = World.getSaveData()
     tSaveData.tTopics = Topics.tTopics
     tSaveData.tEventControllerState = EventController.getSaveData()
@@ -468,7 +463,6 @@ function GameRules.placeModule(tModuleData, tileXOff, tileYOff, bOnPlayerTeam)
     Room.beginLoad(tModuleData.tSaveData, true)
     local nNewTeam = World.loadModule(tModuleData.tSaveData.nSavegameVersion, tModuleData.tSaveData.tWorldSaveData, worldXOff,worldYOff, nDefaultFactionBehavior)
     ObjectList.endLoad()
-    SoundManager.loadModule( tModuleData.tSaveData.tSoundSaveData )
     local tFakeEvent = {sEventType='initialSpawn',sSetName=tModuleData.sSetName,sModuleName=tModuleData.sModuleName,nDifficulty=0,bValidDockingData=true}
     Event._prerollModuleSpawns(g_EventController, tFakeEvent)
     EventController.spawnModuleEntities(tFakeEvent, tModuleData,{ nDefaultTeam=nNewTeam, nDefaultFactionBehavior=nDefaultFactionBehavior })
@@ -520,7 +514,6 @@ function GameRules.loadGame(sOverridePath, bOverridePreservePath)
     GameRules.bHasHadEnclosedRooms = tSaveData.bHasHadEnclosedRooms
     GameRules.bHasZoned = tSaveData.bHasZoned
     GameRules.currentZoom = tSaveData.currentZoom or GameRules.START_ZOOM
-    SoundManager.loadSaveData( tSaveData.tSoundSaveData )
     if tSaveData.nCameraX and tSaveData.nCameraY and tSaveData.nCameraZ then
         GameRules._centerCameraOnPoint(tSaveData.nCameraX, tSaveData.nCameraY, tSaveData.nCameraZ)
     end
@@ -635,28 +628,6 @@ function GameRules.handleHover(x,y)
         firstHover = true
     end
 end
-function GameRules.applyScaleToAudioLevels(scale)
-    GameRules.nAudioLevelLastScale = GameRules.nAudioLevelLastScale or GameRules.MAX_ZOOM
-    GameRules.nAudioLevelLastScale = scale or GameRules.nAudioLevelLastScale
-    GameRules.bAudioLevelScaleApplied = true
-    local nSfxVol = g_Config:getConfigValue("sfx_volume")
-    local nMusicVol = g_Config:getConfigValue("music_volume")
-    local nVoiceVol = g_Config:getConfigValue("voice_volume")
-    if scale == GameRules.MIN_ZOOM then
-        SoundManager.setCategoryVolume ( "sfx",  nSfxVol)
-        SoundManager.setCategoryVolume ( "voice", 1 * nVoiceVol)
-        SoundManager.setCategoryVolume ( "music", 0.65 * nMusicVol)
-    elseif scale <= GameRules.MIN_ZOOM + GameRules.ZOOM_SFX_THRESHOLD then
-        SoundManager.setCategoryVolume ( "sfx", 0.45 * nSfxVol )
-        SoundManager.setCategoryVolume ( "voice", 0.45 * nVoiceVol)
-        SoundManager.setCategoryVolume ( "music", 0.80 * nMusicVol)
-    else
-        SoundManager.setCategoryVolume ( "sfx", 0 * nSfxVol)
-        SoundManager.setCategoryVolume ( "voice", 0 * nVoiceVol)
-        SoundManager.setCategoryVolume ( "music", 1 * nMusicVol)
-    end
-    SoundManager.setCategoryVolume ( "ambience", g_Config:getConfigValue("sfx_volume"))
-end
 function GameRules._setZoom(scale, screenX, screenY)
 	GameRules.lastZoom = GameRules.currentZoom
     local camera = Renderer.getGameplayCamera()
@@ -676,8 +647,6 @@ function GameRules._setZoom(scale, screenX, screenY)
     local farPlane = DFMath.lerp(Renderer.kMaxZoomFarPlane, Renderer.kMinZoomFarPlane, nDepth)
     camera:setNearPlane(nearPlane)
     camera:setFarPlane(farPlane)
-    SoundManager.setZoomLevel(nDepth)
-    GameRules.applyScaleToAudioLevels(scale)
 end
 function GameRules._centerCameraOnPoint(x, y, z)
     local camera = Renderer.getGameplayCamera()
@@ -875,7 +844,6 @@ function GameRules.confirmBuild(bDontExpendMatter)
         GameRules.setUIMode(GameRules.MODE_INSPECT)
         return true
     else
-        SoundManager.playSfx("disallow")
         return false
     end
 end

@@ -2,7 +2,6 @@ local m = {}
 local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
 local UIElement = require('UI.UIElement')
-local SoundManager = require('SoundManager')
 local sUILayoutFileName = 'UILayouts/EmergencyAlarmControlsLayout'
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())

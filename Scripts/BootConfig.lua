@@ -7,9 +7,6 @@ local kDEFAULT_CONFIG =
 {
     window_resolution_w = 1280,
     window_resolution_h = 720,
-    sfx_volume = 1.0,
-    music_volume = 1.0,
-    voice_volume = 1.0,
     show_blood = true,
     crash_reporting = true,
     autosave = true,

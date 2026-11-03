@@ -5,7 +5,6 @@ local DFFile = require('DFCommon.File')
 local UIElement = require('UI.UIElement')
 local Renderer = require('Renderer')
 local GameRules = require('GameRules')
-local SoundManager = require('SoundManager')
 local sUILayoutFileName = 'UILayouts/StartMenuLayout'
 local m = {}
 function m.create()
@@ -67,7 +66,6 @@ function m.create()
         g_GuiManager.updateHoverTarget()
     end
     function Ob:onResumePressed(rEnt, button, eventType)
-        SoundManager.playSfx('select')
         self:resume(false)
     end
     function Ob:resume(bInMenu)
@@ -144,7 +142,6 @@ function m.create()
                         color = Gui.BRIGHT_AMBER,
                     },
                     {
-                        playSfx = 'hilight',
                     },
                 },
                 onHoverOff =
@@ -196,12 +193,10 @@ function m.create()
         end
     end
     function Ob:startNew()
-        SoundManager.playSfx('select')
         self:resume(true)
         g_GuiManager.showNewBaseScreen()
     end
     function Ob:quit()
-        SoundManager.playSfx('select')
         if g_GuiManager.newSideBar:isConstructMenuOpen() then
             g_GameRules.cancelBuild(true)
             g_GuiManager.newSideBar:closeConstructMenu()

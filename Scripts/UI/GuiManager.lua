@@ -11,7 +11,6 @@ local GameScreen = require('GameScreen')
 local StartMenu = require('UI.StartMenu')
 local GlobalJobs = require('UI.GlobalJobs')
 local CharacterManager = require('CharacterManager')
-local SoundManager = require('SoundManager')
 local GameRules = require('GameRules')
 local World = require('World')
 local Room = require('Room')
@@ -383,7 +382,6 @@ function GuiManager.showStartMenu(bFirstTime)
     if bFirstTime then GuiManager.startMenu:setFirstTime() end
     Gui.setActivePane(GuiManager.startMenu)
     local w,h = GuiManager.startMenu.width,GuiManager.startMenu.height
-    SoundManager.playSfx("menu")
     if g_GameRules.getTimeScale() ~= 0 then
         GuiManager.startMenu.bWasPaused = false
         g_GameRules.togglePause()
@@ -392,7 +390,6 @@ function GuiManager.showStartMenu(bFirstTime)
     end
 end
 function GuiManager.showNewBaseScreen()
-    SoundManager.playSfx("menu")
     g_GameRules.lockTimeScale(false)
     if g_GameRules.getTimeScale() ~= 0 then
         g_GameRules.togglePause()
@@ -664,7 +661,6 @@ function GuiManager.setSelectionProp(object)
 		else
 			scale = 1.25
 		end
-        SoundManager.playSfx(objDef.clickSound)
 	end
 	GuiManager.selectionProp:setScl(scale, scale)
 	if object._ObjectList_ObjectMarker and object._ObjectList_ObjectMarker.objType ~= ObjectList.CHARACTER then

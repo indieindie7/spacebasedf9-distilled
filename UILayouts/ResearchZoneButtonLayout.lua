@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,tex,tx=LH.hl,LH.tex,LH.tx
+local tex,tx=LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local nButtonX = 16
 local nZoneNameX = 48
@@ -42,7 +42,6 @@ return
                 { key = 'ProjectNameBubbleMidHole', color = Gui.BROWN, },
                 { key = 'ProjectNameBubbleRightHole', color = Gui.BROWN, },
                 { key = 'ProjectName', color = Gui.BLACK, },
-                hl(),
             },
             onHoverOff =
             {

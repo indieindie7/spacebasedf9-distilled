@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,lc,px,tex,tx=LH.hl,LH.lc,LH.px,LH.tex,LH.tx
+local lc,px,tex,tx=LH.lc,LH.px,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -70,7 +70,6 @@ return
                 { key = 'BackButton', hidden = false, },
                 { key = 'BackLabel', color = Gui.BLACK, },
                 { key = 'BackHotkey', color = Gui.BLACK, },
-                hl(),
             },
             onHoverOff =
             {
@@ -95,7 +94,6 @@ return
                 { key = 'CancelIcon', color = Gui.BLACK, },
                 { key = 'CancelLabel', color = Gui.BLACK, },
                 { key = 'CancelHotkey', color = Gui.BLACK, },
-                hl(),
             },
             onHoverOff =
             {
@@ -131,7 +129,6 @@ return
                 { key = 'CostVerticalRule', color = Gui.BLACK, },
                 { key = 'CostIconMatter', color = Gui.BLACK, },
                 { key = 'CostText', color = Gui.BLACK, },
-                hl(),
             },
             onHoverOff =
             {
@@ -167,7 +164,6 @@ return
                 { key = 'DoorLabel', color = Gui.BLACK, },
                 { key = 'DoorIcon', color = Gui.BLACK, },
                 { key = 'DoorHotkey', color = Gui.BLACK, },
-                hl(),
             },
             onHoverOff =
             {
@@ -198,7 +194,6 @@ return
                 { key = 'AirlockLabel', color = Gui.BLACK, },
                 { key = 'AirlockIcon', color = Gui.BLACK, },
                 { key = 'AirlockHotkey', color = Gui.BLACK, },
-                hl(),
             },
             onHoverOff =
             {
@@ -229,7 +224,6 @@ return
                 { key = 'HeavyDoorLabel', color = Gui.BLACK, },
                 { key = 'HeavyDoorIcon', color = Gui.BLACK, },
                 { key = 'HeavyDoorHotkey', color = Gui.BLACK, },
-                hl(),
             },
             onHoverOff =
             {

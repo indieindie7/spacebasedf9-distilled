@@ -3,7 +3,6 @@ local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local CharacterManager = require('CharacterManager')
-local SoundManager = require('SoundManager')
 local CharacterConstants = require('CharacterConstants')
 local Gui = require('UI.Gui')
 local sUILayoutFileName = 'UILayouts/CitizenDutyButtonLayout'
@@ -91,7 +90,6 @@ function m.create()
         if eventType == DFInput.TOUCH_UP then
             if self.rCitizen and self.rDutyInfo and not self.rCitizen:isDead() then
                 self.rCitizen:setJob(self.rDutyInfo.enum)
-                SoundManager.playSfx('inspectorduty')
             end
         end
     end

@@ -5,7 +5,6 @@ local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local CommandObject = require('Utility.CommandObject')
 local SelectObjectForZoneMenu = require('UI.SelectObjectForZoneMenu')
-local SoundManager = require('SoundManager')
 local sUILayoutFileName = 'UILayouts/ObjectMenuLayout'
 local ZONES_BY_BUTTON_ID =
 {
@@ -88,14 +87,12 @@ function m.create()
         if eventType == DFInput.TOUCH_UP then
             g_GameRules.cancelBuild()
             g_GuiManager.newSideBar:closeConstructMenu()
-            SoundManager.playSfx('degauss')
         end
     end
     function Ob:onConfirmButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if g_GameRules.confirmBuild() then
                 g_GuiManager.newSideBar:closeConstructMenu()
-                SoundManager.playSfx('confirm')
             end
         end
     end

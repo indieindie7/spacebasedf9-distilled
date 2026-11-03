@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local btn,hl,lc,px,tex,tx=LH.btn,LH.hl,LH.lc,LH.px,LH.tex,LH.tx
+local btn,lc,px,tex,tx=LH.btn,LH.lc,LH.px,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 330, 81
 local nTextHeight = nButtonHeight + 20
@@ -27,8 +27,8 @@ return
     tElements =
     {
         px('LargeBar',{ 0, 0 },{ nButtonWidth, -nButtonStartY + (nButtonHeight * numButtons) },Gui.SIDEBAR_BG),
-        btn('DoneButton',{ 0, 0 },{ nButtonWidth, nButtonHeight },Gui.BLACK,{ { key = 'DoneButton', color = Gui.AMBER, }, { key = 'DoneLabel', color = Gui.BLACK, }, { key = 'DoneHotkey', color = Gui.BLACK, }, hl(), },{ { key = 'DoneButton', color = Gui.BLACK, }, { key = 'DoneLabel', color = Gui.AMBER, }, { key = 'DoneHotkey', color = Gui.AMBER, }, }),
-        btn('ClearBeaconButton',{ 0, nButtonStartY },{ nButtonWidth, nButtonHeight },Gui.BLACK,{ { key = 'ClearBeaconButton', color = Gui.AMBER, }, { key = 'ClearBeaconLabel', color = Gui.BLACK, }, { key = 'ClearBeaconIcon', color = Gui.BLACK, }, { key = 'ClearBeaconHotkey', color = Gui.BLACK, }, hl(), },{ { key = 'ClearBeaconButton', color = Gui.BLACK, }, { key = 'ClearBeaconLabel', color = Gui.AMBER, }, { key = 'ClearBeaconIcon', color = Gui.AMBER, }, { key = 'ClearBeaconHotkey', color = Gui.AMBER, }, }),
+        btn('DoneButton',{ 0, 0 },{ nButtonWidth, nButtonHeight },Gui.BLACK,{ { key = 'DoneButton', color = Gui.AMBER, }, { key = 'DoneLabel', color = Gui.BLACK, }, { key = 'DoneHotkey', color = Gui.BLACK, }, },{ { key = 'DoneButton', color = Gui.BLACK, }, { key = 'DoneLabel', color = Gui.AMBER, }, { key = 'DoneHotkey', color = Gui.AMBER, }, }),
+        btn('ClearBeaconButton',{ 0, nButtonStartY },{ nButtonWidth, nButtonHeight },Gui.BLACK,{ { key = 'ClearBeaconButton', color = Gui.AMBER, }, { key = 'ClearBeaconLabel', color = Gui.BLACK, }, { key = 'ClearBeaconIcon', color = Gui.BLACK, }, { key = 'ClearBeaconHotkey', color = Gui.BLACK, }, },{ { key = 'ClearBeaconButton', color = Gui.BLACK, }, { key = 'ClearBeaconLabel', color = Gui.AMBER, }, { key = 'ClearBeaconIcon', color = Gui.AMBER, }, { key = 'ClearBeaconHotkey', color = Gui.AMBER, }, }),
         tex('ClearBeaconIcon','ui_iconIso_erase','UI/Shared',{ nIconX, nIconStartY },Gui.AMBER,{ nIconScale, nIconScale }),
         lc('ClearBeaconLabel',{ nLabelX, nLabelStartY },'HUDHUD037TEXT','dosisregular40',{ 0, 300, 280, 0 },Gui.AMBER),
         {

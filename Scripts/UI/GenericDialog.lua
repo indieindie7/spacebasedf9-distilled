@@ -3,7 +3,6 @@ local m = {}
 local DFUtil = require("DFCommon.Util")
 local DFInput = require("DFCommon.Input")
 local UIElement = require('UI.UIElement')
-local SoundManager = require('SoundManager')
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.tEventData = nil
@@ -39,13 +38,11 @@ function m.create()
         if eventType == DFInput.TOUCH_UP then
             self.cb(bAccept)
             g_GuiManager.removeFromPopupQueue(self, true)
-            SoundManager.playSfx('confirm')
         end
     end
     function Ob:show(nPri)
         local nPri = Ob.Parent.show(self, nPri)
         g_GuiManager.createEffectMaskBox(500, 0, 850, 800, 0.3, 2)
-        SoundManager.playSfx('inspectorshow')
         return nPri
     end
     return Ob

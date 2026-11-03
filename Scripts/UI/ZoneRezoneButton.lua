@@ -4,7 +4,6 @@ local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local Room = require('Room')
 local Character = require('Character')
-local SoundManager = require('SoundManager')
 local sUILayoutFileName = 'UILayouts/ZoneRezoneButtonLayout'
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
@@ -49,7 +48,6 @@ function m.create()
         if eventType == DFInput.TOUCH_UP then
             if self.rRoom and self.rZoneInfo then
                 self.rRoom:setZone(self.rZoneInfo.zoneName)
-                SoundManager.playSfx('inspectorduty')
             end
         end
     end

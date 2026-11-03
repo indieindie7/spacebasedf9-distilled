@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,tex,tx=LH.hl,LH.tex,LH.tx
+local tex,tx=LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local sFlipBorderX = '0'
 local sFlipBorderTopY = 30
@@ -33,7 +33,6 @@ return
                     key = 'FlipButton',
                     hidden = false,
                 },
-                hl(),
             },
             onHoverOff =
             {

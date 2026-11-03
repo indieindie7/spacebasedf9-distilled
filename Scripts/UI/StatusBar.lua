@@ -5,7 +5,6 @@ local UIElement = require('UI.UIElement')
 local Renderer = require('Renderer')
 local GameRules = require('GameRules')
 local CharacterManager = require('CharacterManager')
-local SoundManager = require('SoundManager')
 local Gui = require('UI.Gui')
 local TemplateButton = require('UI.TemplateButton')
 local GameScreen=require('GameScreen')
@@ -22,7 +21,6 @@ function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     function Ob:init()
         Ob.Parent.init(self)
-        self.sCounterTickSound = 'mattercounter'
         self.nCounterTickIncrement = 2
         self.nCounterTickMult = 1
         self.nextCharacter = 1
@@ -103,7 +101,6 @@ function m.create()
             else
                 self.nMatterCount = self.nMatterCount + nIncrement
             end
-            SoundManager.playSfx(self.sCounterTickSound)
             return Gui.GREEN
         elseif g_GameRules:getMatter() < self.nMatterCount then
             if self.nMatterCount - g_GameRules:getMatter() < nIncrement then
@@ -112,7 +109,6 @@ function m.create()
                 self.nMatterCount = self.nMatterCount - nIncrement
             end
             self.nMatterCount = self.nMatterCount - nIncrement
-            SoundManager.playSfx(self.sCounterTickSound)
             return Gui.RED
         else
             return Gui.AMBER
@@ -175,7 +171,6 @@ function m.create()
                 elseif rButton == self.rSpeed3Button then
                     g_GameRules.setTimeScale(4)
                 end
-                SoundManager.playSfx('select')
             end
         end
     end

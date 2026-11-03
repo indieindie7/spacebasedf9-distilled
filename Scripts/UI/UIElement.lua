@@ -6,7 +6,6 @@ local DFUtil = require('DFCommon.Util')
 local Renderer = require('Renderer')
 local Gui = require('UI.Gui')
 local MiscUtil = require("MiscUtil")
-local SoundManager = require('SoundManager')
 local m = {}
 function m.create()
     local Ob = MOAITransform.new()

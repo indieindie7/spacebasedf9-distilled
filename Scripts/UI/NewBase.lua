@@ -8,7 +8,6 @@ local GameRules = require('GameRules')
 local EventController = require('EventController')
 local Gui = require('UI.Gui')
 local NewBaseInspector = require('UI.NewBaseInspector')
-local SoundManager = require('SoundManager')
 local MiscUtil = require('MiscUtil')
 local sUILayoutFileName = 'UILayouts/NewBaseLayout'
 local sRenderLayer='UIOverlay'
@@ -107,11 +106,8 @@ function m.create()
         self.bStartedFadeOut = false
         self.bPlayedTextWarble1 = false
         self.bPlayedTextWarble2 = false
-        SoundManager.playSfx('cursorappear')
         self:colorProp(self.rOverlay, Gui.BLACK, Gui.BLACK_NO_ALPHA, 0.5, 0)
         self.rMap:setColor(unpack(Gui.BLACK))
-        SoundManager.disablePlayback()
-        SoundManager.playMenuMusic()
         local function fnCursorCallback()
             self:playWarbleEffect(true)
             self:showCursor(true)
@@ -216,28 +212,20 @@ function m.create()
         g_GuiManager.refresh()
     end
     function Ob:onButtonConfirm(rButton, eventType)
-        SoundManager.playSfx('accept')
-        SoundManager.playSfx('launchopen')
         self:confirmedLandingZone()
     end
     function Ob:onButtonDecline(rButton, eventType)
-        SoundManager.playSfx('accept')
-        SoundManager.playSfx('previewdissappear')
         self:cancelLandingZone()
     end
     function Ob:onButtonDeploy(rButton, eventType)
         self:deploy()
     end
     function Ob:onButtonCancel(rButton, eventType)
-        SoundManager.playSfx('cancel')
-        SoundManager.playSfx('launchclose')
-        SoundManager.playSfx('previewdissappear')
         self:cancelLandingZone()
     end
     function Ob:selectedLandingZone(x, y)
         if self:isOnMap(x, y) then
             self.currentState = 'SelectedLandingZone'
-            SoundManager.playSfx('previewappear')
             local newX,newY = self:worldToMap(x,y)
             self.tLandingZone.x, self.tLandingZone.y = DFMath.roundDecimal(newX), DFMath.roundDecimal(newY)
             self.rButtonConfirm:setEnabled(true)
@@ -317,8 +305,6 @@ function m.create()
     end
     function Ob:deploy()
         self.currentState = 'Deploying'
-        SoundManager.playSfx('launchbutton')
-        SoundManager.stopMusic()
         self:setVisibilityDeployElements(false)
         self.nDeployTime = 0
         self.rLabelSeedDeployed:setString(g_LM.line(seedLineCode)..self.inspector.sRegionName)
@@ -405,7 +391,6 @@ function m.create()
 			self:resume()
 			g_GuiManager.setCursorVisible(true)
 			g_GuiManager.showStartMenu()
-			SoundManager.incrementTrack()
 		end
     end
     function Ob:onTick(dt)

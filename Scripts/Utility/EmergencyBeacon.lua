@@ -7,7 +7,6 @@ local Gui = require('UI.Gui')
 local ActivityOption = require('Utility.ActivityOption')
 local Character = require('CharacterConstants')
 local CharacterManager = require('CharacterManager')
-local SoundManager= require('SoundManager')
 local ObjectList=require('ObjectList')
 local Base=require('Base')
 local Class=require('Class')
@@ -70,7 +69,6 @@ function EmergencyBeacon:getModeAt(tx,ty)
 end
 function EmergencyBeacon:_showPropAt(wx, wy, tx, ty, rProp)
     if rProp == self then
-        SoundManager.playSfx('placebeacon')
     end
     local tMode = self:getModeAt(tx,ty)
 	if tMode == EmergencyBeacon.MODE_EXPLORE then

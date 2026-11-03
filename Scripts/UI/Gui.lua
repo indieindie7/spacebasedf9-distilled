@@ -3,7 +3,6 @@ local DFGraphics = require('DFCommon.Graphics')
 local DFFile = require('DFCommon.File')
 local DFUtil = require('DFCommon.Util')
 local Renderer = require('Renderer')
-local SoundManager = require('SoundManager')
 Gui.rCurActivePane = nil
 Gui.AMBER = {223/255, 162/255, 0, 1}
 Gui.AMBER_DIM = {0.115, 0.075, 0, 1}
@@ -233,7 +232,6 @@ function Gui.onFinger(touchEvent)
                 table.insert(tProps, 1, tBackgroundProps[i])
             end
             if Gui.rCurActivePane:onFinger(touchEvent, x, y, tProps) then
-                SoundManager.playSfx( "beepHigh" )
             end
         end
         return true

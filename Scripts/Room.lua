@@ -16,7 +16,6 @@ local Character = require('CharacterConstants')
 local Gui = require('UI.Gui')
 local EnvObject=nil
 local Lighting=nil
-local SoundManager=nil
 local CharacterManager=nil
 local Cursor=nil
 local ActivityOption=nil
@@ -53,7 +52,6 @@ Room.DEBUG_DRAW_PROPS = 4
 Room.DEBUG_DRAW_MAX = Room.DEBUG_DRAW_PROPS
 Room.POWER_DISPLAY_LAYER = 'WorldWall'
 function Room.onFileChanged()
-    SoundManager = require('SoundManager')
     EnvObject=require('EnvObjects.EnvObject')
     CharacterManager=require('CharacterManager')
     Malady=require('Malady')
@@ -731,66 +729,6 @@ function Room:setPendingBreach(tx,ty,bBreach)
         self.bPendingBreach = false
     end
 end
-function Room:_updateSound(bShuttingDown)
-    local sCue = nil
-    if bShuttingDown then
-    elseif self.bEmergencyAlarmEnabled then sCue = 'room_alert'
-    elseif self.nFireTiles > 0 then sCue = 'room_fire'
-    elseif self.bBreach then sCue = 'room_breach'
-    elseif self:getOxygenScore() < Character.OXYGEN_LOW then sCue = 'room_oxygen'
-    end
-    local nCurrentWalla = nil
-    local sCurrentWalla = nil
-    local sWallaParam = nil
-    if self.nCharacters > 4 and not bShuttingDown then
-        if GameRules.elapsedTime-self.nLastCombatAlert < 10 then
-            sCurrentWalla = 'room_walla_bad'
-            sWallaParam = 'wallanegative'
-        else
-            sCurrentWalla = 'room_walla_good'
-            sWallaParam = 'wallapositive'
-        end
-        if self.nCharacters > 14 then nCurrentWalla = .8
-        elseif self.nCharacters > 8 then nCurrentWalla = .5
-        else nCurrentWalla = .2 end
-    end
-    local tx,ty = self:getCenterTile()
-    local wx,wy,wz
-    if tx then
-        wx,wy = g_World._getWorldFromTile(tx,ty,1)
-        wz = 0
-    else
-        sCue = nil
-        sCurrentWalla = nil
-    end
-    local bSetParam = nCurrentWalla ~= self.nCurrentWalla
-    if sCurrentWalla ~= self.sCurrentWalla then
-        if self.rCurrentWalla then
-            self.rCurrentWalla:stop()
-        end
-        self.sCurrentWalla = sCurrentWalla
-        self.rCurrentWalla = nil
-        if sCurrentWalla then
-            self.rCurrentWalla = SoundManager.playSfx3D(sCurrentWalla, wx,wy,wz)
-            bSetParam = true
-        end
-    end
-    if bSetParam and self.rCurrentWalla then
-        self.rCurrentWalla:setParameter(sWallaParam,nCurrentWalla)
-    end
-    self.nCurrentWalla = nCurrentWalla
-    if sCue ~= self.sCurrentCue then
-        if self.rCurrentCue then
-            self.rCurrentCue:stop()
-        end
-        self.rCurrentCue = nil
-        self.sCurrentCue = sCue
-        if sCue then
-            self.rCurrentCue = SoundManager.playSfx3D(sCue, wx,wy,wz)
-            self.sCurrentCue = sCue
-        end
-    end
-end
 function Room:updateHazardStatus()
     self.bBurning = false
     self.nFireTiles = 0
@@ -1269,7 +1207,6 @@ function Room:tickRoomFast()
         end
     end
     self:updateHazardStatus()
-    self:_updateSound()
     if self.zoneObj and self.zoneObj.onTick then
         self.zoneObj:onTick(dt)
     end
@@ -2150,7 +2087,6 @@ function Room:getRandomAttackableObject()
 	end
 end
 function Room:_destroy()
-    self:_updateSound(true)
     self:clearPowerVisLines()
 	for id,rPowerRoom in pairs(Room.tPowerZones) do
 		if rPowerRoom.zoneObj:isPowering(self) then

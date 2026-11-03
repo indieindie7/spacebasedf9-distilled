@@ -444,8 +444,6 @@ CharacterConstants.RACE_TYPE=
 {
     [CharacterConstants.RACE_HUMAN] = {
         sName = "human",
-        tMaleVoices = {"Voice/Male1/Male_1_", "Voice/Male2/Male_2_"},
-        tFemaleVoices = {"Voice/Female1/Female_1_"},
         nRig = CharacterConstants.RIG_BASE,
         tBodies = {
             CharacterConstants.BODY_HUMAN_BROWN_MALE,
@@ -472,8 +470,6 @@ CharacterConstants.RACE_TYPE=
     },
     [CharacterConstants.RACE_JELLY] = {
         sName = "jelly",
-        tMaleVoices = {"Voice/Male1/Male_1_", "Voice/Male2/Male_2_"},
-        tFemaleVoices = {"Voice/Female1/Female_1_"},
         nRig = CharacterConstants.RIG_BASE,
         tBodies = {
             CharacterConstants.BODY_JELLY_MAUVE_FEMALE,
@@ -488,8 +484,6 @@ CharacterConstants.RACE_TYPE=
     },
     [CharacterConstants.RACE_TOBIAN] = {
         sName = "tobian",
-        tMaleVoices = {"Voice/Tobian1/Tobian_1_"},
-        tFemaleVoices = {"Voice/Tobian1/Tobian_1_"},
         nRig = CharacterConstants.RIG_ALIEN,
         tBodies = {
             CharacterConstants.BODY_TOBIAN_BLUE_ALIEN_01,
@@ -501,8 +495,6 @@ CharacterConstants.RACE_TYPE=
     },
     [CharacterConstants.RACE_CAT] = {
         sName = "cat",
-        tMaleVoices = {"Voice/CatMale/CatMale_"},
-        tFemaleVoices = {"Voice/CatFemale/CatFemale_"},
         nRig = CharacterConstants.RIG_BASE,
         tBodies = {
             CharacterConstants.BODY_CAT_MALE_01,
@@ -517,8 +509,6 @@ CharacterConstants.RACE_TYPE=
     },
     [CharacterConstants.RACE_BIRDSHARK] = {
         sName = "birdshark",
-        tMaleVoices = {"Voice/ChickenMale/ChickenMale_"},
-        tFemaleVoices = {"Voice/ChickenMale/ChickenMale_"},
         nRig = CharacterConstants.RIG_BASE,
         tBodies = {
             CharacterConstants.BODY_BIRDSHARK_MALE_01,
@@ -533,8 +523,6 @@ CharacterConstants.RACE_TYPE=
     },
     [CharacterConstants.RACE_CHICKEN] = {
         sName = "chicken",
-        tMaleVoices = {"Voice/ChickenMale/ChickenMale_"},
-        tFemaleVoices = {"Voice/ChickenMale/ChickenMale_"},
         nRig = CharacterConstants.RIG_ALIEN,
         tBodies = {
             CharacterConstants.BODY_CHICKEN_MALE_01,
@@ -545,8 +533,6 @@ CharacterConstants.RACE_TYPE=
     },
     [CharacterConstants.RACE_MONSTER] = {
         sName = "badalien",
-        tMaleVoices = {"Voice/ChickenMale/ChickenMale_"},
-        tFemaleVoices = {"Voice/ChickenMale/ChickenMale_"},
         nRig = CharacterConstants.RIG_MONSTER,
         tBodies = {
             CharacterConstants.BODY_MONSTER,
@@ -554,8 +540,6 @@ CharacterConstants.RACE_TYPE=
     },
     [CharacterConstants.RACE_SHAMON] = {
         sName = "shamon",
-        tMaleVoices = {"Voice/ChickenMale/ChickenMale_"},
-        tFemaleVoices = {"Voice/ChickenMale/ChickenMale_"},
         nRig = CharacterConstants.RIG_BASE,
         tBodies = {
             CharacterConstants.BODY_SHAMON_MALE_01,
@@ -563,8 +547,6 @@ CharacterConstants.RACE_TYPE=
     },
     [CharacterConstants.RACE_MURDERFACE] = {
         sName = "murderface",
-        tMaleVoices = {"Voice/ChickenMale/ChickenMale_"},
-        tFemaleVoices = {"Voice/ChickenMale/ChickenMale_"},
         nRig = CharacterConstants.RIG_ALIEN,
         tBodies = {
             CharacterConstants.BODY_MURDERFACE_MALE_01,
@@ -572,8 +554,6 @@ CharacterConstants.RACE_TYPE=
     },
     [CharacterConstants.RACE_KILLBOT] = {
         sName = "killbot",
-        tMaleVoices = {"Voice/ChickenMale/ChickenMale_"},
-        tFemaleVoices = {"Voice/ChickenMale/ChickenMale_"},
         nRig = CharacterConstants.RIG_KILLBOT,
         tBodies = {
             CharacterConstants.BODY_KILLBOT_01,

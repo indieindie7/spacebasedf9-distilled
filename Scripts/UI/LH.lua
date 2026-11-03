@@ -8,8 +8,7 @@ M.tx=tb('text')
 M.lc=tb('linecode')
 function M.c(k,c) return {key=k,color=c} end
 function M.v(k,h) return {key=k,hidden=h} end
-function M.hl() return {playSfx='hilight'} end
-local function hs(f,g) return function(...) local o,c={},nil for _,a in ipairs({...}) do if type(a)=='string' then o[#o+1]={key=a,[f]=c} elseif a==true and g then o[#o+1]={playSfx='hilight'} else c=a end end return o end end
+local function hs(f,g) return function(...) local o,c={},nil for _,a in ipairs({...}) do if type(a)=='string' then o[#o+1]={key=a,[f]=c} elseif not(a==true and g) then c=a end end return o end end
 M.hv=hs('color',1)
 M.hh=hs('hidden')
 function M.btn(k,pos,s,c,on,off,pa,ra) local b={key=k,type='onePixelButton',pos=pos,scale=s,color=c,onHoverOn=on,onHoverOff=off}

@@ -11,7 +11,6 @@ local Docking = require('Docking')
 local Room = require('Room')
 local Gui = require('UI.Gui')
 local AnimatedSprite = require('AnimatedSprite')
-local SoundManager = require('SoundManager')
 local MiscUtil = require('MiscUtil')
 MeteorEvent.sEventType = "meteorEvents"
 MeteorEvent.sAlertLC = 'ALERTS026TEXT'
@@ -87,7 +86,6 @@ function MeteorEvent.tick(rController, dT, tCurrentEventPersistentState, tCurren
         local nEndTime = GameRules.elapsedTime+nDuration
         rController.hideMeteorStrikeIndicator()
         tTransientState.tMeteors = {}
-        SoundManager.playSfx("SFX/SFX/MeteorAppear")
         for i=1,nDuration do
             local nIntensity
             if i <= nPeakIntensity then
@@ -153,7 +151,6 @@ function MeteorEvent.tick(rController, dT, tCurrentEventPersistentState, tCurren
                     else
                         t.bDone = true
                         t.rMeteorSprite:die()
-                        SoundManager.playSfx("SFX/SFX/MeteorImpact",t.wx,t.wy)
                         local tDamage = {}
                         if t.nSize > .9 then
                             GameRules.startCameraShake(15,.2)

@@ -9,7 +9,6 @@ local InfirmaryBedControls = require('UI.InfirmaryBedControls')
 local TurretControls = require('UI.TurretControls')
 local ObjectList = require('ObjectList')
 local GameRules = require('GameRules')
-local SoundManager = require('SoundManager')
 local CommandObject = require('Utility.CommandObject')
 local Character = require('CharacterConstants')
 local sUILayoutFileName = 'UILayouts/ObjectActionTabLayout'
@@ -46,7 +45,6 @@ local tActionButtonData=
 			if self.rSelected.setSlatedForDemolition then
 				self.rSelected:setSlatedForDemolition(not bSlated)
 			end
-			SoundManager.playSfx('inspectordoornormal')
 		end,
     },
     {
@@ -69,7 +67,6 @@ local tActionButtonData=
 		callbackFn=function(self)
 			local bSlated = self.rSelected:slatedForTeardown(true, false)
 			self.rSelected:slateForResearchTeardown(not bSlated)
-			SoundManager.playSfx('inspectordoornormal')
 		end,
 	},
 	{

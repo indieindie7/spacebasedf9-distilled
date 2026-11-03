@@ -3,7 +3,6 @@ local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
 local UIElement = require('UI.UIElement')
 local Door = require('EnvObjects.Door')
-local SoundManager = require('SoundManager')
 local ObjectList = require('ObjectList')
 local sUILayoutFileName = 'UILayouts/DoorControlsLayout'
 function m.create()
@@ -71,13 +70,10 @@ function m.create()
             if eventType == DFInput.TOUCH_UP then
                 if rButton == self.rNormalButton then
                     self.rObject:setOperation(Door.operations.NORMAL)
-                    SoundManager.playSfx('inspectordoornormal')
                 elseif rButton == self.rLockedButton then
                     self.rObject:setOperation(Door.operations.LOCKED)
-                    SoundManager.playSfx('inspectordoorlock')
                 elseif rButton == self.rForcedButton then
                     self.rObject:setOperation(Door.operations.FORCED_OPEN)
-                    SoundManager.playSfx('selectdegauss')
                 end
             end
         end

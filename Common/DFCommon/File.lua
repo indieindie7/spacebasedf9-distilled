@@ -31,9 +31,6 @@ end
 function m.getAssetPath(fn)
     return string.format("%sMunged/%s", m.PLAT_DIR, fn)
 end
-function m.getAudioPath(fn)
-    return string.format("%sAudio/%s", m.PLAT_DIR, fn)
-end
 function m.getSpritePath(fn)
 	return m.getAssetPath(fn)
 end

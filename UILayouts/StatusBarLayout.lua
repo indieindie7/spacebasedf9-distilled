@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hh,hl,lc,px,tex,tx,v=LH.hh,LH.hl,LH.lc,LH.px,LH.tex,LH.tx,LH.v
+local hh,lc,px,tex,tx,v=LH.hh,LH.lc,LH.px,LH.tex,LH.tx,LH.v
 local function _h1(a0,a1) return {key=a0,pos=a1} end
 local Gui = require('UI.Gui')
 local sBottomIconY = '-g_GuiManager.getUIViewportSizeY() + 40'
@@ -93,7 +93,6 @@ return
             {
                 v('PauseInactiveTexture',true),
                 v('PauseActiveTexture',false),
-                hl(),
             },
             onHoverOff =
             hh(false,'PauseInactiveTexture',true,'PauseActiveTexture'),
@@ -112,7 +111,6 @@ return
             {
                 v('Speed1InactiveTexture',true),
                 v('Speed1ActiveTexture',false),
-                hl(),
             },
             onHoverOff =
             hh(false,'Speed1InactiveTexture',true,'Speed1ActiveTexture'),
@@ -131,7 +129,6 @@ return
             {
                 v('Speed2InactiveTexture',true),
                 v('Speed2ActiveTexture',false),
-                hl(),
             },
             onHoverOff =
             hh(false,'Speed2InactiveTexture',true,'Speed2ActiveTexture'),
@@ -150,7 +147,6 @@ return
             {
                 v('Speed3InactiveTexture',true),
                 v('Speed3ActiveTexture',false),
-                hl(),
             },
             onHoverOff =
             hh(false,'Speed3InactiveTexture',true,'Speed3ActiveTexture'),
@@ -169,7 +165,6 @@ return
             {
                 v('ZoomoutTexture',true),
                 v('ZoomoutActiveTexture',false),
-                hl(),
             },
             onHoverOff =
             hh(false,'ZoomoutTexture',true,'ZoomoutActiveTexture'),
@@ -188,7 +183,6 @@ return
             {
                 v('ZoominTexture',true),
                 v('ZoominActiveTexture',false),
-                hl(),
             },
             onHoverOff =
             hh(false,'ZoominTexture',true,'ZoominActiveTexture'),
@@ -208,7 +202,6 @@ return
             {
                 v('WallTexture',true),
                 v('WallActiveTexture',false),
-                hl(),
             },
             onHoverOff =
             hh(false,'WallTexture',true,'WallActiveTexture'),
@@ -228,7 +221,6 @@ return
             {
                 v('OxygenTexture',true),
                 v('OxygenActiveTexture',false),
-                hl(),
             },
             onHoverOff =
             hh(false,'OxygenTexture',true,'OxygenActiveTexture'),

@@ -1998,6 +1998,5 @@ function World.playExplosion( wx, wy )
     local rSprite = require('AnimatedSprite').new(Renderer.getRenderLayer("WorldWall"), nil, "explode01_", {tSizeRange={1.65,1.95} })
     rSprite:setLoc(wx,wy+40,0)
     rSprite:play(true, 0)
-    require('SoundManager').playSfx3D( "wallexplode", wx, wy, 0)
 end
 return World

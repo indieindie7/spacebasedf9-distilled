@@ -1,5 +1,4 @@
 local LH=require('UI.LH')
-local hl=LH.hl
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -41,7 +40,6 @@ return
                     key = 'ButtonDescription',
                     color = { 0, 0, 0 },
                 },
-                hl(),
             },
             onHoverOff =
             {

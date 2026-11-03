@@ -10,7 +10,6 @@ local GridUtil=require('GridUtil')
 local Renderer=require('Renderer')
 local Room=require('Room')
 local EnvObject=require('EnvObjects.EnvObject')
-local SoundManager = require('SoundManager')
 local Gui = require('UI.Gui')
 local Cursor = Class.create()
 Cursor.tiles={}
@@ -357,11 +356,7 @@ Cursor.modes=
 			local tObjectData = EnvObject.getObjectData(GameRules.currentModeParam)
             local bAllow,newTX,newTY = require('Room').attemptAddPropGhostAt(tx,ty,1,GameRules.currentModeParam,GameScreen.bFlipProp)
             if not bAllow then
-                SoundManager.playSfx("disallow")
             else
-                if tObjectData.placeSound then
-                    SoundManager.playSfx(tObjectData.placeSound)
-                end
                 local rRoom = require('Room').getRoomAtTile(newTX,newTY,1)
                 if rRoom and tObjectData.zoneName and rRoom:getZoneName() == 'PLAIN' then
                     rRoom:setZone(tObjectData.zoneName)

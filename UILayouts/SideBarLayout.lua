@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,lc,px,tex,tx=LH.hl,LH.lc,LH.px,LH.tex,LH.tx
+local lc,px,tex,tx=LH.lc,LH.px,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -59,7 +59,6 @@ return
                 { key = 'InspectLabel', color = { 0, 0, 0 }, },
                 { key = 'InspectIcon', color = { 0, 0, 0 }, },
                 { key = 'InspectHotkeyExpanded', color = { 0, 0, 0 }, },
-                hl(),
             },
             onHoverOff =
             {
@@ -90,7 +89,6 @@ return
                 { key = 'AssignLabel', color = { 0, 0, 0 }, },
                 { key = 'AssignIcon', color = { 0, 0, 0 }, },
                 { key = 'AssignHotkeyExpanded', color = { 0, 0, 0 }, },
-                hl(),
             },
             onHoverOff =
             {
@@ -121,7 +119,6 @@ return
                 { key = 'ResearchLabel', color = { 0, 0, 0 }, },
                 { key = 'ResearchIcon', color = { 0, 0, 0 }, },
                 { key = 'ResearchHotkeyExpanded', color = { 0, 0, 0 }, },
-                hl(),
             },
             onHoverOff =
             {
@@ -153,7 +150,6 @@ return
                 { key = 'GoalIcon', color = { 0, 0, 0 }, },
                 { key = 'GoalHotkey', color = { 0, 0, 0 }, },
                 { key = 'GoalHotkeyExpanded', color = { 0, 0, 0 }, },
-                hl(),
             },
             onHoverOff =
             {
@@ -186,7 +182,6 @@ return
                 { key = 'ConstructIcon', color = { 0, 0, 0 }, },
                 { key = 'ConstructHotkey', color = { 0, 0, 0 }, },
                 { key = 'ConstructHotkeyExpanded', color = { 0, 0, 0 }, },
-                hl(),
             },
             onHoverOff =
             {
@@ -218,7 +213,6 @@ return
                 { key = 'MineLabel', color = { 0, 0, 0 }, },
                 { key = 'MineIcon', color = { 0, 0, 0 }, },
                 { key = 'MineHotkeyExpanded', color = { 0, 0, 0 }, },
-                hl(),
             },
             onHoverOff =
             {
@@ -249,7 +243,6 @@ return
                 { key = 'BeaconLabel', color = { 0, 0, 0 }, },
                 { key = 'BeaconIcon', color = { 0, 0, 0 }, },
                 { key = 'BeaconHotkeyExpanded', color = { 0, 0, 0 }, },
-                hl(),
             },
             onHoverOff =
             {

@@ -3,7 +3,6 @@ local m = {}
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
-local SoundManager = require('SoundManager')
 local EmergencyBeacon = require('Utility.EmergencyBeacon')
 local sUILayoutFileName = 'UILayouts/BeaconMenuLayout'
 function m.create()
@@ -44,14 +43,12 @@ function m.create()
         if eventType == DFInput.TOUCH_UP then
             if g_GuiManager.newSideBar then
                 g_GuiManager.newSideBar:closeSubmenu()
-                SoundManager.playSfx('degauss')
             end
         end
     end
     function Ob:onClearBeaconButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             g_ERBeacon:remove()
-            SoundManager.playSfx('clearbeacon')
         end
     end
     function Ob:onViolenceButtonPressed(rButton, eventType)

@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local btn,c,hl,hv,lc,px,tex,tx,v=LH.btn,LH.c,LH.hl,LH.hv,LH.lc,LH.px,LH.tex,LH.tx,LH.v
+local btn,c,hv,lc,px,tex,tx,v=LH.btn,LH.c,LH.hv,LH.lc,LH.px,LH.tex,LH.tx,LH.v
 local function _h1(a0,a1,a2,a3,a4) return {key=a0,type=a1,pos=a2,scale=a3,color=a4} end
 local Gui = require('UI.Gui')
 local CharacterConstants = require('CharacterConstants')
@@ -77,7 +77,7 @@ return
         tex('jobSortDown','ui_jobs_catsortDown','UI/JobRoster',{ nJobColX + nJobLabelDivScl,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },false),
         tex('jobSortUp','ui_jobs_catsortUp','UI/JobRoster',{ nJobColX + nJobLabelDivScl,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },true),
         _h1('JobLabelDivRt', 'onePixel', { nJobColX + nJobLabelDivScl + nSortTextureSize, nTopLabelY }, { nJobLabelDivScl, nTopBarHeight }, Gui.GREY),
-        btn('NameSortButton',{ nNameColX, nHighlightY },{ 432 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('NameSortHighlight',false), hl(), },{ v('NameSortHighlight',true), }),
+        btn('NameSortButton',{ nNameColX, nHighlightY },{ 432 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('NameSortHighlight',false), },{ v('NameSortHighlight',true), }),
         {
             key = 'NameSortHighlight',
             type = 'onePixel',
@@ -93,7 +93,7 @@ return
         tex('nameSortDown','ui_jobs_catsortDown','UI/JobRoster',{ nNameColX + 36,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },false),
         tex('nameSortUp','ui_jobs_catsortUp','UI/JobRoster',{ nNameColX + 36,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },true),
         _h1('NameLabelDivRt', 'onePixel', { nNameColX + 81, nTopLabelY }, { 364, nTopBarHeight }, Gui.GREY),
-        btn('Job1SortButton',{ nJob1ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job1SortHighlight',false), hl(), },{ v('Job1SortHighlight',true), }),
+        btn('Job1SortButton',{ nJob1ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job1SortHighlight',false), },{ v('Job1SortHighlight',true), }),
         px('Job1SortHighlight',{ nJob1ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },HIGHLIGHT_COLOR,true),
         lc('job1Label',{ nJob1ColX, nTopLabelTextY },'DUTIES003TEXT','dosissemibold26',{ 0, 100, nJobCatLabelRectSize, 0 },Gui.AMBER,'C'),
         tex('Job1Texture',CharacterConstants.JOB_ICONS[CharacterConstants.BUILDER],'UI/JobRoster',{ nJob1ColX + nJobTextureXOffset, nJobTextureYOffset },Gui.AMBER,{ 1, 1 }),
@@ -103,7 +103,7 @@ return
         tex('job1SortDown','ui_jobs_catsortDown','UI/JobRoster',{ nJob1ColX + nJobDivScl,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },false),
         tex('job1SortUp','ui_jobs_catsortUp','UI/JobRoster',{ nJob1ColX + nJobDivScl, nTopLabelY + 6  },Gui.GREY,{ 1, 1 },true),
         _h1('Job1LabelDivRt', 'onePixel', { nJob1ColX + nJobDivScl + nSortTextureSize, nTopLabelY }, { nJobDivScl, nTopBarHeight }, Gui.GREY),
-        btn('Job2SortButton',{ nJob2ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job2SortHighlight',false), hl(), },{ v('Job2SortHighlight',true), }),
+        btn('Job2SortButton',{ nJob2ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job2SortHighlight',false), },{ v('Job2SortHighlight',true), }),
         px('Job2SortHighlight',{ nJob2ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },HIGHLIGHT_COLOR,true),
         lc('job2Label',{ nJob2ColX, nTopLabelTextY },'DUTIES005TEXT','dosissemibold26',{ 0, 100, nJobCatLabelRectSize, 0 },Gui.AMBER,'C'),
         tex('Job2Texture',CharacterConstants.JOB_ICONS[CharacterConstants.TECHNICIAN],'UI/JobRoster',{ nJob2ColX + nJobTextureXOffset, nJobTextureYOffset },Gui.AMBER,{ 1, 1 }),
@@ -113,7 +113,7 @@ return
         tex('job2SortDown','ui_jobs_catsortDown','UI/JobRoster',{ nJob2ColX + nJobDivScl,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },false),
         tex('job2SortUp','ui_jobs_catsortUp','UI/JobRoster',{ nJob2ColX + nJobDivScl, nTopLabelY + 6  },Gui.GREY,{ 1, 1 },true),
         _h1('Job2LabelDivRt', 'onePixel', { nJob2ColX + nJobDivScl + nSortTextureSize, nTopLabelY }, { nJobDivScl, nTopBarHeight }, Gui.GREY),
-        btn('Job3SortButton',{ nJob3ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job3SortHighlight',false), hl(), },{ v('Job3SortHighlight',true), }),
+        btn('Job3SortButton',{ nJob3ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job3SortHighlight',false), },{ v('Job3SortHighlight',true), }),
         px('Job3SortHighlight',{ nJob3ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },HIGHLIGHT_COLOR,true),
         lc('job3Label',{ nJob3ColX, nTopLabelTextY },'DUTIES007TEXT','dosissemibold26',{ 0, 100, nJobCatLabelRectSize, 0 },Gui.AMBER,'C'),
         tex('Job3Texture',CharacterConstants.JOB_ICONS[CharacterConstants.MINER],'UI/JobRoster',{ nJob3ColX + nJobTextureXOffset, nJobTextureYOffset },Gui.AMBER,{ 1, 1 }),
@@ -123,7 +123,7 @@ return
         tex('job3SortDown','ui_jobs_catsortDown','UI/JobRoster',{ nJob3ColX + nJobDivScl,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },false),
         tex('job3SortUp','ui_jobs_catsortUp','UI/JobRoster',{ nJob3ColX + nJobDivScl, nTopLabelY + 6  },Gui.GREY,{ 1, 1 },true),
         _h1('Job3LabelDivRt', 'onePixel', { nJob3ColX + nJobDivScl + nSortTextureSize, nTopLabelY }, { nJobDivScl, nTopBarHeight }, Gui.GREY),
-        btn('Job4SortButton',{ nJob4ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job4SortHighlight',false), hl(), },{ v('Job4SortHighlight',true), }),
+        btn('Job4SortButton',{ nJob4ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job4SortHighlight',false), },{ v('Job4SortHighlight',true), }),
         px('Job4SortHighlight',{ nJob4ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },HIGHLIGHT_COLOR,true),
         lc('job4Label',{ nJob4ColX, nTopLabelTextY },'DUTIES009TEXT','dosissemibold26',{ 0, 100, nJobCatLabelRectSize, 0 },Gui.AMBER,'C'),
         tex('Job4Texture',CharacterConstants.JOB_ICONS[CharacterConstants.EMERGENCY],'UI/JobRoster',{ nJob4ColX + nJobTextureXOffset, nJobTextureYOffset },Gui.AMBER,{ 1, 1 }),
@@ -133,7 +133,7 @@ return
         tex('job4SortDown','ui_jobs_catsortDown','UI/JobRoster',{ nJob4ColX + nJobDivScl,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },false),
         tex('job4SortUp','ui_jobs_catsortUp','UI/JobRoster',{ nJob4ColX + nJobDivScl, nTopLabelY + 6  },Gui.GREY,{ 1, 1 },true),
         _h1('Job4LabelDivRt', 'onePixel', { nJob4ColX + nJobDivScl + nSortTextureSize, nTopLabelY }, { nJobDivScl, nTopBarHeight }, Gui.GREY),
-        btn('Job5SortButton',{ nJob5ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job5SortHighlight',false), hl(), },{ v('Job5SortHighlight',true), }),
+        btn('Job5SortButton',{ nJob5ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job5SortHighlight',false), },{ v('Job5SortHighlight',true), }),
         px('Job5SortHighlight',{ nJob5ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },HIGHLIGHT_COLOR,true),
         lc('job5Label',{ nJob5ColX, nTopLabelTextY },'DUTIES013TEXT','dosissemibold26',{ 0, 100, nJobCatLabelRectSize, 0 },Gui.AMBER,'C'),
         tex('Job5Texture',CharacterConstants.JOB_ICONS[CharacterConstants.BARTENDER],'UI/JobRoster',{ nJob5ColX + nJobTextureXOffset, nJobTextureYOffset },Gui.AMBER,{ 1, 1 }),
@@ -143,7 +143,7 @@ return
         tex('job5SortDown','ui_jobs_catsortDown','UI/JobRoster',{ nJob5ColX + nJobDivScl,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },false),
         tex('job5SortUp','ui_jobs_catsortUp','UI/JobRoster',{ nJob5ColX + nJobDivScl, nTopLabelY + 6  },Gui.GREY,{ 1, 1 },true),
         _h1('Job5LabelDivRt', 'onePixel', { nJob5ColX + nJobDivScl + nSortTextureSize, nTopLabelY }, { nJobDivScl, nTopBarHeight }, Gui.GREY),
-        btn('Job6SortButton',{ nJob6ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job6SortHighlight',false), hl(), },{ v('Job6SortHighlight',true), }),
+        btn('Job6SortButton',{ nJob6ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job6SortHighlight',false), },{ v('Job6SortHighlight',true), }),
         px('Job6SortHighlight',{ nJob6ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },HIGHLIGHT_COLOR,true),
         lc('job6Label',{ nJob6ColX, nTopLabelTextY },'DUTIES016TEXT','dosissemibold26',{ 0, 100, nJobCatLabelRectSize, 0 },Gui.AMBER,'C'),
         tex('Job6Texture',CharacterConstants.JOB_ICONS[CharacterConstants.BOTANIST],'UI/JobRoster',{ nJob6ColX + nJobTextureXOffset, nJobTextureYOffset },Gui.AMBER,{ 1, 1 }),
@@ -153,7 +153,7 @@ return
         tex('job6SortDown','ui_jobs_catsortDown','UI/JobRoster',{ nJob6ColX + nJobDivScl,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },false),
         tex('job6SortUp','ui_jobs_catsortUp','UI/JobRoster',{ nJob6ColX + nJobDivScl, nTopLabelY + 6  },Gui.GREY,{ 1, 1 },true),
         _h1('Job6LabelDivRt', 'onePixel', { nJob6ColX + nJobDivScl + nSortTextureSize, nTopLabelY }, { nJobDivScl, nTopBarHeight }, Gui.GREY),
-        btn('Job7SortButton',{ nJob7ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job7SortHighlight',false), hl(), },{ v('Job7SortHighlight',true), }),
+        btn('Job7SortButton',{ nJob7ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job7SortHighlight',false), },{ v('Job7SortHighlight',true), }),
         px('Job7SortHighlight',{ nJob7ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },HIGHLIGHT_COLOR,true),
         lc('job7Label',{ nJob7ColX, nTopLabelTextY },'DUTIES018TEXT','dosissemibold26',{ 0, 100, nJobCatLabelRectSize, 0 },Gui.AMBER,'C'),
         tex('Job7Texture',CharacterConstants.JOB_ICONS[CharacterConstants.SCIENTIST],'UI/JobRoster',{ nJob7ColX + nJobTextureXOffset, nJobTextureYOffset },Gui.AMBER,{ 1, 1 }),
@@ -163,7 +163,7 @@ return
         tex('job7SortDown','ui_jobs_catsortDown','UI/JobRoster',{ nJob7ColX + nJobDivScl,nTopLabelY + 6  },Gui.GREY,{ 1, 1 },false),
         tex('job7SortUp','ui_jobs_catsortUp','UI/JobRoster',{ nJob7ColX + nJobDivScl, nTopLabelY + 6  },Gui.GREY,{ 1, 1 },true),
         _h1('Job7LabelDivRt', 'onePixel', { nJob7ColX + nJobDivScl + nSortTextureSize, nTopLabelY }, { nJobDivScl, nTopBarHeight }, Gui.GREY),
-        btn('Job8SortButton',{ nJob8ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job8SortHighlight',false), hl(), },{ v('Job8SortHighlight',true), }),
+        btn('Job8SortButton',{ nJob8ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },Gui.BLACK,{ v('Job8SortHighlight',false), },{ v('Job8SortHighlight',true), }),
         px('Job8SortHighlight',{ nJob8ColX, nHighlightY },{ nJobDivScl * 2 + nSortTextureSize, nSortHighlightScaleY },HIGHLIGHT_COLOR,true),
         lc('job8Label',{ nJob8ColX, nTopLabelTextY },'DUTIES020TEXT','dosissemibold26',{ 0, 100, nJobCatLabelRectSize, 0 },Gui.AMBER,'C'),
         tex('Job8Texture',CharacterConstants.JOB_ICONS[CharacterConstants.DOCTOR],'UI/JobRoster',{ nJob8ColX + nJobTextureXOffset, nJobTextureYOffset },Gui.AMBER,{ 1, 1 }),

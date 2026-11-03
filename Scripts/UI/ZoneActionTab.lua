@@ -2,7 +2,6 @@ local m = {}
 local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
 local Character = require('CharacterConstants')
-local SoundManager = require('SoundManager')
 local UIElement = require('UI.UIElement')
 local Base = require('Base')
 local GameRules = require('GameRules')
@@ -190,10 +189,8 @@ function m.create()
 		if rRoom and rRoom:getVisibility() == g_World.VISIBILITY_FULL then
 			if rRoom:getTeam() ~= Character.TEAM_ID_PLAYER then
 				rRoom:claim()
-                SoundManager.playSfx('claim')
 			else
 				rRoom:unclaim()
-                SoundManager.playSfx('unclaim')
 			end
 		end
 	end

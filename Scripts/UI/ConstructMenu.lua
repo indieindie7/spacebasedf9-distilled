@@ -4,7 +4,6 @@ local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local CommandObject = require('Utility.CommandObject')
-local SoundManager = require('SoundManager')
 local sUILayoutFileName = 'UILayouts/ConstructMenuLayout'
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
@@ -80,14 +79,12 @@ function m.create()
             if g_GuiManager.newSideBar then
                 g_GameRules.cancelBuild()
                 g_GuiManager.newSideBar:closeConstructMenu()
-                SoundManager.playSfx('degauss')
             end
         end
     end
     function Ob:onBuildTypeButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             self:setModeSelected(rButton)
-            SoundManager.playSfx('select')
         end
     end
     function Ob:onConfirmButtonPressed(rButton, eventType)
@@ -95,7 +92,6 @@ function m.create()
             if g_GuiManager.newSideBar then
 				if g_GameRules.confirmBuild() then
                     g_GuiManager.newSideBar:closeConstructMenu()
-                    SoundManager.playSfx('confirm')
                 end
             end
         end

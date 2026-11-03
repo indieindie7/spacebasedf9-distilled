@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,tex=LH.hl,LH.tex
+local tex=LH.tex
 local Gui = require('UI.Gui')
 local nButtonWidth,nButtonHeight = 31, 31
 return
@@ -27,7 +27,6 @@ return
             {
 				{ key = 'CancelButtonTexture', hidden = true, },
 				{ key = 'CancelButtonTexturePressed', hidden = false, },
-                hl(),
             },
             onHoverOff =
             {

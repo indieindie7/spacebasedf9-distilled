@@ -2,7 +2,6 @@ local UIElement = require('UI.UIElement')
 local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
 local Button = require('UI.Button')
-local SoundManager = require('SoundManager')
 local m = {}
 function m.create()
     local Ob = DFUtil.createSubclass(Button.create())

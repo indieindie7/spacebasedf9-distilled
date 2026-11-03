@@ -4,7 +4,6 @@ local UIElement = require('UI.UIElement')
 local HintEntry = require('UI.HintEntry')
 local Hint = require('Hint')
 local DFInput = require('DFCommon.Input')
-local SoundManager = require('SoundManager')
 local sUILayoutFileName = 'UILayouts/HintPaneLayout'
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
@@ -110,7 +109,6 @@ function m.create()
         if bMaximize and #self:_getAlertsToDisplay() == 0 then return end
         self:playWarbleEffect()
         if g_GuiManager.bFinishedInit and bMaximize then
-            SoundManager.playSfx('inspectorshow')
         end
         if self.bMaximize ~= bMaximize then
             if bMaximize then

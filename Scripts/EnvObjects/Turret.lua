@@ -14,7 +14,6 @@ local MiscUtil=require('MiscUtil')
 local WorldObject=require('WorldObjects.WorldObject')
 local Character=require('CharacterConstants')
 local GameRules=require('GameRules')
-local SoundManager = require('SoundManager')
 local Turret = Class.create(EnvObject, MOAIProp.new)
 Turret.FIRE_RANGE_TILES = 16
 Turret.FIRE_RANGE_WORLD = 16*128
@@ -287,7 +286,6 @@ function Turret:fire(rTarget, wxOverride, wyOverride)
 	tDamage.nAttackType = self.ATTACK_TYPE
     tDamage.nDamageType = self.DAMAGE_TYPE
 	local sSpriteName = Character.SPRITE_NAME_FRIENDLY_RIFLE
-	SoundManager.playSfx3D('turretgunfire', swx, swy, 0)
 	bullet:setSprite(sSpriteName,'SpriteAnims/Effects')
     local stx,sty = self:getTileLoc()
 	local tLineTiles = GridUtil.GetTilesForLine(stx, sty, targetTX,targetTY)

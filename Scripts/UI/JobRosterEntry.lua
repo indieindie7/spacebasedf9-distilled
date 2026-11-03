@@ -4,7 +4,6 @@ local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local CharacterManager = require('CharacterManager')
 local Character = require('CharacterConstants')
-local SoundManager = require('SoundManager')
 local Gui = require("UI.Gui")
 local sUILayoutFileName = 'UILayouts/JobRosterEntryLayout'
 local tJobInfo =
@@ -178,7 +177,6 @@ function m.create()
             local eJob = self.tJobButtons[rButton]
             if eJob then
                 self.rCitizen:setJob(eJob)
-                SoundManager.playSfx('inspectorduty')
             end
         end
     end

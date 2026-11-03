@@ -7,7 +7,6 @@ local CitizenInspector = require('UI.CitizenInspector')
 local ObjectInspector = require('UI.ObjectInspector')
 local ZoneInspector = require('UI.ZoneInspector')
 local ObjectList = require('ObjectList')
-local SoundManager = require('SoundManager')
 local sUILayoutFileName = 'UILayouts/InspectMenuLayout'
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
@@ -61,7 +60,6 @@ function m.create()
             self.rSelected = rSelected
             if not rSelected then
                 g_GuiManager.newSideBar:closeSubmenu()
-                SoundManager.playSfx('degauss')
             end
         end
         if self.rCurInspector then
@@ -102,7 +100,6 @@ function m.create()
             if g_GuiManager.newSideBar then
                 g_GuiManager.newSideBar:closeSubmenu()
                 g_GuiManager.setSelected(nil)
-                SoundManager.playSfx('degauss')
             end
         end
     end

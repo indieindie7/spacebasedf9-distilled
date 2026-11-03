@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local btn,c,hl,hv,lc,tex=LH.btn,LH.c,LH.hl,LH.hv,LH.lc,LH.tex
+local btn,c,hv,lc,tex=LH.btn,LH.c,LH.hv,LH.lc,LH.tex
 local Gui = require('UI.Gui')
 local nIconX, nIconStartY = 10, -12
 local nLabelX, nLabelStartY = 94, -10

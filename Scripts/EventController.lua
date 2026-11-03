@@ -8,7 +8,6 @@ local Renderer=require('Renderer')
 local CharacterManager=require('CharacterManager')
 local DFMath = require('DFCommon.Math')
 local DFGraphics = require('DFCommon.Graphics')
-local SoundManager = nil
 local MiscUtil = require('MiscUtil')
 local Gui = require('UI.Gui')
 local Delegate = require('DFMoai.Delegate')
@@ -50,7 +49,6 @@ EventController.tEventClasses = {
 function EventController.init()
     EventController.nEventsThisPlaySession = 0
 	EventController.hideMeteorStrikeIndicator()
-    SoundManager = require('SoundManager')
     Docking.init()
     EventController.fromSaveData({})
 end

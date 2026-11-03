@@ -7,7 +7,6 @@ local Renderer = require('Renderer')
 local Character = require('Character')
 local GameRules = require('GameRules')
 local CharacterManager = require('CharacterManager')
-local SoundManager = require('SoundManager')
 local m = {}
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
@@ -56,7 +55,6 @@ function m.create()
                 if v == self.quitButton then
                     GameRules.currentMode = GameRules.MODE_INSPECT
                     g_GuiManager.refresh()
-                    SoundManager.playSfx("done")
                     g_GameRules.timeStandard()
                     return
                 end
@@ -131,7 +129,6 @@ function m.create()
     end
     function Ob:show(basePri)
         local pri = Ob.Parent.show(self,basePri)
-        SoundManager.playSfx("jobs")
         self:refresh()
         local uiX,uiY,uiW,uiH = Renderer.getUIViewportRect()
         local w,h = 1860,1600

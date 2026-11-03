@@ -6,7 +6,6 @@ local Renderer = require('Renderer')
 local DFGraphics = require('DFCommon.Graphics')
 local DFMath = require('DFCommon.Math')
 local DFUtil = require('DFCommon.Util')
-local SoundManager = require('SoundManager')
 local Docking = require('Docking')
 local Base = require('Base')
 local AlertEntry = require('UI.AlertEntry')
@@ -165,8 +164,6 @@ function ImmigrationEvent.tick(rController, dT, tCurrentEventPersistentState, tC
         tTransientState.rShip:setPriority(-10000)
         tTransientState.nDuration = 1.5
         tTransientState.nElapsed = 0
-        SoundManager.playSfx3D('spacetaxi', tTransientState.shipStartX,
-            tTransientState.shipStartY, 0)
         tTransientState.bStartedSpawn = true
         return
     end

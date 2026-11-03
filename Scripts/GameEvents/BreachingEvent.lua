@@ -6,7 +6,6 @@ local DFGraphics = require('DFCommon.Graphics')
 local GameRules = require('GameRules')
 local Renderer = require('Renderer')
 local CharacterManager = require('CharacterManager')
-local SoundManager = require('SoundManager')
 local Character = require('Character')
 local Room = require('Room')
 local EnvObject=require('EnvObjects.EnvObject')
@@ -151,11 +150,6 @@ function BreachingEvent.tick(rController, dT, tCurrentEventPersistentState, tCur
             end
         elseif tTransientState.sPhase == 'spawn' then
         elseif tTransientState.sPhase == 'drill' then
-            if not tTransientState.bPlayedDrillSound and GameRules.elapsedTime - tTransientState.nEndTime < 1.5 then
-                local wx,wy = tTransientState.rShip:getLoc()
-                SoundManager.playSfx3D('raiderdrill', wx, wy, 0)
-                tTransientState.bPlayedDrillSound = true
-            end
         elseif tTransientState.sPhase == 'ladder' then
         else
             assertdev(false)
@@ -164,7 +158,6 @@ function BreachingEvent.tick(rController, dT, tCurrentEventPersistentState, tCur
     end
     if tTransientState.sPhase == 'flyIn' then
         local wx,wy = tTransientState.rShip:getLoc()
-        SoundManager.playSfx3D('raiderdocking', wx, wy)
         tTransientState.sPhase = 'drill'
         local wx,wy = EnvObject.getSpriteLoc('Spawner',tTransientState.wxDest,tTransientState.wyDest,false)
         DFGraphics.alignSprite('Environments/Objects', 'breach_drill', 'left', 'bottom')

@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local btn,c,hh,hl,hv,lc,px,tex,tx,v=LH.btn,LH.c,LH.hh,LH.hl,LH.hv,LH.lc,LH.px,LH.tex,LH.tx,LH.v
+local btn,c,hh,hv,lc,px,tex,tx,v=LH.btn,LH.c,LH.hh,LH.hv,LH.lc,LH.px,LH.tex,LH.tx,LH.v
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }

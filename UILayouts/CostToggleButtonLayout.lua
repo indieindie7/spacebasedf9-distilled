@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,lc,tex,tx=LH.hl,LH.lc,LH.tex,LH.tx
+local lc,tex,tx=LH.lc,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local nButtonX, nButtonY = 0, 0
 local nButtonWidth, nButtonHeight  = 160, 37
@@ -34,7 +34,6 @@ return
                 { key = 'ButtonTexture', hidden = true },
                 { key = 'ButtonTexturePressed', hidden = false },
 				{ key = 'CostButton', color = Gui.GREEN, },
-                hl(),
             },
             onHoverOff =
             {
@@ -48,7 +47,6 @@ return
                 { key = 'ButtonLabel', color = Gui.BLACK, },
                 { key = 'ButtonTexture', hidden = true },
                 { key = 'ButtonTexturePressed', hidden = false },
-                hl(),
 				{ key = 'CheckBoxTexture', hidden = true, },
 				{ key = 'CheckBoxTexturePressed', hidden = false, },
 				{ key = 'CostBox', color = Gui.GREEN, scale = { nCostWidthSelected, nCostHeight }, },

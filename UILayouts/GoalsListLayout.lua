@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,lc,px,tx=LH.hl,LH.lc,LH.px,LH.tx
+local lc,px,tx=LH.lc,LH.px,LH.tx
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 286, 98
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 110, -68
@@ -47,7 +47,6 @@ return
                 { key = 'BackButton', hidden = false, },
                 { key = 'BackLabel', color = Gui.BLACK },
                 { key = 'BackHotkey', color = Gui.BLACK },
-                hl(),
             },
             onHoverOff =
             {

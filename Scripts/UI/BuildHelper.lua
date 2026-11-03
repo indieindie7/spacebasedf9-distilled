@@ -6,7 +6,6 @@ local Cursor = require('UI.Cursor')
 local DFInput = require('DFCommon.Input')
 local EnvObject = require('EnvObjects.EnvObject')
 local Zone = require('Zones.Zone')
-local SoundManager=require('SoundManager')
 local m = {}
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
@@ -124,7 +123,6 @@ function m.create()
 		self.text:setString(text)
         local x,y = Cursor.getDragSize()
         if self.tLastDragSize.x ~= x or self.tLastDragSize.y ~= y then
-            SoundManager.playSfx('buildscroll')
             self.tLastDragSize = {x=x,y=y}
         end
     end

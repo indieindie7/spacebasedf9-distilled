@@ -5,7 +5,6 @@ local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
 local DFInput = require('DFCommon.Input')
 local ScrollableUI = require('UI.ScrollableUI')
-local SoundManager = require('SoundManager')
 local JobRosterEntry = require('UI.JobRosterEntry')
 local Character = require('Character')
 local CharacterManager = require('CharacterManager')
@@ -140,7 +139,6 @@ function m.create()
         if eventType == DFInput.TOUCH_UP then
             if g_GuiManager.newSideBar then
                 g_GuiManager.newSideBar:closeSubmenu()
-                SoundManager.playSfx('degauss')
             end
         end
     end

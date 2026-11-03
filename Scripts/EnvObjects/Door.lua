@@ -7,7 +7,6 @@ local Character=require('CharacterConstants')
 local Oxygen=require('Oxygen')
 local BrigZone=require('Zones.BrigZone')
 local DFUtil = require('DFCommon.Util')
-local SoundManager = require('SoundManager')
 local Door = Class.create(EnvObject, MOAIProp.new)
 Door.spriteSheetPath='Environments/Tiles/Wall'
 Door.STAY_OPEN_DURATION = 2
@@ -470,16 +469,12 @@ function Door:_updateDoorState(bForceToOperation)
     if not bForceToOperation then
         if self.doorState == Door.doorStates.OPEN then
             if self.sName == "Airlock" then
-                SoundManager.playSfx3D("airlockdooropen", self.wx, self.wy, 0)
             else
-                SoundManager.playSfx3D("dooropen", self.wx, self.wy, 0)
             end
         end
         if oldState == Door.doorStates.OPEN then
             if self.sName == "Airlock" then
-                SoundManager.playSfx3D("airlockdoorclose", self.wx, self.wy, 0)
             else
-                SoundManager.playSfx3D("doorclose", self.wx, self.wy, 0)
             end
         end
     end

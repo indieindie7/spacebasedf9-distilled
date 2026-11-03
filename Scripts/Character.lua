@@ -31,7 +31,6 @@ local GridUtil=require('GridUtil')
 g_ActivityOption=g_ActivityOption or require('Utility.ActivityOption')
 local Room=require('Room')
 local ObjectList=require('ObjectList')
-local SoundManager = require('SoundManager')
 local Lighting=require('Lighting')
 local Fire=require('Fire')
 local Gui = require('UI.Gui')
@@ -85,7 +84,6 @@ function Character:init( tData )
         self:pickUpItem(tItem)
     end
 	self:_refreshHeldItemVisibility()
-	self:_selectVoice()
 	if not self:retrieveMemory(Character.MEMORY_WORKED_OUT_RECENTLY) and math.random() > .3 then
 		self:storeMemory(Character.MEMORY_WORKED_OUT_RECENTLY, true, math.random(1,30))
 	end
@@ -112,7 +110,6 @@ function Character:init( tData )
     if self.tStatus.bCuffed then self:cuff() end
     self:_testInPrison()
 	self:_refreshHeldItemVisibility()
-	self:_selectVoice()
 	self.nLifetime = 0
 	self:setVisibility(World.VISIBILITY_FULL)
     if tData.tTaskSaveData then
@@ -3093,7 +3090,6 @@ function Character:spacesuitOn(bInitializing)
 	local o2 = self:_getOxygen()
 	self:_updateSpacewalking(o2 < Character.OXYGEN_LOW)
 	local wx, wy = self:getLoc()
-	SoundManager.playSfx3D("spacesuit", wx, wy)
 	self:playAnim("breathe")
 end
 function Character:spacesuitOff()
@@ -3110,7 +3106,6 @@ function Character:spacesuitOff()
 		print(TT_Warning, 'Taking off spacesuit in a breached room.')
 	end
 	local ctx, cty = self:getLoc()
-	SoundManager.playSfx3D("spacesuit", ctx, cty)
 	self:playAnim("breathe")
 end
 function Character:_setSpacesuitRigActive(bActive)
@@ -3448,22 +3443,6 @@ function Character:unHover()
 	if not self:isChatting() and self.rCurrentTask then
 		self.rCurrentTask:dismissEmoticon()
 	end
-end
-function Character:playVoiceCue(sCueType)
-	local x,y,z = self:getLoc()
-	local sVoiceCue = self.sVoicePathPrefix .. sCueType
-	local rEvent = MOAIFmodEventMgr.playEvent3D( sVoiceCue, x, y, 0)
-	return rEvent
-end
-function Character:_selectVoice()
-	local bIsMale = self.sSex == "M"
-	local nRace = self.tStats.nRace
-	local tCharDef = Character.RACE_TYPE[nRace]
-	local tVoices = tCharDef.tMaleVoices
-	if not bIsMale then
-		tVoices = tCharDef.tFemaleVoices
-	end
-	self.sVoicePathPrefix = DFUtil.arrayRandom(tVoices)
 end
 function Character:getStuffSatisfaction(tOptionalNewObj,tOptionalOldObj)
     local nTotal = 1
@@ -4119,11 +4098,8 @@ function Character:takeDamage(rAttacker, tDamage)
     if tDamage and tDamage.nDamageType and tDamage.nDamageType ~= Character.DAMAGE_TYPE.Fire then
         local ctx, cty = self:getLoc()
         if tDamage.nDamageType == Character.DAMAGE_TYPE.Laser then
-            SoundManager.playSfx3D("takedamagelaser", ctx, cty)
         elseif tDamage.nDamageType == Character.DAMAGE_TYPE.Stunner then
-            SoundManager.playSfx3D("takedamagetaser", ctx, cty)
         else
-            SoundManager.playSfx3D("takedamagedefault", ctx, cty)
         end
     end
     if rAttacker and rAttacker.dealtDamage then rAttacker:dealtDamage(tDamage, bKill, self) end
