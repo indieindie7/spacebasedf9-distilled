@@ -12,7 +12,6 @@ local DFFile = require('DFCommon.File')
 local LinecodeManager = require('LinecodeManager')
 local ScreenManager = require('UI.ScreenManager')
 local Hint = require('Hint')
-local ErrorReporting = require('ErrorReporting')
 local GameConfig = require('GameConfig')
 local Point = require('Point')
 g_World = nil
@@ -31,7 +30,6 @@ end
 local function _initGame(windowWidth, windowHeight)
     if MOAIEnvironment.osBrand ~= "OSX" then
     end
-    ErrorReporting.init()
     DFSpace.enableConstraintAspectRatio(g_nMinAspectRatio, g_nMaxAspectRatio)
     DataCache.createCache("particles", 20)
     DataCache.createCache("material", 10)
