@@ -1115,20 +1115,8 @@ function World._checkPropFit(tileX, tileY, propName, bFlipX, bFlipY, bAllowRezon
     local tData = EnvObject.getObjectData(propName)
     if tData.againstWall and not bAgainstWall then
         if tValidTiles then
-            local txWall,tyWall
-            if bFlipX then
-				if bFlipY then
-					txWall,tyWall = _getAdjacentTile(tileX,tileY,World.directions.SE)
-                else
-                    txWall,tyWall = _getAdjacentTile(tileX,tileY,World.directions.NE)
-				end
-            else
-				if bFlipY then
-					txWall,tyWall = _getAdjacentTile(tileX,tileY,World.directions.SW)
-                else
-                    txWall,tyWall = _getAdjacentTile(tileX,tileY,World.directions.NW)
-				end
-            end
+            local sWallDir = (bFlipX and (bFlipY and 'SE' or 'NE')) or (bFlipY and 'SW' or 'NW')
+            local txWall,tyWall = _getAdjacentTile(tileX,tileY,World.directions[sWallDir])
             local wallTileAddr = World.pathGrid:getCellAddr(txWall,tyWall)
             tInvalidTiles[wallTileAddr] = {x=txWall,y=tyWall,addr=wallTileAddr}
         else
@@ -1139,19 +1127,8 @@ function World._checkPropFit(tileX, tileY, propName, bFlipX, bFlipY, bAllowRezon
         local lastDir = nil
         for i,tile in ipairs(affectedTiles) do
             local wallDir = World._getWallDirection(World.pathGrid:cellAddrToCoord(tile))
-            local bValid = true
-            if (lastDir and lastDir ~= wallDir) then
-                bValid = false
-            end
-            if wallDir ~= World.wallDirections.NWSE and wallDir ~= World.wallDirections.NESW then
-                bValid = false
-            end
-            if bFlipX and wallDir == World.wallDirections.NESW then
-                bValid = false
-            end
-            if not bFlipX and wallDir == World.wallDirections.NWSE then
-                bValid = false
-            end
+            local sNeededDir = bFlipX and World.wallDirections.NWSE or World.wallDirections.NESW
+            local bValid = wallDir == sNeededDir and (not lastDir or lastDir == wallDir)
             if GameRules.inEditMode then
                 bValid = true
             end
@@ -1172,11 +1149,8 @@ function World._checkPropFit(tileX, tileY, propName, bFlipX, bFlipY, bAllowRezon
     for i,tile in ipairs(affectedTiles) do
         local tx,ty = World.pathGrid:cellAddrToCoord(tile)
         local tileValue = World._getTileValue(tx,ty)
-        local bValid=true
-        if not tData.door and (not World._isPathable(tx,ty) or tileValue == World.logicalTiles.DOOR) then
-            bValid = false
-        end
-        if tData.door and tileValue == World.logicalTiles.DOOR then
+        local bValid = true
+        if tileValue == World.logicalTiles.DOOR or (not tData.door and not World._isPathable(tx,ty)) then
             bValid = false
         end
 		if tData.bCanBuildInSpace and tileValue == World.logicalTiles.SPACE then
@@ -1681,6 +1655,20 @@ function World._getWallDirection(tileX,tileY)
     end
     return World.wallDirections.PILLAR
 end
+local WALL_SHAPES = {
+	['1010'] = {'NESW', 'SE', 'Straight'},
+	['0101'] = {'NWSE', 'SW', 'Straight', true},
+	['0110'] = {'CARAT', 'S', 'CornerS'},
+	['1100'] = {'LESSTHAN', 'W', 'CornerE'},
+	['1001'] = {'V', 'S', 'CornerN'},
+	['0011'] = {'GREATERTHAN', 'E', 'CornerW'},
+	['1101'] = {'T_NE', 'SW', 'TNE'},
+	['1110'] = {'T_SE', 'S', 'TSE'},
+	['0111'] = {'T_SW', 'S', 'TSW'},
+	['1011'] = {'T_NW', 'SE', 'TNW'},
+	['1111'] = {'X', 'S', 'Cross'},
+	['0000'] = {'PILLAR', 'S', 'Column'},
+}
 function World._getWallTileDetails(tileX, tileY)
 	local tAdj = {}
 	local nConstruction = CommandObject.getConstructionAtTile(tileX, tileY)
@@ -1708,94 +1696,32 @@ function World._getWallTileDetails(tileX, tileY)
 	local dir = World.wallDirections.INVALID
 	local bFlip = false
 	local fallBack = World.layers.worldWall.spriteSheet.names['Wall_Error']
-	if isWall('NE') and not isWall('SE') and isWall('SW') and not isWall('NW') then
-		dir = World.wallDirections.NESW
-		zone = zoneVal('SE')
-		top = zone.wallStraightTop
-		bottom = zone.wallStraightBottom
-	elseif not isWall('NE') and isWall('SE') and not isWall('SW') and isWall('NW') then
-		dir = World.wallDirections.NWSE
-		zone = zoneVal('SW')
-		top = zone.wallStraightTop
-		bottom = zone.wallStraightBottom
-		bFlip = true
-	elseif not isWall('NE') and isWall('SE') and isWall('SW') and not isWall('NW') then
-		dir = World.wallDirections.CARAT
-		zone = zoneVal('S')
-		top = zone.wallCornerSTop
-		bottom = zone.wallCornerSBottom
-	elseif isWall('NE') and isWall('SE') and not isWall('SW') and not isWall('NW') then
-		dir = World.wallDirections.LESSTHAN
-		zone = zoneVal('W')
-		top = zone.wallCornerETop
-		bottom = zone.wallCornerEBottom
-	elseif isWall('NE') and not isWall('SE') and not isWall('SW') and isWall('NW') then
-		dir = World.wallDirections.V
-		zone = zoneVal('S')
-		top = zone.wallCornerNTop
-		bottom = zone.wallCornerNBottom
-	elseif not isWall('NE') and not isWall('SE') and isWall('SW') and isWall('NW') then
-		dir = World.wallDirections.GREATERTHAN
-		zone = zoneVal('E')
-		top = zone.wallCornerWTop
-		bottom = zone.wallCornerWBottom
-	elseif isWall('NE') and isWall('SE') and not isWall('SW') and isWall('NW') then
-		dir = World.wallDirections.T_NE
-		zone = zoneVal('SW')
-		top = zone.wallTNETop
-		bottom = zone.wallTNEBottom
-	elseif isWall('NE') and isWall('SE') and isWall('SW') and not isWall('NW') then
-		dir = World.wallDirections.T_SE
-		zone = zoneVal('S')
-		top = zone.wallTSETop
-		bottom = zone.wallTSEBottom
-	elseif not isWall('NE') and isWall('SE') and isWall('SW') and isWall('NW') then
-		dir = World.wallDirections.T_SW
-		zone = zoneVal('S')
-		top = zone.wallTSWTop
-		bottom = zone.wallTSWBottom
-	elseif isWall('NE') and not isWall('SE') and isWall('SW') and isWall('NW') then
-		dir = World.wallDirections.T_NW
-		zone = zoneVal('SE')
-		top = zone.wallTNWTop
-		bottom = zone.wallTNWBottom
-	elseif isWall('NE') and isWall('SE') and isWall('SW') and isWall('NW') then
-		dir = World.wallDirections.X
-		zone = zoneVal('S')
-		top = zone.wallCrossTop
-		bottom = zone.wallCrossBottom
-	elseif not isWall('NE') and not isWall('SE') and not isWall('SW') and not isWall('NW') then
-		dir = World.wallDirections.PILLAR
-		zone = zoneVal('S')
-		top = zone.wallColumnTop
-		bottom = zone.wallColumnBottom
-	elseif isWall('NE') or isWall('SW') then
-		dir = World.wallDirections.NESW
-		zone = zoneVal('SE')
-		top = zone.wallStraightTop
-		bottom = zone.wallStraightBottom
-	elseif isWall('NW') or isWall('SE') then
-		dir = World.wallDirections.NWSE
-		zone = zoneVal('SW')
-		top = zone.wallStraightTop
-		bottom = zone.wallStraightBottom
-		bFlip = true
+	local sMask = (isWall('NE') and '1' or '0') .. (isWall('SE') and '1' or '0') .. (isWall('SW') and '1' or '0') .. (isWall('NW') and '1' or '0')
+	local tShape = WALL_SHAPES[sMask]
+	if not tShape then
+		if sMask:sub(1, 1) == '1' or sMask:sub(3, 3) == '1' then
+			tShape = WALL_SHAPES['1010']
+		else
+			tShape = WALL_SHAPES['0101']
+		end
 	end
+	dir = World.wallDirections[tShape[1]]
+	zone = zoneVal(tShape[2])
+	top = zone['wall' .. tShape[3] .. 'Top']
+	bottom = zone['wall' .. tShape[3] .. 'Bottom']
+	bFlip = tShape[4] or false
 	local addr = World.pathGrid:getCellAddr(tileX, tileY)
-	local topTile = MiscUtil.weightedRandom(top, addr)
-	if not World.layers.worldWall.spriteSheet.names[topTile] then
-		print('World._getWallTileDetails: '..topTile..' not found')
-		topTile = fallBack
-	else
-		topTile = World.layers.worldWall.spriteSheet.names[topTile]
+	local function pickTile(tWeights)
+		local sTile = MiscUtil.weightedRandom(tWeights, addr)
+		local nIdx = World.layers.worldWall.spriteSheet.names[sTile]
+		if not nIdx then
+			print('World._getWallTileDetails: '..sTile..' not found')
+			return fallBack
+		end
+		return nIdx
 	end
-	local bottomTile = MiscUtil.weightedRandom(bottom, addr)
-	if not World.layers.worldWall.spriteSheet.names[bottomTile] then
-		print('World._getWallTileDetails: '..bottomTile..' not found')
-		bottomTile = fallBack
-	else
-		bottomTile = World.layers.worldWall.spriteSheet.names[bottomTile]
-	end
+	local topTile = pickTile(top)
+	local bottomTile = pickTile(bottom)
     local tDetails = {}
     tDetails.topIdx = topTile
     tDetails.bottomIdx = bottomTile
