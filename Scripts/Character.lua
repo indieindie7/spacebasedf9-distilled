@@ -1,4 +1,3 @@
-local function _h1(a0) return {gatherFn=a0} end
 local DFGraphics = require('DFCommon.Graphics')
 local DFMath = require('DFCommon.Math')
 local DFUtil = require('DFCommon.Util')
@@ -1079,6 +1078,20 @@ end
 function Character:isMarkedForCuff()
     return self.tStatus.bMarkedForCuff or false
 end
+function Character:_detachAttachedEntity()
+	if self.tAttachedEntity then
+		self.rCurrentRig:detach(self.tAttachedEntity.rRig)
+		self.tAttachedEntity.rRig:deactivate()
+		self.tAttachedEntity = nil
+	end
+end
+function Character:_logBrigAssign()
+	local tLogType = Log.tTypes.BRIG_ASSIGN_INCAPACITATED
+	if not Malady.isIncapacitated(self) then
+		tLogType = Log.tTypes.BRIG_ASSIGN_NOT_INCAPACITATED
+	end
+	Log.add(tLogType, self)
+end
 function Character:setMarkedForCuff(bMarked)
     if bMarked == nil then bMarked = false end
     if self.tStatus.bMarkedForCuff == nil then self.tStatus.bMarkedForCuff = false end
@@ -1089,11 +1102,7 @@ function Character:setMarkedForCuff(bMarked)
             self:storeMemory(Character.MEMORY_PRISON_ANGER_RECENTLY, true, 120)
             self:angerEvent(Character.ANGER_MAX * (1-self:getPersonalityStat('nAuthoritarian')))
         end
-		local tLogType = Log.tTypes.BRIG_ASSIGN_INCAPACITATED
-		if not Malady.isIncapacitated(self) then
-			tLogType = Log.tTypes.BRIG_ASSIGN_NOT_INCAPACITATED
-		end
-		Log.add(tLogType, self)
+		self:_logBrigAssign()
     else
         if self.tStatus.bCuffed then
             self:uncuff()
@@ -1753,11 +1762,7 @@ function Character:assignedToBrig(rRoom)
             self:storeMemory(Character.MEMORY_PRISON_ANGER_RECENTLY, true, 120)
             self:angerEvent(Character.ANGER_MAX * (1-self:getPersonalityStat('nAuthoritarian')))
         end
-		local tLogType = Log.tTypes.BRIG_ASSIGN_INCAPACITATED
-		if not Malady.isIncapacitated(self) then
-			tLogType = Log.tTypes.BRIG_ASSIGN_NOT_INCAPACITATED
-		end
-		Log.add(tLogType, self)
+		self:_logBrigAssign()
     end
     self:reevaluateTask()
 end
@@ -2279,125 +2284,117 @@ function Character:getSaveData(xOff,yOff)
 	tData.y = y+(yOff or 0)
 	return tData
 end
-function Character:_setPortrait( tData )
-	if not tData.tStats.sPortrait or not Portraits.isValidPortrait( tData.tStats.sPortrait ) then
-		tData.tStats.sPortraitHair = nil
-		tData.tStats.sPortraitFacialHair = nil
-		if Character.PremadePortraits[self.tStats.sName] then
-			tData.tStats.sPortrait = Character.PremadePortraits[self.tStats.sName]
-		elseif self.tStats.nRace == Character.RACE_SHAMON then
-			tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.SHAMON_MALE )
-		elseif self.tStats.nRace == Character.RACE_JELLY then
-			if self.tStats.nBodyVariation == Character.BODY_JELLY_BLUE_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.JELLY_FEMALE_BLUE )
-			elseif self.tStats.nBodyVariation == Character.BODY_JELLY_PURPLE_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.JELLY_FEMALE_PURPLE )
-			elseif self.tStats.nBodyVariation == Character.BODY_JELLY_PINK_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.JELLY_FEMALE_PINK )
-			else tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.JELLY_FEMALE_MAUVE ) end
-		elseif self.tStats.nRace == Character.RACE_CHICKEN then
-			if self.sSex == "M" then
-				tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.CHICKEN_MALE )
-			else
-				tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.CHICKEN_FEMALE )
-			end
-		elseif self.tStats.nRace == Character.RACE_BIRDSHARK then
-			if self.tStats.nBodyVariation == Character.BODY_BIRDSHARK_MALE_01 then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.BIRDSHARK_MALE )
-			elseif self.tStats.nBodyVariation == Character.BODY_BIRDSHARK_MALE_02 then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.BIRDSHARK_MALE )
-			elseif self.tStats.nBodyVariation == Character.BODY_BIRDSHARK_FEMALE_01 then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.BIRDSHARK_FEMALE )
-			elseif self.tStats.nBodyVariation == Character.BODY_BIRDSHARK_FEMALE_02 then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.BIRDSHARK_FEMALE )
-			elseif self.tStats.nBodyVariation == Character.BODY_BIRDSHARK_FAT_MALE_01 then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.BIRDSHARK_MALE_FAT )
-			elseif self.tStats.nBodyVariation == Character.BODY_BIRDSHARK_FAT_MALE_02 then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.BIRDSHARK_MALE_FAT )
-			elseif self.tStats.nBodyVariation == Character.BODY_BIRDSHARK_FAT_FEMALE_01 then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.BIRDSHARK_FEMALE_FAT )
-			elseif self.tStats.nBodyVariation == Character.BODY_BIRDSHARK_FAT_FEMALE_02 then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.BIRDSHARK_FEMALE_FAT )
-			else tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.BIRDSHARK_MALE ) end
-		elseif self.tStats.nRace == Character.RACE_TOBIAN then
-			local skinColor = 'Blue'
-			if self.tStats.nBodyVariation == Character.BODY_TOBIAN_BLUE_ALIEN_01 then skinColor = 'Blue'
-			elseif self.tStats.nBodyVariation == Character.BODY_TOBIAN_BLUE_ALIEN_02 then skinColor = 'Light_Teal'
-			elseif self.tStats.nBodyVariation == Character.BODY_TOBIAN_BLUE_ALIEN_03 then skinColor = 'Light_Blue'
-			elseif self.tStats.nBodyVariation == Character.BODY_TOBIAN_BLUE_ALIEN_04 then skinColor = 'Teal'
-			else skinColor = 'Purple' end
-			if self.tStats.nHairVariation == Character.TOBIAN_DONG_01
-			or self.tStats.nHairVariation == Character.TOBIAN_DONG_02
-			or self.tStats.nHairVariation == Character.TOBIAN_DONG_03
-			or self.tStats.nHairVariation == Character.TOBIAN_DONG_04
-			or self.tStats.nHairVariation == Character.TOBIAN_DONG_05 then
-				tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.TOBIAN_DONG_HEAD[skinColor] )
-			elseif self.tStats.nHairVariation == Character.TOBIAN_MUSTACHE_01
-			or self.tStats.nHairVariation == Character.TOBIAN_MUSTACHE_02
-			or self.tStats.nHairVariation == Character.TOBIAN_MUSTACHE_03
-			or self.tStats.nHairVariation == Character.TOBIAN_MUSTACHE_04
-			or self.tStats.nHairVariation == Character.TOBIAN_MUSTACHE_05 then
-				tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.TOBIAN_EYESTALK_MUSTACHE_HEAD[skinColor] )
-			elseif self.tStats.nHairVariation == Character.TOBIAN_ELEPHANT_01
-			or self.tStats.nHairVariation == Character.TOBIAN_ELEPHANT_02
-			or self.tStats.nHairVariation == Character.TOBIAN_ELEPHANT_03
-			or self.tStats.nHairVariation == Character.TOBIAN_ELEPHANT_04
-			or self.tStats.nHairVariation == Character.TOBIAN_ELEPHANT_05 then
-				tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.TOBIAN_ELEPHANT_HEAD[skinColor] )
-			end
-		elseif self.tStats.nRace == Character.RACE_CAT then
-			if self.sSex == "M" then
-				tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.CAT_MALE )
-			else
-				tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.CAT_FEMALE )
-			end
-		elseif self.tStats.nRace == Character.RACE_HUMAN then
-			if self.sSex == "M" then
-				if self.tStats.nBodyVariation == Character.BODY_HUMAN_BROWN_MALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_MALE_BROWN )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_YELLOWISH_MALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_MALE_YELLOWISH )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_REDDISH_MALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_MALE_REDDISH )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_BLACK_MALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_MALE_BLACK )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_FAT_BROWN_MALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_MALE_BROWN_FAT )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_FAT_YELLOWISH_MALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_MALE_YELLOWISH_FAT )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_FAT_REDDISH_MALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_MALE_REDDISH_FAT )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_FAT_BLACK_MALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_MALE_BLACK_FAT )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_FAT_WHITE_MALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_MALE_WHITE_FAT )
-				else tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_MALE_WHITE ) end
-				local sFatText, sFaceNum
-				if string.find(tData.tStats.sPortrait, 'Large') then sFatText = 'Large_' else sFatText = '' end
-				sFaceNum = string.sub(tData.tStats.sPortrait, -2)
-				if self.tStats.nHairVariation and self.tStats.nHairVariation ~= Character.BALD then
-					tData.tStats.sPortraitHair = 'Human_' .. sFatText .. 'Male_' .. sFaceNum .. '_Hair_' .. Character.HAIR_TYPE[self.tStats.nHairVariation].sPortraitColor .. '_01'
-				end
-				if self.tStats.nFaceBottomVariation and self.tStats.nFaceBottomVariation ~= Character.FACE_BOTTOM_CLEAR then
-					local hairColor = string.sub(Character.FACE_BOTTOM_TYPE[self.tStats.nFaceBottomVariation], -2)
-					if hairColor == '01' then hairColor = 'Brown'
-					elseif hairColor == '02' then hairColor = 'Red'
-					elseif hairColor == '03' then hairColor = 'Yellow'
-					elseif hairColor == '05' then hairColor = 'Gray'
-					else hairColor = 'Black' end
-					if string.find(tData.tStats.sPortrait, 'Large') then sFatText = 'Large_' else sFatText = '' end
-					local hairType = math.random(1,2)
-					if hairType == 1 then hairType = '_Mustache_' else hairType = '_Beard_' end
-					tData.tStats.sPortraitFacialHair = 'Human_'..sFatText..'Male_'.. sFaceNum .. hairType .. hairColor ..'_01'
-				end
-			else
-				if self.tStats.nBodyVariation == Character.BODY_HUMAN_BROWN_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_FEMALE_BROWN )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_YELLOWISH_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_FEMALE_YELLOWISH )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_REDDISH_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_FEMALE_REDDISH )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_BLACK_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_FEMALE_BLACK )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_FAT_BROWN_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_FEMALE_BROWN_FAT )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_FAT_YELLOWISH_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_FEMALE_YELLOWISH_FAT )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_FAT_REDDISH_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_FEMALE_REDDISH_FAT )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_FAT_BLACK_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_FEMALE_BLACK_FAT )
-				elseif self.tStats.nBodyVariation == Character.BODY_HUMAN_FAT_WHITE_FEMALE then tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_FEMALE_WHITE_FAT )
-				else tData.tStats.sPortrait = DFUtil.arrayRandom( Portraits.HUMAN_FEMALE_WHITE ) end
-				if self.tStats.nHairVariation and self.tStats.nHairVariation ~= Character.BALD then
-					local sFatText
-					if string.find(tData.tStats.sPortrait, 'Large') then sFatText = 'Large_' else sFatText = '' end
-					tData.tStats.sPortraitHair = 'Human_' .. sFatText .. 'Female_' .. string.sub(tData.tStats.sPortrait, -2) .. '_Hair_' .. Character.HAIR_TYPE[self.tStats.nHairVariation].sPortraitColor .. '_01'
-				end
-			end
-		elseif self.tStats.nRace == Character.RACE_MURDERFACE then
-			tData.tStats.sPortrait = DFUtil.arrayRandom(Portraits.MURDERFACE)
-		elseif self.tStats.nRace == Character.RACE_MONSTER then
-			tData.tStats.sPortrait = DFUtil.arrayRandom(Portraits.MONSTER)
-		elseif self.tStats.nRace == Character.RACE_KILLBOT then
-			tData.tStats.sPortrait = DFUtil.arrayRandom(Portraits.KILLBOT)
-		else
-			tData.tStats.sPortrait = GENERIC_PORTRAIT
-		end
-		tData.tStats.sPortraitPath = Portraits.PORTRAIT_PATH
+local JELLY_PORTRAITS = {
+	[Character.BODY_JELLY_BLUE_FEMALE] = Portraits.JELLY_FEMALE_BLUE,
+	[Character.BODY_JELLY_PURPLE_FEMALE] = Portraits.JELLY_FEMALE_PURPLE,
+	[Character.BODY_JELLY_PINK_FEMALE] = Portraits.JELLY_FEMALE_PINK,
+}
+local BIRDSHARK_PORTRAITS = {
+	[Character.BODY_BIRDSHARK_MALE_01] = Portraits.BIRDSHARK_MALE,
+	[Character.BODY_BIRDSHARK_MALE_02] = Portraits.BIRDSHARK_MALE,
+	[Character.BODY_BIRDSHARK_FEMALE_01] = Portraits.BIRDSHARK_FEMALE,
+	[Character.BODY_BIRDSHARK_FEMALE_02] = Portraits.BIRDSHARK_FEMALE,
+	[Character.BODY_BIRDSHARK_FAT_MALE_01] = Portraits.BIRDSHARK_MALE_FAT,
+	[Character.BODY_BIRDSHARK_FAT_MALE_02] = Portraits.BIRDSHARK_MALE_FAT,
+	[Character.BODY_BIRDSHARK_FAT_FEMALE_01] = Portraits.BIRDSHARK_FEMALE_FAT,
+	[Character.BODY_BIRDSHARK_FAT_FEMALE_02] = Portraits.BIRDSHARK_FEMALE_FAT,
+}
+local TOBIAN_SKIN_COLORS = {
+	[Character.BODY_TOBIAN_BLUE_ALIEN_01] = 'Blue',
+	[Character.BODY_TOBIAN_BLUE_ALIEN_02] = 'Light_Teal',
+	[Character.BODY_TOBIAN_BLUE_ALIEN_03] = 'Light_Blue',
+	[Character.BODY_TOBIAN_BLUE_ALIEN_04] = 'Teal',
+}
+local TOBIAN_HEAD_PORTRAITS = {}
+for i = 1, 5 do
+	TOBIAN_HEAD_PORTRAITS[Character['TOBIAN_DONG_0' .. i]] = Portraits.TOBIAN_DONG_HEAD
+	TOBIAN_HEAD_PORTRAITS[Character['TOBIAN_MUSTACHE_0' .. i]] = Portraits.TOBIAN_EYESTALK_MUSTACHE_HEAD
+	TOBIAN_HEAD_PORTRAITS[Character['TOBIAN_ELEPHANT_0' .. i]] = Portraits.TOBIAN_ELEPHANT_HEAD
+end
+local PORTRAITS_BY_SEX = {
+	[Character.RACE_CHICKEN] = { M = Portraits.CHICKEN_MALE, F = Portraits.CHICKEN_FEMALE },
+	[Character.RACE_CAT] = { M = Portraits.CAT_MALE, F = Portraits.CAT_FEMALE },
+}
+local PORTRAITS_BY_RACE = {
+	[Character.RACE_SHAMON] = Portraits.SHAMON_MALE,
+	[Character.RACE_MURDERFACE] = Portraits.MURDERFACE,
+	[Character.RACE_MONSTER] = Portraits.MONSTER,
+	[Character.RACE_KILLBOT] = Portraits.KILLBOT,
+}
+local HUMAN_PORTRAITS = {
+	M = {
+		[Character.BODY_HUMAN_BROWN_MALE] = Portraits.HUMAN_MALE_BROWN,
+		[Character.BODY_HUMAN_YELLOWISH_MALE] = Portraits.HUMAN_MALE_YELLOWISH,
+		[Character.BODY_HUMAN_REDDISH_MALE] = Portraits.HUMAN_MALE_REDDISH,
+		[Character.BODY_HUMAN_BLACK_MALE] = Portraits.HUMAN_MALE_BLACK,
+		[Character.BODY_HUMAN_FAT_BROWN_MALE] = Portraits.HUMAN_MALE_BROWN_FAT,
+		[Character.BODY_HUMAN_FAT_YELLOWISH_MALE] = Portraits.HUMAN_MALE_YELLOWISH_FAT,
+		[Character.BODY_HUMAN_FAT_REDDISH_MALE] = Portraits.HUMAN_MALE_REDDISH_FAT,
+		[Character.BODY_HUMAN_FAT_BLACK_MALE] = Portraits.HUMAN_MALE_BLACK_FAT,
+		[Character.BODY_HUMAN_FAT_WHITE_MALE] = Portraits.HUMAN_MALE_WHITE_FAT,
+	},
+	F = {
+		[Character.BODY_HUMAN_BROWN_FEMALE] = Portraits.HUMAN_FEMALE_BROWN,
+		[Character.BODY_HUMAN_YELLOWISH_FEMALE] = Portraits.HUMAN_FEMALE_YELLOWISH,
+		[Character.BODY_HUMAN_REDDISH_FEMALE] = Portraits.HUMAN_FEMALE_REDDISH,
+		[Character.BODY_HUMAN_BLACK_FEMALE] = Portraits.HUMAN_FEMALE_BLACK,
+		[Character.BODY_HUMAN_FAT_BROWN_FEMALE] = Portraits.HUMAN_FEMALE_BROWN_FAT,
+		[Character.BODY_HUMAN_FAT_YELLOWISH_FEMALE] = Portraits.HUMAN_FEMALE_YELLOWISH_FAT,
+		[Character.BODY_HUMAN_FAT_REDDISH_FEMALE] = Portraits.HUMAN_FEMALE_REDDISH_FAT,
+		[Character.BODY_HUMAN_FAT_BLACK_FEMALE] = Portraits.HUMAN_FEMALE_BLACK_FAT,
+		[Character.BODY_HUMAN_FAT_WHITE_FEMALE] = Portraits.HUMAN_FEMALE_WHITE_FAT,
+	},
+}
+local HUMAN_DEFAULT_PORTRAITS = { M = Portraits.HUMAN_MALE_WHITE, F = Portraits.HUMAN_FEMALE_WHITE }
+local FACE_BOTTOM_HAIR_COLORS = { ['01'] = 'Brown', ['02'] = 'Red', ['03'] = 'Yellow', ['05'] = 'Gray' }
+
+function Character:_setHumanPortrait( tStats )
+	local sSex = (self.sSex == "M") and 'M' or 'F'
+	local sSexName = (sSex == 'M') and 'Male' or 'Female'
+	local tPortraits = HUMAN_PORTRAITS[sSex][self.tStats.nBodyVariation] or HUMAN_DEFAULT_PORTRAITS[sSex]
+	tStats.sPortrait = DFUtil.arrayRandom( tPortraits )
+	local sFatText = string.find(tStats.sPortrait, 'Large') and 'Large_' or ''
+	local sFaceNum = string.sub(tStats.sPortrait, -2)
+	if self.tStats.nHairVariation and self.tStats.nHairVariation ~= Character.BALD then
+		tStats.sPortraitHair = 'Human_' .. sFatText .. sSexName .. '_' .. sFaceNum .. '_Hair_' .. Character.HAIR_TYPE[self.tStats.nHairVariation].sPortraitColor .. '_01'
 	end
+	if sSex == 'M' and self.tStats.nFaceBottomVariation and self.tStats.nFaceBottomVariation ~= Character.FACE_BOTTOM_CLEAR then
+		local hairColor = FACE_BOTTOM_HAIR_COLORS[string.sub(Character.FACE_BOTTOM_TYPE[self.tStats.nFaceBottomVariation], -2)] or 'Black'
+		local hairType = (math.random(1,2) == 1) and '_Mustache_' or '_Beard_'
+		tStats.sPortraitFacialHair = 'Human_'..sFatText..'Male_'.. sFaceNum .. hairType .. hairColor ..'_01'
+	end
+end
+function Character:_setPortrait( tData )
+	local tStats = tData.tStats
+	if tStats.sPortrait and Portraits.isValidPortrait( tStats.sPortrait ) then
+		return
+	end
+	tStats.sPortraitHair = nil
+	tStats.sPortraitFacialHair = nil
+	local nRace = self.tStats.nRace
+	local nBody = self.tStats.nBodyVariation
+	local sSex = (self.sSex == "M") and 'M' or 'F'
+	if Character.PremadePortraits[self.tStats.sName] then
+		tStats.sPortrait = Character.PremadePortraits[self.tStats.sName]
+	elseif nRace == Character.RACE_JELLY then
+		tStats.sPortrait = DFUtil.arrayRandom( JELLY_PORTRAITS[nBody] or Portraits.JELLY_FEMALE_MAUVE )
+	elseif nRace == Character.RACE_BIRDSHARK then
+		tStats.sPortrait = DFUtil.arrayRandom( BIRDSHARK_PORTRAITS[nBody] or Portraits.BIRDSHARK_MALE )
+	elseif nRace == Character.RACE_TOBIAN then
+		local tHeadPortraits = TOBIAN_HEAD_PORTRAITS[self.tStats.nHairVariation]
+		if tHeadPortraits then
+			tStats.sPortrait = DFUtil.arrayRandom( tHeadPortraits[TOBIAN_SKIN_COLORS[nBody] or 'Purple'] )
+		end
+	elseif nRace == Character.RACE_HUMAN then
+		self:_setHumanPortrait( tStats )
+	elseif PORTRAITS_BY_SEX[nRace] then
+		tStats.sPortrait = DFUtil.arrayRandom( PORTRAITS_BY_SEX[nRace][sSex] )
+	elseif PORTRAITS_BY_RACE[nRace] then
+		tStats.sPortrait = DFUtil.arrayRandom( PORTRAITS_BY_RACE[nRace] )
+	else
+		tStats.sPortrait = GENERIC_PORTRAIT
+	end
+	tStats.sPortraitPath = Portraits.PORTRAIT_PATH
 end
 function Character:setEmoticon( sIcon, sText, bIsWordType )
 	if not self.rEmoticon and not self.rEmoticonText then
@@ -2509,36 +2506,25 @@ function Character:getAffChangeEmoticon( change )
 		return 'arrowdown'
 	end
 end
+local LEGACY_PERSONALITY_STATS = { nBravery = 'Bravery', nGregariousness = 'Gregariousness', nChattiness = 'Chattiness', nNeatness = 'Neatness' }
 function Character:_setStats( tData )
 	if tData then
 		self.tStats = tData.tStats or {}
-		if not self.tStats.tPersonality then self.tStats.tPersonality = {} end
-		if not self.tStats.tHistory then self.tStats.tHistory = {} end
-		if not self.tStats.tHistory.tMoraleEvents then self.tStats.tHistory.tMoraleEvents = {} end
-		if not self.tStats.tHistory.tTaskLog then self.tStats.tHistory.tTaskLog = {} end
-		if not self.tStats.tHistory.tGraphItems then
-			self.tStats.tHistory.tGraphItems = {}
-		end
+		self.tStats.tPersonality = self.tStats.tPersonality or {}
+		self.tStats.tHistory = self.tStats.tHistory or {}
+		local tHistory = self.tStats.tHistory
+		tHistory.tMoraleEvents = tHistory.tMoraleEvents or {}
+		tHistory.tTaskLog = tHistory.tTaskLog or {}
+		tHistory.tGraphItems = tHistory.tGraphItems or {}
+		tHistory.tRoomScores = tHistory.tRoomScores or {}
 		for needName,_ in pairs(Needs.tNeedList) do
-			if not self.tStats.tHistory.tGraphItems[needName] then
-				self.tStats.tHistory.tGraphItems[needName] = {}
-			end
+			tHistory.tGraphItems[needName] = tHistory.tGraphItems[needName] or {}
 		end
-		if not self.tStats.tHistory.tGraphItems.Morale then
-			self.tStats.tHistory.tGraphItems['Morale'] = {}
+		for _,sGraphName in ipairs({'Morale', 'XP', 'Stuff'}) do
+			tHistory.tGraphItems[sGraphName] = tHistory.tGraphItems[sGraphName] or {}
 		end
-		if not self.tStats.tHistory.tGraphItems.XP then
-			self.tStats.tHistory.tGraphItems['XP'] = {}
-		end
-		if not self.tStats.tHistory.tGraphItems.Stuff then
-			self.tStats.tHistory.tGraphItems['Stuff'] = {}
-		end
-		if not self.tStats.tHistory.tRoomScores then
-			self.tStats.tHistory.tRoomScores = {}
-		end
-		self.tNeeds = tData.tNeeds
-		if not self.tNeeds then self.tNeeds = {} end
-        if not self.tNeeds.tReduceMods then self.tNeeds.tReduceMods = {} end
+		self.tNeeds = tData.tNeeds or {}
+		self.tNeeds.tReduceMods = self.tNeeds.tReduceMods or {}
 		for needName,_ in pairs(Needs.tNeedList) do
 			if not self.tNeeds[needName] then
 				local nMin = Needs.tNeedList[needName].initMin or 0.1*Needs.MIN_VALUE
@@ -2635,28 +2621,14 @@ function Character:_setStats( tData )
 	self.nAverageOxygen = Oxygen.TILE_MAX
 	self.tRecentOxygen = {}
 	for k,_ in pairs(Character.PERSONALITY_TRAITS) do
-		if k == 'nBravery' and self.tStats.Bravery then
-			self.tStats.tPersonality[k] = self.tStats.Bravery
-			self.tStats.Bravery = nil
-		elseif k == 'nGregariousness' and self.tStats.Gregariousness then
-			self.tStats.tPersonality[k] = self.tStats.Gregariousness
-			self.tStats.Gregariousness = nil
-		elseif k == 'nChattiness' and self.tStats.Chattiness then
-			self.tStats.tPersonality[k] = self.tStats.Chattiness
-			self.tStats.Chattiness = nil
-		elseif k == 'nNeatness' and self.tStats.Neatness then
-			self.tStats.tPersonality[k] = self.tStats.Neatness
-			self.tStats.Neatness = nil
-		else
-			if string.find(k, 'n') == 1 then
-				self.tStats.tPersonality[k] = self.tStats.tPersonality[k] or math.random()
-			elseif string.find(k, 'b') == 1 then
-				if self.tStats.tPersonality[k] == nil then
-					self.tStats.tPersonality[k] = math.random() < (Character.PERSONALITY_LIKELIHOOD[k] or 0.5)
-				else
-					self.tStats.tPersonality[k] = self.tStats.tPersonality[k]
-				end
-			end
+		local sLegacyStat = LEGACY_PERSONALITY_STATS[k]
+		if sLegacyStat and self.tStats[sLegacyStat] then
+			self.tStats.tPersonality[k] = self.tStats[sLegacyStat]
+			self.tStats[sLegacyStat] = nil
+		elseif string.find(k, 'n') == 1 then
+			self.tStats.tPersonality[k] = self.tStats.tPersonality[k] or math.random()
+		elseif string.find(k, 'b') == 1 and self.tStats.tPersonality[k] == nil then
+			self.tStats.tPersonality[k] = math.random() < (Character.PERSONALITY_LIKELIHOOD[k] or 0.5)
 		end
 	end
 	self.tStats.speed = Character.BASE_SPEED * .5 * (World.tileWidth+World.tileHeight)
@@ -3013,42 +2985,34 @@ function Character:_setJobOutfit( bLoading, nJobOverride )
 		if not nJobOutfit then
 			nJobOutfit = Character.getDefaultJobOutfit( nJob, Character.BODY_TYPE[self.tStats.nBodyVariation].bFat )
 		end
-		if Character.JOB_EQUIPMENT[nJob]["sTopLayer"] then
-			table.insert(tJobSubsetReplacements, {self.sBodySubsetId, "g_samTop", Character.JOB_EQUIPMENT[nJob]["sTopLayer"] })
+		local tEquipment = Character.JOB_EQUIPMENT[nJob]
+		if tEquipment.sTopLayer then
+			table.insert(tJobSubsetReplacements, {self.sBodySubsetId, "g_samTop", tEquipment.sTopLayer})
 		end
-		if Character.JOB_EQUIPMENT[nJob]["sBottomLayer"] then
-			table.insert(tJobSubsetReplacements, {self.sBodySubsetId, "g_samBottom", Character.JOB_EQUIPMENT[nJob]["sBottomLayer"]})
+		if tEquipment.sBottomLayer then
+			table.insert(tJobSubsetReplacements, {self.sBodySubsetId, "g_samBottom", tEquipment.sBottomLayer})
 		end
-		if Character.JOB_EQUIPMENT[nJob]["bHasSuit"] then
-			local sJobOutfitModel
-			local sJobOutfitTexture
+		if tEquipment.bHasSuit then
+			local tOutfitType = Character.JOB_OUTFIT_TYPE[nJobOutfit]
 			if nJob == Character.EMERGENCY or nJob == Character.RAIDER then
-                sJobOutfitModel = Character.JOB_EQUIPMENT_PREFIX..Character.JOB_OUTFIT_TYPE[nJobOutfit][sArmorOutfitKey]["sModel"]
-                sJobOutfitTexture = Character.JOB_OUTFIT_TYPE[nJobOutfit][sArmorOutfitKey]["sTexture"]
-			else
-				sJobOutfitModel = Character.JOB_EQUIPMENT_PREFIX..Character.JOB_OUTFIT_TYPE[nJobOutfit]["sModel"]
-				sJobOutfitTexture = Character.JOB_OUTFIT_TYPE[nJobOutfit]["sTexture"]
+				tOutfitType = tOutfitType[sArmorOutfitKey]
 			end
+			local sJobOutfitModel = Character.JOB_EQUIPMENT_PREFIX..tOutfitType.sModel
+			local sJobOutfitTexture = tOutfitType.sTexture
 			self.tJobVariation = { prefix = Character.JOB_EQUIPMENT_PREFIX, full = sJobOutfitModel }
 			table.insert(tJobSubsetReplacements, { sJobOutfitModel, "g_samTop", sJobOutfitTexture })
 		else
 			self.tJobVariation = { prefix = Character.JOB_EQUIPMENT_PREFIX, full = "" }
 		end
-		if Character.JOB_EQUIPMENT[nJob]["bHasHelmet"] then
+		if tEquipment.bHasHelmet then
 			local nHelmetVariation = Character.HEAD_TYPE[self.tStats.nHeadVariation].tJobHelmets[nJob]
 			if nHelmetVariation ~= Character.NO_HELMET then
-				local sJobHelmetModel
-				local sJobHelmetTexture
+				local tHelmetType = Character.JOB_HELMET_TYPE[nHelmetVariation]
 				if nJob == Character.EMERGENCY then
-                    local sItemKey,tItem = self:_getArmor(true)
-                    local sOutfitKey = Inventory.getOutfitOverride(tItem)
-					sJobHelmetModel = Character.JOB_HELMET_PREFIX..Character.JOB_HELMET_TYPE[nHelmetVariation][sOutfitKey]["sModel"]
-					sJobHelmetTexture = Character.JOB_HELMET_TYPE[nHelmetVariation][sOutfitKey]["sTexture"]
-				else
-					sJobHelmetModel = Character.JOB_HELMET_PREFIX..Character.JOB_HELMET_TYPE[nHelmetVariation]["sModel"]
-					sJobHelmetTexture = Character.JOB_HELMET_TYPE[nHelmetVariation]["sTexture"]
+					local sItemKey,tItem = self:_getArmor(true)
+					tHelmetType = tHelmetType[Inventory.getOutfitOverride(tItem)]
 				end
-				table.insert(tJobSubsetReplacements, { sJobHelmetModel, "g_samTop", sJobHelmetTexture })
+				table.insert(tJobSubsetReplacements, { Character.JOB_HELMET_PREFIX..tHelmetType.sModel, "g_samTop", tHelmetType.sTexture })
 			end
 		end
 	else
@@ -3209,11 +3173,7 @@ function Character:_setSpacesuitRigActive(bActive)
 	(not bActive and self.rCurrentRig == self.rRig) then
 		return
 	end
-	if self.tAttachedEntity then
-		self.rCurrentRig:detach(self.tAttachedEntity.rRig)
-		self.tAttachedEntity.rRig:deactivate()
-		self.tAttachedEntity = nil
-	end
+	self:_detachAttachedEntity()
 	if self.currentAccessory then
 		self.rCurrentRig:detach(self.currentAccessory)
 		self.currentAccessory:deactivate()
@@ -3713,11 +3673,7 @@ function Character:_refreshHeldItemVisibility()
 	(self.tAttachedEntity and self.tStatus.sHeldItemName and (self.tStats.sUniqueID..'_'..self.tStatus.sHeldItemName) == self.tAttachedEntity.sName) then
 		return
 	end
-	if self.tAttachedEntity then
-		self.rCurrentRig:detach(self.tAttachedEntity.rRig)
-		self.tAttachedEntity.rRig:deactivate()
-		self.tAttachedEntity = nil
-	end
+	self:_detachAttachedEntity()
 	if self.tStatus.sHeldItemName then
 		local rRenderLayer = Renderer.getRenderLayer(Character.RENDER_LAYER)
         local tHeldItem = self.tInventory[self.tStatus.sHeldItemName]
@@ -4010,32 +3966,48 @@ function Character:_randomChanceInfect()
     end
 end
 function Character:_updateGatherers()
-    self.tActivityOptionGatherers = {}
-    local nTeam = self:getTeam()
-    local nBehavior = Base.getTeamFactionBehavior(nTeam)
+    local tGatherers = {}
+    self.tActivityOptionGatherers = tGatherers
+    local nBehavior = Base.getTeamFactionBehavior(self:getTeam())
+    local tList
     if self.tStatus.tImprisonedIn then
-        self.tActivityOptionGatherers.Characters= _h1(UtilityAI.getNearbyCharacters)
-        self.tActivityOptionGatherers.RoomJobs= _h1(Room.getRoomJobs)
-        self.tActivityOptionGatherers.EnvObjJobs= _h1(EnvObject.getEnvObjectJobs)
-        self.tActivityOptionGatherers.GlobalObjects= _h1(GlobalObjects.getGlobalUtilityObjects)
+        tList = {
+            'Characters', UtilityAI.getNearbyCharacters,
+            'RoomJobs', Room.getRoomJobs,
+            'EnvObjJobs', EnvObject.getEnvObjectJobs,
+            'GlobalObjects', GlobalObjects.getGlobalUtilityObjects,
+        }
     elseif self.tStats.nRace == Character.RACE_MONSTER then
-        self.tActivityOptionGatherers.Characters= _h1(UtilityAI.getNearbyCharacters)
-        self.tActivityOptionGatherers.GlobalMonsterActivities= _h1(MonsterUtility.getGlobalMonsterUtilityObjects)
+        tList = {
+            'Characters', UtilityAI.getNearbyCharacters,
+            'GlobalMonsterActivities', MonsterUtility.getGlobalMonsterUtilityObjects,
+        }
     elseif nBehavior == Character.FACTION_BEHAVIOR.Citizen then
-        self.tActivityOptionGatherers.Characters= _h1(UtilityAI.getNearbyCharacters)
-        self.tActivityOptionGatherers.RoomJobs= _h1(Room.getRoomJobs)
-        self.tActivityOptionGatherers.EnvObjJobs= _h1(EnvObject.getEnvObjectJobs)
-        self.tActivityOptionGatherers.GlobalObjects= _h1(GlobalObjects.getGlobalUtilityObjects)
-        self.tActivityOptionGatherers.CommandObject= _h1(CommandObject.getActivityOptions)
+        tList = {
+            'Characters', UtilityAI.getNearbyCharacters,
+            'RoomJobs', Room.getRoomJobs,
+            'EnvObjJobs', EnvObject.getEnvObjectJobs,
+            'GlobalObjects', GlobalObjects.getGlobalUtilityObjects,
+            'CommandObject', CommandObject.getActivityOptions,
+        }
     elseif nBehavior == Character.FACTION_BEHAVIOR.EnemyGroup then
-        self.tActivityOptionGatherers.RoomJobs= _h1(Room.getRoomJobs)
-        self.tActivityOptionGatherers.Characters= _h1(UtilityAI.getNearbyCharacters)
-        self.tActivityOptionGatherers.EnvObjJobs= _h1(EnvObject.getEnemyEnvObjectJobs)
-        self.tActivityOptionGatherers.GlobalRaiderActivities= _h1(MonsterUtility.getGlobalRaiderUtilityObjects)
-        self.tActivityOptionGatherers.GlobalObjects= _h1(GlobalObjects.getGlobalUtilityObjects)
+        tList = {
+            'RoomJobs', Room.getRoomJobs,
+            'Characters', UtilityAI.getNearbyCharacters,
+            'EnvObjJobs', EnvObject.getEnemyEnvObjectJobs,
+            'GlobalRaiderActivities', MonsterUtility.getGlobalRaiderUtilityObjects,
+            'GlobalObjects', GlobalObjects.getGlobalUtilityObjects,
+        }
     elseif nBehavior == Character.FACTION_BEHAVIOR.Friendly then
-        self.tActivityOptionGatherers.GlobalMonsterActivities= _h1(MonsterUtility.getGlobalFriendlyUtilityObjects)
-        self.tActivityOptionGatherers.GlobalObjects= _h1(GlobalObjects.getGlobalUtilityObjects)
+        tList = {
+            'GlobalMonsterActivities', MonsterUtility.getGlobalFriendlyUtilityObjects,
+            'GlobalObjects', GlobalObjects.getGlobalUtilityObjects,
+        }
+    else
+        return
+    end
+    for i = 1, #tList, 2 do
+        tGatherers[tList[i]] = {gatherFn = tList[i + 1]}
     end
 end
 function Character:_factionSetup(bLoading)
@@ -4097,17 +4069,12 @@ function Character:_factionSetup(bLoading)
             self.tStats.bIgnoreBreachThreats = true
             self.tStats.bIgnoreFire = true
         end
-        if self.tStats.nTeam == 1 then
-            Print(TT_Error, "Attempt to spawn enemy on player's team. Hackily setting to team 2.")
-            self.tStats.nTeam = 2
-            self.tStats.nOriginalTeam = 2
-        end
-    elseif nBehavior == Character.FACTION_BEHAVIOR.Friendly then
-        if self.tStats.nTeam == 1 then
-            Print(TT_Error, "Attempt to spawn enemy on player's team. Hackily setting to team 2.")
-            self.tStats.nTeam = 2
-            self.tStats.nOriginalTeam = 2
-        end
+    end
+    local bHostileNonMonster = self.tStats.nRace ~= Character.RACE_MONSTER and (nBehavior == Character.FACTION_BEHAVIOR.EnemyGroup or nBehavior == Character.FACTION_BEHAVIOR.Friendly)
+    if bHostileNonMonster and self.tStats.nTeam == 1 then
+        Print(TT_Error, "Attempt to spawn enemy on player's team. Hackily setting to team 2.")
+        self.tStats.nTeam = 2
+        self.tStats.nOriginalTeam = 2
     end
     self:_updateGatherers()
 end
@@ -5015,92 +4982,62 @@ function Character:getHealthText(bIncludeOxygen)
 	end
 	return s
 end
+local function _fillTooltipInfo(tInfo, sString, tColor, sIcon)
+    tInfo.sString = sString
+    tInfo.tColor = tColor
+    if sString ~= "" then
+        tInfo.sTexture = sIcon
+        tInfo.sTextureSpriteSheet = 'UI/Inspector'
+        tInfo.tTextureColor = tColor
+    end
+end
 function Character:getToolTipTextInfos()
-	self.tToolTipTextInfos = {}
-	self.tToolTipTextInfos[1] = {}
-	self.tToolTipTextInfos[2] = {}
-	self.tToolTipTextInfos[3] = {}
-	self.tToolTipTextInfos[4] = {}
-	self.tToolTipTextInfos[5] = {}
-	self.tToolTipTextInfos[6] = {}
-	local nCurrentIndex = 1
-    self.tToolTipTextInfos[nCurrentIndex].sString = self:getNiceName()
-    self.tToolTipTextInfos[nCurrentIndex].sTextureSpriteSheet = 'UI/JobRoster'
-    self.tToolTipTextInfos[nCurrentIndex].sTexture = Character.JOB_ICONS[self.tStats.nJob]
-	if GameRules.currentMode == GameRules.MODE_BEACON then
-		nCurrentIndex = nCurrentIndex + 1
-		local s = g_LM.line('UIMISC029TEXT')
-		if not Base.isFriendlyToPlayer(self) then
-			s = g_LM.line('UIMISC030TEXT')
-		end
-		local sTypeLC = g_ERBeacon.tBeaconTypeLinecodes[g_ERBeacon.eViolence]
-		s = s .. ' (' .. g_LM.line(sTypeLC) .. ')'
-		self.tToolTipTextInfos[nCurrentIndex].sString = s
-        self.tToolTipTextInfos[nCurrentIndex].sTexture = nil
-	end
-	nCurrentIndex = nCurrentIndex + 1
-	self.tToolTipTextInfos[nCurrentIndex].sString = self:getHealthText()
-	local bSuffocating = self.tStatus.suffocationTime > 0
-    local tColor = Gui.AMBER
-    if not self:isHealthy() or self:starving() or bSuffocating then
-        tColor = Gui.RED
+    local tInfos = {{}, {}, {}, {}, {}, {}}
+    self.tToolTipTextInfos = tInfos
+    tInfos[1].sString = self:getNiceName()
+    tInfos[1].sTextureSpriteSheet = 'UI/JobRoster'
+    tInfos[1].sTexture = Character.JOB_ICONS[self.tStats.nJob]
+    local nIndex = 1
+    if GameRules.currentMode == GameRules.MODE_BEACON then
+        nIndex = nIndex + 1
+        local s = g_LM.line('UIMISC029TEXT')
+        if not Base.isFriendlyToPlayer(self) then
+            s = g_LM.line('UIMISC030TEXT')
+        end
+        local sTypeLC = g_ERBeacon.tBeaconTypeLinecodes[g_ERBeacon.eViolence]
+        tInfos[nIndex].sString = s .. ' (' .. g_LM.line(sTypeLC) .. ')'
+        tInfos[nIndex].sTexture = nil
+    end
+    local tHealthColor = Gui.AMBER
+    if not self:isHealthy() or self:starving() or self.tStatus.suffocationTime > 0 then
+        tHealthColor = Gui.RED
+    end
+    _fillTooltipInfo(tInfos[nIndex + 1], self:getHealthText(), tHealthColor, 'ui_icon_health')
+    nIndex = nIndex + 2
+    if self:getHealth() == Character.STATUS_DEAD then
+        _fillTooltipInfo(tInfos[nIndex], g_LM.line(Character.tDeathCauses[self.tStatus.nDeathCause]), tHealthColor, 'ui_icon_enemy')
     else
-        tColor = Gui.AMBER
+        local sMorale = self:getMoraleText()
+        local nMorale = self:getMorale()
+        local tTarget = Gui.GREEN
+        if nMorale < 0 then
+            tTarget = Gui.RED
+        end
+        local nBlend = math.abs(nMorale) / 100
+        local tMoraleColor = {}
+        for i = 1, 3 do
+            tMoraleColor[i] = DFMath.lerp(Gui.AMBER[i], tTarget[i], nBlend)
+        end
+        tMoraleColor[4] = 1
+        _fillTooltipInfo(tInfos[nIndex], sMorale, tMoraleColor, 'ui_icon_morale')
     end
-    self.tToolTipTextInfos[nCurrentIndex].tColor = tColor
-    if self.tToolTipTextInfos[nCurrentIndex].sString ~= "" then
-        self.tToolTipTextInfos[nCurrentIndex].sTexture = 'ui_icon_health'
-        self.tToolTipTextInfos[nCurrentIndex].sTextureSpriteSheet = 'UI/Inspector'
-        self.tToolTipTextInfos[nCurrentIndex].tTextureColor = tColor
-    end
-	nCurrentIndex = nCurrentIndex + 1
-	if self:getHealth() == Character.STATUS_DEAD then
-		self.tToolTipTextInfos[nCurrentIndex].sString = g_LM.line(Character.tDeathCauses[self.tStatus.nDeathCause])
-		if self.tToolTipTextInfos[nCurrentIndex].sString ~= "" then
-			self.tToolTipTextInfos[nCurrentIndex].sTexture = 'ui_icon_enemy'
-			self.tToolTipTextInfos[nCurrentIndex].sTextureSpriteSheet = 'UI/Inspector'
-			self.tToolTipTextInfos[nCurrentIndex].tTextureColor = tColor
-		end
-	else
-		self.tToolTipTextInfos[nCurrentIndex].sString = self:getMoraleText()
-		local nMorale = self:getMorale()
-		if nMorale < 0 then
-			nMorale = math.abs(nMorale)/100
-			tColor = { DFMath.lerp(Gui.AMBER[1], Gui.RED[1], nMorale), DFMath.lerp(Gui.AMBER[2], Gui.RED[2], nMorale), DFMath.lerp(Gui.AMBER[3], Gui.RED[3], nMorale), 1 }
-		else
-			nMorale = math.abs(nMorale)/100
-			tColor = { DFMath.lerp(Gui.AMBER[1], Gui.GREEN[1], nMorale), DFMath.lerp(Gui.AMBER[2], Gui.GREEN[2], nMorale), DFMath.lerp(Gui.AMBER[3], Gui.GREEN[3], nMorale), 1 }
-		end
-		self.tToolTipTextInfos[nCurrentIndex].tColor = tColor
-		if self.tToolTipTextInfos[nCurrentIndex].sString ~= "" then
-			self.tToolTipTextInfos[nCurrentIndex].sTexture = 'ui_icon_morale'
-			self.tToolTipTextInfos[nCurrentIndex].sTextureSpriteSheet = 'UI/Inspector'
-			self.tToolTipTextInfos[nCurrentIndex].tTextureColor = tColor
-		end
-	end
-	nCurrentIndex = nCurrentIndex + 1
-    self.tToolTipTextInfos[nCurrentIndex].sString = self:getActivityText()
-        tColor = Gui.AMBER
-    self.tToolTipTextInfos[nCurrentIndex].tColor = tColor
-    if self.tToolTipTextInfos[nCurrentIndex].sString ~= "" then
-        self.tToolTipTextInfos[nCurrentIndex].sTexture = 'ui_icon_activity'
-        self.tToolTipTextInfos[nCurrentIndex].sTextureSpriteSheet = 'UI/Inspector'
-        self.tToolTipTextInfos[nCurrentIndex].tTextureColor = tColor
-    end
-	nCurrentIndex = nCurrentIndex + 1
-    self.tToolTipTextInfos[nCurrentIndex].sString = self:getToolTipOxygenText()
+    _fillTooltipInfo(tInfos[nIndex + 1], self:getActivityText(), Gui.AMBER, 'ui_icon_activity')
+    local tOxygenColor = Gui.AMBER
     if self:getSuitOxygenPct() <= 25 then
-        tColor = Gui.RED
-    else
-        tColor = Gui.AMBER
+        tOxygenColor = Gui.RED
     end
-    self.tToolTipTextInfos[nCurrentIndex].tColor = tColor
-    if self.tToolTipTextInfos[nCurrentIndex].sString ~= "" then
-        self.tToolTipTextInfos[nCurrentIndex].sTexture = 'ui_icon_bulletpoint'
-        self.tToolTipTextInfos[nCurrentIndex].sTextureSpriteSheet = 'UI/Inspector'
-        self.tToolTipTextInfos[nCurrentIndex].tTextureColor = tColor
-    end
-    return self.tToolTipTextInfos
+    _fillTooltipInfo(tInfos[nIndex + 2], self:getToolTipOxygenText(), tOxygenColor, 'ui_icon_bulletpoint')
+    return tInfos
 end
 function Character:drawDebugPath()
 	if not self.rCurrentTask or not self.rCurrentTask.tPath or not self.rCurrentTask.tPath.tPathNodes then
