@@ -43,7 +43,6 @@ function m.create()
     end
     function Ob:onDoneButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
-			g_GameRules.completeTutorialCondition('MineConfirm')
             g_GameRules.confirmBuild(true)
             g_GuiManager.newSideBar:closeSubmenu()
             SoundManager.playSfx('confirm')

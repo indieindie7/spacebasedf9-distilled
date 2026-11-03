@@ -54,7 +54,6 @@ function GuiManager.init()
     GuiManager.dSelectionChanged = Delegate.new()
     local NewSideBar = require('UI.NewSideBar')
     local StatusBar = require('UI.StatusBar')
-    local TutorialText = require('UI.TutorialText')
     Cursor = require('UI.Cursor')
     GuiManager.tScrollableScissorRects = {}
     local rScrollableUILayerLeft = Renderer.getRenderLayer('UIScrollLayerLeft')
@@ -74,7 +73,6 @@ function GuiManager.init()
     GuiManager.newSideBar = NewSideBar.new()
     GuiManager.startMenu = StartMenu.new()
     GuiManager.statusBar = StatusBar.new()
-	GuiManager.tutorialText = TutorialText.new()
     GuiManager.tPopupQueue = {}
     GuiManager.globalJobs = GlobalJobs.new()
 	GuiManager.debugInfoPane = DebugInfoPane.new()
@@ -89,7 +87,6 @@ function GuiManager.init()
     GuiManager.basePri = pri
     pri = GuiManager.newSideBar:show(pri)
     pri = GuiManager.statusBar:show(pri)
-    pri = GuiManager.tutorialText:show(pri)
 	if DebugInfoManager.drawSelectedDebug then
 		pri = GuiManager.debugInfoPane:show(pri)
 	end
@@ -200,7 +197,6 @@ function GuiManager.onResize()
 		GuiManager.rVersionProp:setLoc(Renderer.getViewport().sizeX/2,-Renderer.getViewport().sizeY+175)
 	end
     GuiManager.statusBar:onResize()
-    GuiManager.tutorialText:onResize()
 	GuiManager.hintPane:onResize()
     GuiManager.alertPane:onResize()
     GuiManager.newSideBar:onResize()
@@ -349,7 +345,6 @@ function GuiManager.onTick(dt)
         Profile.enterScope("StatusBar")
     end
     GuiManager.statusBar:onTick(dt)
-    GuiManager.tutorialText:onTick(dt)
     if DBG_moreProfiling then
         Profile.leaveScope("StatusBar")
         Profile.enterScope("GlobalJobs")
@@ -510,9 +505,6 @@ function GuiManager.setSelected(rTarget)
 	local GameScreen = require('GameScreen')
     GameScreen.endTextEntry()
 	local bDeselecting = false
-	if GuiManager.rSelected and not rTarget then
-		g_GameRules.completeTutorialCondition('DeselectedThing')
-	end
     local rObj = nil
     if rTarget then
         local objType = ObjectList.getObjType(rTarget)
@@ -533,7 +525,6 @@ function GuiManager.setSelected(rTarget)
     GuiManager.refresh()
 	if rTarget then
 		GuiManager.setSelectionProp(rTarget)
-		GameRules.completeTutorialCondition('SelectedSomething')
 	else
 		GuiManager.clearSelectionProp()
 	end
@@ -848,7 +839,6 @@ function GuiManager.shutdown()
     Gui.setActivePane(nil)
     GuiManager.startMenu:hide(true)
     GuiManager.statusBar:hide(true)
-    GuiManager.tutorialText:hide(true)
     GuiManager.newSideBar:hide(true)
     GuiManager.hintPane:hide(true)
     GuiManager.alertPane:hide(true)
@@ -861,7 +851,6 @@ function GuiManager.shutdown()
     end
     GuiManager.startMenu = nil
     GuiManager.statusBar = nil
-    GuiManager.tutorialText = nil
     GuiManager.newSideBar = nil
     GuiManager.hintPane = nil
     GuiManager.alertPane = nil

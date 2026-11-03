@@ -233,9 +233,6 @@ function m.create()
 			else
 				g_GameRules.setUIMode(g_GameRules.MODE_PLACE_PROP, self.sObjectId)
 			end
-			if self.sObjectId == 'FoodReplicator' then
-				g_GameRules.completeTutorialCondition('SelectedFoodRep')
-			end
         end
     end
     function Ob:setParams(tParams)

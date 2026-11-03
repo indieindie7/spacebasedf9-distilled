@@ -1809,11 +1809,6 @@ function Room.attemptAddPropGhostAt(tx,ty,tw,sName,bFlipX,bFlipY)
         end
         if rRoom then
             rRoom:_addPropGhostAt(sName,tx,ty,bFlipX,bFlipY,nCost)
-			if sName == 'OxygenRecycler' then
-				GameRules.completeTutorialCondition('BuiltO2')
-			elseif sName == 'OxygenRecycler' then
-				GameRules.completeTutorialCondition('FlippedObject')
-			end
             return true,tx,ty,bFlipX,bFlipY
         end
     end

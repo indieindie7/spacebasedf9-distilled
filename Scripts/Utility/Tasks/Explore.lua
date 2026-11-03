@@ -142,7 +142,6 @@ function Explore:onUpdate(dt)
 			if not self.rChar:retrieveMemory(Character.MEMORY_EXPLORED_RECENTLY) then
 				Log.add(Log.tTypes.DUTY_SECURITY_START_EXPLORE, self.rChar)
 			end
-			GameRules.completeTutorialCondition('ExploredDerelict')
             if self.sInterceptedTask then
                 local sName,tData = self.sInterceptedTask,self.tInterceptedTask
                 Task.queueTask(self,sName,tData)

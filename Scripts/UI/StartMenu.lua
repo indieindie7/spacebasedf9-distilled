@@ -26,8 +26,6 @@ function m.create()
         self.rButtonResume:addPressedCallback(self.onResumePressed, self)
         self.rButtonNewGame = self:getTemplateElement('ButtonNewGame')
         self.rButtonNewGame:addPressedCallback(self.startNew, self)
-        self.rButtonTutorial = self:getTemplateElement('ButtonTutorial')
-        self.rButtonTutorial:addPressedCallback(self.startTutorial, self)
         self.rButtonSettings = self:getTemplateElement('ButtonSettings')
         self.rButtonSettings:addPressedCallback(self.openSettings, self)
         self.rButtonCredits = self:getTemplateElement('ButtonCredits')
@@ -211,10 +209,6 @@ function m.create()
         self:resume(true)
         g_GuiManager.showNewBaseScreen()
     end
-	function Ob:startTutorial()
-		GameRules.bTutorialMode = true
-		GameRules.reset()
-	end
     function Ob:quit()
         SoundManager.playSfx('select')
         if g_GuiManager.newSideBar:isConstructMenuOpen() then

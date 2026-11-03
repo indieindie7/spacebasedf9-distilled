@@ -42,28 +42,6 @@ local AutoSave = require('AutoSave')
 local Profile = require('Profile')
 local GameScreen = nil
 local SAVE_TYPES={ObjectList.ROOM, ObjectList.ENVOBJECT, ObjectList.CHARACTER, ObjectList.RESERVATION}
-local tStartingTutorialState = {
-    { sName = 'ZoomedView',        bComplete = false, sLC = 'TRAING001TEXT' },
-    { sName = 'PannedView',        bComplete = false, sLC = 'TRAING002TEXT' },
-    { sName = 'SelectedSomething', bComplete = false, sLC = 'TRAING003TEXT' },
-    { sName = 'DeselectedThing',   bComplete = false, sLC = 'TRAING017TEXT' },
-    { sName = 'SetTimeSpeed',      bComplete = false, sLC = 'TRAING004TEXT' },
-    { sName = 'BuiltO2',           bComplete = false, sLC = 'TRAING005TEXT' },
-    { sName = 'BuildConfirm',      bComplete = false, sLC = 'TRAING013TEXT' },
-    { sName = 'AssignedBuilders',  bComplete = false, sLC = 'TRAING012TEXT' },
-    { sName = 'UsedVizModes',      bComplete = false, sLC = 'TRAING020TEXT' },
-    { sName = 'SelectedFoodRep',   bComplete = false, sLC = 'TRAING006TEXT' },
-    { sName = 'FlippedObject',     bComplete = false, sLC = 'TRAING018TEXT' },
-    { sName = 'BuiltAirlock',      bComplete = false, sLC = 'TRAING008TEXT' },
-    { sName = 'SpeedUpTime',       bComplete = false, sLC = 'TRAING015TEXT' },
-    { sName = 'RepairedBreach',    bComplete = false, sLC = 'TRAING007TEXT' },
-    { sName = 'ZonedResidence',    bComplete = false, sLC = 'TRAING010TEXT' },
-    { sName = 'MineConfirm',       bComplete = false, sLC = 'TRAING014TEXT' },
-    { sName = 'AssignedTechs',     bComplete = false, sLC = 'TRAING019TEXT' },
-    { sName = 'ExploredDerelict',  bComplete = false, sLC = 'TRAING009TEXT' },
-    { sName = 'Final1',            bComplete = false, sLC = 'TRAING011TEXT' },
-    { sName = 'Final2',            bComplete = false, sLC = 'TRAING016TEXT' },
-}
 local GameRules = {
 	SAVEGAME_VERSION = 7,
     sEditModulePath='editme',
@@ -97,9 +75,6 @@ local GameRules = {
 	bHasHadEnclosedRooms = false,
 	bHasZoned = false,
     bHasStartedResearch = false,
-	bTutorialMode = false,
-	tTutorialState = tStartingTutorialState,
-	nTutorialStateVersion = 6,
     SPACEDATE_BASE = 9091,
 	SPACEDATE_BASE_RANDOM_OFFSET = 9,
     sAutoSaveFile = 'SpacebaseDF9AutoSave',
@@ -186,7 +161,6 @@ function GameRules.init()
     GameRules.simTime = 0
     GameRules.elapsedTime = 0
     GameRules.deltaTime = 0
-	GameRules.resetTutorialState()
     GameRules.SPACEDATE_BASE = GameRules.SPACEDATE_BASE + math.random(0,GameRules.SPACEDATE_BASE_RANDOM_OFFSET)
     GameRules.sStarDate = GameRules.SPACEDATE_BASE .. ".0"
     GameRules.sStarTime = "00"
@@ -337,10 +311,6 @@ function GameRules.onTick(dt)
 	Profile.enterScope("AutoSave")
 	AutoSave.onTick(dt)
 	Profile.leaveScope("AutoSave")
-    if GameRules.bTutorialMode then
-		GameRules.tutorialChecks()
-        GameRules.updateTutorialText()
-    end
 	if GameRules.zoomBuffer > 0 then
 		GameRules.zoomBuffer = GameRules.zoomBuffer - GameRules.ZOOM_RATE
 	elseif GameRules.zoomBuffer < 0 then
@@ -361,123 +331,6 @@ function GameRules.onTick(dt)
 	end
 	GameRules._setZoom(DFMath.clamp(newZoom, GameRules.MIN_ZOOM, GameRules.MAX_ZOOM), GameRules.zoomLoc.x, GameRules.zoomLoc.y)
 end
-function GameRules.updateTutorialText()
-	if #GameRules.tTutorialState == 0 then
-        g_GuiManager.tutorialText:setTutorialTextVisibility(false)
-        GameRules.bTutorialMode = false
-		return
-    end
-	local tNextTutorial = GameRules.tTutorialState[1]
-	if not tNextTutorial.bComplete then
-		g_GuiManager.tutorialText:setTutorialText(tNextTutorial.sLC)
-	else
-		table.remove(GameRules.tTutorialState, 1)
-	end
-end
-function GameRules.completeTutorialCondition(sCondition)
-    for _,tTutData in ipairs(GameRules.tTutorialState) do
-        if tTutData.sName == sCondition and not tTutData.bComplete then
-            tTutData.bComplete = true
-        end
-    end
-end
-function GameRules.isTutorialConditionComplete(sCondition)
-	for _,tTutData in ipairs(GameRules.tTutorialState) do
-        if tTutData.sName == sCondition then
-			return tTutData.bComplete
-		end
-	end
-	return true
-end
-function GameRules.resetTutorialState()
-	GameRules.tTutorialState = DFUtil.deepCopy(tStartingTutorialState)
-end
-function GameRules.isFunctionalAirlockSlated(rRoom)
-	local bLocker = false
-	for addr,rProp in pairs(rRoom.tPropPlacements) do
-		if rProp.sName == 'AirlockLocker' then
-			bLocker = true
-			break
-		end
-	end
-	if not bLocker then
-		return false
-	end
-	local bHasSpaceDoor, bHasInteriorDoor = false, false
-	for addr,tCmd in pairs(CommandObject.tCommands) do
-		if tCmd.commandAction == CommandObject.COMMAND_BUILD_ENVOBJECT and tCmd.commandParam == 'Airlock' then
-			local bSpaceFacing = false
-			local bInAirlock = false
-			for nTileAddr,_ in pairs(tCmd.tTiles) do
-				if rRoom.tWalls[nTileAddr] then
-					bInAirlock = true
-					local wx,wy = g_World._getWorldFromAddr(nTileAddr)
-					local tx,ty = World._getTileFromWorld(wx, wy)
-					bSpaceFacing = g_World.isAdjacentToSpace(tx, ty)
-				end
-			end
-			if bSpaceFacing then
-				bHasSpaceDoor = true
-			elseif bInAirlock then
-				bHasInteriorDoor = true
-			end
-		end
-	end
-	return bHasSpaceDoor and bHasInteriorDoor
-end
-function GameRules.tutorialChecks()
-	if not GameRules.isTutorialConditionComplete('AssignedBuilders') then
-		CharacterManager.updateOwnedCharacters()
-		if require('HintChecks').pendingConstruction() and CharacterManager.tJobCount[Character.BUILDER] > 0 then
-			GameRules.completeTutorialCondition('AssignedBuilders')
-		end
-	end
-	if not GameRules.isTutorialConditionComplete('AssignedTechs') then
-		CharacterManager.updateOwnedCharacters()
-		if CharacterManager.tJobCount[Character.TECHNICIAN] > 0 then
-			GameRules.completeTutorialCondition('AssignedTechs')
-		end
-	end
-	local bBreachedRoom = false
-	local bFunctionalAirlock = false
-	local bZonedResidence = false
-	for _,rRoom in pairs(Room.tRooms) do
-		if rRoom:isBreached() then
-			bBreachedRoom = true
-		end
-		if rRoom.zoneName == 'AIRLOCK' and not GameRules.isTutorialConditionComplete('BuiltAirlock') then
-			bFunctionalAirlock = GameRules.isFunctionalAirlockSlated(rRoom)
-		elseif rRoom.zoneName == 'RESIDENCE' then
-			bZonedResidence = true
-		end
-	end
-	if not bBreachedRoom and not GameRules.isTutorialConditionComplete('RepairedBreach') then
-		GameRules.completeTutorialCondition('RepairedBreach')
-	end
-	if bFunctionalAirlock and not GameRules.isTutorialConditionComplete('BuiltAirlock') then
-		GameRules.completeTutorialCondition('BuiltAirlock')
-	end
-	if not bBreachedRoom and bZonedResidence and not GameRules.isTutorialConditionComplete('ZonedResidence') then
-		GameRules.completeTutorialCondition('ZonedResidence')
-	end
-	if not GameRules.tTutorialState[1] then
-		return
-	elseif GameRules.tTutorialState[1].sName == 'ExploredDerelict' and not GameRules.tTutorialState.bSpawnedDerelict then
-		GameRules.tTutorialState.bSpawnedDerelict = true
-		EventController.DBG_forceQueue('friendlyDerelictEvents', false, 5)
-	elseif GameRules.tTutorialState[1].sName == 'Final1' then
-		if not GameRules.tTutorialState.nTimeSinceCompleted then
-			GameRules.tTutorialState.nTimeSinceCompleted = GameRules.elapsedTime
-		elseif GameRules.elapsedTime >= GameRules.tTutorialState.nTimeSinceCompleted + 30 then
-			GameRules.completeTutorialCondition('Final1')
-			GameRules.tTutorialState.nTimeSinceCompleted = GameRules.elapsedTime
-		end
-	elseif GameRules.tTutorialState[1].sName == 'Final2' then
-		if GameRules.elapsedTime >= GameRules.tTutorialState.nTimeSinceCompleted + 30 then
-			GameRules.completeTutorialCondition('Final2')
-		end
-	end
-end
 function GameRules.shutdown()
     GameRules.bInitialized=false
 	local Base = require('Base')
@@ -485,7 +338,6 @@ function GameRules.shutdown()
 	Base.tS.tMemory = {}
 	Base.tS.tGoals = {}
 	Base.tS.tStats = {}
-	GameRules.tTutorialState = nil
 	GameRules.stopLoop()
     CharacterManager.shutdown()
     if g_ERBeacon then
@@ -546,9 +398,6 @@ function GameRules.saveGame()
         tSaveData.tEventControllerState = EventController.getSaveData()
         tSaveData.tBaseState = require('Base').getSaveData()
 		tSaveData.currentZoom = GameRules.currentZoom
-        tSaveData.bTutorialMode = GameRules.bTutorialMode
-		tSaveData.tTutorialState = GameRules.tTutorialState
-        tSaveData.nTutorialStateVersion = GameRules.nTutorialStateVersion
 		tSaveData.bHasHadEnclosedRooms = GameRules.bHasHadEnclosedRooms
 		tSaveData.bHasZoned = GameRules.bHasZoned
 		tSaveData.nCameraX,tSaveData.nCameraY,tSaveData.nCameraZ = Renderer.getGameplayCamera():getLoc()
@@ -728,12 +577,6 @@ function GameRules.loadGame(sOverridePath, bOverridePreservePath)
         GameRules.sStarTime = tSaveData.sStarTime
         GameRules.nLastDutyAccident = tSaveData.nLastDutyAccident or 0
         GameRules.nLastNewShip = tSaveData.nLastNewShip or 0
-        GameRules.bTutorialMode = tSaveData.bTutorialMode
-        if not tSaveData.nTutorialStateVersion or GameRules.nTutorialStateVersion > tSaveData.nTutorialStateVersion then
-            GameRules.resetTutorialState()
-        else
-            GameRules.tTutorialState = tSaveData.tTutorialState or tStartingTutorialState
-        end
         GameRules.SPACEDATE_BASE = tSaveData.SPACEDATE_BASE or GameRules.SPACEDATE_BASE
         ObjectList.portOldSavegames(tSaveData,tSaveData.nSavegameVersion)
         local tTags={}
@@ -858,12 +701,7 @@ function GameRules.randomSetup(tLandingZone)
 	GameRules.nLastNewShip = 0
 	GameRules.bHasHadEnclosedRooms = false
     Environment.randomSetup()
-    local tModuleData
-	if GameRules.bTutorialMode then
-        tModuleData = GameRules.loadRandomFromSet("tutorialModules")
-    else
-        tModuleData = GameRules.loadRandomFromSet("startingModules")
-    end
+    local tModuleData = GameRules.loadRandomFromSet("startingModules")
     local tileX,tileY = math.floor((World.width-tModuleData.tileWidth)*.5), math.floor((World.height-tModuleData.tileHeight)*.5)
     require('Asteroid').spawnAsteroids(MiscUtil.getGalaxyMapValue(tLandingZone.x, tLandingZone.y,'asteroids'))
     EventController.setBaseSeeds()
@@ -1034,14 +872,12 @@ function GameRules.inputPointer(touch, bDoubleTap)
             x = x + (touch.x - prevX) * -moveScale * camScaleFactor
             y = y + (touch.y - prevY) * moveScale * camScaleFactor
             GameRules.setCameraLoc(x,y,z)
-            GameRules.completeTutorialCondition('PannedView')
         elseif touch.button == DFInput.MOUSE_MIDDLE then
             local prevY = GameRules.prevDragY[touch.button] or touch.y
 			local scale = (touch.y - prevY) * GameRules.DRAG_ZOOM_SCALE
 			scale = GameRules.currentZoom + scale
 			scale = math.max(math.min(scale,GameRules.MAX_ZOOM),GameRules.MIN_ZOOM)
             GameRules._setZoom(scale, GameRules.startDragX, GameRules.startDragY)
-            GameRules.completeTutorialCondition('ZoomedView')
         elseif touch.button == DFInput.MOUSE_LEFT then
             Cursor.updateGridCursor(touch.x, touch.y, GameRules.startDragX, GameRules.startDragY, GameRules.currentMode, true)
         end
@@ -1054,7 +890,6 @@ function GameRules.inputPointer(touch, bDoubleTap)
 			end
             GameRules.AddZoom(zoomAmount, GameRules.cursorX, GameRules.cursorY)
 		end
-		GameRules.completeTutorialCondition('ZoomedView')
     end
     if touch.button == DFInput.MOUSE_LEFT and touch.eventType == DFInput.TOUCH_UP then
         if GameRules.nDragging ~= GameRules.kBUTTON_NONE then
@@ -1151,7 +986,6 @@ function GameRules.confirmBuild(bDontExpendMatter)
     if CommandObject.canAffordCost() then
         CommandObject.clearSavedCommandStates(nil, bDontExpendMatter)
         GameRules.setUIMode(GameRules.MODE_INSPECT)
-		GameRules.completeTutorialCondition('BuildConfirm')
         return true
     else
         SoundManager.playSfx("disallow")

@@ -133,14 +133,11 @@ function GameScreen:onKeyboard(key, bDown)
             end
         elseif key == string.byte("o") then
             GameRules.cycleVisualizer()
-			GameRules.completeTutorialCondition('UsedVizModes')
         elseif key == string.byte("k") then
             GameRules.cutawayMode = not GameRules.cutawayMode
             World.updateCutaway()
-			GameRules.completeTutorialCondition('UsedVizModes')
         elseif GameRules.currentMode == GameRules.MODE_PLACE_PROP and key == string.byte("f") then
             GameScreen.bFlipProp = not GameScreen.bFlipProp
-			GameRules.completeTutorialCondition('FlippedObject')
         elseif (key == string.byte("+")) or (key == string.byte("="))
             or (key == string.byte("-")) or (key == string.byte("_")) then
             local bBackward = false
@@ -155,7 +152,6 @@ function GameScreen:onKeyboard(key, bDown)
                     zoomAmount = -zoomAmount
                 end
                 GameRules.AddZoom(zoomAmount)
-				GameRules.completeTutorialCondition('ZoomedView')
             end
         elseif bShift and ( key == string.byte(']') or key == string.byte('[') ) then
             local sel = g_GuiManager.getSelected()
@@ -200,12 +196,8 @@ function GameScreen:onKeyboard(key, bDown)
             end
         elseif key == string.byte(']') then
             GameRules.timeFaster()
-			GameRules.completeTutorialCondition('SetTimeSpeed')
-			GameRules.completeTutorialCondition('SpeedUpTime')
         elseif key == string.byte('[') then
             GameRules.timeSlower()
-			GameRules.completeTutorialCondition('SetTimeSpeed')
-			GameRules.completeTutorialCondition('SpeedUpTime')
         elseif key == string.byte(".") or key == string.byte(",") then
             if not bShift then
                 local CM = require('CharacterManager')
@@ -262,7 +254,6 @@ function GameScreen:onKeyboard(key, bDown)
             GameRules.bDisasterMode = true
         elseif key == 32 then
             GameRules.togglePause()
-			GameRules.completeTutorialCondition('SetTimeSpeed')
         elseif key == 264 then
             Renderer.toggleUI()
         elseif DFSpace.isDev() or g_bAllowDebugInRelease then

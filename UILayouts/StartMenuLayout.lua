@@ -1,5 +1,5 @@
 local LH=require('UI.LH')
-local hl,lc,px,tex,tx=LH.hl,LH.lc,LH.px,LH.tex,LH.tx
+local hl,lc,px,tex=LH.hl,LH.lc,LH.px,LH.tex
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.BRIGHT_AMBER[1], Gui.BRIGHT_AMBER[2], Gui.BRIGHT_AMBER[3], 1 }
@@ -86,27 +86,9 @@ return
             },
         },
         {
-            key = 'ButtonTutorial',
-            type = 'onePixelButton',
-            pos = { 280, nLineStartY - nLineHeight*2 },
-            scale = { 630, 70 },
-            color = Gui.RED,
-            hidden=true,
-            clickWhileHidden=true,
-            onHoverOn =
-            {
-                { key = 'ButtonTutorialText', color = Gui.BRIGHT_AMBER, },
-                hl(),
-            },
-            onHoverOff =
-            {
-                { key = 'ButtonTutorialText', color = Gui.AMBER, },
-            },
-        },
-        {
             key = 'ButtonSettings',
             type = 'onePixelButton',
-            pos = { 280, nLineStartY - nLineHeight*3 },
+            pos = { 280, nLineStartY - nLineHeight*2 },
             scale = { 630, 70 },
             color = Gui.RED,
             hidden=true,
@@ -124,7 +106,7 @@ return
         {
             key = 'ButtonCredits',
             type = 'onePixelButton',
-            pos = { 280, nLineStartY - nLineHeight*4 },
+            pos = { 280, nLineStartY - nLineHeight*3 },
             scale = { 630, 70 },
             color = Gui.RED,
             hidden=true,
@@ -142,7 +124,7 @@ return
         {
             key = 'ButtonQuit',
             type = 'onePixelButton',
-            pos = { 280, nLineStartY - nLineHeight*5 },
+            pos = { 280, nLineStartY - nLineHeight*4 },
             scale = { 630, 70 },
             color = Gui.RED,
             hidden=true,
@@ -159,9 +141,8 @@ return
         },
         lc('ButtonResumeText',{ nMenuItemsX, nLineStartY },'UIMISC023TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
         lc('ButtonNewGameText',{ nMenuItemsX, nLineStartY - nLineHeight },'UIMISC024TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
-        tx('ButtonTutorialText',{ nMenuItemsX, nLineStartY - nLineHeight*2 },'LEARN TO PLAY','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
-        lc('ButtonSettingsText',{ nMenuItemsX, nLineStartY - nLineHeight*3 },'UIMISC025TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
-        lc('ButtonCreditsText',{ nMenuItemsX, nLineStartY - nLineHeight*4 },'UIMISC026TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
-        lc('ButtonQuitText',{ nMenuItemsX, nLineStartY - nLineHeight*5 },'UIMISC027TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
+        lc('ButtonSettingsText',{ nMenuItemsX, nLineStartY - nLineHeight*2 },'UIMISC025TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
+        lc('ButtonCreditsText',{ nMenuItemsX, nLineStartY - nLineHeight*3 },'UIMISC026TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
+        lc('ButtonQuitText',{ nMenuItemsX, nLineStartY - nLineHeight*4 },'UIMISC027TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
     },
 }

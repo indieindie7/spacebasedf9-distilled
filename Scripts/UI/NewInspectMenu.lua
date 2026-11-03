@@ -100,7 +100,6 @@ function m.create()
     function Ob:onBackButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if g_GuiManager.newSideBar then
-				g_GameRules.completeTutorialCondition('DeselectedThing')
                 g_GuiManager.newSideBar:closeSubmenu()
                 g_GuiManager.setSelected(nil)
                 SoundManager.playSfx('degauss')

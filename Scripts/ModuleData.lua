@@ -14,13 +14,6 @@ local t=
             weight = 1,
         },
     },
-    tutorialModules=
-    {
-        easyMode = {
-            shipsWithCrew="easyMode",
-            weight = 1,
-        },
-    },
     asteroidModules=
     {
         asteroid01={weight=1, filename="asteroid01",},
@@ -137,17 +130,6 @@ local t=
 	},
     shipsWithCrew=
     {
-        easyMode=
-        {
-            filename="Box",
-            crew={
-                Oxygen1={Settler=1},
-                Hall1={Settler=1},
-                Hall2={Settler=1},
-                Hall3={Settler=1},
-                Power1={Settler=1},
-            },
-        },
 		emptySpace=
 		{
 			filename="DeepSpace",

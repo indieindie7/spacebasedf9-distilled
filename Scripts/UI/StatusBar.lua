@@ -166,26 +166,15 @@ function m.create()
     function Ob:onTimeButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             if not g_GameRules.bInCutscene then
-				local bPaused = false
                 if rButton == self.rTimePauseButton then
                     g_GameRules.timePause()
-					bPaused = true
                 elseif rButton == self.rSpeed1Button then
                     g_GameRules.setTimeScale(1)
                 elseif rButton == self.rSpeed2Button then
                     g_GameRules.setTimeScale(2)
-					if not g_GameRules.bTimeLocked then
-						g_GameRules.completeTutorialCondition('SpeedUpTime')
-					end
                 elseif rButton == self.rSpeed3Button then
                     g_GameRules.setTimeScale(4)
-					if not g_GameRules.bTimeLocked then
-						g_GameRules.completeTutorialCondition('SpeedUpTime')
-					end
                 end
-				if not bPaused then
-					GameRules.completeTutorialCondition('SetTimeSpeed')
-				end
                 SoundManager.playSfx('select')
             end
         end
@@ -199,19 +188,16 @@ function m.create()
     function Ob:onFlipButtonPressed(rButton, eventType)
         if self.bShowFlipZone and eventType == DFInput.TOUCH_UP then
             GameScreen.bFlipProp = not GameScreen.bFlipProp
-			GameRules.completeTutorialCondition('FlippedObject')
         end
     end
     function Ob:onOxygenButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             g_GameRules.cycleVisualizer()
-			GameRules.completeTutorialCondition('UsedVizModes')
         end
     end
     function Ob:onWallButtonPressed(rButton, eventType)
         if eventType == DFInput.TOUCH_UP then
             g_GameRules.cycleCutawayMode()
-			GameRules.completeTutorialCondition('UsedVizModes')
         end
     end
     function Ob:onZoomButtonPressed(rButton, eventType)
