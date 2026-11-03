@@ -26,17 +26,8 @@ function m.create()
         self.rButtonResume:addPressedCallback(self.onResumePressed, self)
         self.rButtonNewGame = self:getTemplateElement('ButtonNewGame')
         self.rButtonNewGame:addPressedCallback(self.startNew, self)
-        self.rButtonSettings = self:getTemplateElement('ButtonSettings')
-        self.rButtonSettings:addPressedCallback(self.openSettings, self)
-        self.rButtonCredits = self:getTemplateElement('ButtonCredits')
-        self.rButtonCredits:addPressedCallback(self.openCredits, self)
         self.rButtonQuit = self:getTemplateElement('ButtonQuit')
         self.rButtonQuit:addPressedCallback(self.quit, self)
-    end
-    function Ob:onTick(dt)
-        Ob.Parent.onTick(self, dt)
-        if self.credits then self.credits:onTick(dt) end
-        if self.settings then self.settings:onTick(dt) end
     end
     function Ob:refreshMOTD()
         local sPath = DFFile.getDataPath("UILayouts/motd-client.json")
@@ -217,16 +208,6 @@ function m.create()
         end
         GameRules.saveGame()
         MOAISim.exit()
-    end
-    function Ob:openCredits()
-        SoundManager.playSfx('select')
-        if not self.credits then self.credits = require('UI.Credits').new() end
-        Gui.setActivePane(self.credits)
-    end
-    function Ob:openSettings()
-        SoundManager.playSfx('select')
-        if not self.settings then self.settings = require('UI.AudioVideoSettings').new() end
-        Gui.setActivePane(self.settings)
     end
     function Ob:onResize()
         Ob.Parent.onResize(self)

@@ -86,45 +86,9 @@ return
             },
         },
         {
-            key = 'ButtonSettings',
-            type = 'onePixelButton',
-            pos = { 280, nLineStartY - nLineHeight*2 },
-            scale = { 630, 70 },
-            color = Gui.RED,
-            hidden=true,
-            clickWhileHidden=true,
-            onHoverOn =
-            {
-                { key = 'ButtonSettingsText', color = Gui.BRIGHT_AMBER, },
-                hl(),
-            },
-            onHoverOff =
-            {
-                { key = 'ButtonSettingsText', color = Gui.AMBER, },
-            },
-        },
-        {
-            key = 'ButtonCredits',
-            type = 'onePixelButton',
-            pos = { 280, nLineStartY - nLineHeight*3 },
-            scale = { 630, 70 },
-            color = Gui.RED,
-            hidden=true,
-            clickWhileHidden=true,
-            onHoverOn =
-            {
-                { key = 'ButtonCreditsText', color = Gui.BRIGHT_AMBER, },
-                hl(),
-            },
-            onHoverOff =
-            {
-                { key = 'ButtonCreditsText', color = Gui.AMBER, },
-            },
-        },
-        {
             key = 'ButtonQuit',
             type = 'onePixelButton',
-            pos = { 280, nLineStartY - nLineHeight*4 },
+            pos = { 280, nLineStartY - nLineHeight*2 },
             scale = { 630, 70 },
             color = Gui.RED,
             hidden=true,
@@ -141,8 +105,6 @@ return
         },
         lc('ButtonResumeText',{ nMenuItemsX, nLineStartY },'UIMISC023TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
         lc('ButtonNewGameText',{ nMenuItemsX, nLineStartY - nLineHeight },'UIMISC024TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
-        lc('ButtonSettingsText',{ nMenuItemsX, nLineStartY - nLineHeight*2 },'UIMISC025TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
-        lc('ButtonCreditsText',{ nMenuItemsX, nLineStartY - nLineHeight*3 },'UIMISC026TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
-        lc('ButtonQuitText',{ nMenuItemsX, nLineStartY - nLineHeight*4 },'UIMISC027TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
+        lc('ButtonQuitText',{ nMenuItemsX, nLineStartY - nLineHeight*2 },'UIMISC027TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
     },
 }

@@ -635,17 +635,6 @@ function GameRules.handleHover(x,y)
         firstHover = true
     end
 end
-function GameRules.updateAudioLevels()
-    if GameRules.bAudioLevelScaleApplied then
-        GameRules.applyScaleToAudioLevels(GameRules.nAudioLevelLastScale)
-    else
-        SoundManager.setCategoryVolume ( "sfx", g_Config:getConfigValue("sfx_volume"))
-        SoundManager.setCategoryVolume ( "voice", g_Config:getConfigValue("voice_volume"))
-        SoundManager.setCategoryVolume ( "music", g_Config:getConfigValue("music_volume"))
-        SoundManager.setCategoryVolume ( "ambience", g_Config:getConfigValue("sfx_volume"))
-        SoundManager.setCategoryVolume ( "ui", g_Config:getConfigValue("sfx_volume"))
-    end
-end
 function GameRules.applyScaleToAudioLevels(scale)
     GameRules.nAudioLevelLastScale = GameRules.nAudioLevelLastScale or GameRules.MAX_ZOOM
     GameRules.nAudioLevelLastScale = scale or GameRules.nAudioLevelLastScale

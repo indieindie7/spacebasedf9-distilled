@@ -35,12 +35,6 @@ function ScreenManager:toggleFullscreen()
         ScreenManager.bFullScreen = false
     end
 end
-function ScreenManager:setFullscreen(bFullscreen)
-    if ScreenManager.bFullScreen ~= bFullscreen then
-        ScreenManager.bFullScreen = bFullscreen
-        DFSpace.setFullscreenState(bFullscreen)
-    end
-end
 function ScreenManager:_onPointer(pointer)
     local bDoubleTap=pointer.bDoubleTap
     local numScreens = #ScreenManager.tInputScreens
