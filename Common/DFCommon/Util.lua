@@ -206,9 +206,6 @@ function m.findFileCase(dir, filename)
         end
     end
 end
-function m.isTraceEnabled()
-    return TT_ENABLED[TT_Warning] or TT_ENABLED[TT_System] or TT_ENABLED[TT_Gameplay] or TT_ENABLED[TT_Info]
-end
 local weakIndex = function(t, k)
     local ref = rawget(t, '_UserData')
     return ref[k]

@@ -5,7 +5,6 @@ local Renderer=require('Renderer')
 local ObjectList=require('ObjectList')
 local Character = require('CharacterConstants')
 local EnvObject = require('EnvObjects.EnvObject')
-local Profile = require('Profile')
 local SpaceRoom = Class.create(Room)
 function SpaceRoom:init(tSaveData)
 	Room.init(self, -1, {}, tSaveData)
@@ -153,11 +152,9 @@ function SpaceRoom:tickRoomSlow()
         dt = GameRules.elapsedTime - self.lastTickTime
         self.lastTickTime = GameRules.elapsedTime
     end
-    Profile.enterScope("Props_Space")
     for rProp,_ in pairs(self.tProps) do
         rProp:onTick(dt)
     end
-    Profile.leaveScope("Props_Space")
 end
 function SpaceRoom:_destroy()
     Room._destroy(self)

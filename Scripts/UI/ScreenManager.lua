@@ -5,7 +5,6 @@ local ScreenManager = {
 local DFInput = require("DFCommon.Input")
 local Renderer = require('Renderer')
 local Screen = require('UI.Screen')
-local Profile = require('Profile')
 local kMaxDeltaTime = 1.0 / 30.0
 function ScreenManager:initialize(bFullscreen)
     if nil == bFullscreen then bFullscreen = false end

@@ -14,7 +14,6 @@ local Malady = require('Malady')
 local GameRules = require('GameRules')
 local ObjectList = require('ObjectList')
 local MiscUtil = require('MiscUtil')
-local Profile = require('Profile')
 local Task = Class.create()
 Task.MAX_OBSTRUCTION_WAIT = 10
 Task.EMOTICON_INITIAL_DURATION = 5

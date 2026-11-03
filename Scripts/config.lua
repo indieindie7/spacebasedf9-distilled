@@ -41,5 +41,4 @@ MOAILogMgr.openFile(string.format('moai_log_%s.txt', MOAIEnvironment.appDisplayN
 local BootConfig = require('BootConfig')
 g_Config = BootConfig.init()
 local jit = require('jit')
-local Profile = require('Profile')
 local DFUtil = require('DFCommon.Util')

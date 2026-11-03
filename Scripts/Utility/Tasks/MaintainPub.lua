@@ -37,7 +37,7 @@ function MaintainPub:_lookForWork()
     local tGatherers = {MaintainPub={ gatherFn=function() return self:_gatherPubJobs() end } }
     local rNewOption,nNewUtility, logStr = UtilityAI.getBestTask(self.rChar,self.rChar:getCurrentTaskPriority(),true,tGatherers)
     if rNewOption then
-        local rTask = rNewOption:createTask(self.rChar, nNewUtility, UtilityAI.DEBUG_PROFILE)
+        local rTask = rNewOption:createTask(self.rChar, nNewUtility)
         self:chainTaskRef(rTask)
         return true
     end

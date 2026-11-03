@@ -11,12 +11,10 @@ local DFFile = require('DFCommon.File')
 local Character = require('CharacterConstants')
 local Topics = require('Topics')
 local Log = require('Log')
-local Profile = require('Profile')
 local CharacterManager =
 {
     profilerName='CharacterManager',
 }
-CharacterManager.bDBGExtendedProfiler = false
 local tCharacters
 local tOwnedCharacters
 local tDeadCharacters
@@ -300,12 +298,9 @@ function CharacterManager.onTick( dt )
         local b= CharacterManager.getCharacterByUniqueID('Kill Bot9')
         g_GuiManager.setSelectedCharacter(b)
     end
-    Profile.enterScope("CharacterUpdate")
     for _,rCharacter in ipairs( tOwnedCharacters ) do
        rCharacter:updateAI(dt)
     end
-    Profile.leaveScope("CharacterUpdate")
-    Profile.enterScope("CharacterMover")
     for k=1, #tOwnedCharacters do
         local rCharacter = tOwnedCharacters[k]
         if not tDecisionNeededHash[rCharacter] and rCharacter:needsNewTask() then
@@ -313,16 +308,8 @@ function CharacterManager.onTick( dt )
             table.insert(tDecisionNeeded,rCharacter)
         end
         rCharacter:updateAnimation(dt)
-        if CharacterManager.bDBGExtendedProfiler then
-            Profile.enterScope("CharacterLights")
-        end
         rCharacter:updateLights(dt)
-        if CharacterManager.bDBGExtendedProfiler then
-            Profile.leaveScope("CharacterLights")
-        end
     end
-    Profile.leaveScope("CharacterMover")
-    Profile.enterScope("CharacterSelectTask")
     if #tDecisionNeeded > 0 then
         local rCharDecide = tDecisionNeeded[1]
         tDecisionNeededHash[rCharDecide] = nil
@@ -331,13 +318,10 @@ function CharacterManager.onTick( dt )
             rCharDecide:_selectTask()
         end
     end
-    Profile.leaveScope("CharacterSelectTask")
-    Profile.enterScope("CharacterCorpser")
     for rCharacter,_ in pairs(tDeadCharacters) do
         if rCharacter.deathTick then
             rCharacter:deathTick(dt)
         end
     end
-    Profile.leaveScope("CharacterCorpser")
 end
 return CharacterManager

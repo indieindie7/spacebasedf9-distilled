@@ -8,13 +8,11 @@ local Prerequisites = require('Utility.Prerequisites')
 local World=require('World')
 local Room=require('Room')
 local Character=require('CharacterConstants')
-local Profile = require('Profile')
 local ActivityOption = Class.create()
 ActivityOption.DEBUG_DRAW_NONE = 1
 ActivityOption.DEBUG_DRAW_JOBS = 2
 ActivityOption.DEBUG_DRAW_MAX = 2
 ActivityOption.debugDraw = 1
-ActivityOption.DEBUG_PROFILE = true
 ActivityOption.DISTANCE_ADJUST_START = 5
 ActivityOption.DISTANCE_ADJUST_END = 50
 ActivityOption.DISTANCE_ADJUST_SCORE = -.3
@@ -272,8 +270,7 @@ function ActivityOption:_getPathParams(rChar,startWX,startWY,destWX,destWY)
     end
     return tPathParams
 end
-function ActivityOption:createTask(rChar, promisedUtility, DEBUG_PROFILE, tSaveData)
-    if DEBUG_PROFILE then Profile.enterScope("Create"..self.name) end
+function ActivityOption:createTask(rChar, promisedUtility, tSaveData)
     if self.tBlackboard.nPathDist then
         self.tBlackboard.tPath = Pathfinder.getPath(self.tBlackboard.nPathStartWX, self.tBlackboard.nPathStartWY, self.tBlackboard.nPathEndWX, self.tBlackboard.nPathEndWY, rChar, self.tBlackboard.tPathParams)
         if not self.tBlackboard.tPath then
@@ -300,7 +297,6 @@ function ActivityOption:createTask(rChar, promisedUtility, DEBUG_PROFILE, tSaveD
     local rClass = require(classPath)
 	if type(rClass) == 'boolean' then
 		print('ActivityOption:createTask(): rClass is empty')
-        if DEBUG_PROFILE then Profile.leaveScope("Create"..self.name) end
 		return nil
 	end
     rTask = rClass.new(rChar, self.tBlackboard.tAdvertisedNeeds or self.tBaseAdvertisedNeeds, self, tSaveData)
@@ -309,7 +305,6 @@ function ActivityOption:createTask(rChar, promisedUtility, DEBUG_PROFILE, tSaveD
     if not rTask.bComplete then
         self:reserve(rChar)
     end
-    if DEBUG_PROFILE then Profile.leaveScope("Create"..self.name) end
     return rTask
 end
 function ActivityOption:scoreNeedsChange(rChar)
@@ -446,14 +441,12 @@ function ActivityOption:_computeActivityPath(rChar, nOverrideStartWX, nOverrideS
         local tTilesByAddr, bSorted = self.tData.targetTileListFn(rChar, self)
         local tTiles = {}
         if not bSorted then
-    	    if ActivityOption.DEBUG_PROFILE then Profile.enterScope("ActivityOption.Sort") end
             for addr,data in pairs(tTilesByAddr) do
                 table.insert(tTiles,data)
             end
             table.sort(tTiles, function(a, b)
                 return MiscUtil.isoDist(cx,cy,a.x,a.y) < MiscUtil.isoDist(cx,cy,b.x,b.y)
             end)
-    	    if ActivityOption.DEBUG_PROFILE then Profile.leaveScope("ActivityOption.Sort") end
         else
             tTiles = tTilesByAddr
         end

@@ -8,9 +8,7 @@ local Character = require('CharacterConstants')
 local SeqCommand = require('SeqCommand')
 local DataCache = require('DFCommon.DataCache')
 local AssetSet = require('DFCommon.AssetSet')
-local Profile = require('Profile')
 local Rig = {}
-Rig.bDBGExtendedProfiler = false
 local gAllRigs = {}
 setmetatable(gAllRigs, {__mode = 'k'})
 function Rig.new( rEntity, tRigArgs, rAssetSet )
@@ -239,9 +237,6 @@ function Rig:setJointScl( sName, tScl, sLayerName )
     end
 end
 function Rig:playAnimation(tAnimationData)
-    if Rig.bDBGExtendedProfiler then
-        Profile.enterScope( "Rig:playAnimation" )
-    end
     local animPriority = DFAnimController.PRIORITY_NORMAL
     if tAnimationData.animPriority ~= nil then
         animPriority = tAnimationData.animPriority
@@ -259,17 +254,11 @@ function Rig:playAnimation(tAnimationData)
     end
     local sAnimName = tAnimationData.sAnimPath
     if not tAnimationData.bPlayOnce and self.tActiveAnims[sAnimName] ~= nil then
-        if Rig.bDBGExtendedProfiler then
-            Profile.leaveScope( "Rig:playAnimation" )
-        end
         return
     end
 	local sAnimFile = DFFile.getAssetPath(tAnimationData.sAnimPath)
 	local tAnimData = DataCache.getData("anim", sAnimFile)
 	if tAnimData == nil then
-        if Rig.bDBGExtendedProfiler then
-            Profile.leaveScope( "Rig:playAnimation" )
-        end
 		return
 	end
     if not tAnimData.rAnimData then
@@ -350,9 +339,6 @@ function Rig:playAnimation(tAnimationData)
             end
             self:_attach(true, rPropRig, rPropRig.tPropData.sJoint, tOffsetLoc, tOffsetRot, tScale)
         end
-    end
-    if Rig.bDBGExtendedProfiler then
-        Profile.leaveScope( "Rig:playAnimation" )
     end
 end
 function Rig:stopAnimation(sAnimationFile)
@@ -566,9 +552,6 @@ function Rig:_findAnimationAttachment(otherRig)
 	return 0
 end
 function Rig:update(deltaTime)
-    if Rig.bDBGExtendedProfiler then
-        Profile.enterScope( "Rig:update" )
-    end
     if not self.rRootJoint then return end
     self:_updateShaderValues()
 	self:_updateRootProp()
@@ -598,9 +581,6 @@ function Rig:update(deltaTime)
         end
     end
     self:_updateTracker()
-    if Rig.bDBGExtendedProfiler then
-        Profile.leaveScope( "Rig:update" )
-    end
 end
 function Rig:getProp()
     return self.rUnscaledRootJointProp
@@ -954,9 +934,6 @@ function Rig:_updateTracker()
     end
 end
 function Rig:_updateShaderValues()
-    if Rig.bDBGExtendedProfiler then
-        Profile.enterScope( "Rig:_updateShaderValues" )
-    end
     local tShaderValues = {}
     local bUpdateEntityLoc = false
     local x, y, z = self.rEntity.rProp:modelToWorld()
@@ -989,9 +966,6 @@ function Rig:_updateShaderValues()
                 self.sLastTargetSceneLayerName = nil
             end
         end
-    end
-    if Rig.bDBGExtendedProfiler then
-        Profile.leaveScope( "Rig:_updateShaderValues" )
     end
 end
 function Rig.debugDrawBox(rSceneLayer, x0, y0, z0, x1, y1, z1)
@@ -1074,9 +1048,6 @@ function Rig:debugDraw(bDebugDrawJoints, bDebugDrawBounds, bDebugDrawSubsetBound
     end
 end
 function Rig:setRigShaderValue(valueName, value)
-    if Rig.bDBGExtendedProfiler then
-        Profile.enterScope("setRigShaderValue per mesh")
-    end
     local valueType = nil
     if type(value) == 'number' then
         valueType = MOAIMaterial.VALUETYPE_FLOAT
@@ -1094,9 +1065,6 @@ function Rig:setRigShaderValue(valueName, value)
         return
     end
     self.rMainMesh:setShaderValue(valueName, valueType, value)
-    if Rig.bDBGExtendedProfiler then
-        Profile.leaveScope("setRigShaderValue per mesh")
-    end
 end
 function Rig.hotReloadAnim(assetPath)
     print("doing a hot reload for anim: " .. assetPath)

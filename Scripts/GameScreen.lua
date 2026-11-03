@@ -6,7 +6,6 @@ local Character=require('CharacterConstants')
 local SoundManager=require('SoundManager')
 local EventController = require('EventController')
 local Room = require('Room')
-local Profile = require('Profile')
 local GameScreen = Class.create(Screen)
 GameScreen.bIsOpaque = true
 GameScreen.inputMode = INPUTMODE_NORMAL

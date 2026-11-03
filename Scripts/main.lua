@@ -14,7 +14,6 @@ local ScreenManager = require('UI.ScreenManager')
 local Hint = require('Hint')
 local ErrorReporting = require('ErrorReporting')
 local GameConfig = require('GameConfig')
-local Profile = require('Profile')
 local Point = require('Point')
 g_World = nil
 g_GameRules = GameRules
@@ -115,7 +114,6 @@ function main()
     local MAX_FRAME_TIME = 1/10
     g_mainThread = MOAICoroutine.new()
     g_mainThread:setName("MainLoop")
-    local DBG_moreProfiling=false
     g_mainThread:run(function()
         TT_ENABLED[TT_Cache] = true
         while true do
@@ -123,26 +121,10 @@ function main()
             local deltaTime = currentTime - lastTime
             deltaTime = math.min(deltaTime, MAX_FRAME_TIME)
             lastTime = currentTime
-            Profile.shinyBeginLoop('main_loop')
             GameRules.onTick(deltaTime)
-            Profile.enterScope("UI")
-            if DBG_moreProfiling then
-                Profile.enterScope("ScreenManager")
-            end
             ScreenManager:onTick(deltaTime)
-            if DBG_moreProfiling then
-                Profile.leaveScope("ScreenManager")
-                Profile.enterScope("GuiManager")
-            end
             g_GuiManager.onTick(deltaTime)
-            if DBG_moreProfiling then
-                Profile.leaveScope("GuiManager")
-            end
-            Profile.leaveScope("UI")
-            Profile.enterScope("SoundManager")
             SoundManager.onTick(deltaTime)
-            Profile.leaveScope("SoundManager")
-            Profile.shinyEndLoop('main_loop')
             coroutine.yield()
         end
     end)

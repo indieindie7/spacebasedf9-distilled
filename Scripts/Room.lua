@@ -24,7 +24,6 @@ local ActivityOptionList=nil
 local CommandObject = nil
 local Oxygen = nil
 local Fire = nil
-local Profile = require('Profile')
 local Room
 if not g_Room then
     Room = Class.create()
@@ -1233,7 +1232,6 @@ function Room:addContiguousRooms(tRoomList)
 	return tRoomList
 end
 function Room:tickRoomFast()
-    Profile.enterScope("TickSingleRoom")
     local dt
     if not self.lastTickTime then
         self.lastTickTime = GameRules.elapsedTime
@@ -1270,22 +1268,17 @@ function Room:tickRoomFast()
             self.tFailedPathfinds = nil
         end
     end
-    Profile.enterScope("HazardStatus")
     self:updateHazardStatus()
-    Profile.leaveScope("HazardStatus")
     self:_updateSound()
-    Profile.enterScope("ZoneObj")
     if self.zoneObj and self.zoneObj.onTick then
         self.zoneObj:onTick(dt)
     end
-    Profile.leaveScope("ZoneObj")
     if self:getVisibility() ~= World.VISIBILITY_DIM then
         for rProp,_ in pairs(self.tProps) do
             rProp:onTick(dt)
         end
     end
 	self.nMoraleScore = self:_getMoraleScore()
-    Profile.enterScope("UpdateCharAllegiance")
 	local tChars,nChars = self:getCharactersInRoom(true)
     if self.nLastVisibility == World.VISIBILITY_FULL then
 		for rChar,_ in pairs(tChars) do
@@ -1294,7 +1287,6 @@ function Room:tickRoomFast()
 			end
 		end
     end
-    Profile.leaveScope("UpdateCharAllegiance")
 	if GameRules.elapsedTime - self.nLastFamiliarityTick > Character.FAMILIARITY_TICK_RATE then
 	    self.nLastFamiliarityTick = GameRules.elapsedTime
 	    for rChar,_ in pairs(tChars) do
@@ -1305,7 +1297,6 @@ function Room:tickRoomFast()
 		    end
 	    end
     end
-    Profile.leaveScope("TickSingleRoom")
 end
 function Room:revealed()
 	for rChar,_ in pairs(CharacterManager.getDeadCharacters()) do
@@ -1458,7 +1449,6 @@ function Room:getAlertString()
     return ""
 end
 function Room:tickLighting()
-    Profile.enterScope("FlashingLights")
     local dt = GameRules.deltaTime
     if self.nLightingScheme ~= Room.LIGHTING_SCHEME_NORMAL
             and self.nLightingScheme ~= Room.LIGHTING_SCHEME_OFF
@@ -1470,7 +1460,6 @@ function Room:tickLighting()
         local nDarkPct = ((math.sin(self.nLightFadeTimer * math.pi * 2) * 0.5) + 0.5) * 0.5
         Lighting.setRoomTileLightInfo(self, 1.0, 1.0, nDarkPct)
     end
-    Profile.leaveScope("FlashingLights")
 end
 function Room:setLightingScheme(nNewScheme)
     nNewScheme = nNewScheme or Room.DBG_globalSetTeam
@@ -1878,7 +1867,6 @@ function Room._isValidRoomTile(tx,ty)
     return false
 end
 function Room:setTiles(tTiles)
-    Profile.enterScope("Room.setTiles")
     if self.zoneObj then
         self.zoneObj:preTileUpdate()
     end
@@ -2058,7 +2046,6 @@ function Room:setTiles(tTiles)
     self:updateEmergency()
     self:_updateAdjoiningRooms()
     self.bJobsDirty = true
-    Profile.leaveScope("Room.setTiles")
 end
 function Room:canClaim()
     if self:getTeam() ~= Character.TEAM_ID_PLAYER then

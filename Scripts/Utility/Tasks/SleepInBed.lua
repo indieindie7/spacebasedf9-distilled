@@ -14,7 +14,7 @@ function SleepInBed.staticFromSaveData(rChar,tData)
         local rAO = rTargetObject.rSleepInBedOption
         local bSuccess, sReason = rAO:fillOutBlackboard(rChar)
         if bSuccess then
-            local rTask = rAO:createTask(rChar, tData.nPromisedUtility, UtilityAI.DEBUG_PROFILE, tData)
+            local rTask = rAO:createTask(rChar, tData.nPromisedUtility, tData)
             return rTask
         end
     end

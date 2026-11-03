@@ -8,7 +8,6 @@ local Character = require('CharacterConstants')
 local Oxygen = require('Oxygen')
 local Airlock = nil
 local ObjectList = require('ObjectList')
-local Profile = require('Profile')
 local Pathfinder = Class.create()
 function Pathfinder.staticInit()
     Pathfinder.moaiPathFinder = MOAIPathFinder.new()
@@ -770,7 +769,6 @@ function Pathfinder.testPath(x0, y0, x1, y1, rChar, tAdditionalParams)
     tAdditionalParams = tAdditionalParams or {}
     if not tAdditionalParams.bPathToNearest and not g_World.isPathable(x1, y1) then
     else
-        Profile.enterScope("Pathfinder.TestPath")
         local txStart, tyStart = g_World._getTileFromWorld(x0, y0)
         local txDest, tyDest = g_World._getTileFromWorld(x1, y1)
         local startAddr = g_World.pathGrid:getCellAddr(txStart, tyStart)
@@ -778,7 +776,6 @@ function Pathfinder.testPath(x0, y0, x1, y1, rChar, tAdditionalParams)
         local bSuited=(rChar and rChar:spacewalking()) or tAdditionalParams.bForceSpacewalking
         local tFinalNode
         if not bSuited and g_World._getTileValue(txStart,tyStart) == g_World.logicalTiles.SPACE then
-            Profile.leaveScope("Pathfinder.TestPath")
             return
         end
         local tPathfinderState = { tOpenNodesByAddr={}, tClosedNodesByAddr={}, txStart=txStart,tyStart=tyStart, txDest=txDest,tyDest=tyDest, nRequiredTeam=tAdditionalParams.nRequiredTeam, nMinimumVisibility=tAdditionalParams.nMinimumVisibility or g_World.VISIBILITY_HIDDEN, rChar=rChar }
@@ -787,13 +784,11 @@ function Pathfinder.testPath(x0, y0, x1, y1, rChar, tAdditionalParams)
             tPathfinderState.bTestMemoryCombat = tAdditionalParams.bTestMemoryCombat
         end
         if not Pathfinder._setDest(tPathfinderState, txDest, tyDest, tAdditionalParams.bPathToNearest, tAdditionalParams.bNoPathToNearestDiagonal) then
-            Profile.leaveScope("Pathfinder.TestPath")
             return
         end
         local tCachedPathArray,tDestSpec = Pathfinder._getCachedPath(rChar,tPathfinderState,tAdditionalParams)
         if tCachedPathArray then
             if tCachedPathArray == 'FAILED' then
-                Profile.leaveScope("Pathfinder.TestPath")
                 return
             end
             local tLastNode = tCachedPathArray[#tCachedPathArray]
@@ -801,7 +796,6 @@ function Pathfinder.testPath(x0, y0, x1, y1, rChar, tAdditionalParams)
             local f = tLastNode.g+nLastNodeDist
             local tPathData = { f=f, g=f, tPenultimateNode=tLastNode, tx=tDestSpec.tx, ty=tDestSpec.ty, bPathToNearest=tDestSpec.bPathToNearest,
                                 bNoPathToNearestDiagonal=tDestSpec.bNoPathToNearestDiagonal}
-            Profile.leaveScope("Pathfinder.TestPath")
             return f,tPathData
         end
         Pathfinder._pushNodeLoc(tPathfinderState, txStart,tyStart, 0, nil, {bStartingNode=true, bPathToNearest=false, bSuited=bSuited,
@@ -821,7 +815,6 @@ function Pathfinder.testPath(x0, y0, x1, y1, rChar, tAdditionalParams)
         else
             Pathfinder._cachePathFailure(rChar,startAddr,tPathfinderState.tDestInfo,tAdditionalParams)
         end
-        Profile.leaveScope("Pathfinder.TestPath")
         if tPathfinderState.tBestPath then
             return tPathfinderState.tBestPath.f, tPathfinderState.tBestPath
         end

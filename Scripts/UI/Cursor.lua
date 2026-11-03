@@ -12,7 +12,6 @@ local Room=require('Room')
 local EnvObject=require('EnvObjects.EnvObject')
 local SoundManager = require('SoundManager')
 local Gui = require('UI.Gui')
-local Profile = require('Profile')
 local Cursor = Class.create()
 Cursor.tiles={}
 function Cursor.execute(touchUpWX,touchUpWY)
@@ -38,7 +37,6 @@ function Cursor.refresh()
 end
 function Cursor.updateGridCursor(cursorX, cursorY, curStartX, curStartY, mode, bMouseDown)
     if not GameRules.bRunning then return end
-    Profile.enterScope("Cursor.updateGridCursor")
     for addr,tile in pairs(Cursor.tiles) do
         g_World.layers.cursor.grid:setTileValue(tile.x, tile.y, 0)
     end
@@ -49,13 +47,10 @@ function Cursor.updateGridCursor(cursorX, cursorY, curStartX, curStartY, mode, b
     local bDragging = Cursor._updateDragArea(cursorX, cursorY, curStartX, curStartY, mode)
     local cursorMode = Cursor.modes[GameRules.currentMode]
     if not cursorMode then
-        Profile.leaveScope("Cursor.updateGridCursor")
         return
     end
     if cursorMode.customClearFunction then
-        Profile.enterScope("Cursor.customClearFunction")
         cursorMode.customClearFunction()
-        Profile.leaveScope("Cursor.customClearFunction")
     end
     local tValid={}
     local tInvalid={}
@@ -93,13 +88,10 @@ function Cursor.updateGridCursor(cursorX, cursorY, curStartX, curStartY, mode, b
     if Cursor.tempCommand then
 		Cursor.tempCommand:setCommandVisible(true,true)
 	elseif not cursorMode.hideGrid then
-        Profile.enterScope("Cursor.drawTiles")
         Cursor.drawTiles(tValid, true,true)
         Cursor.drawTiles(tInvalid, false,true)
-        Profile.leaveScope("Cursor.drawTiles")
 	end
     Cursor.currentDragTarget = nil
-    Profile.leaveScope("Cursor.updateGridCursor")
 end
 function Cursor.modeChanging(oldMode,newMode)
     local cursorMode = Cursor.modes[oldMode]
@@ -147,7 +139,6 @@ function Cursor._updateDragArea(cursorX, cursorY, curStartX, curStartY, mode)
     if not cursorMode then
         return
     end
-        Profile.enterScope("Cursor.updateDragArea")
     local wx,wy = Renderer.getWorldFromCursor(cursorX, cursorY)
     local tileX, tileY = g_World._getTileFromWorld(wx,wy)
     local dragging = curStartX >= 0 and curStartY >= 0
@@ -185,7 +176,6 @@ function Cursor._updateDragArea(cursorX, cursorY, curStartX, curStartY, mode)
         tBoxTiles[addr] = {x=tileX, y=tileY, wall=g_World.countsAsWall(g_World._getTileValue(tileX, tileY)), addr=addr}
     end
     Cursor.tiles = tBoxTiles
-        Profile.leaveScope("Cursor.updateDragArea")
     return dragging
 end
 function Cursor.getDragSize()

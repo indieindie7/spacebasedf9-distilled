@@ -8,7 +8,6 @@ local Oxygen=require('Oxygen')
 local BrigZone=require('Zones.BrigZone')
 local DFUtil = require('DFCommon.Util')
 local SoundManager = require('SoundManager')
-local Profile = require('Profile')
 local Door = Class.create(EnvObject, MOAIProp.new)
 Door.spriteSheetPath='Environments/Tiles/Wall'
 Door.STAY_OPEN_DURATION = 2
@@ -400,7 +399,6 @@ function Door:isInFrontOfDoor(addr)
     return false
 end
 function Door:_updateDoorState(bForceToOperation)
-        Profile.enterScope("Door_State")
     self:_updateSpaceStatus()
     local oldState = self.doorState
     if bForceToOperation then
@@ -413,25 +411,21 @@ function Door:_updateDoorState(bForceToOperation)
         end
     elseif self.nCondition == 0 and (self.bSmashedOpen or self.doorState == Door.doorStates.OPEN) then
         if self.doorState == Door.doorStates.BROKEN_OPEN then
-            Profile.leaveScope("Door_State")
             return
         end
         self:_setDoorState(Door.doorStates.BROKEN_OPEN)
     elseif self.nCondition == 0 then
         if self.doorState == Door.doorStates.BROKEN_CLOSED then
-            Profile.leaveScope("Door_State")
             return
         end
         self:_setDoorState(Door.doorStates.BROKEN_CLOSED)
     elseif self.operation == Door.operations.FORCED_OPEN then
         if self.doorState == Door.doorStates.OPEN then
-            Profile.leaveScope("Door_State")
             return
         end
         self:_setDoorState(Door.doorStates.OPEN)
     elseif self:_isSabotaged() or self.operation == Door.operations.LOCKED or (self.bTouchesVacuum and self.bEastSideVacuum ~= self.bWestSideVacuum) then
         if self.doorState == Door.doorStates.LOCKED then
-            Profile.leaveScope("Door_State")
             return
         end
         self:_setDoorState(Door.doorStates.LOCKED)
@@ -439,13 +433,11 @@ function Door:_updateDoorState(bForceToOperation)
 		if not self:hasPower() then
 			if self.bTouchesVacuum and self.bEastSideVacuum ~= self.bWestSideVacuum then
 				if self.doorState == Door.doorStates.LOCKED then
-					Profile.leaveScope("Door_State")
 					return
 				end
 				self:_setDoorState(Door.doorStates.LOCKED)
 			else
 				if self.doorState == Door.doorStates.OPEN then
-					Profile.leaveScope("Door_State")
 					return
 				end
 				self:_setDoorState(Door.doorStates.OPEN)
@@ -464,14 +456,12 @@ function Door:_updateDoorState(bForceToOperation)
 				if self.doorState ~= Door.doorStates.OPEN then
 					self:_setDoorState(Door.doorStates.OPEN)
 				else
-					Profile.leaveScope("Door_State")
 					return
 				end
 			else
 				if self.doorState ~= Door.doorStates.CLOSED then
 					self:_setDoorState(Door.doorStates.CLOSED)
 				else
-					Profile.leaveScope("Door_State")
 					return
 				end
 			end
@@ -500,7 +490,6 @@ function Door:_updateDoorState(bForceToOperation)
     if self:getVisibility() == g_World.VISIBILITY_FULL or self.bFirstUpdate then
         self:setIndex(index)
     end
-            Profile.leaveScope("Door_State")
 end
 function Door:isPartOfFunctioningAirlock()
 	local rEastRoom,rWestRoom = self:getRooms()

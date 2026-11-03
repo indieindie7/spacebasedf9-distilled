@@ -29,7 +29,6 @@ local TemplateButton = require('UI.TemplateButton')
 local OnePixelButton = require('UI.OnePixelButton')
 local ProgressBar = require('UI.ProgressBar')
 local WorldToolTip = require('UI.WorldToolTip')
-local Profile = require('Profile')
 local Cursor=nil
 GuiManager.AMBER = Gui.AMBER
 GuiManager.RED = Gui.RED
@@ -320,69 +319,17 @@ function GuiManager.hoverInside(sx,sy)
     return nil
 end
 function GuiManager.onTick(dt)
-    local DBG_moreProfiling = false
-    if DBG_moreProfiling then
-        Profile.enterScope("Log")
-    end
-    if DBG_moreProfiling then
-        Profile.leaveScope("Log")
-        Profile.enterScope("SideBar")
-    end
     GuiManager.newSideBar:onTick(dt)
-    if DBG_moreProfiling then
-        Profile.leaveScope("SideBar")
-        Profile.enterScope("StartMenu")
-    end
     GuiManager.startMenu:onTick(dt)
-    if DBG_moreProfiling then
-        Profile.leaveScope("StartMenu")
-        Profile.enterScope("StatusBar")
-    end
     GuiManager.statusBar:onTick(dt)
-    if DBG_moreProfiling then
-        Profile.leaveScope("StatusBar")
-        Profile.enterScope("GlobalJobs")
-    end
     GuiManager.globalJobs:onTick(dt)
-    if DBG_moreProfiling then
-        Profile.leaveScope("GlobalJobs")
-        Profile.enterScope("BuildHelper")
-    end
 	GuiManager.buildHelper:onTick(dt)
-    if DBG_moreProfiling then
-        Profile.leaveScope("BuildHelper")
-        Profile.enterScope("HintPane")
-    end
 	GuiManager.hintPane:onTick(dt)
-    if DBG_moreProfiling then
-        Profile.leaveScope("HintPane")
-        Profile.enterScope("AlertPane")
-    end
     GuiManager.alertPane:onTick(dt)
-    if DBG_moreProfiling then
-        Profile.leaveScope("AlertPane")
-        Profile.enterScope("UIEffectMask")
-    end
     GuiManager.uiEffectMask:onTick(dt)
-    if DBG_moreProfiling then
-        Profile.leaveScope("UIEffectMask")
-        Profile.enterScope("NewBase")
-    end
     GuiManager.newBase:onTick(dt)
-    if DBG_moreProfiling then
-        Profile.leaveScope("NewBase")
-    end
     if GameRules.bRunning and GameRules.cursorX and GameRules.cursorY then
-        if DBG_moreProfiling then
-            Profile.enterScope("HoverTarget")
-        end
         GuiManager.updateHoverTarget(GameRules.cursorX, GameRules.cursorY, dt)
-        if DBG_moreProfiling then
-            Profile.leaveScope("HoverTarget")
-        end
-    end
-    if DBG_moreProfiling then
-        Profile.enterScope("AlertSetLoc")
     end
     GuiManager.snapAlertPos()
     if GuiManager.worldToolTip then
@@ -406,13 +353,7 @@ function GuiManager.onTick(dt)
             end
         end
     end
-    if DBG_moreProfiling then
-        Profile.leaveScope("AlertSetLoc")
-    end
     if MOAIInputMgr.device.pointer then
-        if DBG_moreProfiling then
-            Profile.enterScope("tooltip")
-        end
         if not GuiManager.isInStartupScreen() then
             local sRenderlayer = 'UIOverlay'
             local x, y = MOAIInputMgr.device.pointer:getLoc()
@@ -425,9 +366,6 @@ function GuiManager.onTick(dt)
                 local nOffsetX, nOffsetY = GuiManager.worldToolTip:getCursorOffset()
                 GuiManager.worldToolTip:setLoc(wx + nOffsetX, wy + nOffsetY)
             end
-        end
-        if DBG_moreProfiling then
-            Profile.leaveScope("tooltip")
         end
     end
 end

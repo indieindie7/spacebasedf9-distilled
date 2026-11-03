@@ -22,7 +22,6 @@ local ActivityOptionList=nil
 local EnvObject=nil
 local PickupData=nil
 local Room=nil
-local Profile = require('Profile')
 local CommandObject = Class.create()
 CommandObject.COMMAND_BUILD_TILE=1
 CommandObject.COMMAND_VAPORIZE=2
@@ -46,7 +45,6 @@ CommandObject.BUILD_PARAM_VAPORIZE = -1
 CommandObject.CANCEL_PARAM_MINE = -2
 CommandObject.CANCEL_PARAM_BUILD = -3
 CommandObject.BUILD_PARAM_DEMOLISH = -4
-CommandObject.DEBUG_PROFILE=true
 CommandObject.pendingBuildCost = 0
 CommandObject.pendingVaporizeCost = 0
 CommandObject.pendingCancelCost = 0
@@ -314,7 +312,6 @@ function CommandObject.undoDemolishObject(tx, ty)
     end
 end
 function CommandObject.getCommandFromDragOperation(commandAction, tTiles, commandParam, cursorMode, bDrag)
-    Profile.enterScope("Command.fromDragOp")
     local tCmds = {}
     if commandAction == CommandObject.COMMAND_DEMOLISH then
             tCmds = CommandObject._getDemolishCommandsFromDragOperation(commandAction, tTiles)
@@ -407,7 +404,6 @@ function CommandObject.getCommandFromDragOperation(commandAction, tTiles, comman
             batchCommand.tInvalidTiles[addr] = nil
         end
     end
-    Profile.leaveScope("Command.fromDragOp")
     return batchCommand
 end
 function CommandObject._invalidateCommandTile(addr, bNoRetest)
@@ -884,15 +880,12 @@ end
 function CommandObject:setCommandVisible(bVisible,bDrawInvalid)
     self.bVisible = bVisible
     if self.commandAction == CommandObject.COMMAND_BATCH then
-        Profile.enterScope("Cursor.setCommandVisibleBatch")
         for _,cmd in ipairs(self.commandParam) do
             cmd:setCommandVisible(bVisible,bDrawInvalid)
         end
         Cursor.drawTiles(self.tInvalidTiles,false,bVisible)
-        Profile.leaveScope("Cursor.setCommandVisibleBatch")
         return
     end
-        Profile.enterScope("Cursor.setCommandVisible")
     if self.commandAction == CommandObject.COMMAND_CANCEL then
         Cursor.drawTiles(self.tTiles,true,bVisible)
     else
@@ -901,7 +894,6 @@ function CommandObject:setCommandVisible(bVisible,bDrawInvalid)
         end
     end
     Cursor.drawTiles(self.tInvalidTiles,false,bVisible)
-        Profile.leaveScope("Cursor.setCommandVisible")
 end
 function CommandObject._canVaporizeTile(tx,ty)
     local tileValue = g_World._getTileValue(tx, ty)
@@ -1260,10 +1252,8 @@ function CommandObject._refreshMineTiles()
     end
 end
 function CommandObject._refreshBuildTiles()
-    if CommandObject.DEBUG_PROFILE then Profile.enterScope("CO.RefreshBuildTiles") end
     local addr, coord = CommandObject.coBuildTileIter()
     if not addr then
-        if CommandObject.DEBUG_PROFILE then Profile.leaveScope("CO.RefreshBuildTiles") end
         return
     end
     CommandObject.tBuildTiles['inside']['wall'][addr] = nil
@@ -1276,7 +1266,6 @@ function CommandObject._refreshBuildTiles()
     if t then
         t[addr] = tTileData
     end
-    if CommandObject.DEBUG_PROFILE then Profile.leaveScope("CO.RefreshBuildTiles") end
 end
 function CommandObject.jobGate(rChar, job)
     if rChar:getJob() == job then

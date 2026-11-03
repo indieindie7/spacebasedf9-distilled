@@ -40,7 +40,6 @@ local Base = require('Base')
 local PickupData = require('Pickups.PickupData')
 local Pickup = require('Pickups.Pickup')
 local Topics = require('Topics')
-local Profile = require('Profile')
 local Character = require('CharacterConstants')
 kMAX_BUBBLE_BG_SEGMENTS = 12
 Character.staticCounter=1
@@ -1398,17 +1397,11 @@ function Character:inVacuum()
 		bInVacuum = true
 	elseif GameRules.bProhibitSuffocation then
 	else
-		if CharacterManager.bDBGExtendedProfiler then
-			Profile.enterScope("InVacuum")
-		end
 		local vx,vy,mag = Oxygen.getVacuumVec(self:getLoc())
 		if self.bWasInVacuum then
 			bInVacuum = not (mag < Oxygen.VACUUM_THRESHOLD_END)
 		else
 			bInVacuum = (mag > Oxygen.VACUUM_THRESHOLD)
-		end
-		if CharacterManager.bDBGExtendedProfiler then
-			Profile.leaveScope("InVacuum")
 		end
 	end
 	self.bWasInVacuum = bInVacuum
@@ -1767,9 +1760,7 @@ function Character:updateAI(dt)
                 self:_convert()
             end
         end
-		Profile.enterScope("SurvivalThreats")
 		self:_testSurvivalThreats()
-		Profile.leaveScope("SurvivalThreats")
         if self.tStatus.bRampageViolent then
             local _,nChars = CharacterManager.getTeamCharacters(self:getTeam())
             if nChars <= 1 then
@@ -1828,13 +1819,7 @@ function Character:updateAI(dt)
 	end
 	self.oxygenTimer = self.oxygenTimer - dt
 	if self.oxygenTimer < 0 then
-		if CharacterManager.bDBGExtendedProfiler then
-			Profile.enterScope("CharacterOxygen")
-		end
 		self:updateOxygen(Character.OXYGEN_TICK + math.abs(self.oxygenTimer))
-		if CharacterManager.bDBGExtendedProfiler then
-			Profile.leaveScope("CharacterOxygen")
-		end
 		self.oxygenTimer = Character.OXYGEN_TICK
 	end
 	local bIsRobot = self.tStats.nRace == Character.RACE_KILLBOT
@@ -1958,13 +1943,7 @@ function Character:_testSurvivalThreats()
             end
         end
     end
-	if CharacterManager.bDBGExtendedProfiler then
-		Profile.enterScope("look for enemies")
-	end
 	self:_lookForEnemies(nil, true, true)
-	if CharacterManager.bDBGExtendedProfiler then
-		Profile.leaveScope("look for enemies")
-	end
 	local bBreached = self.rCurrentRoom and self.rCurrentRoom:isBreached()
 	if bBreached then
 		self:storeMemory(Character.MEMORY_ROOM_BREACHED_PREFIX..self.rCurrentRoom.id, true, 60)
@@ -2011,9 +1990,6 @@ function Character:_testSurvivalThreats()
             nThreat = OptionData.tPriorities.SURVIVAL_LOW
             self.sThreatSource='brawl,current or nearby room'
         end
-		if CharacterManager.bDBGExtendedProfiler then
-			Profile.enterScope("FireThreat")
-		end
 		if nThreat < OptionData.tPriorities.SURVIVAL_NORMAL and not self.tStats.bIgnoreFire then
 			local rFireRoom, bFireCurrentRoom = self:_lookForFire()
 			if bFireCurrentRoom then
@@ -2021,9 +1997,6 @@ function Character:_testSurvivalThreats()
 				nThreat = OptionData.tPriorities.SURVIVAL_NORMAL
 				self.sThreatSource='fire, current room'
 			end
-		end
-		if CharacterManager.bDBGExtendedProfiler then
-			Profile.leaveScope("FireThreat")
 		end
 	end
     if nThreat < OptionData.tPriorities.SURVIVAL_LOW and self:_shouldRespondToTantrum() then
@@ -2185,14 +2158,12 @@ function Character:_postPathfind()
         end
     end
 end
-local Profile = require('Profile')
 function Character:_selectTask()
     self.bOneTimeReevaluate = false
 	if self:getCurrentTaskPriority() == OptionData.tPriorities.PUPPET then return end
     assertdev(not self:isDead())
     if self:isDead() then return end
 	local bPrintLog = DFSpace.isDev() and g_GuiManager.getSelectedCharacter() == self
-	Profile.shinyBeginLoop('select_task')
 	local nRequiredPri = self:getCurrentTaskPriority() + 1
 	local rNewOption,nNewUtility, logStr = UtilityAI.getBestTask(self, nRequiredPri, bPrintLog, Malady.getGathererOverride(self))
     self:_postPathfind()
@@ -2210,10 +2181,9 @@ function Character:_selectTask()
 		if self.rCurrentTask and not self.rCurrentTask.bComplete then
 			self.rCurrentTask:interrupt("pri interrupt " .. (self.sThreatSource or 'unknown'))
 		end
-		self.rCurrentTask = rNewOption:createTask(self, nNewUtility, UtilityAI.DEBUG_PROFILE)
+		self.rCurrentTask = rNewOption:createTask(self, nNewUtility)
 		self:_newTaskStarted(self.rCurrentTask)
 	end
-	Profile.shinyEndLoop('select_task')
 end
 function Character:taskCompleting(rTask,bSuccess,bChildTask)
 	if not bChildTask then

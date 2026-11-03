@@ -7,7 +7,6 @@ local DFMath=require('DFCommon.Math')
 local DFUtil=require('DFCommon.Util')
 local GridUtil=require('GridUtil')
 local LuaGrid=require('LuaGrid')
-local Profile = require('Profile')
 local kCOLOR_DARKNESS = { 0.3, 0.3, 0.3}
 local kCOLOR_DARKNESS_EMERGENCY = { 0.1, 0.1, 0.1}
 local kWALL_BASE_COLOR = { 0.1, 0.1, 0.1 }
@@ -149,7 +148,6 @@ function Lighting.setRoomTileLightInfo(rRoom, nNormalPercent, nEmergencyPercent,
         rRoom.tTileLightInfo[2] = nEmergencyPercent
         rRoom.tTileLightInfo[3] = nDarknessPercent
     end
-    Profile.enterScope("setRoomTileLightInfo")
     if rRoom.tTiles then
         local tZoneDef = rRoom:getZoneDef()
         local tAmbientLight = tZoneDef.tAmbientLightColor or {kCOLOR_DARKNESS[1], kCOLOR_DARKNESS[2], kCOLOR_DARKNESS[3]}
@@ -196,7 +194,6 @@ function Lighting.setRoomTileLightInfo(rRoom, nNormalPercent, nEmergencyPercent,
             end
         end
     end
-    Profile.leaveScope("setRoomTileLightInfo")
 end
 function Lighting.setAlphaForTile(tx,ty,alpha)
     local gr = Lighting.LightDataMap:getMOAIGrid()
@@ -243,21 +240,15 @@ else
     end
 end
 function Lighting.updateAll()
-    Profile.enterScope("Lighting.updateAll()")
     if Lighting.IsDirty then
         if Room.tRooms and #Room.tRooms > 0 then
-            Profile.enterScope("_updateCeilingLights")
             Lighting._updateCeilingLights()
-            Profile.leaveScope("_updateCeilingLights")
             Lighting._updateDoorLights()
             Lighting.IsDirty = false
-            Profile.enterScope("LightTexture:load")
             Lighting.LightTexture:load(Lighting.LightPixelBuffer)
             Lighting.LightTextureEmergency:load(Lighting.LightPixelBufferEmergency)
-            Profile.leaveScope("LightTexture:load")
         end
     end
-    Profile.leaveScope("Lighting.updateAll()")
 end
 function Lighting._updateCeilingLights()
     local kForceRebuild = false

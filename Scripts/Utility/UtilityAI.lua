@@ -6,9 +6,7 @@ local Room = require('Room')
 local GlobalObjects = require('Utility.GlobalObjects')
 local CommandObject = require('Utility.CommandObject')
 local MiscUtil = require('MiscUtil')
-local Profile = require('Profile')
 local UtilityAI = {
-    DEBUG_PROFILE = false,
 }
 function UtilityAI.getNearbyCharacters(rChar)
     return require('CharacterManager').getCharacters()
@@ -24,15 +22,12 @@ function getOptionTargetName(option)
 	return nil
 end
 function UtilityAI.getBestTask(rChar, nMinPri, bLog, tGathererOverride)
-    if UtilityAI.DEBUG_PROFILE then Profile.enterScope("GetBestTask") end
     local tValidOptions={}
     local tAllOptions={}
     local tSatisfiers={}
     local tGatherers = tGathererOverride or rChar.tActivityOptionGatherers
     for gatherName,gatherData in pairs(tGatherers) do
-        if UtilityAI.DEBUG_PROFILE then Profile.enterScope("UtilityGather_"..gatherName) end
         local tObjects = gatherData.gatherFn(rChar)
-        if UtilityAI.DEBUG_PROFILE then Profile.leaveScope("UtilityGather_"..gatherName) end
         for _, object in ipairs(tObjects) do
             for _,rOption in ipairs((object.getUtilityOptions and object:getUtilityOptions(rChar)) or object.tUtilityOptions) do
                 assertdev(rOption.tBlackboard)
@@ -43,9 +38,7 @@ function UtilityAI.getBestTask(rChar, nMinPri, bLog, tGathererOverride)
                     tSatisfiers[k][rOption] = v
                     bSatisfier = true
                 end
-                if UtilityAI.DEBUG_PROFILE then Profile.enterScope("UtilityScore"..rOption.name) end
                 local bValid, sReason = rOption:earlyGates(rChar, (not bSatisfier and nMinPri) or 0)
-                if UtilityAI.DEBUG_PROFILE then Profile.leaveScope("UtilityScore"..rOption.name) end
                 local tOptionEntry = {rOption=rOption, bEarlyGatesValid=bValid, sReason=sReason}
                 if bValid then
                     tOptionEntry.nMaxScore=rOption:getMaxPotentialScore(rChar)
@@ -104,7 +97,6 @@ function UtilityAI.getBestTask(rChar, nMinPri, bLog, tGathererOverride)
             end
         end
     end
-    if UtilityAI.DEBUG_PROFILE then Profile.leaveScope("GetBestTask") end
     if tBestOptionData then
         if tBestOptionData.tSatisfiers then
             return tBestOptionData.tSatisfiers[1], nBestScore, logStr

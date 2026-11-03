@@ -1,6 +1,5 @@
 local DFFile = require('DFCommon.File')
 local Delegate = require('DFMoai.Delegate')
-local Profile = require('Profile')
 local EntityManager = { }
 EntityManager.tComponentModules = { }
 EntityManager.tEntityModules = { }
@@ -24,7 +23,6 @@ function EntityManager._destroy(rEntity, index, bRemove)
     end
 end
 function EntityManager.onTick(deltaTime)
-	Profile.enterScope( "EntityManager.onTick" )
     for i, rEntity in ipairs(EntityManager.tEntities) do
         if rEntity.onTick then
             rEntity:onTick(deltaTime)
@@ -32,7 +30,6 @@ function EntityManager.onTick(deltaTime)
 		rEntity:_updateComponents(deltaTime)
     end
 	EntityManager.processDestroyedEntities()
-	Profile.leaveScope( "EntityManager.onTick" )
 end
 function EntityManager.processDestroyedEntities()
     local index = 1

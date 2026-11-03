@@ -27,7 +27,6 @@ local Door = nil
 local GameRules = nil
 local Pathfinder = nil
 local GlobalObjects = nil
-local Profile = require('Profile')
 local SAVE_TYPES={ObjectList.ROOM, ObjectList.ENVOBJECT, ObjectList.CHARACTER, ObjectList.RESERVATION}
 World.pathGrid=nil
 World.roomGrid=nil
@@ -1450,7 +1449,6 @@ function World.fixupVisuals()
         return
     end
     Room.updateDirty()
-    Profile.enterScope("World.fixupVisuals")
     for addr,coord in pairs(World.tDirtyWallTiles) do
         if not World.tWallAddrToBlob[addr] and not Room.tWallsByAddr[addr] then
             local logicalValue = World._getTileValue(coord.x,coord.y)
@@ -1534,7 +1532,6 @@ function World.fixupVisuals()
             World._updateTileColor(tx,ty,nil,logicalValue, bFlip)
         end
     end
-    Profile.leaveScope("World.fixupVisuals")
     World.dirtyVisualTiles = { dirtyList = {} }
 end
 function World._updateTileColor(tx,ty,addr,value, bFlip)
