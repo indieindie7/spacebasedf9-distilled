@@ -1321,8 +1321,6 @@ function EnvObject:getPowerOutput()
     if self:_isSabotaged() or not self.bActive or self.nCondition == 0 then return 0 end
     return self.tData.nPowerOutput or 0
 end
-function EnvObject.updateSavegame(nSavegameVersion, saveData)
-end
 function EnvObject.getConditionUIString(nCondition)
     local sString = ""
     if not nCondition then return sString end

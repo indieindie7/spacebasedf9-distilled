@@ -593,8 +593,6 @@ function World.loadSaveData(nSavegameVersion, saveData)
     print('f')
 end
 function World.updateSavegame(nSavegameVersion, saveData)
-    Room.updateSavegame(nSavegameVersion, saveData[ObjectList.ROOM])
-    EnvObject.updateSavegame(nSavegameVersion, saveData[ObjectList.ENVOBJECT])
     Character.updateSavegame(nSavegameVersion, saveData[ObjectList.CHARACTER])
 end
 function World.getHackySortingZ(x,y,skipTileJustification)

@@ -2626,6 +2626,4 @@ function Room:getToolTipTextInfos()
 	end
     return self.tToolTipTextInfos
 end
-function Room.updateSavegame(nSavegameVersion, saveData)
-end
 return Room

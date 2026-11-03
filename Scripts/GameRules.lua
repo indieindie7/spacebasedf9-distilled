@@ -490,9 +490,6 @@ function GameRules.loadGame(sOverridePath, bOverridePreservePath)
     GameRules.simTime = tSaveData.simTime
     GameRules.elapsedTime = tSaveData.elapsedTime  or 0
     GameRules.powerHolidayEndTime = tSaveData.powerHolidayEndTime
-    if not tSaveData.nSavegameVersion or tSaveData.nSavegameVersion < 5 then
-        GameRules.powerHolidayEndTime = GameRules.elapsedTime + 60*10
-    end
     if GameRules.powerHolidayEndTime then
         g_PowerHoliday = true
     end
