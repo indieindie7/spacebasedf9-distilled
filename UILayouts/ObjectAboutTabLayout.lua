@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local lc=LH.lc
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 418, 98
 local nStatLabelMargin, nStatTextMargin  = 35, 210
@@ -19,16 +21,6 @@ return
     },
     tElements =
     {
-        {
-            key = 'FlavorText',
-            type = 'textBox',
-            pos = { 8, nStatsStartY - 2 },
-			linecode = 'OBFLAV007TEXT',
-            style = 'dosissemibold20',
-            rect = { 0, 800, 400, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        lc('FlavorText',{ 8, nStatsStartY - 2 },'OBFLAV007TEXT','dosissemibold20',{ 0, 800, 400, 0 },Gui.AMBER),
     },
 }

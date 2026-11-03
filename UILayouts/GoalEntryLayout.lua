@@ -1,5 +1,5 @@
-local function _h1(a0,a1,a2,a3,a4) return {key=a0,type=a1,pos=a2,scale=a3,color=a4} end
-local function _h2(a0,a1,a2,a3,a4,a5,a6) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,scale=a5,color=a6} end
+local LH=require('UI.LH')
+local hl,px,tex,tx=LH.hl,LH.px,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local nBarWidth = 300
 local nBarHeight = 64
@@ -22,56 +22,26 @@ return
 	},
     tElements =
     {
-		_h1('ProgressBarBG', 'onePixel', { nBarX, 0 }, { nBarWidth, nBarHeight }, Gui.BLACK),
-		_h1('ProgressBar', 'onePixel', { nBarX, 0 }, { nBarWidth, nBarHeight }, Gui.AMBER_OPAQUE),
-		{
-            key = 'ProgressLabel',
-            type = 'textBox',
-            pos = { nBarX, nBarTextY },
-            text = "1 / 1000",
-            style = 'dosissemibold35',
-            rect = { 0, 100, nBarWidth - 32, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-		},
-		_h1('DescShadeBox', 'onePixel', { 0, -64 }, { 940, nShadeBoxHeight }, Gui.AMBER_OPAQUE_DIM),
-		_h1('DescShadeBoxLeft', 'onePixel', { 0, -32 }, { 32, 32 }, Gui.AMBER_OPAQUE),
-		_h1('DescShadeBoxRight', 'onePixel', { 940 - 32, -32 }, { 32, 32 }, Gui.AMBER_OPAQUE),
-		_h2('NameBubbleLeftEndFilled', 'uiTexture', 'ui_circlefilled', 'UI/Shared', { 0, 0 }, {1, 1}, Gui.BLACK),
-		_h2('NameBubbleLeftEnd', 'uiTexture', 'ui_circleempty', 'UI/Shared', { 0, 0 }, {1, 1}, Gui.AMBER),
-        _h2('NameBar', 'uiTexture', 'ui_circlestraightfilled', 'UI/Shared', { 32, 0 }, {18, 1}, Gui.AMBER),
-        _h2('NameBubbleFilled', 'uiTexture', 'ui_circlestraight_inv', 'UI/Shared', { 32, 0 }, {18, 1}, Gui.BLACK),
-        _h2('GoalIcon', 'uiTexture', 'ui_jobs_iconHelp', 'UI/JobRoster', { 20, -16 }, {1, 1}, Gui.AMBER),
-    	{
-            key = 'GoalName',
-            type = 'textBox',
-            pos = { 64, nBarTextY },
-            text = "Project Name",
-            style = 'dosissemibold35',
-            rect = { 0, 90, 600, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-		},
-        _h2('BarLeftInnerFilled', 'uiTexture', 'ui_circleinverse_inset', 'UI/Shared', { nBarX, 0 }, {1, 1}, Gui.BLACK),
-        _h2('BarLeftInner', 'uiTexture', 'ui_circleinverse_inset_empty', 'UI/Shared', { nBarX, 0 }, {1, 1}, Gui.AMBER),
-		_h2('BarMid', 'uiTexture', 'ui_circlestraight', 'UI/Shared', { nBarX + 32, 0 }, { (nBarWidth - 32) / 32, 1}, Gui.AMBER),
-        _h2('BarRightInnerFilled', 'uiTexture', 'ui_circleinverse_inset', 'UI/Shared', { nBarX + nBarWidth, 0 }, {-1, 1}, Gui.BLACK),
-        _h2('BarRightInner', 'uiTexture', 'ui_circleinverse_inset_empty', 'UI/Shared', { nBarX + nBarWidth, 0 }, {-1, 1}, Gui.AMBER),
-        _h2('NameBubbleRightEndFilled', 'uiTexture', 'ui_circlefilled', 'UI/Shared', { nBarX + nBarWidth + 32, 0 }, {-1, 1}, Gui.BLACK),
-        _h2('NameBubbleRightEnd', 'uiTexture', 'ui_circleempty', 'UI/Shared', { nBarX + nBarWidth + 32, 0 }, {-1, 1}, Gui.AMBER),
-    	{
-            key = 'GoalDescription',
-            type = 'textBox',
-            pos = { 96, -115 },
-            text = "blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
-            style = 'dosissemibold28',
-            rect = { 0, 200, 800, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-		},
+		px('ProgressBarBG',{ nBarX, 0 },{ nBarWidth, nBarHeight },Gui.BLACK),
+		px('ProgressBar',{ nBarX, 0 },{ nBarWidth, nBarHeight },Gui.AMBER_OPAQUE),
+		tx('ProgressLabel',{ nBarX, nBarTextY },"1 / 1000",'dosissemibold35',{ 0, 100, nBarWidth - 32, 0 },Gui.AMBER,'R'),
+		px('DescShadeBox',{ 0, -64 },{ 940, nShadeBoxHeight },Gui.AMBER_OPAQUE_DIM),
+		px('DescShadeBoxLeft',{ 0, -32 },{ 32, 32 },Gui.AMBER_OPAQUE),
+		px('DescShadeBoxRight',{ 940 - 32, -32 },{ 32, 32 },Gui.AMBER_OPAQUE),
+		tex('NameBubbleLeftEndFilled','ui_circlefilled','UI/Shared',{ 0, 0 },Gui.BLACK,{1, 1}),
+		tex('NameBubbleLeftEnd','ui_circleempty','UI/Shared',{ 0, 0 },Gui.AMBER,{1, 1}),
+        tex('NameBar','ui_circlestraightfilled','UI/Shared',{ 32, 0 },Gui.AMBER,{18, 1}),
+        tex('NameBubbleFilled','ui_circlestraight_inv','UI/Shared',{ 32, 0 },Gui.BLACK,{18, 1}),
+        tex('GoalIcon','ui_jobs_iconHelp','UI/JobRoster',{ 20, -16 },Gui.AMBER,{1, 1}),
+    	tx('GoalName',{ 64, nBarTextY },"Project Name",'dosissemibold35',{ 0, 90, 600, 0 },Gui.AMBER),
+        tex('BarLeftInnerFilled','ui_circleinverse_inset','UI/Shared',{ nBarX, 0 },Gui.BLACK,{1, 1}),
+        tex('BarLeftInner','ui_circleinverse_inset_empty','UI/Shared',{ nBarX, 0 },Gui.AMBER,{1, 1}),
+		tex('BarMid','ui_circlestraight','UI/Shared',{ nBarX + 32, 0 },Gui.AMBER,{ (nBarWidth - 32) / 32, 1}),
+        tex('BarRightInnerFilled','ui_circleinverse_inset','UI/Shared',{ nBarX + nBarWidth, 0 },Gui.BLACK,{-1, 1}),
+        tex('BarRightInner','ui_circleinverse_inset_empty','UI/Shared',{ nBarX + nBarWidth, 0 },Gui.AMBER,{-1, 1}),
+        tex('NameBubbleRightEndFilled','ui_circlefilled','UI/Shared',{ nBarX + nBarWidth + 32, 0 },Gui.BLACK,{-1, 1}),
+        tex('NameBubbleRightEnd','ui_circleempty','UI/Shared',{ nBarX + nBarWidth + 32, 0 },Gui.AMBER,{-1, 1}),
+    	tx('GoalDescription',{ 96, -115 },"blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",'dosissemibold28',{ 0, 200, 800, 0 },Gui.AMBER),
         {
             key = 'Button',
             type = 'onePixelButton',
@@ -96,7 +66,7 @@ return
 				{ key = 'BarRightInner', hidden = true },
 				{ key = 'NameBubbleRightEndFilled', color = Gui.AMBER },
 				{ key = 'NameBubbleRightEnd', hidden = true },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {

@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local px,tex,tx=LH.px,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local nTutorialX = 0
 local nTutorialY = -720
@@ -17,55 +19,10 @@ return
     },
     tElements =
     {
-        {
-            key = 'TutorialTextBGFadeTop',
-            type = 'uiTexture',
-            textureName = 'grad64',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nTutorialX, nTutorialY },
-            scale = { 2568/64, 1 },
-            color = {0, 0, 0, nTutorialOpacity},
-            hidden = true,
-        },
-        {
-            key = 'TutorialTextBG',
-            type = 'onePixel',
-            pos = { nTutorialX, nTutorialY-64 },
-            scale = { 2568, nTutorialHeight },
-            color = {0, 0, 0, nTutorialOpacity},
-            hidden = true,
-        },
-        {
-            key = 'TutorialTextBGFadeBottom',
-            type = 'uiTexture',
-            textureName = 'grad64',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nTutorialX, nTutorialY-64-nTutorialHeight-64 },
-            scale = { 2568/64, -1 },
-            color = {0, 0, 0, nTutorialOpacity},
-            hidden = true,
-        },
-		{
-            key = 'TutorialText',
-            type = 'textBox',
-            pos = { nTutorialX+nTutorialTextXOffset, nTutorialY+nTutorialTextYOffset },
-            text = 'Hi, this is a training message. Press the BLUH key to frobnabulate the wizard. Use the foot pedal to scroll through Z-levels and the dwarf toe to rectify all breakfast cereals. Sure, another sentence to test text overflow.',
-            style = 'dosissemibold42',
-            rect = { 0, 300, 1500, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-            hidden = true,
-        },
-        {
-            key = 'TutorialBlip',
-            type = 'uiTexture',
-            textureName = 'ui_hud_speed0',
-            sSpritesheetPath = 'UI/HUD',
-            pos = { 1790, -170 },
-            scale = {2, 2},
-            color = Gui.RED,
-			hidden = true,
-        },
+        tex('TutorialTextBGFadeTop','grad64','UI/Shared',{ nTutorialX, nTutorialY },{0, 0, 0, nTutorialOpacity},{ 2568/64, 1 },true),
+        px('TutorialTextBG',{ nTutorialX, nTutorialY-64 },{ 2568, nTutorialHeight },{0, 0, 0, nTutorialOpacity},true),
+        tex('TutorialTextBGFadeBottom','grad64','UI/Shared',{ nTutorialX, nTutorialY-64-nTutorialHeight-64 },{0, 0, 0, nTutorialOpacity},{ 2568/64, -1 },true),
+		tx('TutorialText',{ nTutorialX+nTutorialTextXOffset, nTutorialY+nTutorialTextYOffset },'Hi, this is a training message. Press the BLUH key to frobnabulate the wizard. Use the foot pedal to scroll through Z-levels and the dwarf toe to rectify all breakfast cereals. Sure, another sentence to test text overflow.','dosissemibold42',{ 0, 300, 1500, 0 },Gui.AMBER,'R','C',true),
+        tex('TutorialBlip','ui_hud_speed0','UI/HUD',{ 1790, -170 },Gui.RED,{2, 2},true),
 	},
 }

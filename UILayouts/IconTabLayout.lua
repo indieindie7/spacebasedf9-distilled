@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local hl,tex=LH.hl,LH.tex
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -30,34 +32,9 @@ return
     },
     tElements =
     {
-        {
-            key = 'TabBackground',
-            type = 'uiTexture',
-			textureName = 'ui_inspector_folderTop_5wide',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { 0, 8 },
-            scale = { 1, 1 },
-            color = Gui.AMBER_OPAQUE,
-        },
-        {
-            key = 'TabActive',
-            type = 'uiTexture',
-            textureName = 'ui_inspector_folderActive_5wide',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { 0, 0 },
-            scale = { 1, 1 },
-            hidden = true,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'Tab',
-            type = 'uiTexture',
-            textureName = 'ui_inspector_folderInactive_5wide',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { 0, 0 },
-            scale = { 1, 1 },
-            color = Gui.AMBER,
-        },
+        tex('TabBackground','ui_inspector_folderTop_5wide','UI/Inspector',{ 0, 8 },Gui.AMBER_OPAQUE,{ 1, 1 }),
+        tex('TabActive','ui_inspector_folderActive_5wide','UI/Inspector',{ 0, 0 },Gui.AMBER,{ 1, 1 },true),
+        tex('Tab','ui_inspector_folderInactive_5wide','UI/Inspector',{ 0, 0 },Gui.AMBER,{ 1, 1 }),
         {
             key = 'TabButton',
             type = 'onePixel',
@@ -70,7 +47,7 @@ return
                 { key = 'TabActive', color = Gui.GREY, hidden = false, },
                 { key = 'Tab', hidden = true, },
                 { key = 'Icon', color = Gui.BLACK, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -79,13 +56,6 @@ return
                 { key = 'Icon', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'Icon',
-            type = 'uiTexture',
-            color = Gui.AMBER,
-            textureName = 'ui_iconIso_confirm',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { 26, -8 },
-        },
+        tex('Icon','ui_iconIso_confirm','UI/Inspector',{ 26, -8 },Gui.AMBER),
     },
 }

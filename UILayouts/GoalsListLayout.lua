@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local hl,lc,px,tx=LH.hl,LH.lc,LH.px,LH.tx
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 286, 98
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 110, -68
@@ -17,13 +19,7 @@ return
     },
     tElements =
     {
-        {
-            key = 'LargeBar',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { 'g_GuiManager.getUIViewportSizeX()', 'g_GuiManager.getUIViewportSizeY()' },
-            color = Gui.SIDEBAR_BG,
-        },
+        px('LargeBar',{ 0, 0 },{ 'g_GuiManager.getUIViewportSizeX()', 'g_GuiManager.getUIViewportSizeY()' },Gui.SIDEBAR_BG),
         {
             key = 'GoalScrollPane',
             type = 'scrollPane',
@@ -51,7 +47,7 @@ return
                 { key = 'BackButton', hidden = false, },
                 { key = 'BackLabel', color = Gui.BLACK },
                 { key = 'BackHotkey', color = Gui.BLACK },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -60,50 +56,10 @@ return
                 { key = 'BackHotkey', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'BackLabel',
-            type = 'textBox',
-            pos = { 96, -20 },
-            linecode = 'HUDHUD035TEXT',
-            style = 'dosisregular40',
-            rect = { 0, 300, 200, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'BackHotkey',
-            type = 'textBox',
-            pos = { nHotkeyX, -60 },
-            text = 'ESC',
-            style = 'dosissemibold22',
-            rect = { 0, 100, 100, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'GoalLabel',
-            type = 'textBox',
-            pos = { 380, -20 },
-            linecode = 'HUDHUD052TEXT',
-            style = 'dosismedium44',
-            rect = { 0, 300, 400, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'SortLabel',
-            type = 'textBox',
-            pos = { nSortButton1X - 75, nSortButtonY + 6 },
-            linecode = 'GOALSS014TEXT',
-            style = 'dosismedium32',
-            rect = { 0, 300, 400, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        lc('BackLabel',{ 96, -20 },'HUDHUD035TEXT','dosisregular40',{ 0, 300, 200, 0 },Gui.AMBER),
+        tx('BackHotkey',{ nHotkeyX, -60 },'ESC','dosissemibold22',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
+        lc('GoalLabel',{ 380, -20 },'HUDHUD052TEXT','dosismedium44',{ 0, 300, 400, 0 },Gui.AMBER),
+        lc('SortLabel',{ nSortButton1X - 75, nSortButtonY + 6 },'GOALSS014TEXT','dosismedium32',{ 0, 300, 400, 0 },Gui.AMBER),
 		{
 			key = 'SortCompletedButton',
             type = 'templateButton',

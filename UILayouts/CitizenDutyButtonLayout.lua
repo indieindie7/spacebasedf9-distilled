@@ -1,5 +1,5 @@
-local function _h1(a0,a1) return {key=a0,color=a1} end
-local function _h2(a0,a1,a2,a3,a4,a5,a6,a7) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,scale=a5,color=a6,hidden=a7} end
+local LH=require('UI.LH')
+local c,hl,px,tex=LH.c,LH.hl,LH.px,LH.tex
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.1 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
@@ -33,13 +33,11 @@ return
                     key = 'StarBG',
                     hidden = false
                 },
-                _h1('DutyButton', Gui.AMBER),
-                _h1('DutyButtonLabelBG', Gui.AMBER),
-                _h1('ButtonLabel', {0,0,0}),
-                _h1('ButtonDescription', {0,0,0}),
-                {
-                    playSfx = 'hilight',
-                },
+                c('DutyButton',Gui.AMBER),
+                c('DutyButtonLabelBG',Gui.AMBER),
+                c('ButtonLabel',{0,0,0}),
+                c('ButtonDescription',{0,0,0}),
+                hl(),
             },
             onHoverOff =
             {
@@ -47,20 +45,13 @@ return
                     key = 'StarBG',
                     hidden = true
                 },
-                _h1('DutyButton', Gui.AMBER),
-                _h1('DutyButtonLabelBG', Gui.AMBER_OPAQUE),
-                _h1('ButtonLabel', Gui.AMBER),
-                _h1('ButtonDescription', Gui.AMBER),
+                c('DutyButton',Gui.AMBER),
+                c('DutyButtonLabelBG',Gui.AMBER_OPAQUE),
+                c('ButtonLabel',Gui.AMBER),
+                c('ButtonDescription',Gui.AMBER),
             },
         },
-        {
-            key = 'StarBG',
-            type = 'onePixel',
-            pos = { 224, -41 },
-            scale = { 130, 59 },
-            color = { 0, 0, 0 },
-            hidden = true,
-        },
+        px('StarBG',{ 224, -41 },{ 130, 59 },{ 0, 0, 0 },true),
         {
             key = 'DutyButton',
             type = 'uiTexture',
@@ -117,8 +108,8 @@ return
             color = Gui.AMBER,
             layerOverride = 'UIScrollLayerLeft',
         },
-        _h2('DutyIcon', 'uiTexture', 'ui_jobs_iconJobBarkeep', 'UI/JobRoster', { 23, -55 }, { 1, 1 }, Gui.AMBER, false),
-        _h2('SkillIcon', 'uiTexture', 'ui_icon_friend', 'UI/Inspector', { 345, -55 }, { 1.25, 1.25 }, { 0, 0, 0}, false),
+        tex('DutyIcon','ui_jobs_iconJobBarkeep','UI/JobRoster',{ 23, -55 },Gui.AMBER,{ 1, 1 },false),
+        tex('SkillIcon','ui_icon_friend','UI/Inspector',{ 345, -55 },{ 0, 0, 0},{ 1.25, 1.25 },false),
         {
             key = 'NumText',
             type = 'textBox',
@@ -131,7 +122,7 @@ return
             color = { 0, 0, 0 },
             layerOverride = 'UIScrollLayerLeft',
         },
-        _h2('StarsIcon', 'uiTexture', 'ui_jobs_skillrank5', 'UI/JobRoster', { 185, -40 }, { 1, 1 }, Gui.AMBER, false),
-        _h2('AffIcon', 'uiTexture', 'ui_dialogicon_meh', 'UI/Emoticons', { 290, -52 }, { 1, 1 }, Gui.AMBER, false),
+        tex('StarsIcon','ui_jobs_skillrank5','UI/JobRoster',{ 185, -40 },Gui.AMBER,{ 1, 1 },false),
+        tex('AffIcon','ui_dialogicon_meh','UI/Emoticons',{ 290, -52 },Gui.AMBER,{ 1, 1 },false),
     },
 }

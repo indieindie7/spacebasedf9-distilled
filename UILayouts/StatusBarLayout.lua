@@ -1,7 +1,6 @@
+local LH=require('UI.LH')
+local hh,hl,lc,px,tex,tx,v=LH.hh,LH.hl,LH.lc,LH.px,LH.tex,LH.tx,LH.v
 local function _h1(a0,a1) return {key=a0,pos=a1} end
-local function _h2(a0,a1,a2,a3,a4,a5,a6) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,scale=a5,color=a6} end
-local function _h3(a0,a1) return {key=a0,hidden=a1} end
-local function _h4(a0,a1,a2,a3,a4,a5,a6,a7) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,scale=a5,color=a6,hidden=a7} end
 local Gui = require('UI.Gui')
 local sBottomIconY = '-g_GuiManager.getUIViewportSizeY() + 40'
 local nZoomoutButtonX = 1072
@@ -74,70 +73,14 @@ return
     },
     tElements =
     {
-        _h2('MatterIcon', 'uiTexture', 'ui_hud_iconMatter', 'UI/HUD', { 620, -70 }, { 1.4, 1.4 }, Gui.AMBER),
-        {
-            key = 'MatterLabel',
-            type = 'textBox',
-            pos = { 730, -52 },
-            linecode = 'HUDHUD002TEXT',
-            style = 'dosissemibold26',
-            rect = { 0, 100, 100, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.GREY,
-        },
-        {
-            key = 'MatterText',
-            type = 'textBox',
-            pos = { 730, -70 },
-            text = '1',
-            style = 'dosisregular70',
-            rect = { 0, 300, 200, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        _h2('CapacityIcon', 'uiTexture', 'ui_hud_iconPeople', 'UI/HUD', { 900, -70 }, { 1.4, 1.4 }, Gui.AMBER),
-        {
-            key = 'CapacityLabel',
-            type = 'textBox',
-            pos = { 960, -50 },
-            linecode = 'HUDHUD003TEXT',
-            style = 'dosissemibold26',
-            rect = { 0, 200, 600, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.GREY,
-        },
-        {
-            key = 'CapacityText',
-            type = 'textBox',
-            pos = { 960, -74 },
-            text = '2',
-            style = 'dosisregular70',
-            rect = { 0, 300, 400, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'DividerLine',
-            type = 'onePixel',
-            pos = { 620, -192 },
-            scale = { 490, 4 },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'StardateText',
-            type = 'textBox',
-            pos = { 620, -214 },
-            text = '2',
-            style = 'dosissemibold30',
-            rect = { 0, 100, 300, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        tex('MatterIcon','ui_hud_iconMatter','UI/HUD',{ 620, -70 },Gui.AMBER,{ 1.4, 1.4 }),
+        lc('MatterLabel',{ 730, -52 },'HUDHUD002TEXT','dosissemibold26',{ 0, 100, 100, 0 },Gui.GREY),
+        tx('MatterText',{ 730, -70 },'1','dosisregular70',{ 0, 300, 200, 0 },Gui.AMBER),
+        tex('CapacityIcon','ui_hud_iconPeople','UI/HUD',{ 900, -70 },Gui.AMBER,{ 1.4, 1.4 }),
+        lc('CapacityLabel',{ 960, -50 },'HUDHUD003TEXT','dosissemibold26',{ 0, 200, 600, 0 },Gui.GREY),
+        tx('CapacityText',{ 960, -74 },'2','dosisregular70',{ 0, 300, 400, 0 },Gui.AMBER),
+        px('DividerLine',{ 620, -192 },{ 490, 4 },Gui.AMBER),
+        tx('StardateText',{ 620, -214 },'2','dosissemibold30',{ 0, 100, 300, 0 },Gui.AMBER),
         {
             key = 'PauseButton',
             type = 'onePixelButton',
@@ -148,20 +91,15 @@ return
             clickWhileHidden=true,
             onHoverOn =
             {
-                _h3('PauseInactiveTexture', true),
-                _h3('PauseActiveTexture', false),
-                {
-                    playSfx = 'hilight',
-                },
+                v('PauseInactiveTexture',true),
+                v('PauseActiveTexture',false),
+                hl(),
             },
             onHoverOff =
-            {
-                _h3('PauseInactiveTexture', false),
-                _h3('PauseActiveTexture', true),
-            },
+            hh(false,'PauseInactiveTexture',true,'PauseActiveTexture'),
         },
-        _h2('PauseInactiveTexture', 'uiTexture', 'ui_hud_speed0', 'UI/HUD', { 900, -214 }, {1.4, 1.4}, Gui.AMBER),
-        _h4('PauseActiveTexture', 'uiTexture', 'ui_hud_speed0_active', 'UI/HUD', { 900, -214 }, {1.4, 1.4}, Gui.AMBER, true),
+        tex('PauseInactiveTexture','ui_hud_speed0','UI/HUD',{ 900, -214 },Gui.AMBER,{1.4, 1.4}),
+        tex('PauseActiveTexture','ui_hud_speed0_active','UI/HUD',{ 900, -214 },Gui.AMBER,{1.4, 1.4},true),
         {
             key = 'Speed1Button',
             type = 'onePixelButton',
@@ -172,20 +110,15 @@ return
             clickWhileHidden=true,
             onHoverOn =
             {
-                _h3('Speed1InactiveTexture', true),
-                _h3('Speed1ActiveTexture', false),
-                {
-                    playSfx = 'hilight',
-                },
+                v('Speed1InactiveTexture',true),
+                v('Speed1ActiveTexture',false),
+                hl(),
             },
             onHoverOff =
-            {
-                _h3('Speed1InactiveTexture', false),
-                _h3('Speed1ActiveTexture', true),
-            },
+            hh(false,'Speed1InactiveTexture',true,'Speed1ActiveTexture'),
         },
-        _h2('Speed1InactiveTexture', 'uiTexture', 'ui_hud_speed1', 'UI/HUD', { 956, -214 }, {1.4, 1.4}, Gui.AMBER),
-        _h4('Speed1ActiveTexture', 'uiTexture', 'ui_hud_speed1_active', 'UI/HUD', { 956, -214 }, {1.4, 1.4}, Gui.AMBER, true),
+        tex('Speed1InactiveTexture','ui_hud_speed1','UI/HUD',{ 956, -214 },Gui.AMBER,{1.4, 1.4}),
+        tex('Speed1ActiveTexture','ui_hud_speed1_active','UI/HUD',{ 956, -214 },Gui.AMBER,{1.4, 1.4},true),
         {
             key = 'Speed2Button',
             type = 'onePixelButton',
@@ -196,20 +129,15 @@ return
             clickWhileHidden=true,
             onHoverOn =
             {
-                _h3('Speed2InactiveTexture', true),
-                _h3('Speed2ActiveTexture', false),
-                {
-                    playSfx = 'hilight',
-                },
+                v('Speed2InactiveTexture',true),
+                v('Speed2ActiveTexture',false),
+                hl(),
             },
             onHoverOff =
-            {
-                _h3('Speed2InactiveTexture', false),
-                _h3('Speed2ActiveTexture', true),
-            },
+            hh(false,'Speed2InactiveTexture',true,'Speed2ActiveTexture'),
         },
-        _h2('Speed2InactiveTexture', 'uiTexture', 'ui_hud_speed2', 'UI/HUD', { 1012, -214 }, {1.4, 1.4}, Gui.AMBER),
-        _h4('Speed2ActiveTexture', 'uiTexture', 'ui_hud_speed2_active', 'UI/HUD', { 1012, -214 }, {1.4, 1.4}, Gui.AMBER, true),
+        tex('Speed2InactiveTexture','ui_hud_speed2','UI/HUD',{ 1012, -214 },Gui.AMBER,{1.4, 1.4}),
+        tex('Speed2ActiveTexture','ui_hud_speed2_active','UI/HUD',{ 1012, -214 },Gui.AMBER,{1.4, 1.4},true),
         {
             key = 'Speed3Button',
             type = 'onePixelButton',
@@ -220,20 +148,15 @@ return
             clickWhileHidden=true,
             onHoverOn =
             {
-                _h3('Speed3InactiveTexture', true),
-                _h3('Speed3ActiveTexture', false),
-                {
-                    playSfx = 'hilight',
-                },
+                v('Speed3InactiveTexture',true),
+                v('Speed3ActiveTexture',false),
+                hl(),
             },
             onHoverOff =
-            {
-                _h3('Speed3InactiveTexture', false),
-                _h3('Speed3ActiveTexture', true),
-            },
+            hh(false,'Speed3InactiveTexture',true,'Speed3ActiveTexture'),
         },
-        _h2('Speed3InactiveTexture', 'uiTexture', 'ui_hud_speed3', 'UI/HUD', { 1068, -214 }, {1.4, 1.4}, Gui.AMBER),
-        _h4('Speed3ActiveTexture', 'uiTexture', 'ui_hud_speed3_active', 'UI/HUD', { 1068, -214 }, {1.4, 1.4}, Gui.AMBER, true),
+        tex('Speed3InactiveTexture','ui_hud_speed3','UI/HUD',{ 1068, -214 },Gui.AMBER,{1.4, 1.4}),
+        tex('Speed3ActiveTexture','ui_hud_speed3_active','UI/HUD',{ 1068, -214 },Gui.AMBER,{1.4, 1.4},true),
         {
             key = 'ZoomoutButton',
             type = 'onePixelButton',
@@ -244,20 +167,15 @@ return
             clickWhileHidden=true,
             onHoverOn =
             {
-                _h3('ZoomoutTexture', true),
-                _h3('ZoomoutActiveTexture', false),
-                {
-                    playSfx = 'hilight',
-                },
+                v('ZoomoutTexture',true),
+                v('ZoomoutActiveTexture',false),
+                hl(),
             },
             onHoverOff =
-            {
-                _h3('ZoomoutTexture', false),
-                _h3('ZoomoutActiveTexture', true),
-            },
+            hh(false,'ZoomoutTexture',true,'ZoomoutActiveTexture'),
         },
-        _h2('ZoomoutTexture', 'uiTexture', 'ui_hud_button_zoomout', 'UI/HUD', { nZoomoutButtonX, sBottomIconY }, {1, 1}, Gui.AMBER),
-        _h4('ZoomoutActiveTexture', 'uiTexture', 'ui_hud_button_zoomout_active', 'UI/HUD', { nZoomoutButtonX, sBottomIconY }, {1, 1}, Gui.AMBER, true),
+        tex('ZoomoutTexture','ui_hud_button_zoomout','UI/HUD',{ nZoomoutButtonX, sBottomIconY },Gui.AMBER,{1, 1}),
+        tex('ZoomoutActiveTexture','ui_hud_button_zoomout_active','UI/HUD',{ nZoomoutButtonX, sBottomIconY },Gui.AMBER,{1, 1},true),
        {
             key = 'ZoominButton',
             type = 'onePixelButton',
@@ -268,27 +186,16 @@ return
             clickWhileHidden=true,
             onHoverOn =
             {
-                _h3('ZoominTexture', true),
-                _h3('ZoominActiveTexture', false),
-                {
-                    playSfx = 'hilight',
-                },
+                v('ZoominTexture',true),
+                v('ZoominActiveTexture',false),
+                hl(),
             },
             onHoverOff =
-            {
-                _h3('ZoominTexture', false),
-                _h3('ZoominActiveTexture', true),
-            },
+            hh(false,'ZoominTexture',true,'ZoominActiveTexture'),
         },
-        _h2('ZoominTexture', 'uiTexture', 'ui_hud_button_zoomin', 'UI/HUD', { nZoominButtonX, sBottomIconY }, {1, 1}, Gui.AMBER),
-        _h4('ZoominActiveTexture', 'uiTexture', 'ui_hud_button_zoomin_active', 'UI/HUD', { nZoominButtonX, sBottomIconY }, {1, 1}, Gui.AMBER, true),
-        {
-            key = 'BottomButtonDividerLine',
-            type = 'onePixel',
-            pos = { nZoomoutButtonX - 76, '-g_GuiManager.getUIViewportSizeY() + 40'  },
-            scale = { 4, 54 },
-            color = Gui.AMBER,
-        },
+        tex('ZoominTexture','ui_hud_button_zoomin','UI/HUD',{ nZoominButtonX, sBottomIconY },Gui.AMBER,{1, 1}),
+        tex('ZoominActiveTexture','ui_hud_button_zoomin_active','UI/HUD',{ nZoominButtonX, sBottomIconY },Gui.AMBER,{1, 1},true),
+        px('BottomButtonDividerLine',{ nZoomoutButtonX - 76, '-g_GuiManager.getUIViewportSizeY() + 40'  },{ 4, 54 },Gui.AMBER),
        {
             key = 'WallButton',
             type = 'onePixelButton',
@@ -299,31 +206,16 @@ return
             clickWhileHidden=true,
             onHoverOn =
             {
-                _h3('WallTexture', true),
-                _h3('WallActiveTexture', false),
-                {
-                    playSfx = 'hilight',
-                },
+                v('WallTexture',true),
+                v('WallActiveTexture',false),
+                hl(),
             },
             onHoverOff =
-            {
-                _h3('WallTexture', false),
-                _h3('WallActiveTexture', true),
-            },
+            hh(false,'WallTexture',true,'WallActiveTexture'),
         },
-        _h2('WallTexture', 'uiTexture', 'ui_hud_buttonvis_walls', 'UI/HUD', { nWallButtonX, sBottomIconY }, {1, 1}, Gui.AMBER),
-        _h4('WallActiveTexture', 'uiTexture', 'ui_hud_buttonvis_walls_active', 'UI/HUD', { nWallButtonX, sBottomIconY }, {1, 1}, Gui.AMBER, true),
-        {
-            key = 'WallHotkey',
-            type = 'textBox',
-            pos = { nWallButtonX + 50, sBottomIconY..' - 30' },
-            text = 'K',
-            style = 'dosissemibold22',
-            rect = { 0, 100, 100, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        tex('WallTexture','ui_hud_buttonvis_walls','UI/HUD',{ nWallButtonX, sBottomIconY },Gui.AMBER,{1, 1}),
+        tex('WallActiveTexture','ui_hud_buttonvis_walls_active','UI/HUD',{ nWallButtonX, sBottomIconY },Gui.AMBER,{1, 1},true),
+        tx('WallHotkey',{ nWallButtonX + 50, sBottomIconY..' - 30' },'K','dosissemibold22',{ 0, 100, 100, 0 },Gui.AMBER),
        {
             key = 'OxygenButton',
             type = 'onePixelButton',
@@ -334,30 +226,15 @@ return
             clickWhileHidden=true,
             onHoverOn =
             {
-                _h3('OxygenTexture', true),
-                _h3('OxygenActiveTexture', false),
-                {
-                    playSfx = 'hilight',
-                },
+                v('OxygenTexture',true),
+                v('OxygenActiveTexture',false),
+                hl(),
             },
             onHoverOff =
-            {
-                _h3('OxygenTexture', false),
-                _h3('OxygenActiveTexture', true),
-            },
+            hh(false,'OxygenTexture',true,'OxygenActiveTexture'),
         },
-        _h2('OxygenTexture', 'uiTexture', 'ui_hud_buttonvis_o2', 'UI/HUD', { nOxygenButtonX, sBottomIconY }, {1, 1}, Gui.AMBER),
-        _h4('OxygenActiveTexture', 'uiTexture', 'ui_hud_buttonvis_o2_active', 'UI/HUD', { nOxygenButtonX, sBottomIconY }, {1, 1}, Gui.AMBER, true),
-        {
-            key = 'OxygenHotkey',
-            type = 'textBox',
-            pos = { nOxygenButtonX + 50, sBottomIconY..' - 30' },
-            text = 'O',
-            style = 'dosissemibold22',
-            rect = { 0, 100, 100, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        tex('OxygenTexture','ui_hud_buttonvis_o2','UI/HUD',{ nOxygenButtonX, sBottomIconY },Gui.AMBER,{1, 1}),
+        tex('OxygenActiveTexture','ui_hud_buttonvis_o2_active','UI/HUD',{ nOxygenButtonX, sBottomIconY },Gui.AMBER,{1, 1},true),
+        tx('OxygenHotkey',{ nOxygenButtonX + 50, sBottomIconY..' - 30' },'O','dosissemibold22',{ 0, 100, 100, 0 },Gui.AMBER),
     },
 }

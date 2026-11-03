@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local tex,tx=LH.tex,LH.tx
 local function _h1(a0,a1,a2,a3,a4) return {key=a0,type=a1,pos=a2,scale=a3,color=a4} end
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 418, 98
@@ -26,26 +28,8 @@ return
         _h1('PictureLargeBG', 'onePixel', { 0, -163 }, { nButtonWidth, 106 }, Gui.AMBER),
         _h1('NameEditBG', 'onePixelButton', { 0, -176 }, { nButtonWidth, 35 }, Gui.AMBER),
         _h1('PictureBG', 'onePixel', { 30, -144 }, { 110, 20 }, Gui.AMBER),
-        {
-            key = 'Picture',
-            type = 'uiTexture',
-            textureName = 'portrait_generic',
-            sSpritesheetPath = 'UI/Portraits',
-            pos = { 33, -145 },
-            scale = { 0.84, 0.84 },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'NameLabel',
-            type = 'textBox',
-            pos = { 150, -174 },
-            text = "Reactor Zone Tao",
-            style = 'dosissemibold26',
-            rect = { 0, 300, 500, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = { 0, 0, 0 },
-        },
+        tex('Picture','portrait_generic','UI/Portraits',{ 33, -145 },Gui.AMBER,{ 0.84, 0.84 }),
+        tx('NameLabel',{ 150, -174 },"Reactor Zone Tao",'dosissemibold26',{ 0, 300, 500, 0 },{ 0, 0, 0 }),
         {
             key = 'NameEditButton',
             type = 'onePixelButton',
@@ -79,38 +63,10 @@ return
 				{ key = 'NameEditTexture', hidden = true, },
             },
         },
-        {
-            key = 'NameEditTexture',
-            type = 'uiTexture',
-            textureName = 'ui_inspector_buttonEdit',
-            sSpritesheetPath = 'UI/Inspector',
-            pos = { 380, -176 },
-            color = Gui.AMBER,
-			hidden = true,
-        },
-        {
-            key = 'AlertLabel',
-            type = 'textBox',
-            pos = { 150, -216 },
-            text = "",
-            style = 'dosisregular26',
-            rect = { 0, 300, 500, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = { 0, 0, 0 },
-        },
+        tex('NameEditTexture','ui_inspector_buttonEdit','UI/Inspector',{ 380, -176 },Gui.AMBER,nil,true),
+        tx('AlertLabel',{ 150, -216 },"",'dosisregular26',{ 0, 300, 500, 0 },{ 0, 0, 0 }),
         _h1('StatsBG', 'onePixel', { 0, -268 }, { nButtonWidth, 152 }, Gui.AMBER_OPAQUE),
-        {
-            key = 'DescriptionText',
-            type = 'textBox',
-            pos = { 20, -280 },
-            text = "",
-            style = 'dosissemibold26',
-            rect = { 0, 300, 400, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        tx('DescriptionText',{ 20, -280 },"",'dosissemibold26',{ 0, 300, 400, 0 },Gui.AMBER),
         _h1('TabBGSpacer', 'onePixel', { nTabWidth * 3, -420 }, { nTabWidth*2 + 3, nTabHeight }, Gui.AMBER_OPAQUE),
         _h1('TabLineSpacer', 'onePixel', { nTabWidth * 3, -420-nTabHeight }, { nTabWidth*2 + 3, nTabLineHeight }, Gui.AMBER),
         {

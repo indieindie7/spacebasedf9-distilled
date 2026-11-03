@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local tx=LH.tx
 local Gui = require('UI.Gui')
 local tLayout =
 {
@@ -17,17 +19,7 @@ local tLayout =
             scale = { 570, 70 },
             color = Gui.HINTLOG_BG,
         },
-        {
-            key = 'HintText',
-            type = 'textBox',
-            pos = { 10, -10 },
-            text = "Log goes here.  Let's make sure the length is correct.",
-            style = 'dosissemibold22',
-            rect = { 0, 300, 450, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = { 0, 0, 0 },
-        },
+        tx('HintText',{ 10, -10 },"Log goes here.  Let's make sure the length is correct.",'dosissemibold22',{ 0, 300, 450, 0 },{ 0, 0, 0 }),
     },
 }
 return tLayout

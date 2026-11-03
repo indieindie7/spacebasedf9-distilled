@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local hl,lc,px,tex,tx=LH.hl,LH.lc,LH.px,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.BRIGHT_AMBER[1], Gui.BRIGHT_AMBER[2], Gui.BRIGHT_AMBER[3], 1 }
@@ -22,72 +24,13 @@ return
 	},
     tElements =
     {
-        {
-            key = 'Background',
-            type = 'onePixel',
-            pos = { -777, 641 },
-            scale = { 2568, 1444 },
-            color = PAUSESCREEN_BG,
-            hidden = false,
-        },
-        {
-            key = 'TextBGFadeTop',
-            type = 'uiTexture',
-            textureName = 'grad64',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { -1920/2 - 64, 239 },
-            scale = { 2568/64, 1 },
-            color = {0, 0, 0, 0.6},
-        },
-        {
-            key = 'MOTDTextBackground',
-            type = 'onePixel',
-            pos = { -1920/2 - 64, 175 },
-            scale = { 2568, 625 },
-            color = {0, 0, 0, 0.6},
-            hidden = false,
-        },
-        {
-            key = 'TextBGFadeBottom',
-            type = 'uiTexture',
-            textureName = 'grad64',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { -1920/2 - 64, -514 },
-            scale = { 2568/64, -1 },
-            color = {0, 0, 0, 0.6},
-        },
-        {
-            key = 'Logo',
-            type = 'uiTexture',
-            textureName = 'logo',
-            sSpritesheetPath = 'UI/StartMenu',
-            pos = { -1920/2, 1152/2 + 50 },
-            scale = { 1.5, 1.5 },
-            color = Gui.WHITE,
-            hidden = false,
-        },
-        {
-            key = 'MOTDTitle',
-            type = 'textBox',
-            pos = { nMOTDX, 150 },
-			linecode = 'UIMISC022TEXT',
-            style = 'dosissemibold38',
-            rect = { 0, 50, 705, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'WebsiteText',
-            type = 'textBox',
-            pos = { -400, 260 },
-            linecode = "UIMISC016TEXT",
-            style = 'dosismedium32',
-            rect = { 0, 70, 800, 0 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        px('Background',{ -777, 641 },{ 2568, 1444 },PAUSESCREEN_BG,false),
+        tex('TextBGFadeTop','grad64','UI/Shared',{ -1920/2 - 64, 239 },{0, 0, 0, 0.6},{ 2568/64, 1 }),
+        px('MOTDTextBackground',{ -1920/2 - 64, 175 },{ 2568, 625 },{0, 0, 0, 0.6},false),
+        tex('TextBGFadeBottom','grad64','UI/Shared',{ -1920/2 - 64, -514 },{0, 0, 0, 0.6},{ 2568/64, -1 }),
+        tex('Logo','logo','UI/StartMenu',{ -1920/2, 1152/2 + 50 },Gui.WHITE,{ 1.5, 1.5 },false),
+        lc('MOTDTitle',{ nMOTDX, 150 },'UIMISC022TEXT','dosissemibold38',{ 0, 50, 705, 0 },Gui.AMBER),
+        lc('WebsiteText',{ -400, 260 },"UIMISC016TEXT",'dosismedium32',{ 0, 70, 800, 0 },Gui.AMBER,'C','C'),
         {
             key = 'ButtonWebsite',
             type = 'onePixelButton',
@@ -99,7 +42,7 @@ return
             onHoverOn =
             {
                 { key = 'WebsiteText', color = Gui.BRIGHT_AMBER, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -117,7 +60,7 @@ return
             onHoverOn =
             {
                 { key = 'ButtonResumeText', color = Gui.BRIGHT_AMBER, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -135,7 +78,7 @@ return
             onHoverOn =
             {
                 { key = 'ButtonNewGameText', color = Gui.BRIGHT_AMBER, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -153,7 +96,7 @@ return
             onHoverOn =
             {
                 { key = 'ButtonTutorialText', color = Gui.BRIGHT_AMBER, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -171,7 +114,7 @@ return
             onHoverOn =
             {
                 { key = 'ButtonSettingsText', color = Gui.BRIGHT_AMBER, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -189,7 +132,7 @@ return
             onHoverOn =
             {
                 { key = 'ButtonCreditsText', color = Gui.BRIGHT_AMBER, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -207,78 +150,18 @@ return
             onHoverOn =
             {
                 { key = 'ButtonQuitText', color = Gui.BRIGHT_AMBER, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
                 { key = 'ButtonQuitText', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'ButtonResumeText',
-            type = 'textBox',
-            pos = { nMenuItemsX, nLineStartY },
-			linecode = 'UIMISC023TEXT',
-            style = 'orbitronWhite',
-            rect = { 0, 70, 800, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ButtonNewGameText',
-            type = 'textBox',
-            pos = { nMenuItemsX, nLineStartY - nLineHeight },
-			linecode = 'UIMISC024TEXT',
-            style = 'orbitronWhite',
-            rect = { 0, 70, 800, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ButtonTutorialText',
-            type = 'textBox',
-            pos = { nMenuItemsX, nLineStartY - nLineHeight*2 },
-			text = 'LEARN TO PLAY',
-            style = 'orbitronWhite',
-            rect = { 0, 70, 800, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ButtonSettingsText',
-            type = 'textBox',
-            pos = { nMenuItemsX, nLineStartY - nLineHeight*3 },
-			linecode = 'UIMISC025TEXT',
-            style = 'orbitronWhite',
-            rect = { 0, 70, 800, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ButtonCreditsText',
-            type = 'textBox',
-            pos = { nMenuItemsX, nLineStartY - nLineHeight*4 },
-			linecode = 'UIMISC026TEXT',
-            style = 'orbitronWhite',
-            rect = { 0, 70, 800, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ButtonQuitText',
-            type = 'textBox',
-            pos = { nMenuItemsX, nLineStartY - nLineHeight*5 },
-			linecode = 'UIMISC027TEXT',
-            style = 'orbitronWhite',
-            rect = { 0, 70, 800, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        lc('ButtonResumeText',{ nMenuItemsX, nLineStartY },'UIMISC023TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
+        lc('ButtonNewGameText',{ nMenuItemsX, nLineStartY - nLineHeight },'UIMISC024TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
+        tx('ButtonTutorialText',{ nMenuItemsX, nLineStartY - nLineHeight*2 },'LEARN TO PLAY','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
+        lc('ButtonSettingsText',{ nMenuItemsX, nLineStartY - nLineHeight*3 },'UIMISC025TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
+        lc('ButtonCreditsText',{ nMenuItemsX, nLineStartY - nLineHeight*4 },'UIMISC026TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
+        lc('ButtonQuitText',{ nMenuItemsX, nLineStartY - nLineHeight*5 },'UIMISC027TEXT','orbitronWhite',{ 0, 70, 800, 0 },Gui.AMBER,'R','C'),
     },
 }

@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local lc=LH.lc
 local Gui = require('UI.Gui')
 local nLabelX, nLabelY = 16, -170
 return
@@ -14,16 +16,6 @@ return
     },
     tElements =
     {
-		{
-            key = 'CustomControlsLabel',
-            type = 'textBox',
-            pos = { nLabelX, nLabelY },
-			linecode = 'PROPSX089TEXT',
-            style = 'dosissemibold26',
-            rect = { 0, 100, 400, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
+		lc('CustomControlsLabel',{ nLabelX, nLabelY },'PROPSX089TEXT','dosissemibold26',{ 0, 100, 400, 0 },Gui.AMBER,'L','C'),
     },
 }

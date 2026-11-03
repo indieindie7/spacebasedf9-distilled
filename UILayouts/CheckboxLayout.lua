@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local tex=LH.tex
 local Gui = require('UI.Gui')
 return
 {
@@ -10,26 +12,8 @@ return
     },
     tElements =
     {
-        {
-            key = 'Background',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_confirm_circle',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { 0, 0 },
-            color = Gui.WHITE,
-            scale = { 0.5, 0.5 },
-            hidden = false,
-        },
-        {
-            key = 'Check',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_confirm',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { 0, 0 },
-            scale = { 0.5, 0.5 },
-            color = Gui.AMBER,
-            hidden = false,
-        },
+        tex('Background','ui_iconIso_confirm_circle','UI/Shared',{ 0, 0 },Gui.WHITE,{ 0.5, 0.5 },false),
+        tex('Check','ui_iconIso_confirm','UI/Shared',{ 0, 0 },Gui.AMBER,{ 0.5, 0.5 },false),
         {
             key = 'ButtonToggle',
             type = 'onePixelButton',

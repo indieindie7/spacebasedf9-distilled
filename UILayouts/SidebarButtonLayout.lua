@@ -1,4 +1,5 @@
-local function _h1(a0,a1) return {key=a0,color=a1} end
+local LH=require('UI.LH')
+local btn,c,hl,hv,lc,tex=LH.btn,LH.c,LH.hl,LH.hv,LH.lc,LH.tex
 local Gui = require('UI.Gui')
 local nIconX, nIconStartY = 10, -12
 local nLabelX, nLabelStartY = 94, -10
@@ -17,48 +18,8 @@ return
     },
     tElements =
     {
-        {
-            key = 'SidebarButton',
-            type = 'onePixelButton',
-            pos = { 0, 0 },
-            scale = { nButtonWidth, nButtonHeight },
-            color = Gui.BLACK,
-            onHoverOn =
-            {
-                _h1('SidebarButton', Gui.AMBER),
-                _h1('SidebarLabel', { 0, 0, 0 }),
-                _h1('SidebarIcon', { 0, 0, 0 }),
-                _h1('SidebarHotkey', { 0, 0, 0 }),
-                {
-                    playSfx = 'hilight',
-                },
-            },
-            onHoverOff =
-            {
-                _h1('SidebarButton', Gui.BLACK),
-                _h1('SidebarLabel', Gui.AMBER),
-                _h1('SidebarIcon', Gui.AMBER),
-                _h1('SidebarHotkey', Gui.AMBER),
-            },
-        },
-        {
-            key = 'SidebarIcon',
-            type = 'uiTexture',
-            textureName = 'ui_iconIso_erase',
-            sSpritesheetPath = 'UI/Shared',
-            pos = { nIconX, nIconStartY },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'SidebarLabel',
-            type = 'textBox',
-            pos = { nLabelX, nLabelStartY },
-            linecode = 'HUDHUD037TEXT',
-            style = 'dosisregular40',
-            rect = { 0, 300, 280, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        btn('SidebarButton',{ 0, 0 },{ nButtonWidth, nButtonHeight },Gui.BLACK,hv(Gui.AMBER,'SidebarButton',{ 0, 0, 0 },'SidebarLabel','SidebarIcon','SidebarHotkey',true),hv(Gui.BLACK,'SidebarButton',Gui.AMBER,'SidebarLabel','SidebarIcon','SidebarHotkey')),
+        tex('SidebarIcon','ui_iconIso_erase','UI/Shared',{ nIconX, nIconStartY },Gui.AMBER),
+        lc('SidebarLabel',{ nLabelX, nLabelStartY },'HUDHUD037TEXT','dosisregular40',{ 0, 300, 280, 0 },Gui.AMBER),
    },
 }

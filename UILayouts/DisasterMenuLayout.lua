@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local btn,hl,lc,px,tex,tx=LH.btn,LH.hl,LH.lc,LH.px,LH.tex,LH.tx
 local function _h1(a0,a1) return {SidebarLabel=a0,SidebarIcon=a1} end
 local function _h2(a0,a1,a2,a3,a4,a5) return {key=a0,type=a1,layoutFile=a2,replacements=a3,buttonName=a4,pos=a5} end
 local Gui = require('UI.Gui')
@@ -26,66 +28,11 @@ return
     },
     tElements =
     {
-        {
-            key = 'LargeBar',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { nButtonWidth, -nButtonStartY + (nButtonHeight * numButtons) },
-            color = Gui.SIDEBAR_BG,
-        },
-        {
-            key = 'DoneButton',
-            type = 'onePixelButton',
-            pos = { 0, 0 },
-            scale = { nButtonWidth, nButtonHeight },
-            color = Gui.BLACK,
-            onHoverOn =
-            {
-                { key = 'DoneButton', color = Gui.AMBER, },
-                { key = 'DoneLabel', color = Gui.BLACK, },
-                { key = 'DoneHotkey', color = Gui.BLACK, },
-                { playSfx = 'hilight', },
-            },
-            onHoverOff =
-            {
-                { key = 'DoneButton', color = Gui.BLACK, },
-                { key = 'DoneLabel', color = Gui.AMBER, },
-                { key = 'DoneHotkey', color = Gui.AMBER, },
-            },
-        },
-        {
-            key = 'DoneLabel',
-            type = 'textBox',
-            pos = { nLabelX, nDoneLabelStartY },
-            linecode = 'HUDHUD035TEXT',
-            style = 'dosisregular40',
-            rect = { 0, 300, 200, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'DoneHotkey',
-            type = 'textBox',
-            pos = { nHotkeyX, nDoneHotkeyY },
-            text = 'ESC',
-            style = 'dosissemibold22',
-            rect = { 0, 100, 100, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'MenuSublabel',
-            type = 'textBox',
-            pos = { 40, -90 },
-            linecode = "HUDHUD053TEXT",
-            style = 'dosissemibold22',
-            rect = { 0, 100, 200, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.GREY,
-        },
+        px('LargeBar',{ 0, 0 },{ nButtonWidth, -nButtonStartY + (nButtonHeight * numButtons) },Gui.SIDEBAR_BG),
+        btn('DoneButton',{ 0, 0 },{ nButtonWidth, nButtonHeight },Gui.BLACK,{ { key = 'DoneButton', color = Gui.AMBER, }, { key = 'DoneLabel', color = Gui.BLACK, }, { key = 'DoneHotkey', color = Gui.BLACK, }, hl(), },{ { key = 'DoneButton', color = Gui.BLACK, }, { key = 'DoneLabel', color = Gui.AMBER, }, { key = 'DoneHotkey', color = Gui.AMBER, }, }),
+        lc('DoneLabel',{ nLabelX, nDoneLabelStartY },'HUDHUD035TEXT','dosisregular40',{ 0, 300, 200, 0 },Gui.AMBER),
+        tx('DoneHotkey',{ nHotkeyX, nDoneHotkeyY },'ESC','dosissemibold22',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
+        lc('MenuSublabel',{ 40, -90 },"HUDHUD053TEXT",'dosissemibold22',{ 0, 100, 200, 0 },Gui.GREY),
         _h2('FireButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD054TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY }),
         _h2('MeteorButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD055TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight }),
         _h2('KillbotButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD056TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight*2 }),
@@ -94,14 +41,6 @@ return
         _h2('ParasiteButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD059TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight*5 }),
         _h2('DerelictButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD060TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight*6 }),
         _h2('DockButton', 'templateButton', 'UILayouts/SidebarButtonLayout', _h1({linecode='HUDHUD061TEXT', pos={nLabelNoIconX, nLabelButtonStartY}}, {hidden=true, }), 'SidebarButton', { 0, nButtonStartY-nButtonHeight*7 }),
-        {
-            key = 'SidebarBottomEndcapExpanded',
-            type = 'uiTexture',
-            textureName = 'ui_hud_anglebottom',
-            sSpritesheetPath = 'UI/HUD',
-            pos = { 0, nButtonStartY - numButtons*nButtonHeight },
-            scale = { 1.28, 1.28 },
-            color = Gui.SIDEBAR_BG,
-        },
+        tex('SidebarBottomEndcapExpanded','ui_hud_anglebottom','UI/HUD',{ 0, nButtonStartY - numButtons*nButtonHeight },Gui.SIDEBAR_BG,{ 1.28, 1.28 }),
     },
 }

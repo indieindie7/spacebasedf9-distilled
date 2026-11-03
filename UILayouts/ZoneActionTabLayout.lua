@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local lc=LH.lc
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 418, 90
 local buttonX = 200
@@ -18,17 +20,7 @@ return
     },
     tElements =
     {
-		{
-            key = 'CustomControlsLabel',
-            type = 'textBox',
-            pos = { nLabelX, nCustomControlLabelY },
-			linecode = 'PROPSX098TEXT',
-            style = 'dosissemibold26',
-            rect = { 0, 100, 500, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
+		lc('CustomControlsLabel',{ nLabelX, nCustomControlLabelY },'PROPSX098TEXT','dosissemibold26',{ 0, 100, 500, 0 },Gui.AMBER,'L','C'),
         {
             key = 'AssignmentButtonScrollPane',
             type = 'scrollPane',

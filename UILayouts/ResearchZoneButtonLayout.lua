@@ -1,4 +1,5 @@
-local function _h1(a0,a1,a2,a3,a4,a5,a6) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,scale=a5,color=a6} end
+local LH=require('UI.LH')
+local hl,tex,tx=LH.hl,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local nButtonX = 16
 local nZoneNameX = 48
@@ -17,36 +18,16 @@ return
     },
     tElements =
     {
-        _h1('ZoneNameBubbleLeft', 'uiTexture', 'ui_circlefilled', 'UI/Shared', { nButtonX, 0 }, {1, 1}, Gui.AMBER),
-        _h1('ZoneNameBubbleMid', 'uiTexture', 'ui_circlestraightfilled', 'UI/Shared', { nButtonX + 32, 0 }, {(nZoneButtonWidth / 32), 1}, Gui.AMBER),
-        _h1('ProjectNameBubbleLeft', 'uiTexture', 'ui_circleinverse_inset_inv', 'UI/Shared', { nButtonX + 32 + nZoneButtonWidth, 0 }, {1, 1}, Gui.BLACK),
-        _h1('ZoneNameBubbleRight', 'uiTexture', 'ui_circleinverse_inset', 'UI/Shared', { nButtonX + 32 + nZoneButtonWidth, 0 }, {1, 1}, Gui.AMBER),
-    	{
-            key = 'ZoneName',
-            type = 'textBox',
-            pos = { nZoneNameX, -nTextY },
-            text = "Zone Name",
-            style = 'dosissemibold35',
-            rect = { 0, 100, 600, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.BLACK,
-		},
-        _h1('ProjectNameBubbleMid', 'uiTexture', 'ui_circlestraight', 'UI/Shared', { nProjectButtonWidth, 0 }, {(nProjectButtonWidth - 32) / 32, 1}, Gui.AMBER),
-        _h1('ProjectNameBubbleMidHole', 'uiTexture', 'ui_circlestraight_inv', 'UI/Shared', { nButtonX + nZoneButtonWidth + 64, 0 }, {(nProjectButtonWidth - 32) / 32, 1}, Gui.BLACK),
-        _h1('ProjectNameBubbleRightHole', 'uiTexture', 'ui_circlefilled', 'UI/Shared', { nButtonX + nZoneButtonWidth + 64 + nProjectButtonWidth, 0 }, {-1, 1}, Gui.BLACK),
-        _h1('ProjectNameBubbleRight', 'uiTexture', 'ui_circleempty', 'UI/Shared', { nButtonX + nZoneButtonWidth + 64 + nProjectButtonWidth, 0 }, {-1, 1}, Gui.AMBER),
-		{
-            key = 'ProjectName',
-            type = 'textBox',
-            pos = { nProjectNameX, -nTextY },
-            text = "Project Name",
-            style = 'dosissemibold35',
-            rect = { 0, 100, 600, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-		},
+        tex('ZoneNameBubbleLeft','ui_circlefilled','UI/Shared',{ nButtonX, 0 },Gui.AMBER,{1, 1}),
+        tex('ZoneNameBubbleMid','ui_circlestraightfilled','UI/Shared',{ nButtonX + 32, 0 },Gui.AMBER,{(nZoneButtonWidth / 32), 1}),
+        tex('ProjectNameBubbleLeft','ui_circleinverse_inset_inv','UI/Shared',{ nButtonX + 32 + nZoneButtonWidth, 0 },Gui.BLACK,{1, 1}),
+        tex('ZoneNameBubbleRight','ui_circleinverse_inset','UI/Shared',{ nButtonX + 32 + nZoneButtonWidth, 0 },Gui.AMBER,{1, 1}),
+    	tx('ZoneName',{ nZoneNameX, -nTextY },"Zone Name",'dosissemibold35',{ 0, 100, 600, 0 },Gui.BLACK),
+        tex('ProjectNameBubbleMid','ui_circlestraight','UI/Shared',{ nProjectButtonWidth, 0 },Gui.AMBER,{(nProjectButtonWidth - 32) / 32, 1}),
+        tex('ProjectNameBubbleMidHole','ui_circlestraight_inv','UI/Shared',{ nButtonX + nZoneButtonWidth + 64, 0 },Gui.BLACK,{(nProjectButtonWidth - 32) / 32, 1}),
+        tex('ProjectNameBubbleRightHole','ui_circlefilled','UI/Shared',{ nButtonX + nZoneButtonWidth + 64 + nProjectButtonWidth, 0 },Gui.BLACK,{-1, 1}),
+        tex('ProjectNameBubbleRight','ui_circleempty','UI/Shared',{ nButtonX + nZoneButtonWidth + 64 + nProjectButtonWidth, 0 },Gui.AMBER,{-1, 1}),
+		tx('ProjectName',{ nProjectNameX, -nTextY },"Project Name",'dosissemibold35',{ 0, 100, 600, 0 },Gui.AMBER),
         {
             key = 'Button',
             type = 'onePixelButton',
@@ -61,7 +42,7 @@ return
                 { key = 'ProjectNameBubbleMidHole', color = Gui.BROWN, },
                 { key = 'ProjectNameBubbleRightHole', color = Gui.BROWN, },
                 { key = 'ProjectName', color = Gui.BLACK, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {

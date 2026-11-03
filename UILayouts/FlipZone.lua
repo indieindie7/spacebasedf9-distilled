@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local hl,tex,tx=LH.hl,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local sFlipBorderX = '0'
 local sFlipBorderTopY = 30
@@ -31,9 +33,7 @@ return
                     key = 'FlipButton',
                     hidden = false,
                 },
-                {
-                    playSfx = 'hilight',
-                },
+                hl(),
             },
             onHoverOff =
             {
@@ -43,54 +43,10 @@ return
                 },
             },
         },
-        {
-            key = 'FlipLabel',
-            type = 'textBox',
-            pos = { sFlipLabelX, sFlipTextY },
-            text = 'Flip Object',
-            style = 'dosissemibold26',
-            rect = { 0, 100, 300, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'FlipHotkey',
-            type = 'textBox',
-            pos = { sFlipHotkeyX, sFlipTextY },
-            text = 'F',
-            style = 'dosissemibold26',
-            rect = { 0, 100, 300, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'FlipZoneTop',
-            type = 'uiTexture',
-            textureName = 'ui_flip_border',
-            sSpritesheetPath = 'UI/HUD',
-            pos = { sFlipBorderX, sFlipBorderTopY },
-            scale = {1.0, 1.0},
-            color = Gui.AMBER,
-        },
-        {
-            key = 'FlipZoneBottom',
-            type = 'uiTexture',
-            textureName = 'ui_flip_border',
-            sSpritesheetPath = 'UI/HUD',
-            pos = { sFlipBorderX, sFlipBorderBottomY },
-            scale = {1.0, -1.0},
-            color = Gui.AMBER,
-        },
-        {
-            key = 'FlipZoneArrows',
-            type = 'uiTexture',
-            textureName = 'ui_flip_arrows',
-            sSpritesheetPath = 'UI/HUD',
-            pos = { sFlipArrowsX, sFlipArrowsY },
-            scale = {1.0, -1.0},
-            color = Gui.AMBER,
-        },
+        tx('FlipLabel',{ sFlipLabelX, sFlipTextY },'Flip Object','dosissemibold26',{ 0, 100, 300, 0 },Gui.AMBER),
+        tx('FlipHotkey',{ sFlipHotkeyX, sFlipTextY },'F','dosissemibold26',{ 0, 100, 300, 0 },Gui.AMBER),
+        tex('FlipZoneTop','ui_flip_border','UI/HUD',{ sFlipBorderX, sFlipBorderTopY },Gui.AMBER,{1.0, 1.0}),
+        tex('FlipZoneBottom','ui_flip_border','UI/HUD',{ sFlipBorderX, sFlipBorderBottomY },Gui.AMBER,{1.0, -1.0}),
+        tex('FlipZoneArrows','ui_flip_arrows','UI/HUD',{ sFlipArrowsX, sFlipArrowsY },Gui.AMBER,{1.0, -1.0}),
     },
 }

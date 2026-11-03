@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local hl,tex=LH.hl,LH.tex
 local Gui = require('UI.Gui')
 local nButtonWidth,nButtonHeight = 31, 31
 return
@@ -25,7 +27,7 @@ return
             {
 				{ key = 'CancelButtonTexture', hidden = true, },
 				{ key = 'CancelButtonTexturePressed', hidden = false, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -41,24 +43,7 @@ return
 				{ key = 'CancelButtonTexture', color = Gui.AMBER },
             },
         },
- 		{
-			key = 'CancelButtonTexture',
-			type = 'uiTexture',
-            textureName = 'checkbox_xed',
-            sSpritesheetPath = 'UI/Shared',
-			pos = { 0, 0 },
-			scale = { 1, 1 },
-			color = Gui.AMBER,
-		},
-		{
-			key = 'CancelButtonTexturePressed',
-			type = 'uiTexture',
-            textureName = 'checkbox_xed_inverse',
-            sSpritesheetPath = 'UI/Shared',
-			pos = { 0, 0 },
-			scale = { 1, 1 },
-			color = Gui.AMBER,
-			hidden = true,
-		},
+ 		tex('CancelButtonTexture','checkbox_xed','UI/Shared',{ 0, 0 },Gui.AMBER,{ 1, 1 }),
+		tex('CancelButtonTexturePressed','checkbox_xed_inverse','UI/Shared',{ 0, 0 },Gui.AMBER,{ 1, 1 },true),
     },
 }

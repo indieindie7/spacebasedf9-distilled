@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local px=LH.px
 local Gui = require('UI.Gui')
 return
 {
@@ -10,26 +12,8 @@ return
     },
     tElements =
     {
-        {
-            key = 'Background',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { 400, 40 },
-            color = Gui.WHITE,
-        },
-        {
-            key = 'Foreground',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { 400, 40 },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'Thumb',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { 10, 40 },
-            color = Gui.BLACK,
-        },
+        px('Background',{ 0, 0 },{ 400, 40 },Gui.WHITE),
+        px('Foreground',{ 0, 0 },{ 400, 40 },Gui.AMBER),
+        px('Thumb',{ 0, 0 },{ 10, 40 },Gui.BLACK),
     }
 }

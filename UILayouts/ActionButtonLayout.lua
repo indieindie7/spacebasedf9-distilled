@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local hl,lc,tex=LH.hl,LH.lc,LH.tex
 local Gui = require('UI.Gui')
 local nControlButtonX, nControlButtonY = 0,0
 local nControlButtonWidth, nControlButtonHeight = 205, 37
@@ -28,7 +30,7 @@ return
                 { key = 'ActionLabel', color = Gui.BLACK, },
 				{ key = 'ActionButtonTexture', hidden = true, },
 				{ key = 'ActionButtonTexturePressed', hidden = false, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -41,7 +43,7 @@ return
 				{ key = 'ActionLabel', color = Gui.BLACK, },
 				{ key = 'ActionButtonTexture', hidden = true, },
 				{ key = 'ActionButtonTexturePressed', hidden = false, },
-                { playSfx = 'hilight', },
+                hl(),
 			},
             onSelectedOff =
             {
@@ -60,35 +62,8 @@ return
 				{ key = 'ActionButtonTexture', color = Gui.AMBER },
             },
         },
- 		{
-			key = 'ActionButtonTexture',
-			type = 'uiTexture',
-            textureName = 'buttonbig',
-            sSpritesheetPath = 'UI/Shared',
-			pos = { nControlButtonX, nControlButtonY },
-			scale = { 1, 1 },
-			color = Gui.AMBER,
-		},
-		{
-			key = 'ActionButtonTexturePressed',
-			type = 'uiTexture',
-            textureName = 'buttonbig_pressed',
-            sSpritesheetPath = 'UI/Shared',
-			pos = { nControlButtonX, nControlButtonY },
-			scale = { 1, 1 },
-			color = Gui.AMBER,
-			hidden = true,
-		},
-        {
-            key = 'ActionLabel',
-            type = 'textBox',
-            pos = { nControlButtonX + labelX, labelY },
-			linecode = 'ZONEUI072TEXT',
-            style = 'dosissemibold20',
-            rect = { 0, 100, nControlButtonWidth, 0 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
+ 		tex('ActionButtonTexture','buttonbig','UI/Shared',{ nControlButtonX, nControlButtonY },Gui.AMBER,{ 1, 1 }),
+		tex('ActionButtonTexturePressed','buttonbig_pressed','UI/Shared',{ nControlButtonX, nControlButtonY },Gui.AMBER,{ 1, 1 },true),
+        lc('ActionLabel',{ nControlButtonX + labelX, labelY },'ZONEUI072TEXT','dosissemibold20',{ 0, 100, nControlButtonWidth, 0 },Gui.AMBER,'C'),
     },
 }

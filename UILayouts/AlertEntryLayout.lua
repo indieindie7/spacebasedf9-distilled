@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local btn,tx=LH.btn,LH.tx
 local Gui = require('UI.Gui')
 local tLayout =
 {
@@ -10,49 +12,9 @@ local tLayout =
     },
     tElements =
     {
-        {
-            key = 'Button',
-            type = 'onePixelButton',
-            pos = { 0, 0 },
-            scale = { 440, 100 },
-            color = Gui.ALERTLOG_BG,
-            onHoverOn =
-            {
-                {
-                    key = 'Button',
-                    color = Gui.AMBER,
-                },
-            },
-            onHoverOff =
-            {
-                {
-                    key = 'Button',
-                    color = Gui.ALERTLOG_BG,
-                },
-            },
-        },
-        {
-            key = 'AlertText',
-            type = 'textBox',
-            pos = { 10, -10 },
-            text = "Log goes here.  Let's make sure the length is correct.",
-            style = 'dosissemibold22',
-            rect = { 0, 300, 430, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.BLACK,
-        },
-        {
-            key = 'TimeText',
-            type = 'textBox',
-            pos = { 10, -50 },
-            text = "0 minutes ago",
-            style = 'dosissemibold20',
-            rect = { 0, 300, 450, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.BLACK,
-        },
+        btn('Button',{ 0, 0 },{ 440, 100 },Gui.ALERTLOG_BG,{ { key = 'Button', color = Gui.AMBER, }, },{ { key = 'Button', color = Gui.ALERTLOG_BG, }, }),
+        tx('AlertText',{ 10, -10 },"Log goes here.  Let's make sure the length is correct.",'dosissemibold22',{ 0, 300, 430, 0 },Gui.BLACK),
+        tx('TimeText',{ 10, -50 },"0 minutes ago",'dosissemibold20',{ 0, 300, 450, 0 },Gui.BLACK),
     },
 }
 return tLayout

@@ -1,4 +1,5 @@
-local function _h1(a0,a1,a2,a3,a4,a5,a6) return {key=a0,type=a1,textureName=a2,sSpritesheetPath=a3,pos=a4,scale=a5,color=a6} end
+local LH=require('UI.LH')
+local hl,lc,tex,tx=LH.hl,LH.lc,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local nButtonX, nButtonY = 0, 0
 local nButtonWidth, nButtonHeight  = 160, 37
@@ -33,7 +34,7 @@ return
                 { key = 'ButtonTexture', hidden = true },
                 { key = 'ButtonTexturePressed', hidden = false },
 				{ key = 'CostButton', color = Gui.GREEN, },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -47,7 +48,7 @@ return
                 { key = 'ButtonLabel', color = Gui.BLACK, },
                 { key = 'ButtonTexture', hidden = true },
                 { key = 'ButtonTexturePressed', hidden = false },
-                { playSfx = 'hilight', },
+                hl(),
 				{ key = 'CheckBoxTexture', hidden = true, },
 				{ key = 'CheckBoxTexturePressed', hidden = false, },
 				{ key = 'CostBox', color = Gui.GREEN, scale = { nCostWidthSelected, nCostHeight }, },
@@ -92,39 +93,11 @@ return
 				{ key = 'CostText', color = Gui.AMBER, },
 			},
         },
-		_h1('ButtonTexture', 'uiTexture', 'button_medium', 'UI/Shared', { nButtonX, nButtonY }, { 1, 1 }, Gui.AMBER),
-		{
-			key = 'ButtonTexturePressed',
-			type = 'uiTexture',
-            textureName = 'button_medium_pressed',
-            sSpritesheetPath = 'UI/Shared',
-			pos = { nButtonX, nButtonY },
-			scale = { 1, 1 },
-			color = Gui.AMBER,
-			hidden = true,
-		},
-		_h1('CheckBoxTexture', 'uiTexture', 'checkbox_empty', 'UI/Shared', { nButtonX + 5, nButtonY - 5 }, { 0.85, 0.85 }, Gui.AMBER),
-		{
-			key = 'CheckBoxTexturePressed',
-			type = 'uiTexture',
-            textureName = 'checkbox_checked_inverse',
-            sSpritesheetPath = 'UI/Shared',
-			pos = { nButtonX + 5, nButtonY - 5 },
-			scale = { 0.85, 0.85 },
-			color = Gui.AMBER,
-			hidden = true,
-		},
-        {
-            key = 'ButtonLabel',
-            type = 'textBox',
-            pos = { nButtonX + 19, nButtonY + nTextY },
-			linecode = 'INSPEC086TEXT',
-            style = 'dosissemibold22',
-            rect = { 0, 100, 150, 0 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
+		tex('ButtonTexture','button_medium','UI/Shared',{ nButtonX, nButtonY },Gui.AMBER,{ 1, 1 }),
+		tex('ButtonTexturePressed','button_medium_pressed','UI/Shared',{ nButtonX, nButtonY },Gui.AMBER,{ 1, 1 },true),
+		tex('CheckBoxTexture','checkbox_empty','UI/Shared',{ nButtonX + 5, nButtonY - 5 },Gui.AMBER,{ 0.85, 0.85 }),
+		tex('CheckBoxTexturePressed','checkbox_checked_inverse','UI/Shared',{ nButtonX + 5, nButtonY - 5 },Gui.AMBER,{ 0.85, 0.85 },true),
+        lc('ButtonLabel',{ nButtonX + 19, nButtonY + nTextY },'INSPEC086TEXT','dosissemibold22',{ 0, 100, 150, 0 },Gui.AMBER,'C','C'),
 		{
             key = 'CostBox',
             type = 'onePixelButton',
@@ -132,29 +105,9 @@ return
             scale = { nCostWidth, nCostHeight },
             color = Gui.BLACK,
 		},
-		_h1('CostBoxEndTexture', 'uiTexture', 'button_cost_flag', 'UI/Shared', { nButtonX + nButtonWidth + nCostWidth - 1, nButtonY - 2 }, { 1, 1 }, Gui.BLACK),
-        {
-            key = 'CostLabel',
-            type = 'textBox',
-            pos = { nButtonX + nButtonWidth + 4, nButtonY + nTextY },
-			linecode = 'INSPEC118TEXT',
-            style = 'dosissemibold22',
-            rect = { 0, 100, 175, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
-		_h1('CostIcon', 'uiTexture', 'ui_confirm_iconmatter', 'UI/Shared', { nButtonX + nButtonWidth + 112, nButtonY - 10 }, { 1, 1 }, Gui.AMBER),
-		{
-            key = 'CostText',
-            type = 'textBox',
-            pos = { nButtonX + nButtonWidth + 102, nButtonY + nTextY },
-			text = '11400',
-            style = 'dosissemibold22',
-            rect = { 0, 100, 100, 0 },
-            hAlign = MOAITextBox.CENTER_JUSTIFY,
-            vAlign = MOAITextBox.CENTER_JUSTIFY,
-            color = Gui.AMBER,
-        },
+		tex('CostBoxEndTexture','button_cost_flag','UI/Shared',{ nButtonX + nButtonWidth + nCostWidth - 1, nButtonY - 2 },Gui.BLACK,{ 1, 1 }),
+        lc('CostLabel',{ nButtonX + nButtonWidth + 4, nButtonY + nTextY },'INSPEC118TEXT','dosissemibold22',{ 0, 100, 175, 0 },Gui.AMBER,'L','C'),
+		tex('CostIcon','ui_confirm_iconmatter','UI/Shared',{ nButtonX + nButtonWidth + 112, nButtonY - 10 },Gui.AMBER,{ 1, 1 }),
+		tx('CostText',{ nButtonX + nButtonWidth + 102, nButtonY + nTextY },'11400','dosissemibold22',{ 0, 100, 100, 0 },Gui.AMBER,'C','C'),
     },
 }

@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local lc,px=LH.lc,LH.px
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 286, 98
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 110, -68
@@ -24,13 +26,7 @@ return
     },
     tElements =
     {
-        {
-            key = 'LargeBar',
-            type = 'onePixel',
-            pos = { 0, 0 },
-            scale = { 'g_GuiManager.getUIViewportSizeX()', 'g_GuiManager.getUIViewportSizeY()' },
-            color = Gui.SIDEBAR_BG,
-        },
+        px('LargeBar',{ 0, 0 },{ 'g_GuiManager.getUIViewportSizeX()', 'g_GuiManager.getUIViewportSizeY()' },Gui.SIDEBAR_BG),
         {
             key = 'ZoneScrollPane',
             type = 'scrollPane',
@@ -48,41 +44,9 @@ return
             buttonName='ActionButtonTexture',
             pos = { nRoomScrollerX, -20 },
         },
-        {
-            key = 'SelectBedLabel',
-            type = 'textBox',
-            pos = { 380, -20 },
-            linecode = 'INSPEC162TEXT',
-            style = 'dosismedium44',
-            rect = { 0, 300, 400, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ZoneHeadingShade',
-            type = 'onePixel',
-            pos = { nZoneButtonX, -nHeadingY },
-            scale = { nZoneHeadingWidth, nHeadingHeight },
-            color = Gui.AMBER_OPAQUE,
-        },
-        {
-            key = 'ZoneHeadingDiv',
-            type = 'onePixel',
-            pos = { nZoneButtonX, -(nHeadingY + nHeadingHeight) },
-            scale = { nZoneHeadingWidth, nHeadingLineWidth },
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ZoneHeadingText',
-            type = 'textBox',
-            pos = { nZoneButtonX + 32, -nHeadingY - nHeadingHeight + 40 },
-            linecode = 'RSCHUI003TEXT',
-            style = 'dosissemibold26',
-            rect = { 0, 300, 200, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        lc('SelectBedLabel',{ 380, -20 },'INSPEC162TEXT','dosismedium44',{ 0, 300, 400, 0 },Gui.AMBER),
+        px('ZoneHeadingShade',{ nZoneButtonX, -nHeadingY },{ nZoneHeadingWidth, nHeadingHeight },Gui.AMBER_OPAQUE),
+        px('ZoneHeadingDiv',{ nZoneButtonX, -(nHeadingY + nHeadingHeight) },{ nZoneHeadingWidth, nHeadingLineWidth },Gui.AMBER),
+        lc('ZoneHeadingText',{ nZoneButtonX + 32, -nHeadingY - nHeadingHeight + 40 },'RSCHUI003TEXT','dosissemibold26',{ 0, 300, 200, 0 },Gui.AMBER),
     },
 }

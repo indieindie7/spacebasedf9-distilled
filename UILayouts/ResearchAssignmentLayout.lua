@@ -1,4 +1,5 @@
-local function _h1(a0,a1,a2,a3,a4) return {key=a0,type=a1,pos=a2,scale=a3,color=a4} end
+local LH=require('UI.LH')
+local hl,lc,px,tx=LH.hl,LH.lc,LH.px,LH.tx
 local Gui = require('UI.Gui')
 local nButtonWidth, nButtonHeight  = 286, 98
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 110, -68
@@ -24,7 +25,7 @@ return
     },
     tElements =
     {
-        _h1('LargeBar', 'onePixel', { 0, 0 }, { 'g_GuiManager.getUIViewportSizeX()', 'g_GuiManager.getUIViewportSizeY()' }, Gui.SIDEBAR_BG),
+        px('LargeBar',{ 0, 0 },{ 'g_GuiManager.getUIViewportSizeX()', 'g_GuiManager.getUIViewportSizeY()' },Gui.SIDEBAR_BG),
         {
             key = 'ProjectScrollPane',
             type = 'scrollPane',
@@ -58,7 +59,7 @@ return
                 { key = 'BackButton', color = Gui.AMBER, },
                 { key = 'BackLabel', color = Gui.BLACK },
                 { key = 'BackHotkey', color = Gui.BLACK },
-                { playSfx = 'hilight', },
+                hl(),
             },
             onHoverOff =
             {
@@ -67,65 +68,15 @@ return
                 { key = 'BackHotkey', color = Gui.AMBER, },
             },
         },
-        {
-            key = 'BackLabel',
-            type = 'textBox',
-            pos = { 96, -20 },
-            linecode = 'HUDHUD035TEXT',
-            style = 'dosisregular40',
-            rect = { 0, 300, 200, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'BackHotkey',
-            type = 'textBox',
-            pos = { nHotkeyX, -60 },
-            text = 'ESC',
-            style = 'dosissemibold22',
-            rect = { 0, 100, 100, 0 },
-            hAlign = MOAITextBox.RIGHT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        {
-            key = 'ResearchLabel',
-            type = 'textBox',
-            pos = { 380, -20 },
-            linecode = 'HUDHUD048TEXT',
-            style = 'dosismedium44',
-            rect = { 0, 300, 400, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        _h1('ZoneHeadingShade', 'onePixel', { nZoneButtonX, -nHeadingY }, { nZoneHeadingWidth, nHeadingHeight }, Gui.AMBER_OPAQUE),
-        _h1('ZoneHeadingDiv', 'onePixel', { nZoneButtonX, -(nHeadingY + nHeadingHeight) }, { nZoneHeadingWidth, nHeadingLineWidth }, Gui.AMBER),
-        {
-            key = 'ZoneHeadingText',
-            type = 'textBox',
-            pos = { nZoneButtonX + 32, -nHeadingY - nHeadingHeight + 40 },
-            linecode = 'RSCHUI003TEXT',
-            style = 'dosissemibold26',
-            rect = { 0, 300, 200, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
-        _h1('ProjectHeadingShade', 'onePixel', { nProjectHeadingX, -nHeadingY }, { nProjectHeadingWidth, nHeadingHeight }, Gui.AMBER_OPAQUE),
-        _h1('ProjectHeadingDiv', 'onePixel', { nProjectHeadingX, -(nHeadingY + nHeadingHeight) }, { nProjectHeadingWidth, nHeadingLineWidth }, Gui.AMBER),
-        {
-            key = 'ProjectHeadingText',
-            type = 'textBox',
-            pos = { nProjectHeadingX + 32, -nHeadingY - nHeadingHeight + 40 },
-            linecode = 'RSCHUI004TEXT',
-            style = 'dosissemibold26',
-            rect = { 0, 300, 200, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = Gui.AMBER,
-        },
+        lc('BackLabel',{ 96, -20 },'HUDHUD035TEXT','dosisregular40',{ 0, 300, 200, 0 },Gui.AMBER),
+        tx('BackHotkey',{ nHotkeyX, -60 },'ESC','dosissemibold22',{ 0, 100, 100, 0 },Gui.AMBER,'R'),
+        lc('ResearchLabel',{ 380, -20 },'HUDHUD048TEXT','dosismedium44',{ 0, 300, 400, 0 },Gui.AMBER),
+        px('ZoneHeadingShade',{ nZoneButtonX, -nHeadingY },{ nZoneHeadingWidth, nHeadingHeight },Gui.AMBER_OPAQUE),
+        px('ZoneHeadingDiv',{ nZoneButtonX, -(nHeadingY + nHeadingHeight) },{ nZoneHeadingWidth, nHeadingLineWidth },Gui.AMBER),
+        lc('ZoneHeadingText',{ nZoneButtonX + 32, -nHeadingY - nHeadingHeight + 40 },'RSCHUI003TEXT','dosissemibold26',{ 0, 300, 200, 0 },Gui.AMBER),
+        px('ProjectHeadingShade',{ nProjectHeadingX, -nHeadingY },{ nProjectHeadingWidth, nHeadingHeight },Gui.AMBER_OPAQUE),
+        px('ProjectHeadingDiv',{ nProjectHeadingX, -(nHeadingY + nHeadingHeight) },{ nProjectHeadingWidth, nHeadingLineWidth },Gui.AMBER),
+        lc('ProjectHeadingText',{ nProjectHeadingX + 32, -nHeadingY - nHeadingHeight + 40 },'RSCHUI004TEXT','dosissemibold26',{ 0, 300, 200, 0 },Gui.AMBER),
         {
             key = 'TechTabButton',
             type = 'templateButton',
@@ -150,6 +101,6 @@ return
             buttonName='ActiveTabTexture',
             pos = { 1000 + 172 * nProjectTabScale - 5, -nProjectTabY },
         },
-		_h1('TabLine', 'onePixel', { 1000 + (172 * nProjectTabScale * 2) - 5, -nProjectTabY - (42 * nProjectTabScale) + 3}, { 515, 4 }, Gui.AMBER),
+		px('TabLine',{ 1000 + (172 * nProjectTabScale * 2) - 5, -nProjectTabY - (42 * nProjectTabScale) + 3},{ 515, 4 },Gui.AMBER),
     },
 }

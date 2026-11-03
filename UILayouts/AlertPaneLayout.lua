@@ -1,3 +1,5 @@
+local LH=require('UI.LH')
+local tx=LH.tx
 local Gui = require('UI.Gui')
 return
 {
@@ -42,16 +44,6 @@ return
             scale = { 50, 50 },
             color = Gui.AMBER,
         },
-        {
-            key = 'ButtonLabel',
-            type = 'textBox',
-            pos = { -30, 0 },
-            text = "!",
-            style = 'dosissemibold38',
-            rect = { 0, 300, 450, 0 },
-            hAlign = MOAITextBox.LEFT_JUSTIFY,
-            vAlign = MOAITextBox.LEFT_JUSTIFY,
-            color = { 0, 0, 0 },
-        },
+        tx('ButtonLabel',{ -30, 0 },"!",'dosissemibold38',{ 0, 300, 450, 0 },{ 0, 0, 0 }),
    },
 }
