@@ -7,33 +7,21 @@ local ObjectList=require('ObjectList')
 local Character=require('CharacterConstants')
 local Zone = Class.create()
 Zone.spriteSheetPath='Environments/Tiles/Floor'
+local WALLS={CornerNTop='Corner_outer01_top',CornerNBottom='Corner_outer01_bottom',CornerETop='Corner_lb_top',CornerEBottom='Corner_lb_bottom',CornerSTop='Corner_inner01_top',CornerSBottom='Corner_inner01_bottom',CornerWTop='Corner_rb_top',CornerWBottom='Corner_rb_bottom',TNETop='Corner_T_NE_top',TNEBottom='Corner_T_NE_bottom',TSETop='Corner_T_SE_top',TSEBottom='Corner_T_SE_bottom',TSWTop='Corner_T_SW_top',TSWBottom='Corner_T_SW_bottom',TNWTop='Corner_T_NW_top',TNWBottom='Corner_T_NW_bottom',CrossTop='Corner_cross_top',CrossBottom='Corner_cross_bottom'}
+local function fill(P,col,t)
+ for k,v in pairs(WALLS) do t['wall'..k]=t['wall'..k] or {[P..'_'..v]=1} end
+ t.wallColumnTop=t.wallColumnTop or {[P..'_Corner_'..col..'_top']=1}
+ t.wallColumnBottom=t.wallColumnBottom or {[P..'_Corner_'..col..'_bottom']=1}
+ return t
+end
 Zone.PLAIN =
+fill('Base','cross',
 {
     name='Unzoned',
     floorNames={ 'base01', },
     description="ZONEUI006TEXT",
 	wallStraightTop = {Base_Straight01_top=15, Base_Straight02_top=1, Base_Straight03_top=30, Base_Straight04_top=2},
 	wallStraightBottom = {Base_Straight01_bottom=5, Base_Straight02_bottom=2, Base_Straight03_bottom=1},
-	wallCornerNTop = {Base_Corner_outer01_top=1},
-	wallCornerNBottom = {Base_Corner_outer01_bottom=1},
-	wallCornerETop = {Base_Corner_lb_top=1},
-	wallCornerEBottom = {Base_Corner_lb_bottom=1},
-	wallCornerSTop = {Base_Corner_inner01_top=1},
-	wallCornerSBottom = {Base_Corner_inner01_bottom=1},
-	wallCornerWTop = {Base_Corner_rb_top=1},
-	wallCornerWBottom = {Base_Corner_rb_bottom=1},
-	wallTNETop = {Base_Corner_T_NE_top=1},
-	wallTNEBottom = {Base_Corner_T_NE_bottom=1},
-	wallTSETop = {Base_Corner_T_SE_top=1},
-	wallTSEBottom = {Base_Corner_T_SE_bottom=1},
-	wallTSWTop = {Base_Corner_T_SW_top=1},
-	wallTSWBottom = {Base_Corner_T_SW_bottom=1},
-	wallTNWTop = {Base_Corner_T_NW_top=1},
-	wallTNWBottom = {Base_Corner_T_NW_bottom=1},
-	wallCrossTop = {Base_Corner_cross_top=1},
-	wallCrossBottom = {Base_Corner_cross_bottom=1},
-	wallColumnTop = {Base_Corner_cross_top=1},
-	wallColumnBottom = {Base_Corner_cross_bottom=1},
     tAmbientLightColor = { 0.6*0.6, 0.55*0.6, 0.45*0.6 },
     tRoomLights =
     {
@@ -42,8 +30,9 @@ Zone.PLAIN =
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickunzoned',
     portrait = 'Zone_Unzoned'
-}
+})
 Zone.GARDEN =
+fill('Garden','outer01',
 {
     name='Garden',
     description="ZONEUI070TEXT",
@@ -51,26 +40,6 @@ Zone.GARDEN =
     associatedJob=Character.BOTANIST,
     wallStraightTop = { Garden_Straight01_top=1, Garden_Straight02_top=10, Garden_Straight03_top=2 },
     wallStraightBottom = {Garden_Straight01_bottom=5,Garden_Straight02_bottom=5,Garden_Straight03_bottom=1},
-    wallCornerNTop = {Garden_Corner_outer01_top=1},
-    wallCornerNBottom = {Garden_Corner_outer01_bottom=1},
-    wallCornerETop = {Garden_Corner_lb_top=1},
-    wallCornerEBottom = {Garden_Corner_lb_bottom=1},
-    wallCornerSTop = {Garden_Corner_inner01_top=1},
-    wallCornerSBottom = {Garden_Corner_inner01_bottom=1},
-    wallCornerWTop = {Garden_Corner_rb_top=1},
-    wallCornerWBottom = {Garden_Corner_rb_bottom=1},
-    wallTNETop = {Garden_Corner_T_NE_top=1},
-    wallTNEBottom = {Garden_Corner_T_NE_bottom=1},
-    wallTSETop = {Garden_Corner_T_SE_top=1},
-    wallTSEBottom = {Garden_Corner_T_SE_bottom=1},
-    wallTSWTop = {Garden_Corner_T_SW_top=1},
-    wallTSWBottom = {Garden_Corner_T_SW_bottom=1},
-    wallTNWTop = {Garden_Corner_T_NW_top=1},
-    wallTNWBottom = {Garden_Corner_T_NW_bottom=1},
-    wallCrossTop = {Garden_Corner_cross_top=1},
-    wallCrossBottom = {Garden_Corner_cross_bottom=1},
-    wallColumnTop = {Garden_Corner_outer01_top=1},
-    wallColumnBottom = {Garden_Corner_outer01_bottom=1},
     tAmbientLightColor = {0.5, 0.5, 0.5 },
     tRoomLights =
     {
@@ -79,8 +48,9 @@ Zone.GARDEN =
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickbar',
     portrait = 'Zone_Garden',
-}
+})
 Zone.INFIRMARY =
+fill('Infirmary','outer01',
 {
     name='Infirmary',
     description="ZONEUI048TEXT",
@@ -88,26 +58,6 @@ Zone.INFIRMARY =
     associatedJob=Character.DOCTOR,
     wallStraightTop = { Infirmary_Straight02_top=10, Infirmary_Straight01_top=3,Infirmary_Straight03_top=5, },
     wallStraightBottom = {Infirmary_Straight01_bottom=10,},
-    wallCornerNTop = {Infirmary_Corner_outer01_top=1},
-    wallCornerNBottom = {Infirmary_Corner_outer01_bottom=1},
-    wallCornerETop = {Infirmary_Corner_lb_top=1},
-    wallCornerEBottom = {Infirmary_Corner_lb_bottom=1},
-    wallCornerSTop = {Infirmary_Corner_inner01_top=1},
-    wallCornerSBottom = {Infirmary_Corner_inner01_bottom=1},
-    wallCornerWTop = {Infirmary_Corner_rb_top=1},
-    wallCornerWBottom = {Infirmary_Corner_rb_bottom=1},
-    wallTNETop = {Infirmary_Corner_T_NE_top=1},
-    wallTNEBottom = {Infirmary_Corner_T_NE_bottom=1},
-    wallTSETop = {Infirmary_Corner_T_SE_top=1},
-    wallTSEBottom = {Infirmary_Corner_T_SE_bottom=1},
-    wallTSWTop = {Infirmary_Corner_T_SW_top=1},
-    wallTSWBottom = {Infirmary_Corner_T_SW_bottom=1},
-    wallTNWTop = {Infirmary_Corner_T_NW_top=1},
-    wallTNWBottom = {Infirmary_Corner_T_NW_bottom=1},
-    wallCrossTop = {Infirmary_Corner_cross_top=1},
-    wallCrossBottom = {Infirmary_Corner_cross_bottom=1},
-    wallColumnTop = {Infirmary_Corner_outer01_top=1},
-    wallColumnBottom = {Infirmary_Corner_outer01_bottom=1},
     tAmbientLightColor = { 0.65, 0.65, 0.65 },
     tRoomLights =
     {
@@ -117,8 +67,9 @@ Zone.INFIRMARY =
     clickSound = 'clickbar',
     class='Zones.HospitalZone',
     portrait = 'Zone_Infirmary',
-}
+})
 Zone.LIFESUPPORT =
+fill('LifeSupport','cross',
 {
     name='Life Support',
     description="ZONEUI002TEXT",
@@ -126,25 +77,7 @@ Zone.LIFESUPPORT =
     associatedJob=Character.TECHNICIAN,
 	wallStraightTop = {LifeSupport_Straight01_top=40, LifeSupport_Straight02_top=1, LifeSupport_Straight03_top=2},
 	wallStraightBottom = {LifeSupport_Straight01_bottom=1},
-	wallCornerNTop = {LifeSupport_Corner_outer01_top=1},
 	wallCornerNBottom = {LifeSupport_Corner_outerr01_bottom=1},
-	wallCornerETop = {LifeSupport_Corner_lb_top=1},
-	wallCornerEBottom = {LifeSupport_Corner_lb_bottom=1},
-	wallCornerSTop = {LifeSupport_Corner_inner01_top=1},
-	wallCornerSBottom = {LifeSupport_Corner_inner01_bottom=1},
-	wallCornerWTop = {LifeSupport_Corner_rb_top=1},
-	wallCornerWBottom = {LifeSupport_Corner_rb_bottom=1},
-	wallTNETop = {LifeSupport_Corner_T_NE_top=1},
-	wallTNEBottom = {LifeSupport_Corner_T_NE_bottom=1},
-	wallTSETop = {LifeSupport_Corner_T_SE_top=1},
-	wallTSEBottom = {LifeSupport_Corner_T_SE_bottom=1},
-	wallTSWTop = {LifeSupport_Corner_T_SW_top=1},
-	wallTSWBottom = {LifeSupport_Corner_T_SW_bottom=1},
-	wallTNWTop = {LifeSupport_Corner_T_NW_top=1},
-	wallTNWBottom = {LifeSupport_Corner_T_NW_bottom=1},
-	wallCrossTop = {LifeSupport_Corner_cross_top=1},
-	wallCrossBottom = {LifeSupport_Corner_cross_bottom=1},
-	wallColumnTop = {LifeSupport_Corner_outer01_top=1},
 	wallColumnBottom = {LifeSupport_Corner_outerr01_bottom=1},
     tAmbientLightColor = {0.2, 0.3, 0.6 },
     tRoomLights =
@@ -154,34 +87,15 @@ Zone.LIFESUPPORT =
     sLightSpriteName = 'directionalcast',
     clickSound = 'clicklifesupport',
     portrait = 'Zone_LifeSupport',
-}
+})
 Zone.RESIDENCE =
+fill('Residence','cross',
 {
     name='Residential Zone',
     description="ZONEUI043TEXT",
     floorNames={ 'Residence', },
 	wallStraightTop = {Residence_Straight01_top=1, Residence_Straight02_top=10, Residence_Straight03_top=1},
     wallStraightBottom = {Residence_Straight01_bottom=1},
-	wallCornerNTop = {Residence_Corner_outer01_top=1},
-	wallCornerNBottom = {Residence_Corner_outer01_bottom=1},
-	wallCornerETop = {Residence_Corner_lb_top=1},
-	wallCornerEBottom = {Residence_Corner_lb_bottom=1},
-	wallCornerSTop = {Residence_Corner_inner01_top=1},
-	wallCornerSBottom = {Residence_Corner_inner01_bottom=1},
-	wallCornerWTop = {Residence_Corner_rb_top=1},
-	wallCornerWBottom = {Residence_Corner_rb_bottom=1},
-	wallTNETop = {Residence_Corner_T_NE_top=1},
-	wallTNEBottom = {Residence_Corner_T_NE_bottom=1},
-	wallTSETop = {Residence_Corner_T_SE_top=1},
-	wallTSEBottom = {Residence_Corner_T_SE_bottom=1},
-	wallTSWTop = {Residence_Corner_T_SW_top=1},
-	wallTSWBottom = {Residence_Corner_T_SW_bottom=1},
-	wallTNWTop = {Residence_Corner_T_NW_top=1},
-	wallTNWBottom = {Residence_Corner_T_NW_bottom=1},
-	wallCrossTop = {Residence_Corner_cross_top=1},
-	wallCrossBottom = {Residence_Corner_cross_bottom=1},
-	wallColumnTop = {Residence_Corner_cross_top=1},
-	wallColumnBottom = {Residence_Corner_cross_bottom=1},
     tAmbientLightColor = { 0.52, 0.485, 0.41 },
     tRoomLights =
     {
@@ -191,8 +105,9 @@ Zone.RESIDENCE =
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickresidence',
     portrait = 'Zone_Residence',
-}
+})
 Zone.PUB =
+fill('Pub','outer01',
 {
     name='Pub',
     description="ZONEUI047TEXT",
@@ -200,26 +115,6 @@ Zone.PUB =
     associatedJob=Character.BARTENDER,
 	wallStraightTop = {Pub_Straight01_top=1},
 	wallStraightBottom = {Pub_Straight01_bottom=1},
-	wallCornerNTop = {Pub_Corner_outer01_top=1},
-	wallCornerNBottom = {Pub_Corner_outer01_bottom=1},
-	wallCornerETop = {Pub_Corner_lb_top=1},
-	wallCornerEBottom = {Pub_Corner_lb_bottom=1},
-	wallCornerSTop = {Pub_Corner_inner01_top=1},
-	wallCornerSBottom = {Pub_Corner_inner01_bottom=1},
-	wallCornerWTop = {Pub_Corner_rb_top=1},
-	wallCornerWBottom = {Pub_Corner_rb_bottom=1},
-	wallTNETop = {Pub_Corner_T_NE_top=1},
-	wallTNEBottom = {Pub_Corner_T_NE_bottom=1},
-	wallTSETop = {Pub_Corner_T_SE_top=1},
-	wallTSEBottom = {Pub_Corner_T_SE_bottom=1},
-	wallTSWTop = {Pub_Corner_T_SW_top=1},
-	wallTSWBottom = {Pub_Corner_T_SW_bottom=1},
-	wallTNWTop = {Pub_Corner_T_NW_top=1},
-	wallTNWBottom = {Pub_Corner_T_NW_bottom=1},
-	wallCrossTop = {Pub_Corner_cross_top=1},
-	wallCrossBottom = {Pub_Corner_cross_bottom=1},
-	wallColumnTop = {Pub_Corner_outer01_top=1},
-	wallColumnBottom = {Pub_Corner_outer01_bottom=1},
     tAmbientLightColor = { 0.8, 0.5, 1.0  },
     tRoomLights =
     {
@@ -229,8 +124,9 @@ Zone.PUB =
     class='Zones.Pub',
     clickSound = 'clickbar',
     portrait = 'Zone_Pub',
-}
+})
 Zone.POWER =
+fill('Reactor','cross',
 {
     name='Power Reactor',
     description="ZONEUI004TEXT",
@@ -238,26 +134,6 @@ Zone.POWER =
     associatedJob=Character.TECHNICIAN,
 	wallStraightTop = {Reactor_Straight01_top=3, Reactor_Straight02_top=1},
 	wallStraightBottom = {Reactor_Straight01_bottom=5, Reactor_Straight02_bottom=2},
-	wallCornerNTop = {Reactor_Corner_outer01_top=1},
-	wallCornerNBottom = {Reactor_Corner_outer01_bottom=1},
-	wallCornerETop = {Reactor_Corner_lb_top=1},
-	wallCornerEBottom = {Reactor_Corner_lb_bottom=1},
-	wallCornerSTop = {Reactor_Corner_inner01_top=1},
-	wallCornerSBottom = {Reactor_Corner_inner01_bottom=1},
-	wallCornerWTop = {Reactor_Corner_rb_top=1},
-	wallCornerWBottom = {Reactor_Corner_rb_bottom=1},
-	wallTNETop = {Reactor_Corner_T_NE_top=1},
-	wallTNEBottom = {Reactor_Corner_T_NE_bottom=1},
-	wallTSETop = {Reactor_Corner_T_SE_top=1},
-	wallTSEBottom = {Reactor_Corner_T_SE_bottom=1},
-	wallTSWTop = {Reactor_Corner_T_SW_top=1},
-	wallTSWBottom = {Reactor_Corner_T_SW_bottom=1},
-	wallTNWTop = {Reactor_Corner_T_NW_top=1},
-	wallTNWBottom = {Reactor_Corner_T_NW_bottom=1},
-	wallCrossTop = {Reactor_Corner_cross_top=1},
-	wallCrossBottom = {Reactor_Corner_cross_bottom=1},
-	wallColumnTop = {Reactor_Corner_cross_top=1},
-	wallColumnBottom = {Reactor_Corner_cross_bottom=1},
     tAmbientLightColor = { 0.5, 0.2, 0.2 },
     tRoomLights =
     {
@@ -266,34 +142,15 @@ Zone.POWER =
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickreactor',
     portrait = 'Zone_Power',
-}
+})
 Zone.AIRLOCK =
+fill('Airlock','cross',
 {
     name='Airlock',
     description="ZONEUI038TEXT",
     floorNames={ 'airlock02','airlock01', },
 	wallStraightTop = {Airlock_Straight01_top=1, Airlock_Straight02_top=1, Airlock_Straight03_top=4, Airlock_Straight04_top=1},
 	wallStraightBottom = {Airlock_Straight01_bottom=1, Airlock_Straight02_bottom=1},
-	wallCornerNTop = {Airlock_Corner_outer01_top=1},
-	wallCornerNBottom = {Airlock_Corner_outer01_bottom=1},
-	wallCornerETop = {Airlock_Corner_lb_top=1},
-	wallCornerEBottom = {Airlock_Corner_lb_bottom=1},
-	wallCornerSTop = {Airlock_Corner_inner01_top=1},
-	wallCornerSBottom = {Airlock_Corner_inner01_bottom=1},
-	wallCornerWTop = {Airlock_Corner_rb_top=1},
-	wallCornerWBottom = {Airlock_Corner_rb_bottom=1},
-	wallTNETop = {Airlock_Corner_T_NE_top=1},
-	wallTNEBottom = {Airlock_Corner_T_NE_bottom=1},
-	wallTSETop = {Airlock_Corner_T_SE_top=1},
-	wallTSEBottom = {Airlock_Corner_T_SE_bottom=1},
-	wallTSWTop = {Airlock_Corner_T_SW_top=1},
-	wallTSWBottom = {Airlock_Corner_T_SW_bottom=1},
-	wallTNWTop = {Airlock_Corner_T_NW_top=1},
-	wallTNWBottom = {Airlock_Corner_T_NW_bottom=1},
-	wallCrossTop = {Airlock_Corner_cross_top=1},
-	wallCrossBottom = {Airlock_Corner_cross_bottom=1},
-	wallColumnTop = {Airlock_Corner_cross_top=1},
-	wallColumnBottom = {Airlock_Corner_cross_bottom=1},
     tAmbientLightColor = { 0.3, 0.5, 0.6 },
     tRoomLights =
     {
@@ -303,8 +160,9 @@ Zone.AIRLOCK =
     class='Zones.Airlock',
     clickSound = 'clickairlock',
     portrait = 'Zone_Airlock',
-}
+})
 Zone.REFINERY =
+fill('Refinery','cross',
 {
     name='Refinery',
     description="ZONEUI039TEXT",
@@ -312,26 +170,6 @@ Zone.REFINERY =
     associatedJob=Character.MINER,
 	wallStraightTop = {Refinery_Straight01_top=1},
 	wallStraightBottom = {Refinery_Straight01_bottom=1},
-	wallCornerNTop = {Refinery_Corner_outer01_top=1},
-	wallCornerNBottom = {Refinery_Corner_outer01_bottom=1},
-	wallCornerETop = {Refinery_Corner_lb_top=1},
-	wallCornerEBottom = {Refinery_Corner_lb_bottom=1},
-	wallCornerSTop = {Refinery_Corner_inner01_top=1},
-	wallCornerSBottom = {Refinery_Corner_inner01_bottom=1},
-	wallCornerWTop = {Refinery_Corner_rb_top=1},
-	wallCornerWBottom = {Refinery_Corner_rb_bottom=1},
-	wallTNETop = {Refinery_Corner_T_NE_top=1},
-	wallTNEBottom = {Refinery_Corner_T_NE_bottom=1},
-	wallTSETop = {Refinery_Corner_T_SE_top=1},
-	wallTSEBottom = {Refinery_Corner_T_SE_bottom=1},
-	wallTSWTop = {Refinery_Corner_T_SW_top=1},
-	wallTSWBottom = {Refinery_Corner_T_SW_bottom=1},
-	wallTNWTop = {Refinery_Corner_T_NW_top=1},
-	wallTNWBottom = {Refinery_Corner_T_NW_bottom=1},
-	wallCrossTop = {Refinery_Corner_cross_top=1},
-	wallCrossBottom = {Refinery_Corner_cross_bottom=1},
-	wallColumnTop = {Refinery_Corner_cross_top=1},
-	wallColumnBottom = {Refinery_Corner_cross_bottom=1},
     tAmbientLightColor = { .47/2, .44/2, .53/2 },
     tRoomLights =
     {
@@ -340,98 +178,41 @@ Zone.REFINERY =
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickrefinery',
     portrait = 'Zone_Refinery',
-}
+})
 Zone.EXTERIOR =
+fill('Exterior','cross',
 {
     name='External',
     floorNames={ 'base01', },
 	wallStraightTop = {Exterior_Straight01_top=4, Exterior_Straight02_top=15},
 	wallStraightBottom = {Exterior_Straight01_bottom=5},
-	wallCornerNTop = {Exterior_Corner_outer01_top=1},
-	wallCornerNBottom = {Exterior_Corner_outer01_bottom=1},
-	wallCornerETop = {Exterior_Corner_lb_top=1},
-	wallCornerEBottom = {Exterior_Corner_lb_bottom=1},
-	wallCornerSTop = {Exterior_Corner_inner01_top=1},
-	wallCornerSBottom = {Exterior_Corner_inner01_bottom=1},
-	wallCornerWTop = {Exterior_Corner_rb_top=1},
-	wallCornerWBottom = {Exterior_Corner_rb_bottom=1},
-	wallTNETop = {Exterior_Corner_T_NE_top=1},
-	wallTNEBottom = {Exterior_Corner_T_NE_bottom=1},
-	wallTSETop = {Exterior_Corner_T_SE_top=1},
-	wallTSEBottom = {Exterior_Corner_T_SE_bottom=1},
-	wallTSWTop = {Exterior_Corner_T_SW_top=1},
-	wallTSWBottom = {Exterior_Corner_T_SW_bottom=1},
-	wallTNWTop = {Exterior_Corner_T_NW_top=1},
-	wallTNWBottom = {Exterior_Corner_T_NW_bottom=1},
-	wallCrossTop = {Exterior_Corner_cross_top=1},
-	wallCrossBottom = {Exterior_Corner_cross_bottom=1},
-	wallColumnTop = {Exterior_Corner_cross_top=1},
-	wallColumnBottom = {Exterior_Corner_cross_bottom=1},
     tRoomLights =
     {
         _h1({0.8, 1.0, 0.2}, 3, 3, 3),
     },
     sLightSpriteName = 'directionalcast',
     clickSound = 'clickunzoned',
-}
+})
 Zone.CONSTRUCTION =
+fill('Wireframe','cross',
 {
     name='Construction',
     floorNames={ 'base01', },
 	wallStraightTop = {Wireframe_Straight01_top=1},
 	wallStraightBottom = {Wireframe_Straight01_bottom=1},
-	wallCornerNTop = {Wireframe_Corner_outer01_top=1},
-	wallCornerNBottom = {Wireframe_Corner_outer01_bottom=1},
-	wallCornerETop = {Wireframe_Corner_lb_top=1},
-	wallCornerEBottom = {Wireframe_Corner_lb_bottom=1},
-	wallCornerSTop = {Wireframe_Corner_inner01_top=1},
-	wallCornerSBottom = {Wireframe_Corner_inner01_bottom=1},
-	wallCornerWTop = {Wireframe_Corner_rb_top=1},
-	wallCornerWBottom = {Wireframe_Corner_rb_bottom=1},
-	wallTNETop = {Wireframe_Corner_T_NE_top=1},
-	wallTNEBottom = {Wireframe_Corner_T_NE_bottom=1},
-	wallTSETop = {Wireframe_Corner_T_SE_top=1},
-	wallTSEBottom = {Wireframe_Corner_T_SE_bottom=1},
-	wallTSWTop = {Wireframe_Corner_T_SW_top=1},
-	wallTSWBottom = {Wireframe_Corner_T_SW_bottom=1},
-	wallTNWTop = {Wireframe_Corner_T_NW_top=1},
-	wallTNWBottom = {Wireframe_Corner_T_NW_bottom=1},
-	wallCrossTop = {Wireframe_Corner_cross_top=1},
-	wallCrossBottom = {Wireframe_Corner_cross_bottom=1},
-	wallColumnTop = {Wireframe_Corner_cross_top=1},
-	wallColumnBottom = {Wireframe_Corner_cross_bottom=1},
     tRoomLights =
     {
         _h1({0.8, 1.0, 0.2}, 3, 3, 3),
     },
-}
+})
 Zone.FITNESS =
+fill('Fitness','outer01',
 {
     name='Fitness',
     description="ZONEUI110TEXT",
     floorNames={ 'airlock01', 'airlock02', },
     wallStraightTop = { Fitness_Straight01_top=10, Fitness_Straight02_top=1, },
     wallStraightBottom = {Fitness_Straight01_bottom=10,Fitness_Straight02_bottom=1,},
-    wallCornerNTop = {Fitness_Corner_outer01_top=1},
-    wallCornerNBottom = {Fitness_Corner_outer01_bottom=1},
-    wallCornerETop = {Fitness_Corner_lb_top=1},
-    wallCornerEBottom = {Fitness_Corner_lb_bottom=1},
-    wallCornerSTop = {Fitness_Corner_inner01_top=1},
-    wallCornerSBottom = {Fitness_Corner_inner01_bottom=1},
-    wallCornerWTop = {Fitness_Corner_rb_top=1},
-    wallCornerWBottom = {Fitness_Corner_rb_bottom=1},
-    wallTNETop = {Fitness_Corner_T_NE_top=1},
-    wallTNEBottom = {Fitness_Corner_T_NE_bottom=1},
-    wallTSETop = {Fitness_Corner_T_SE_top=1},
-    wallTSEBottom = {Fitness_Corner_T_SE_bottom=1},
-    wallTSWTop = {Fitness_Corner_T_SW_top=1},
-    wallTSWBottom = {Fitness_Corner_T_SW_bottom=1},
-    wallTNWTop = {Fitness_Corner_T_NW_top=1},
-    wallTNWBottom = {Fitness_Corner_T_NW_bottom=1},
-    wallCrossTop = {Fitness_Corner_cross_top=1},
-    wallCrossBottom = {Fitness_Corner_cross_bottom=1},
-    wallColumnTop = {Fitness_Corner_outer01_top=1},
-    wallColumnBottom = {Fitness_Corner_outer01_bottom=1},
     tAmbientLightColor = { 0.6, 0.6, 0.6 },
     tRoomLights =
     {
@@ -441,8 +222,9 @@ Zone.FITNESS =
     clickSound = 'clickbar',
     class='Zones.FitnessZone',
     portrait = 'Zone_Fitness',
-}
+})
 Zone.RESEARCH =
+fill('Research','outer01',
 {
     name='Research Lab',
     description="ZONEUI127TEXT",
@@ -450,26 +232,6 @@ Zone.RESEARCH =
     associatedJob=Character.SCIENTIST,
     wallStraightTop = { Research_Straight02_top=2, Research_Straight01_top=1, },
     wallStraightBottom = {Research_Straight01_bottom=10,},
-    wallCornerNTop = {Research_Corner_outer01_top=1},
-    wallCornerNBottom = {Research_Corner_outer01_bottom=1},
-    wallCornerETop = {Research_Corner_lb_top=1},
-    wallCornerEBottom = {Research_Corner_lb_bottom=1},
-    wallCornerSTop = {Research_Corner_inner01_top=1},
-    wallCornerSBottom = {Research_Corner_inner01_bottom=1},
-    wallCornerWTop = {Research_Corner_rb_top=1},
-    wallCornerWBottom = {Research_Corner_rb_bottom=1},
-    wallTNETop = {Research_Corner_T_NE_top=1},
-    wallTNEBottom = {Research_Corner_T_NE_bottom=1},
-    wallTSETop = {Research_Corner_T_SE_top=1},
-    wallTSEBottom = {Research_Corner_T_SE_bottom=1},
-    wallTSWTop = {Research_Corner_T_SW_top=1},
-    wallTSWBottom = {Research_Corner_T_SW_bottom=1},
-    wallTNWTop = {Research_Corner_T_NW_top=1},
-    wallTNWBottom = {Research_Corner_T_NW_bottom=1},
-    wallCrossTop = {Research_Corner_cross_top=1},
-    wallCrossBottom = {Research_Corner_cross_bottom=1},
-    wallColumnTop = {Research_Corner_outer01_top=1},
-    wallColumnBottom = {Research_Corner_outer01_bottom=1},
     tAmbientLightColor = { 0.3, 0.5, 0.6 },
     tRoomLights =
     {
@@ -479,34 +241,17 @@ Zone.RESEARCH =
     clickSound = 'clickbar',
     class='Zones.ResearchZone',
     portrait = 'Zone_Research',
-}
+})
 Zone.BRIG =
+fill('Brig','outer01',
 {
     name='Brig',
     description="ZONEUI146TEXT",
     floorNames={ 'brig01','brig02', 'brig02','brig02','brig02','brig02','brig02','brig02', 'brig03', },
     wallStraightTop = { Brig_Straight02_top=1, Brig_Straight01_top=2, },
     wallStraightBottom = {Brig_Straight01_bottom=5, Brig_Straight02_bottom=1},
-    wallCornerNTop = {Brig_Corner_outer01_top=1},
     wallCornerNBottom = {Research_Corner_outer01_bottom=1},
-    wallCornerETop = {Brig_Corner_lb_top=1},
     wallCornerEBottom = {Research_Corner_lb_bottom=1},
-    wallCornerSTop = {Brig_Corner_inner01_top=1},
-    wallCornerSBottom = {Brig_Corner_inner01_bottom=1},
-    wallCornerWTop = {Brig_Corner_rb_top=1},
-    wallCornerWBottom = {Brig_Corner_rb_bottom=1},
-    wallTNETop = {Brig_Corner_T_NE_top=1},
-    wallTNEBottom = {Brig_Corner_T_NE_bottom=1},
-    wallTSETop = {Brig_Corner_T_SE_top=1},
-    wallTSEBottom = {Brig_Corner_T_SE_bottom=1},
-    wallTSWTop = {Brig_Corner_T_SW_top=1},
-    wallTSWBottom = {Brig_Corner_T_SW_bottom=1},
-    wallTNWTop = {Brig_Corner_T_NW_top=1},
-    wallTNWBottom = {Brig_Corner_T_NW_bottom=1},
-    wallCrossTop = {Brig_Corner_cross_top=1},
-    wallCrossBottom = {Brig_Corner_cross_bottom=1},
-    wallColumnTop = {Brig_Corner_outer01_top=1},
-    wallColumnBottom = {Brig_Corner_outer01_bottom=1},
     tAmbientLightColor = { 0.4, 0.45, 0.5 },
     tRoomLights =
     {
@@ -516,7 +261,7 @@ Zone.BRIG =
     clickSound = 'clickbar',
     portrait = 'Zone_Unzoned',
     class='Zones.BrigZone',
-}
+})
 Zone.tOrderedZoneList=
 {
     'PLAIN','GARDEN','INFIRMARY','LIFESUPPORT','RESIDENCE','PUB','POWER',
