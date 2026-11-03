@@ -1,14 +1,14 @@
 # Spacebase DF-9 - distilled Lua
 
 Smaller copy of the game scripts of *Spacebase DF-9* (Double Fine Productions). Same behaviour, less code.
-Code by Double Fine Productions, "Copyright (c) 2012 Double Fine Productions", licensed CPAL-1.0 (see `COPYING`).
+Code by Double Fine Productions, "Copyright (c) 2012 Double Fine Productions", licensed CPAL-1.0 (see `COPYING`). The CPAL-1.0 licence is taken from the community fork https://gitlab.com/derelictgames/spacebase-v2-updated-code; the Steam install itself ships no licence text, only the copyright headers.
 This repo holds only Lua source and text. No art, audio or binaries. You need your own legal copy of the game.
 
 ## Size
 | | files | lines |
 |---|---|---|
 | shipped (baseline 82b4704) | 465 | 132003 |
-| distilled | 395 | 91784 (-30.5%) |
+| distilled | 395 | 84241 lines, about 636k Lua tokens (baseline 131942 lines, 821434 tokens) |
 
 ## What was cut (commits)
 1. 45f25fb: 70 files unreachable from `config.lua`/`main.lua` (editor/dev tools, analytics/IAP, jit disassemblers, duplicate string table, unused UI/tasks).
