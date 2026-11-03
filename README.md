@@ -8,13 +8,14 @@ This repo holds only Lua source and text. No art, audio or binaries. You need yo
 | | files | lines |
 |---|---|---|
 | shipped (baseline 82b4704) | 465 | 132003 |
-| distilled | 393 | 74743 lines, 562758 Lua tokens (baseline 131942 lines, 776846 tokens by the lexer metric) |
+| distilled | 379 | 71218 lines, 538013 Lua tokens (baseline 131942 lines, 776846 tokens by the lexer metric) |
 
 ## What was cut (commits)
 1. 45f25fb: 70 files unreachable from `config.lua`/`main.lua` (editor/dev tools, analytics/IAP, jit disassemblers, duplicate string table, unused UI/tasks).
 2. 9a04d21: 246 member/local functions whose name appears nowhere else in the code base.
 3. f986ced: comments (license/copyright ones kept), blank lines, trailing whitespace.
 4. bdd6083: `GalaxyData` 4096 one-line rows -> packed 64x64 number array + loader, identical resulting table (checksum verified in game).
+Passes 20-26 (non-gameplay removal): debug/dev, editor/cheats, profiling, crash reporting, credits + options menus, 236 unused linecodes; save-upgrade code kept (shipped modules use save versions 1, 3, 7); platform shims kept (live per-OS branches).
 Passes 13-15: shared UI.LH layout helpers, credits/linecode data, HEAD_TYPE helper, dead-function re-sweep. Remaining candidates (per-file _hN helpers, dup windows) each gain < 0.2%.
 
 ## Verification
