@@ -1,3 +1,4 @@
+local HK = require('UI.HK')
 local m = {}
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
@@ -133,22 +134,7 @@ function m.create()
             self.rSubmenu:refresh()
         end
     end
-    function Ob:addHotkey(sKey, rButton)
-        sKey = string.lower(sKey)
-        local keyCode = -1
-        if sKey == "esc" then
-            keyCode = 27
-        elseif sKey == "ret" then
-            keyCode = 13
-        elseif sKey == "spc" then
-            keyCode = 32
-        else
-            keyCode = string.byte(sKey)
-            local uppercaseKeyCode = string.byte(string.upper(sKey))
-            self.tHotkeyButtons[uppercaseKeyCode] = rButton
-        end
-        self.tHotkeyButtons[keyCode] = rButton
-    end
+    Ob.addHotkey = HK.add
     function Ob:setButtonsLocked(bDisabled, bHoveredOverride)
         local bEnabled = not bDisabled
         self.rInspectButton:setEnabled(bEnabled)
@@ -368,20 +354,7 @@ function m.create()
         end
         return false
     end
-    function Ob:onKeyboard(key, bDown)
-        local bHandled = false
-        if not self.rSubmenu then
-            if bDown and self.tHotkeyButtons[key] then
-                local rButton = self.tHotkeyButtons[key]
-                rButton:keyboardPressed()
-                bHandled = true
-            end
-        end
-        if not bHandled and self.rSubmenu and self.rSubmenu.onKeyboard then
-            bHandled = self.rSubmenu:onKeyboard(key, bDown)
-        end
-        return bHandled
-    end
+    Ob.onKeyboard = HK.key
     function Ob:inside(wx, wy)
         if self.rSubmenu then
             return self.rSubmenu:inside(wx, wy)

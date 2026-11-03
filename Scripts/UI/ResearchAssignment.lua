@@ -1,3 +1,4 @@
+local HK = require('UI.HK')
 local m = {}
 local DFUtil = require("DFCommon.Util")
 local UIElement = require('UI.UIElement')
@@ -49,22 +50,7 @@ function m.create()
         end
         self:applyTemplateInfos(tOverrides)
     end
-    function Ob:addHotkey(sKey, rButton)
-        sKey = string.lower(sKey)
-        local keyCode = -1
-        if sKey == "esc" then
-            keyCode = 27
-        elseif sKey == "ret" or sKey == "ent" then
-            keyCode = 13
-        elseif sKey == "spc" then
-            keyCode = 32
-        else
-            keyCode = string.byte(sKey)
-            local uppercaseKeyCode = string.byte(string.upper(sKey))
-            self.tHotkeyButtons[uppercaseKeyCode] = rButton
-        end
-        self.tHotkeyButtons[keyCode] = rButton
-    end
+    Ob.addHotkey = HK.add
     function Ob:onKeyboard(key, bDown)
         local bHandled = false
         if not self.rSubmenu then
