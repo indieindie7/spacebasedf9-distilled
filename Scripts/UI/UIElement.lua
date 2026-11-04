@@ -1,6 +1,5 @@
 local DFGraphics = require('DFCommon.Graphics')
 local DFFile = require('DFCommon.File')
-local DFMoaiDebugger = require("DFMoai.Debugger")
 local DFMath = require("DFCommon.Math")
 local DFUtil = require('DFCommon.Util')
 local Renderer = require('Renderer')
@@ -26,7 +25,6 @@ function m.create()
         end
         self.tAnimatingObjects = {}
         self.tTickElements = {}
-        DFMoaiDebugger.dFileChanged:register(self.onFileChange,self)
     end
     function Ob:setRenderLayer(sName)
         self.sRenderLayerName = sName
@@ -682,63 +680,19 @@ function m.create()
             return self.tExtraTemplateInfo[sInfoKey]
         end
     end
+    function Ob:applyExtraInfo(sInfoKey)
+        self:applyTemplateInfos(self:getExtraTemplateInfo(sInfoKey))
+    end
+    function Ob:setHostileMode(bSet)
+        self.bHostileMode = bSet
+        self:applyExtraInfo(bSet and 'tHostileMode' or 'tCitizenMode')
+    end
     function Ob:setPosInfo(tPosInfo)
         if not tPosInfo then
             return
         end
         self.tPosInfo = tPosInfo
         self:alignToPosInfo()
-    end
-    function Ob:onFileChange(path)
-        if self.sUILayoutFileName and path == self.sUILayoutFileName then
-            print("RELOADING "..path)
-            local tInfo = dofile(self.sUILayoutFileName)
-            if not tInfo then
-                print("ERROR: Could not reload "..self.sUILayoutFileName)
-                return
-            end
-            if tInfo.posInfo then
-                self.tPosInfo = tInfo.posInfo
-                self:alignToPosInfo()
-            end
-            if self.tTemplateElements then
-                if tInfo.tElements then
-                    for i, tElementInfo in ipairs(tInfo.tElements) do
-                        local sElementName = tElementInfo.key
-                        local rElement = self.tTemplateElements[sElementName]
-                        if not rElement then
-                            return
-                        end
-                        if tElementInfo.tTemplateRect then
-                            rElement:setRect(unpack(tElementInfo.tTemplateRect))
-                        end
-                        if tElementInfo.type then
-                            if tElementInfo.type == 'textBox' then
-                                local sString = ''
-                                if tElementInfo.text then
-                                    sString = tElementInfo.text
-                                elseif tElementInfo.linecode then
-                                    sString = g_LM.line(tElementInfo.linecode)
-                                end
-                                rElement:setString(sString)
-                                rElement:setAlignment(tElementInfo.hAlign or MOAITextBox.LEFT_JUSTIFY,tElementInfo.vAlign or MOAITextBox.LEFT_JUSTIFY)
-                            end
-                        end
-                        self:_applyTemplateInfo(rElement, tElementInfo)
-                    end
-                end
-                if tInfo.tExtraInfo then
-                    self.tExtraTemplateInfo = tInfo.tExtraInfo
-                end
-            end
-        end
-        if self.tElements then
-            for i, rElement in pairs(self.tElements) do
-                if rElement.onFileChange then
-                    rElement:onFileChange(path)
-                end
-            end
-        end
     end
     function Ob:_inBounds(wx,wy)
         local w,h = self:getDims()
@@ -808,9 +762,5 @@ function m.create()
     end
     return Ob
 end
-function m.new(...)
-    local Ob = m.create()
-    Ob:init(...)
-    return Ob
-end
+m.new = DFUtil.constructor(m)
 return m

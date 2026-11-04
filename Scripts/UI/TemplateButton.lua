@@ -4,7 +4,6 @@ local Gui = require('UI.Gui')
 local DFInput = require('DFCommon.Input')
 local Button = require('UI.Button')
 local m = {}
-local PRESSED_SCALE_PCT = 0.7
 function m.create()
     local Ob = DFUtil.createSubclass(Button.create())
     Ob.rTexture = nil
@@ -173,9 +172,5 @@ function m.create()
     end
     return Ob
 end
-function m.new(...)
-    local Ob = m.create()
-    Ob:init(...)
-    return Ob
-end
+m.new = DFUtil.constructor(m)
 return m

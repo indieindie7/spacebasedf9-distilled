@@ -5,7 +5,6 @@ local nButtonWidth, nButtonHeight  = 418, 98
 local nStatLabelMargin, nStatTextMargin  = 35, 210
 local nStatsStartY = 0
 local nLineSize = 40
-local nInspectorWidth = 418
 return
 {
     posInfo =

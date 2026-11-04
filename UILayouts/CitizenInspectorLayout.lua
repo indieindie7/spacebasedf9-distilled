@@ -2,9 +2,6 @@ local LH=require('UI.LH')
 local btn,tex,tx=LH.btn,LH.tex,LH.tx
 local function _h1(a0,a1,a2,a3,a4) return {key=a0,type=a1,pos=a2,scale=a3,color=a4} end
 local Gui = require('UI.Gui')
-local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
-local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
-local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
 local nButtonWidth, nButtonHeight  = 418, 90
 local nTabWidth, nTabHeight = 83, 47
 local nTabLineHeight = 3

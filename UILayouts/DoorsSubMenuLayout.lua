@@ -13,7 +13,6 @@ local nIconX, nIconStartY = 20, -280
 local nLabelX, nLabelStartY =  105, -288
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 112, -330
 local nIconScale = .6
-local numButtons = 7
 local nCancelIconStartY = -82
 local nCancelLabelStartY = -90
 local nCancelHotkeyY = -130

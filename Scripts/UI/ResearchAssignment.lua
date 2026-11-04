@@ -39,15 +39,9 @@ function m.create()
     end
     function Ob:setTechMode(bTech)
         self.bResearchMaladies = not bTech
-        local tOverrides
         self.rTechTabButton:setSelected(bTech)
         self.rDiseaseTabButton:setSelected(not bTech)
-        if self.bResearchMaladies then
-            tOverrides = self:getExtraTemplateInfo('tDiseaseMode')
-        else
-            tOverrides = self:getExtraTemplateInfo('tTechMode')
-        end
-        self:applyTemplateInfos(tOverrides)
+        self:applyExtraInfo(bTech and 'tTechMode' or 'tDiseaseMode')
     end
     Ob.addHotkey = HK.add
     function Ob:onKeyboard(key, bDown)
@@ -301,9 +295,5 @@ function m.create()
     end
     return Ob
 end
-function m.new(...)
-    local Ob = m.create()
-    Ob:init(...)
-    return Ob
-end
+m.new = DFUtil.constructor(m)
 return m

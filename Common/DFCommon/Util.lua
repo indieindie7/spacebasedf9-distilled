@@ -184,6 +184,13 @@ function m.arrayShuffle(array)
     end
     return array
 end
+function m.constructor(klass)
+	return function(...)
+		local Ob = klass.create()
+		Ob:init(...)
+		return Ob
+	end
+end
 function m.createSubclass(parentClass)
 	assert(parentClass)
 	local klass = {}

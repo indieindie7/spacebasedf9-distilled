@@ -11,7 +11,6 @@ local NewBaseInspector = require('UI.NewBaseInspector')
 local MiscUtil = require('MiscUtil')
 local sUILayoutFileName = 'UILayouts/NewBaseLayout'
 local sRenderLayer='UIOverlay'
-local NewBaseStates = { 'Initial', 'SelectedLandingZone', 'ConfirmedLandingZone', 'Deploying', 'Deployed' }
 local defaultHelpTextCode =     'NEWBAS001TEXT'
 local selectedHelpTextCode =    'NEWBAS004TEXT'
 local seedLineCode =            'NEWBAS017TEXT'
@@ -488,9 +487,5 @@ function m.create()
     end
     return Ob
 end
-function m.new(...)
-    local Ob = m.create()
-    Ob:init(...)
-    return Ob
-end
+m.new = DFUtil.constructor(m)
 return m

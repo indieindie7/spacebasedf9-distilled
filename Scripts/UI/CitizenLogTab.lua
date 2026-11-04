@@ -45,25 +45,7 @@ function m.create()
     function Ob:setCitizen(rCitizen)
         self.rCitizen = rCitizen
     end
-    function Ob:setHostileMode(bSet)
-        self.bHostileMode = bSet
-        if bSet then
-            local tOverrides = self:getExtraTemplateInfo('tHostileMode')
-            if tOverrides then
-                self:applyTemplateInfos(tOverrides)
-            end
-        else
-            local tOverrides = self:getExtraTemplateInfo('tCitizenMode')
-            if tOverrides then
-                self:applyTemplateInfos(tOverrides)
-            end
-        end
-    end
     return Ob
 end
-function m.new(...)
-    local Ob = m.create()
-    Ob:init(...)
-    return Ob
-end
+m.new = DFUtil.constructor(m)
 return m

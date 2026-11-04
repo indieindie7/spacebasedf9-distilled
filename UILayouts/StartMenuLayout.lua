@@ -1,8 +1,6 @@
 local LH=require('UI.LH')
 local lc,px,tex=LH.lc,LH.px,LH.tex
 local Gui = require('UI.Gui')
-local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
-local BRIGHT_AMBER = { Gui.BRIGHT_AMBER[1], Gui.BRIGHT_AMBER[2], Gui.BRIGHT_AMBER[3], 1 }
 local PAUSESCREEN_BG = { 0, 0, 0, 0.3 }
 local nMenuItemsX = 100
 local nMOTDX = -900

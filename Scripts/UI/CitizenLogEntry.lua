@@ -47,23 +47,11 @@ function m.create()
     end
     function Ob:setIndex(nIndex)
         if nIndex then
-            local infoToApply = nil
-            if nIndex % 2 == 0 then
-                infoToApply = self:getExtraTemplateInfo('evenIndex')
-            else
-                infoToApply = self:getExtraTemplateInfo('oddIndex')
-            end
-            if infoToApply then
-                self:applyTemplateInfos(infoToApply)
-            end
+            self:applyExtraInfo(nIndex % 2 == 0 and 'evenIndex' or 'oddIndex')
             self.nIndex = nIndex
         end
     end
     return Ob
 end
-function m.new(...)
-    local Ob = m.create()
-    Ob:init(...)
-    return Ob
-end
+m.new = DFUtil.constructor(m)
 return m

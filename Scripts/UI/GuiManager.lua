@@ -21,7 +21,6 @@ local ObjectList = require('ObjectList')
 local EnvObject = require('EnvObjects.EnvObject')
 local Delegate = require('DFMoai.Delegate')
 local BuildHelper = require('UI.BuildHelper')
-local DFMoaiDebugger = require("DFMoai.Debugger")
 local UIEffectMask = require('UI.UIEffectMask')
 local TextureButton = require('UI.TextureButton')
 local TemplateButton = require('UI.TemplateButton')
@@ -780,7 +779,4 @@ function GuiManager.shutdown()
     GuiManager.rSelected = nil
 	GuiManager.hintPane = nil
 end
-function GuiManager.onFileChange(path)
-end
-DFMoaiDebugger.dFileChanged:register(GuiManager.onFileChange)
 return GuiManager

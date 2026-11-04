@@ -5,7 +5,6 @@ local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local nButtonWidth, nButtonHeight  = 104, 81
 local nButtonWidthExpanded = 286
-local nButtonStartY = -204
 local nIconX, nIconStartY = 10, 0
 local nLabelX, nLabelStartY = 105, -10
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 104, -50

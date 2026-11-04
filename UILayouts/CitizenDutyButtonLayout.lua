@@ -1,9 +1,6 @@
 local LH=require('UI.LH')
 local c,px,tex=LH.c,LH.px,LH.tex
 local Gui = require('UI.Gui')
-local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.1 }
-local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
-local SELECTION_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.01 }
 return
 {
     posInfo =

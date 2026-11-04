@@ -2,7 +2,6 @@ local UIElement = require('UI.UIElement')
 local DFUtil = require("DFCommon.Util")
 local DFInput = require('DFCommon.Input')
 local m = {}
-local PRESSED_SCALE_PCT = 0.7
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.bHover = false
@@ -130,9 +129,5 @@ function m.create()
     end
     return Ob
 end
-function m.new(...)
-    local Ob = m.create()
-    Ob:init(...)
-    return Ob
-end
+m.new = DFUtil.constructor(m)
 return m

@@ -11,9 +11,6 @@ local nHeadingHeight = 90
 local nHeadingLineWidth = 4
 local nZoneHeadingWidth = 402
 local nProjectHeadingX = nZoneHeadingWidth + nZoneButtonX + 4
-local nProjectHeadingWidth = 480
-local nProjectTabY = 48
-local nProjectTabScale = 1.25
 return
 {
     posInfo =

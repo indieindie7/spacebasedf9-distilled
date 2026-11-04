@@ -6,7 +6,6 @@ local HintPane = require('UI.HintPane')
 local GameRules = require('GameRules')
 local Base = require('Base')
 local DFInput = require('DFCommon.Input')
-local sUILayoutFileName = 'UILayouts/AlertPaneLayout'
 function m.create()
     local Ob = DFUtil.createSubclass(HintPane.create())
     Ob.tEntries = {}
@@ -40,9 +39,5 @@ function m.create()
     end
     return Ob
 end
-function m.new(...)
-    local Ob = m.create()
-    Ob:init(...)
-    return Ob
-end
+m.new = DFUtil.constructor(m)
 return m

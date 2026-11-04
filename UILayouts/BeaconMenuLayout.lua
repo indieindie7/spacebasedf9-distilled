@@ -5,7 +5,6 @@ local nButtonWidth, nButtonHeight  = 330, 81
 local nTextHeight = nButtonHeight + 20
 local nButtonStartY = -134
 local nIconX, nIconStartY = 10, -136
-local nDoneIconStartY = -2
 local nLabelX, nLabelStartY = 94, -144
 local nLabelNoIconX, nLabelButtonStartY = 10, -10
 local nDoneLabelStartY = -10
@@ -13,7 +12,6 @@ local nHotkeyX, nHotkeyStartY = nButtonWidth - 112, -180
 local nDoneHotkeyY = -46
 local nIconScale = .6
 local numButtons = 4
-local nBGWidth = 160
 return
 {
     posInfo =

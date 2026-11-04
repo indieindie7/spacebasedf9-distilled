@@ -4,7 +4,6 @@ local DFInput = require('DFCommon.Input')
 local ScrollableUI = require('UI.ScrollableUI')
 local ZoneResearchPane = require('UI.ZoneResearchPane')
 local UIElement = require('UI.UIElement')
-local sUILayoutFileName = 'UILayouts/ZoneSpecificTabLayout'
 function m.create()
     local Ob = DFUtil.createSubclass(UIElement.create())
     Ob.rZone = nil
@@ -45,9 +44,5 @@ function m.create()
     end
     return Ob
 end
-function m.new(...)
-    local Ob = m.create()
-    Ob:init(...)
-    return Ob
-end
+m.new = DFUtil.constructor(m)
 return m

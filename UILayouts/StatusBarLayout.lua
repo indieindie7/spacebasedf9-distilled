@@ -17,8 +17,6 @@ local sFlipArrowsX = sFlipBorderX .. ' + 76'
 local sFlipArrowsY = sFlipBorderTopY .. ' - 124'
 local sFlipButtonX = sFlipBorderX .. ' + 1'
 local sFlipButtonY = sFlipBorderTopY .. ' - 1'
-local nFlipButtonW = 193
-local nFlipButtonH = 206
 local nAlertExpandedOffsetX = -480
 return
 {

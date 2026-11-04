@@ -111,16 +111,7 @@ function m.create()
     end
     function Ob:setMatterCostVisible(bVisible)
         if self.bMatterCostVisible ~= bVisible then
-            local sTemplateInfoToApply = nil
-            if bVisible then
-                sTemplateInfoToApply = 'onShowMatterCost'
-            else
-                sTemplateInfoToApply = 'onHideMatterCost'
-            end
-            local tInfo = self:getExtraTemplateInfo(sTemplateInfoToApply)
-            if tInfo then
-                self:applyTemplateInfos(tInfo)
-            end
+            self:applyExtraInfo(bVisible and 'onShowMatterCost' or 'onHideMatterCost')
             self.bMatterCostVisible = bVisible
             self.rConfirmButton:setEnabled(true)
         end
@@ -154,9 +145,5 @@ function m.create()
     end
     return Ob
 end
-function m.new(...)
-    local Ob = m.create()
-    Ob:init(...)
-    return Ob
-end
+m.new = DFUtil.constructor(m)
 return m

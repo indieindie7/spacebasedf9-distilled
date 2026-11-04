@@ -2,7 +2,6 @@ local LH=require('UI.LH')
 local hh,lc,px,tex,tx,v=LH.hh,LH.lc,LH.px,LH.tex,LH.tx,LH.v
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
-local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 local sRightSideBarTileX = '(g_GuiManager.getUIViewportSizeX() / 2) - 126'
 local sLeftSideBarTileX = '-g_GuiManager.getUIViewportSizeX() / 2'
 local sLeftSidebarStartY = '(g_GuiManager.getUIViewportSizeY() / 2) - 758'
