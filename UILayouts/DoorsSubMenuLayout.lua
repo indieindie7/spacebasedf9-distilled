@@ -1,4 +1,5 @@
 local LH=require('UI.LH')
+local hh=LH.hh
 local lc,px,tex,tx=LH.lc,LH.px,LH.tex,LH.tx
 local Gui = require('UI.Gui')
 local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
@@ -23,21 +24,9 @@ return
     tExtraInfo =
     {
         onShowMatterCost =
-        {
-            { key = 'CostBackground', hidden = false, },
-            { key = 'CostBackgroundEndCap', hidden = false, },
-            { key = 'CostVerticalRule', hidden = false, },
-            { key = 'CostIconMatter', hidden = false, },
-            { key = 'CostText', hidden = false, },
-        },
+        hh(false,'CostBackground','CostBackgroundEndCap','CostVerticalRule','CostIconMatter','CostText'),
         onHideMatterCost =
-        {
-            { key = 'CostBackground', hidden = true, },
-            { key = 'CostBackgroundEndCap', hidden = true, },
-            { key = 'CostVerticalRule', hidden = true, },
-            { key = 'CostIconMatter', hidden = true, },
-            { key = 'CostText', hidden = true, },
-        },
+        hh(true,'CostBackground','CostBackgroundEndCap','CostVerticalRule','CostIconMatter','CostText'),
     },
     tElements =
     {
