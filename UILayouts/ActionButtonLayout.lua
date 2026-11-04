@@ -6,13 +6,7 @@ local nControlButtonWidth, nControlButtonHeight = 205, 37
 local labelX, labelY = 0, nControlButtonY - 5
 return
 {
-    posInfo =
-    {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('left', 'top', 0, 0),
     tExtraInfo =
     {
     },

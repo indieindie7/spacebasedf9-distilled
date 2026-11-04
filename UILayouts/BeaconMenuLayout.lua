@@ -14,14 +14,7 @@ local nIconScale = .6
 local numButtons = 4
 return
 {
-    posInfo =
-        {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-        scale = { 1, 1 },
-    },
+    posInfo = LH.pos('left', 'top', 0, 0, {1,1}),
     tElements =
     {
         px('LargeBar',{ 0, 0 },{ nButtonWidth, -nButtonStartY + (nButtonHeight * numButtons) },Gui.SIDEBAR_BG),

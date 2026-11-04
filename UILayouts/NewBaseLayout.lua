@@ -10,14 +10,7 @@ local sTileHeight = 542
 local defaultTextStyle = 'dosissemibold28'
 return
 {
-    posInfo =
-        {
-        alignX = 'center',
-        alignY = 'center',
-        offsetX = 0,
-        offsetY = 0,
-        scale = { 1, 1 },
-    },
+    posInfo = LH.pos('center', 'center', 0, 0, {1,1}),
     tElements =
     {
         {

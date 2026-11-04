@@ -3,13 +3,7 @@ local px=LH.px
 local Gui = require('UI.Gui')
 return
 {
-    posInfo =
-    {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('left', 'top', 0, 0),
     tElements =
     {
         px('Background',{ 0, 0 },{ 400, 40 },Gui.WHITE),

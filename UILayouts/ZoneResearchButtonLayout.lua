@@ -1,13 +1,8 @@
+local LH=require('UI.LH')
 local Gui = require('UI.Gui')
 return
 {
-    posInfo =
-    {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('left', 'top', 0, 0),
     tElements =
     {
         {

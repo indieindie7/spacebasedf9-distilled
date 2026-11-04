@@ -17,13 +17,7 @@ local nHorizBorderXScale = 1636
 local nHorizBorderYScale = 2
 return
 {
-    posInfo =
-    {
-        alignX = 'left',
-        alignY = 'top',
-    offsetX = 0,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('left', 'top', 0, 0),
     tExtraInfo =
     {
         tActiveJobInfo =

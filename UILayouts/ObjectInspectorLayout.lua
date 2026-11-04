@@ -7,14 +7,7 @@ local nTabWidth, nTabHeight = 83, 47
 local nTabLineHeight = 3
 return
 {
-    posInfo =
-        {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-        scale = { 1, 1 },
-    },
+    posInfo = LH.pos('left', 'top', 0, 0, {1,1}),
 	tExtraInfo =
     {
 		nTabWidth = nTabWidth,

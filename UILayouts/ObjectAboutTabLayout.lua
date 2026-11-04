@@ -7,13 +7,7 @@ local nStatsStartY = 0
 local nLineSize = 40
 return
 {
-    posInfo =
-        {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = -6,
-    },
+    posInfo = LH.pos('left', 'top', 0, -6),
     tExtraInfo =
     {
 		nLineSize = nLineSize,

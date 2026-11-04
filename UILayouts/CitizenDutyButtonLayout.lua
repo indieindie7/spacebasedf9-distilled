@@ -3,13 +3,7 @@ local c,px,tex=LH.c,LH.px,LH.tex
 local Gui = require('UI.Gui')
 return
 {
-    posInfo =
-    {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('left', 'top', 0, 0),
 	tExtraInfo =
 	{
 		nMarginY = 12,

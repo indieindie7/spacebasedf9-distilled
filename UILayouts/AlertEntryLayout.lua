@@ -3,13 +3,7 @@ local btn,tx=LH.btn,LH.tx
 local Gui = require('UI.Gui')
 local tLayout =
 {
-    posInfo =
-        {
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-        scale = { 1, 1 },
-    },
+    posInfo = LH.pos(nil, 'top', 0, 0, {1,1}),
     tElements =
     {
         btn('Button',{ 0, 0 },{ 440, 100 },Gui.ALERTLOG_BG,{ { key = 'Button', color = Gui.AMBER, }, },{ { key = 'Button', color = Gui.ALERTLOG_BG, }, }),

@@ -13,14 +13,7 @@ local nZoneHeadingWidth = 402
 local nProjectHeadingX = nZoneHeadingWidth + nZoneButtonX + 4
 return
 {
-    posInfo =
-        {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-        scale = { 1, 1 },
-    },
+    posInfo = LH.pos('left', 'top', 0, 0, {1,1}),
     tElements =
     {
         px('LargeBar',{ 0, 0 },{ 'g_GuiManager.getUIViewportSizeX()', 'g_GuiManager.getUIViewportSizeY()' },Gui.SIDEBAR_BG),

@@ -8,14 +8,7 @@ local nLabelX, nLabelStartY = 105, -228
 local nHotkeyX, nHotkeyStartY = nButtonWidth - 52, -270
 return
 {
-    posInfo =
-        {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-        scale = { 1, 1 },
-    },
+    posInfo = LH.pos('left', 'top', 0, 0, {1,1}),
     tElements =
     {
         {

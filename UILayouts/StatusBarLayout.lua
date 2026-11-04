@@ -20,14 +20,7 @@ local sFlipButtonY = sFlipBorderTopY .. ' - 1'
 local nAlertExpandedOffsetX = -480
 return
 {
-    posInfo =
-        {
-        alignX = 'right',
-        alignY = 'top',
-        offsetX = -1150,
-        offsetY = 36,
-        scale = { 1, 1 },
-    },
+    posInfo = LH.pos('right', 'top', -1150, 36, {1,1}),
     tExtraInfo =
     {
         alertsExpandedOverride =

@@ -6,13 +6,7 @@ local buttonWidth, buttonHeight, buttonSpacing = 190, 37, 0
 local labelY = -192
 return
 {
-    posInfo =
-        {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = -30,
-    },
+    posInfo = LH.pos('left', 'top', 0, -30),
     tElements =
     {
         btn('OnButton',{ buttonX, buttonY },{ buttonWidth, buttonHeight },{ 0, 0, 0, 0 },{ { key = 'OnLabel', color = Gui.BLACK, }, v('OnButtonTexture',true), v('OnButtonTexturePressed',false), },{ { key = 'OnLabel', color = Gui.AMBER, }, v('OnButtonTexture',false), v('OnButtonTexturePressed',true), }),

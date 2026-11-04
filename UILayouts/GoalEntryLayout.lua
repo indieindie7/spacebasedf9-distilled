@@ -8,13 +8,7 @@ local nBarTextY = -7
 local nShadeBoxHeight = 145
 return
 {
-    posInfo =
-    {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('left', 'top', 0, 0),
 	tExtraInfo =
 	{
 		nProgressBarWidth = nBarWidth,

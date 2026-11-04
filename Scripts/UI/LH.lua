@@ -15,4 +15,5 @@ function M.btn(k,pos,s,c,on,off,pa,ra) local b={key=k,type='onePixelButton',pos=
  if pa then b.onPressed={{key=k,color=pa}} end
  if ra then b.onReleased={{key=k,color=ra}} end
  return b end
+function M.pos(alignX,alignY,offsetX,offsetY,scale) return {alignX=alignX,alignY=alignY,offsetX=offsetX,offsetY=offsetY,scale=scale} end
 return M

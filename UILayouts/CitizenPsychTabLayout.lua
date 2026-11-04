@@ -16,13 +16,7 @@ local nGraphLabelWidth = 85
 local nGraphLabelY = -630
 return
 {
-    posInfo =
-	{
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = -24,
-    },
+    posInfo = LH.pos('left', 'top', 0, -24),
     tExtraInfo =
     {
         tHostileMode =

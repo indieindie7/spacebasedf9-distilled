@@ -7,14 +7,7 @@ local textX = 1125
 local boxX = 1100
 return
 {
-    posInfo =
-        {
-        alignX = 'right',
-        alignY = 'top',
-        offsetX = -1770,
-        offsetY = 0,
-        scale = { 1, 1 },
-    },
+    posInfo = LH.pos('right', 'top', -1770, 0, {1,1}),
     tExtraInfo =
     {
         tAccordionInfo =

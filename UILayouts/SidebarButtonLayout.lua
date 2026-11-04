@@ -6,13 +6,7 @@ local nLabelX, nLabelStartY = 94, -10
 local nButtonWidth, nButtonHeight  = 330, 81
 return
 {
-    posInfo =
-    {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('left', 'top', 0, 0),
     tExtraInfo =
     {
     },

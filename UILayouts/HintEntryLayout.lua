@@ -3,13 +3,7 @@ local tx=LH.tx
 local Gui = require('UI.Gui')
 local tLayout =
 {
-    posInfo =
-        {
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-        scale = { 1, 1 },
-    },
+    posInfo = LH.pos(nil, 'top', 0, 0, {1,1}),
     tElements =
     {
         {

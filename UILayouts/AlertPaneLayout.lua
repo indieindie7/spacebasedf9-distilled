@@ -3,13 +3,7 @@ local tx=LH.tx
 local Gui = require('UI.Gui')
 return
 {
-    posInfo =
-    {
-        alignX = 'right',
-        alignY = 'top',
-        offsetX = -480,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('right', 'top', -480, 0),
     tExtraInfo =
     {
         minimizedOverride =

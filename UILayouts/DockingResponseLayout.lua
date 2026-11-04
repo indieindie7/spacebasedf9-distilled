@@ -5,14 +5,7 @@ local AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 0.95 }
 local BRIGHT_AMBER = { Gui.AMBER[1], Gui.AMBER[2], Gui.AMBER[3], 1 }
 return
 {
-    posInfo =
-        {
-        alignX = 'center',
-        alignY = 'center',
-        offsetX = -510,
-        offsetY = 405,
-        scale = { .85, .85 },
-    },
+    posInfo = LH.pos('center', 'center', -510, 405, {.85,.85}),
     tElements =
     {
         px('Background',{ 0, 0 },{ 1028, 810 },{ 0, 0, 0 }),

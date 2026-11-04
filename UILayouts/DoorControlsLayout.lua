@@ -6,13 +6,7 @@ local buttonX, buttonY = 18, -225
 local labelY = -191
 return
 {
-    posInfo =
-	{
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = -30,
-    },
+    posInfo = LH.pos('left', 'top', 0, -30),
     tElements =
     {
         {

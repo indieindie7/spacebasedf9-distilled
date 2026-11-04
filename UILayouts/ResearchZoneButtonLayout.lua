@@ -9,13 +9,7 @@ local nZoneButtonWidth,nZoneButtonHeight = 370, 64
 local nProjectButtonWidth = 450
 return
 {
-    posInfo =
-    {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('left', 'top', 0, 0),
     tElements =
     {
         tex('ZoneNameBubbleLeft','ui_circlefilled','UI/Shared',{ nButtonX, 0 },Gui.AMBER,{1, 1}),

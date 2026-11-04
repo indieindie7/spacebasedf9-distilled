@@ -9,14 +9,7 @@ local nLabelX, nTextStartY = 40, -276
 local nLineHeight = 36
 return
 {
-    posInfo =
-        {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-        scale = { 1, 1 },
-    },
+    posInfo = LH.pos('left', 'top', 0, 0, {1,1}),
     tExtraInfo =
     {
 		nTabWidth = nTabWidth,

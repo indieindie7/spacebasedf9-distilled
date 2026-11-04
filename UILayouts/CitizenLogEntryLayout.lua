@@ -1,16 +1,11 @@
+local LH=require('UI.LH')
 local Gui = require('UI.Gui')
 local LOG_DATE_COLOR = { 0/255, 0/255, 0/255, 0.5 }
 local LOG_TEXT_COLOR = { 0/255, 0/255, 0/255, 1 }
 local nButtonWidth, nButtonHeight  = 381, 98
 return
 {
-    posInfo =
-        {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('left', 'top', 0, 0),
     tExtraInfo =
     {
         oddIndex =

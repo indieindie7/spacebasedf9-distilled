@@ -1,16 +1,11 @@
+local LH=require('UI.LH')
 local Gui = require('UI.Gui')
 local buttonX, buttonY = 0, -205
 local DIM_AMBER = Gui.AMBER_DIM
 DIM_AMBER[4] = 0.25
 return
 {
-    posInfo =
-    {
-        alignX = 'left',
-        alignY = 'top',
-        offsetX = 0,
-        offsetY = 0,
-    },
+    posInfo = LH.pos('left', 'top', 0, 0),
     tElements =
     {
         {
