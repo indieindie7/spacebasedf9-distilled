@@ -16,4 +16,12 @@ function M.btn(k,pos,s,c,on,off,pa,ra) local b={key=k,type='onePixelButton',pos=
  if ra then b.onReleased={{key=k,color=ra}} end
  return b end
 function M.pos(alignX,alignY,offsetX,offsetY,scale) return {alignX=alignX,alignY=alignY,offsetX=offsetX,offsetY=offsetY,scale=scale} end
+function M.iconBtn(k,ik,ak,t1,t2,pos,s,c,ts)
+ local function p() return {pos[1],pos[2]} end
+ return {__flat=true,
+  {key=k,type='onePixelButton',pos=p(),scale=s,color={1,0,0},hidden=true,clickWhileHidden=true,onHoverOn={M.v(ik,true),M.v(ak,false)},onHoverOff=M.hh(false,ik,true,ak)},
+  M.tex(ik,t1,'UI/HUD',p(),c,ts),
+  M.tex(ak,t2,'UI/HUD',p(),c,ts,true)}
+end
+function M.flat(l) local o={} for _,e in ipairs(l) do if e.__flat then for _,x in ipairs(e) do o[#o+1]=x end else o[#o+1]=e end end return o end
 return M
